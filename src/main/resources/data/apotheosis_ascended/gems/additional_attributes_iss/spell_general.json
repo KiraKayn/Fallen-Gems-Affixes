@@ -12,15 +12,8 @@
 	"bonuses": [{
 			"type": "apotheosis:attribute",
 			"gem_class": {
-				"key": "anything",
+				"key": "helmet",
 				"types": [
-					"sword",
-					"trident",
-					"heavy_weapon",
-					"curios:spellbook",
-					"chestplate",
-					"leggings",
-					"boots",
 					"helmet"
 				]
 			},

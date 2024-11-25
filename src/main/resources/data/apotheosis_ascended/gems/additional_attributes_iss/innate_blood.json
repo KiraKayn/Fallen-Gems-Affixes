@@ -9,7 +9,7 @@
 		"the_nether",
 		"overworld"
 	],
-	"unique": false,
+	"unique": true,
 	"min_rarity": "rare",
 	"bonuses": [{
 			"type": "apotheosis:multi_attribute",
