@@ -6,6 +6,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
     id "net.darkhax.curseforgegradle" version "1.0.7"
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 base {
@@ -283,18 +284,45 @@ reobf {
 
 jar.finalizedBy('reobfJarJar')
 
-task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-    apiToken = System.getenv("CF_TOKEN")
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "apotheosis-ascended"
+    versionNumber = "${version}"
+    versionType = "release"
+    versionName = "Apotheosis Ascended ${rootProject.version}+${mc_version}"
+    changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
+    uploadFile = jar
+    gameVersions = forge_game_versions.split(", ").toList()
+    loaders = forge_mod_loaders.split(", ").collect { return it.toLowerCase(Locale.ROOT) }
+    dependencies {
+        required.project("additional-attributes")
+        required.project("tipsylib")
+        // required.project("apotheosis")
+        // not uploaded to modrinth
+    }
+}
 
-    def mainFile = upload(1055023, jar)
-    mainFile.displayName = "Forge/Neoforge-${rootProject.version}+${mc_version}"
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    group = 'publishing'
+    apiToken = System.getenv("CF_TOKEN")
+    def mainFile = upload(1144178, jar)
+    mainFile.displayName = "Apotheosis Ascended ${rootProject.version}+${mc_version}"
     mainFile.releaseType = "release"
     mainFile.changelog = new File("$project.rootDir/CHANGELOG.md").getText('UTF-8')
     mainFile.changelogType = "markdown"
     forge_mod_loaders.split(", ").each {
         mainFile.addModLoader(it)
     }
-    forge_game_versions.split(", ").each {
-        mainFile.addGameVersion(it)
-    }
+    mainFile.addGameVersion("1.20.1")
+
+    mainFile.addRequirement("apotheosis")
+    mainFile.addRequirement("additional-attributes")
+    mainFile.addRequirement("tipsylib")
+}
+
+task publishAll {
+    dependsOn('publishCurseForge')
+    dependsOn('modrinth')
+    group = 'publishing'
 }
