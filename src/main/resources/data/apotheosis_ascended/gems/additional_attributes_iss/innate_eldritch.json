@@ -9,7 +9,7 @@
 		"overworld",
         "the_end"
 	],
-	"unique": false,
+	"unique": true,
 	"min_rarity": "rare",
 	"bonuses": [{
 			"type": "apotheosis:multi_attribute",
