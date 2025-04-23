@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:precision",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:precision",
 	"target": "ARROW_SELF",
 	"values": {
 		"epic": {

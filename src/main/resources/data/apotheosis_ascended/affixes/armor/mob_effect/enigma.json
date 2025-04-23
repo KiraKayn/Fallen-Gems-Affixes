@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:enigma",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:enigma",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

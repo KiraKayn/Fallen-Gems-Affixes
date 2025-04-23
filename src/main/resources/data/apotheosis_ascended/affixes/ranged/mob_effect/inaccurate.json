@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:inaccurate",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:inaccurate",
 	"target": "ARROW_TARGET",
 	"values": {
 		"epic": {

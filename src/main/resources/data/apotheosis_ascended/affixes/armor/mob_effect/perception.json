@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:perception",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:perception",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

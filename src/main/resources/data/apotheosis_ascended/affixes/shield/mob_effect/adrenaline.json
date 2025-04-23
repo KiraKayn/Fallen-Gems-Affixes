@@ -1,6 +1,6 @@
 {
-    "type": "apotheosis:mob_effect",
-    "mob_effect": "tipsylib:adrenaline",
+    "type": "apotheosis:attribute",
+    "attribute": "runiclib:adrenaline",
     "target": "BLOCK_SELF",
     "values": {
         "epic": {

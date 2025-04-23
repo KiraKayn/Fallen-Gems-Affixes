@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:devour",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:devour",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

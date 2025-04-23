@@ -16,9 +16,9 @@ public class ApotheosisAscended
 {
     public static final String MODID = "apotheosis_ascended";
     private static final Logger LOGGER = LogManager.getLogger();
-    public ApotheosisAscended()
+    public ApotheosisAscended(FMLJavaModLoadingContext context)
     {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
         ApotheosisAscended.LOGGER.info("Loading Apotheosis Ascended");
 
@@ -30,6 +30,6 @@ public class ApotheosisAscended
     private void commonSetup(final FMLCommonSetupEvent event) {}
 
     public static ResourceLocation loc(String id) {
-        return new ResourceLocation(ApotheosisAscended.MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(ApotheosisAscended.MODID, id);
     }
 }

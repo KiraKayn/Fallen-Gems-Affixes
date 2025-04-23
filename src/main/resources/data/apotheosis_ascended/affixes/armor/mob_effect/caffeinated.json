@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:caffeinated",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:caffeinated",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

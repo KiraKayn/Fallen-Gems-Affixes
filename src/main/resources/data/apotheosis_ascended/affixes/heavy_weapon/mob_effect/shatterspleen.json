@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:shatterspleen",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:shatterspleen",
 	"target": "ATTACK_TARGET",
 	"values": {
 		"epic": {

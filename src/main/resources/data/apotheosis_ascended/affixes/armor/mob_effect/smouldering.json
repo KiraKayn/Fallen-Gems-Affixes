@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:smouldering",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:smouldering",
 	"target": "HURT_ATTACKER",
 	"values": {
 		"rare": {

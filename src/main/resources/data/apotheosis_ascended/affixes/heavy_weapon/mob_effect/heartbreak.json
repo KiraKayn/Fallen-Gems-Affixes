@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:heartbreak",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:heartbreak",
 	"target": "ATTACK_TARGET",
 	"values": {
 		"rare": {

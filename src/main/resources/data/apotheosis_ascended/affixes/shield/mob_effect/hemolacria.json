@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:hemolacria",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:hemolacria",
 	"target": "BLOCK_ATTACKER",
 	"values": {
 		"rare": {

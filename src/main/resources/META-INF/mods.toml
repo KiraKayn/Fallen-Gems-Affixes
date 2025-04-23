@@ -7,13 +7,13 @@ showAsResourcePack=false
 
 [[mods]]
   modId="apotheosis_ascended"
-  version="1.20.1-1.6.0"
+  version="1.20.1-1.7.0"
   displayName="Apotheosis Ascended"
   updateJSONURL="https://github.com/meeprdib/Apotheosis-Ascended"
   displayURL="https://github.com/meeprdib/Apotheosis-Ascended"
   logoFile="logo.png"
   credits="me"
-  authors="Davey, Ace, and Lazarus"
+  authors="Davey, Ace, Lazarus, Mysticpasta1"
   description='''
   An Apotheosis addon focusing on integration and compatibility
   '''
@@ -34,9 +34,9 @@ showAsResourcePack=false
   side="BOTH"
 
 [[dependencies.apotheosis_ascended]]
-  modId="tipsylib"
+  modId="runiclib"
   mandatory=true
-  versionRange="[2.0.9,)"
+  versionRange="[4.+,)"
   ordering="AFTER"
   side="BOTH"
 
@@ -50,7 +50,7 @@ showAsResourcePack=false
 [[dependencies.apotheosis_ascended]]
   modId="minecraft"
   mandatory=true
-  versionRange="[1.20,)"
+  versionRange="[1.20.1,1.20.2)"
   ordering="NONE"
   side="BOTH"
 

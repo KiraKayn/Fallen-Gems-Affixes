@@ -1,6 +1,6 @@
 {
-	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:burning_thorns",
+	"type": "apotheosis:attribute",
+	"attribute": "runiclib:burning_thorns",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {
