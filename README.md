@@ -1,4 +1,4 @@
-# Apotheosis-Ascended
-Repository for the Apotheosis Ascended addon mod for Apotheosis
+# Apotheosis-Ascended-Fork
+Repository for the Apotheosis Ascended Fork mod
 
-This mod is discontinued and will no longer recieve updates!
+This fork was created because the original mod was discontinued, credit for all of the current content goes to the original Owner.
