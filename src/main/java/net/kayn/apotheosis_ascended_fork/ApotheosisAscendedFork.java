@@ -1,6 +1,6 @@
-package dev.davey.apotheosis_ascended;
+package net.kayn.apotheosis_ascended_fork;
 
-import dev.davey.apotheosis_ascended.attributes.AAAttributes;
+import net.kayn.apotheosis_ascended_fork.attributes.AAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -11,16 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(ApotheosisAscended.MODID)
-public class ApotheosisAscended
+@Mod(ApotheosisAscendedFork.MOD_ID)
+public class ApotheosisAscendedFork
 {
-    public static final String MODID = "apotheosis_ascended";
+    public static final String MOD_ID = "apotheosis_ascended_fork";
     private static final Logger LOGGER = LogManager.getLogger();
-    public ApotheosisAscended(FMLJavaModLoadingContext context)
+    public ApotheosisAscendedFork(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
-        ApotheosisAscended.LOGGER.info("Loading Apotheosis Ascended");
+        ApotheosisAscendedFork.LOGGER.info("Loading Apotheosis Ascended Fork");
 
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);
@@ -30,6 +30,6 @@ public class ApotheosisAscended
     private void commonSetup(final FMLCommonSetupEvent event) {}
 
     public static ResourceLocation loc(String id) {
-        return ResourceLocation.fromNamespaceAndPath(ApotheosisAscended.MODID, id);
+        return ResourceLocation.fromNamespaceAndPath(ApotheosisAscendedFork.MOD_ID, id);
     }
 }

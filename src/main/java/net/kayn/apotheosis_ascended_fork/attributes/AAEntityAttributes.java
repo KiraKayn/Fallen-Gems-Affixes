@@ -1,12 +1,12 @@
-package dev.davey.apotheosis_ascended.attributes;
+package net.kayn.apotheosis_ascended_fork.attributes;
 
-import dev.davey.apotheosis_ascended.ApotheosisAscended;
+import net.kayn.apotheosis_ascended_fork.ApotheosisAscendedFork;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.world.entity.EntityType;
 
-@Mod.EventBusSubscriber(modid = ApotheosisAscended.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = ApotheosisAscendedFork.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AAEntityAttributes {
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {

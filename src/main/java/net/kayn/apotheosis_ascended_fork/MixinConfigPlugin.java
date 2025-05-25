@@ -1,4 +1,4 @@
-package dev.davey.apotheosis_ascended;
+package net.kayn.apotheosis_ascended_fork;
 
 import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
@@ -22,7 +22,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals("dev.davey.apotheosis_ascended.mixin.GunModifierHelperMixin")) {
+        if (mixinClassName.equals("net.kayn.apotheosis_ascended_fork.mixin.GunModifierHelperMixin")) {
             return isModLoaded("scguns");
         }
         return true;

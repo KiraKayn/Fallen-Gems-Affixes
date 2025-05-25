@@ -1,4 +1,4 @@
-package dev.davey.apotheosis_ascended;
+package net.kayn.apotheosis_ascended_fork;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraft.world.entity.EquipmentSlot;
