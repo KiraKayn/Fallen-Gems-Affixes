@@ -2,66 +2,66 @@ modLoader="javafml"
 loaderVersion="[47,)"
 
 license="MIT"
-issueTrackerURL="https://github.com/meeprdib/Apotheosis-Ascended/issues"
+issueTrackerURL=""
 showAsResourcePack=false
 
 [[mods]]
-  modId="apotheosis_ascended"
+  modId="apotheosis_ascended_fork"
   version="1.20.1-1.7.0"
   displayName="Apotheosis Ascended"
-  updateJSONURL="https://github.com/meeprdib/Apotheosis-Ascended"
-  displayURL="https://github.com/meeprdib/Apotheosis-Ascended"
+  updateJSONURL="https://github.com/KiraKayn/Apotheosis-Ascended-Fork"
+  displayURL="https://github.com/KiraKayn/Apotheosis-Ascended-Fork"
   logoFile="logo.png"
   credits="me"
-  authors="Davey, Ace, Lazarus, Mysticpasta1"
+  authors="Kayn, Davey, Ace, Lazarus, Mysticpasta1"
   description='''
   An Apotheosis addon focusing on integration and compatibility
   '''
   displayTest="MATCH_VERSION"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="apotheosis"
   mandatory=true
   versionRange="[1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="additional_attributes"
   mandatory=true
   versionRange="[1.1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="runiclib"
   mandatory=true
   versionRange="[4.+,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="forge"
   mandatory=true
   versionRange="[47,)"
   ordering="NONE"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="minecraft"
   mandatory=true
   versionRange="[1.20.1,1.20.2)"
   ordering="NONE"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="irons_spellbooks"
   mandatory=false
   versionRange="[1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended]]
+[[dependencies.apotheosis_ascended_fork]]
   modId="apothluckaffix"
   mandatory=false
   versionRange="[1.0,)"

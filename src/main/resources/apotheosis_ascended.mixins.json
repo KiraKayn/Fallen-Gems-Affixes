@@ -1,9 +1,9 @@
 {
     "required": true,
-    "package": "dev.davey.apotheosis_ascended.mixin",
+    "package": "net.kayn.apotheosis_ascended_fork.mixin",
     "compatibilityLevel": "JAVA_17",
     "refmap": "${modid}.refmap.json",
-    "plugin": "dev.davey.apotheosis_ascended.MixinConfigPlugin",
+    "plugin": "net.kayn.apotheosis_ascended_fork.MixinConfigPlugin",
     "mixins": [
         "GunModifierHelperMixin"
     ],

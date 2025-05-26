@@ -2,6 +2,7 @@ package net.kayn.apotheosis_ascended_fork;
 
 import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
+import net.kayn.apotheosis_ascended_fork.MixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import net.minecraftforge.fml.ModList;
@@ -23,16 +24,16 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.equals("net.kayn.apotheosis_ascended_fork.mixin.GunModifierHelperMixin")) {
-            return isModLoaded("scguns");
+            return isModLoaded();
         }
         return true;
     }
 
-    private static boolean isModLoaded(String modId) {
+    private static boolean isModLoaded() {
         if (ModList.get() == null) {
-            return LoadingModList.get().getMods().stream().map(ModInfo::getModId).anyMatch(modId::equals);
+            return LoadingModList.get().getMods().stream().map(ModInfo::getModId).anyMatch("scguns"::equals);
         }
-        return ModList.get().isLoaded(modId);
+        return ModList.get().isLoaded("scguns");
     }
 
     @Override
