@@ -1,12 +1,12 @@
-package net.kayn.apotheosis_ascended_fork.attributes;
+package net.kayn.fallen_gems_affixes.attributes;
 
-import net.kayn.apotheosis_ascended_fork.ApotheosisAscendedFork;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.world.entity.EntityType;
 
-@Mod.EventBusSubscriber(modid = ApotheosisAscendedFork.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AAEntityAttributes {
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {

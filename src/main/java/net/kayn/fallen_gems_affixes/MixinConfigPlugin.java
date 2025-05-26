@@ -1,8 +1,7 @@
-package net.kayn.apotheosis_ascended_fork;
+package net.kayn.fallen_gems_affixes;
 
 import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
-import net.kayn.apotheosis_ascended_fork.MixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import net.minecraftforge.fml.ModList;
@@ -23,7 +22,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals("net.kayn.apotheosis_ascended_fork.mixin.GunModifierHelperMixin")) {
+        if (mixinClassName.equals("net.kayn.fallen_gems_affixes.mixin.GunModifierHelperMixin")) {
             return isModLoaded();
         }
         return true;

@@ -1,0 +1,30 @@
+{
+  "attribute.fallen_gems_affixes.kick_reduction": "Kick Reduction",
+  "attribute.fallen_gems_affixes.projectile_speed": "Projectile Speed",
+  "attribute.fallen_gems_affixes.fire_rate": "Fire Rate",
+  "attribute.fallen_gems_affixes.additional_ammo": "Additional Ammo",
+  "attribute.fallen_gems_affixes.spread_reduction": "Spread Reduction",
+  "attribute.fallen_gems_affixes.reload_speed": "Reload Speed Increase",
+  "attribute.fallen_gems_affixes.bullet_damage": "Damage",
+
+  "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
+  "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",
+
+  "affix.fallen_gems_affixes:gun/attribute/projectile_speed": "Accelerated",
+  "affix.fallen_gems_affixes:gun/attribute/projectile_speed.suffix": "of Velocity",
+
+  "affix.fallen_gems_affixes:gun/attribute/fire_rate": "Rapid",
+  "affix.fallen_gems_affixes:gun/attribute/fire_rate.suffix": "of Quick Firing",
+
+  "affix.fallen_gems_affixes:gun/attribute/capacity": "Expanded",
+  "affix.fallen_gems_affixes:gun/attribute/capacity.suffix": "of Abundance",
+
+  "affix.fallen_gems_affixes:gun/attribute/spread_reduction": "Precise",
+  "affix.fallen_gems_affixes:gun/attribute/spread_reduction.suffix": "of Accuracy",
+
+  "affix.fallen_gems_affixes:gun/attribute/reload_speed": "Swift",
+  "affix.fallen_gems_affixes:gun/attribute/reload_speed.suffix": "of Quick Hands",
+
+  "affix.fallen_gems_affixes:gun/attribute/bullet_damage": "Powerful",
+  "affix.fallen_gems_affixes:gun/attribute/bullet_damage.suffix": "of Destruction"
+}

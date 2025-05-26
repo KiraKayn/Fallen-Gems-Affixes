@@ -1,6 +1,6 @@
-package net.kayn.apotheosis_ascended_fork;
+package net.kayn.fallen_gems_affixes;
 
-import net.kayn.apotheosis_ascended_fork.attributes.AAAttributes;
+import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -11,16 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(ApotheosisAscendedFork.MOD_ID)
-public class ApotheosisAscendedFork
+@Mod(FallenGemsAffixes.MOD_ID)
+public class FallenGemsAffixes
 {
-    public static final String MOD_ID = "apotheosis_ascended_fork";
+    public static final String MOD_ID = "fallen_gems_affixes";
     private static final Logger LOGGER = LogManager.getLogger();
-    public ApotheosisAscendedFork(FMLJavaModLoadingContext context)
+    public FallenGemsAffixes(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
-        ApotheosisAscendedFork.LOGGER.info("Loading Apotheosis Ascended Fork");
+        FallenGemsAffixes.LOGGER.info("Loading Fallen Gems & Affixes");
 
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);
@@ -30,6 +30,6 @@ public class ApotheosisAscendedFork
     private void commonSetup(final FMLCommonSetupEvent event) {}
 
     public static ResourceLocation loc(String id) {
-        return ResourceLocation.fromNamespaceAndPath(ApotheosisAscendedFork.MOD_ID, id);
+        return ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, id);
     }
 }

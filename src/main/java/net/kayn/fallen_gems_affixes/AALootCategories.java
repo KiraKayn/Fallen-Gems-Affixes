@@ -1,4 +1,4 @@
-package net.kayn.apotheosis_ascended_fork;
+package net.kayn.fallen_gems_affixes;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraft.world.entity.EquipmentSlot;

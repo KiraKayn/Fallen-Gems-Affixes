@@ -3,7 +3,7 @@
     { "type": "forge:false" }
   ],
   "type": "apotheosis:attribute",
-  "attribute": "apotheosis_ascended:additional_ammo",
+  "attribute": "fallen_gems_affixes:additional_ammo",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {

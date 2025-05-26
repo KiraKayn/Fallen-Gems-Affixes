@@ -1,6 +1,6 @@
-package net.kayn.apotheosis_ascended_fork.mixin;
+package net.kayn.fallen_gems_affixes.mixin;
 
-import net.kayn.apotheosis_ascended_fork.attributes.AAAttributes;
+import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -16,7 +16,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 public class GunModifierHelperMixin {
 
     @Unique
-    private static double apotheosisAscendedFork$getAttributeValue(ItemStack weapon, RegistryObject<Attribute> attributeRO) {
+    private static double fallenGemsAffixes$getAttributeValue(ItemStack weapon, RegistryObject<Attribute> attributeRO) {
         return weapon.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attributeRO.get()).stream()
                 .mapToDouble(AttributeModifier::getAmount)
                 .sum();
@@ -24,45 +24,45 @@ public class GunModifierHelperMixin {
 
     @ModifyReturnValue(method = "getModifiedProjectileSpeed", at = @At("RETURN"))
     private static double onGetModifiedProjectileSpeed(double originalSpeed, ItemStack weapon, double speed) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.PROJECTILE_SPEED);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.PROJECTILE_SPEED);
         return originalSpeed * (1 + modifier);
     }
 
     @ModifyReturnValue(method = "getKickReduction", at = @At("RETURN"))
     private static float onGetKickReduction(float originalReduction, ItemStack weapon) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.KICK_REDUCTION);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.KICK_REDUCTION);
         return originalReduction + (float)(modifier * (1 - originalReduction));
     }
 
     @ModifyReturnValue(method = "getModifiedRate", at = @At("RETURN"))
     private static int onGetModifiedRate(int originalRate, ItemStack weapon, int rate) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.FIRE_RATE);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.FIRE_RATE);
         return (int) (originalRate / (1 + modifier));
     }
 
     @ModifyReturnValue(method = "getModifiedAmmoCapacity", at = @At("RETURN"))
     private static int onGetModifiedAmmoCapacity(int originalCapacity, ItemStack weapon, top.ribs.scguns.common.Gun modifiedGun) {
-        double additionalAmmo = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.ADDITIONAL_AMMO);
+        double additionalAmmo = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.ADDITIONAL_AMMO);
         return originalCapacity + (int)additionalAmmo;
     }
 
     @ModifyReturnValue(method = "getModifiedSpread", at = @At("RETURN"))
     private static float onGetModifiedSpread(float originalSpread, ItemStack weapon, float spread) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.SPREAD_REDUCTION);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.SPREAD_REDUCTION);
         return originalSpread * (float)(1 - modifier);
     }
 
 
     @ModifyReturnValue(method = "getModifiedReloadSpeed", at = @At("RETURN"))
     private static double onGetModifiedReloadSpeed(double originalReloadSpeed, ItemStack weapon, double reloadSpeed) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.RELOAD_SPEED);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.RELOAD_SPEED);
         return originalReloadSpeed / (1 + modifier);
     }
 
 
     @ModifyReturnValue(method = "getModifiedProjectileDamage", at = @At("RETURN"))
     private static float onGetModifiedProjectileDamage(float originalDamage, ItemStack weapon, float damage) {
-        double modifier = apotheosisAscendedFork$getAttributeValue(weapon, AAAttributes.BULLET_DAMAGE);
+        double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.BULLET_DAMAGE);
         return originalDamage * (float)(1 + modifier);
     }
 

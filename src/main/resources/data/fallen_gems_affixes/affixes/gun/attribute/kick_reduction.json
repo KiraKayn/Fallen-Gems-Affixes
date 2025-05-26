@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "apotheosis_ascended:kick_reduction",
+  "attribute": "fallen_gems_affixes:kick_reduction",
   "operation": "ADDITION",
   "values": {
     "common": {

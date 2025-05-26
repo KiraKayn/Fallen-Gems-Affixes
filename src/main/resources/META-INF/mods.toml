@@ -6,62 +6,62 @@ issueTrackerURL=""
 showAsResourcePack=false
 
 [[mods]]
-  modId="apotheosis_ascended_fork"
+  modId="fallen_gems_affixes"
   version="1.20.1-1.7.0"
-  displayName="Apotheosis Ascended"
-  updateJSONURL="https://github.com/KiraKayn/Apotheosis-Ascended-Fork"
-  displayURL="https://github.com/KiraKayn/Apotheosis-Ascended-Fork"
+  displayName="Fallen Gems & Affixes"
+  updateJSONURL="https://github.com/KiraKayn/Fallen-Gems-Affixes"
+  displayURL="https://github.com/KiraKayn/Fallen-Gems-Affixes"
   logoFile="logo.png"
   credits="me"
-  authors="Kayn, Davey, Ace, Lazarus, Mysticpasta1"
+  authors="Kayn"
   description='''
   An Apotheosis addon focusing on integration and compatibility
   '''
   displayTest="MATCH_VERSION"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="apotheosis"
   mandatory=true
   versionRange="[1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="additional_attributes"
   mandatory=true
   versionRange="[1.1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="runiclib"
   mandatory=true
   versionRange="[4.+,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="forge"
   mandatory=true
   versionRange="[47,)"
   ordering="NONE"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="minecraft"
   mandatory=true
   versionRange="[1.20.1,1.20.2)"
   ordering="NONE"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="irons_spellbooks"
   mandatory=false
   versionRange="[1.0,)"
   ordering="AFTER"
   side="BOTH"
 
-[[dependencies.apotheosis_ascended_fork]]
+[[dependencies.fallen_gems_affixes]]
   modId="apothluckaffix"
   mandatory=false
   versionRange="[1.0,)"

@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "apotheosis_ascended:reload_speed",
+  "attribute": "fallen_gems_affixes:projectile_speed",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {

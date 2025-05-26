@@ -1,7 +1,7 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "apotheosis_ascended:fire_rate",
-  "operation": "MULTIPLY_BASE",
+  "attribute": "fallen_gems_affixes:spread_reduction",
+  "operation": "ADDITION",
   "values": {
     "common": {
       "min": 0.05,
@@ -19,7 +19,7 @@
       "step": 0.05
     },
     "epic": {
-      "min": 0.15,
+      "min": 0.20,
       "steps": 2,
       "step": 0.05
     },
