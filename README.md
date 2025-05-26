@@ -1,4 +1,4 @@
-# Apotheosis-Ascended-Fork
-Repository for the Apotheosis Ascended Fork mod
+# Fallen Gems & Affixes
+Repository for the Fallens Gems & Affixes mod
 
-This fork was created because the original mod was discontinued, credit for all of the current content goes to the original Owner.
+This is a fork of the Apotheosis Ascended mod
