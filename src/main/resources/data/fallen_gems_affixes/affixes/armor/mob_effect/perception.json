@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:perception",
+	"attribute": "tipsylib:perception",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

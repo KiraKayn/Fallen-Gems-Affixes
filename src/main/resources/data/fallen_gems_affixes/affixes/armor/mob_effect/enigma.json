@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:enigma",
+	"attribute": "tipsylib:enigma",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

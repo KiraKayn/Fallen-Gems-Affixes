@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:backlash",
+	"attribute": "tipsylib:backlash",
 	"target": "HURT_SELF",
 	"values": {
 		"epic": {

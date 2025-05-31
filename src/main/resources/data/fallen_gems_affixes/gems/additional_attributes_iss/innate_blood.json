@@ -13,7 +13,7 @@
 	"min_rarity": "rare",
 	"bonuses": [{
 			"type": "apotheosis:multi_attribute",
-			"desc": "bonus.apotheosis_ascended:multi_attr.desc.and_three",
+			"desc": "bonus.fallen_gems_affixes:multi_attr.desc.and_three",
 			"gem_class": {
 				"key": "helmet",
 				"types": [
@@ -51,7 +51,7 @@
 		},
 		{
 			"type": "apotheosis:multi_attribute",
-			"desc": "bonus.apotheosis_ascended:multi_attr.desc.and_three",
+			"desc": "bonus.fallen_gems_affixes:multi_attr.desc.and_three",
 			"gem_class": {
 				"key": "chestplate",
 				"types": [

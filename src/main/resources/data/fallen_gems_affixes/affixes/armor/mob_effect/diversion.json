@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:diversion",
+	"attribute": "tipsylib:diversion",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

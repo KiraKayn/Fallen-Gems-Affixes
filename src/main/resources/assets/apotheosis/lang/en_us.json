@@ -21,6 +21,15 @@
     "item.apotheosis.gem.fallen_gems_affixes:additional_attributes_iss/innate_fire": "Innate Fire Spell Gem",
     "item.apotheosis.gem.fallen_gems_affixes:additional_attributes_iss/innate_lightning": "Innate Lightning Spell Gem",
 
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/blood_tyrant": "Gem of the Blood Tyrant",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/ender_dragon_heart": "Gem of the Dragon Heart",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/fallen_warrior": "Gem of the Fallen Warrior",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/guardian_of_hell": "Gem of the Guardian of Hell",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/infernal_overlord": "Gem of the Infernal Overlord",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/ruler_of_abyss": "Gem of the Ruler of Abyss",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/void_guardian": "Gem of the Void Guardian",
+    "item.apotheosis.gem.fallen_gems_affixes:boss_gems/withered_sentinel": "Gem of the Withered Sentinel",
+
     "affix.fallen_gems_affixes:armor/mob_effect/backlash": "Backlashing",
     "affix.fallen_gems_affixes:armor/mob_effect/backlash.suffix": "of Backlashing",
     "affix.fallen_gems_affixes:armor/mob_effect/berserk": "Berserking",

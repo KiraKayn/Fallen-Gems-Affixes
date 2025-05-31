@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:heartbreak",
+	"attribute": "tipsylib:heartbreak",
 	"target": "ATTACK_TARGET",
 	"values": {
 		"rare": {

@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:berserk",
+	"attribute": "tipsylib,:berserk",
 	"target": "HURT_SELF",
 	"values": {
 		"epic": {

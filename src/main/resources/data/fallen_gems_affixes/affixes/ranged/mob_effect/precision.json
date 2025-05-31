@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:precision",
+	"attribute": "tipsylib:precision",
 	"target": "ARROW_SELF",
 	"values": {
 		"epic": {

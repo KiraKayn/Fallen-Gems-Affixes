@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:internal_bleeding",
+	"attribute": "tipsylib:internal_bleeding",
 	"target": "ATTACK_TARGET",
 	"values": {
 		"epic": {

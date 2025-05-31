@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:shatterspleen",
+	"attribute": "tipsylib:shatterspleen",
 	"target": "ATTACK_TARGET",
 	"values": {
 		"epic": {

@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:smouldering",
+	"attribute": "tipsylib:smouldering",
 	"target": "HURT_ATTACKER",
 	"values": {
 		"rare": {

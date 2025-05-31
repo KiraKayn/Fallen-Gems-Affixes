@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:inaccurate",
+	"attribute": "tipsylib:inaccurate",
 	"target": "ARROW_TARGET",
 	"values": {
 		"epic": {

@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:caffeinated",
+	"attribute": "tipsylib:caffeinated",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

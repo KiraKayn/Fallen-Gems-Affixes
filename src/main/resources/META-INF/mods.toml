@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 
-license="MIT"
+license="LGPL-2.1-or-later"
 issueTrackerURL=""
 showAsResourcePack=false
 
@@ -34,9 +34,9 @@ showAsResourcePack=false
   side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
-  modId="runiclib"
+  modId="tipsylib"
   mandatory=true
-  versionRange="[4.+,)"
+  versionRange="[2.0.9]"
   ordering="AFTER"
   side="BOTH"
 
@@ -67,3 +67,10 @@ showAsResourcePack=false
   versionRange="[1.0,)"
   ordering="AFTER"
   side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
+modId="cataclysm"
+mandatory=false
+versionRange="[2.0,)"
+ordering="AFTER"
+side="BOTH"

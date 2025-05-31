@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:burning_thorns",
+	"attribute": "tipsylib:burning_thorns",
 	"target": "HURT_SELF",
 	"values": {
 		"rare": {

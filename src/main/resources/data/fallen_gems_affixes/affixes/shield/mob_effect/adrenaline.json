@@ -1,6 +1,6 @@
 {
     "type": "apotheosis:attribute",
-    "attribute": "runiclib:adrenaline",
+    "attribute": "tipsylib:adrenaline",
     "target": "BLOCK_SELF",
     "values": {
         "epic": {

@@ -71,7 +71,7 @@
 		},
 		{
 			"type": "apotheosis:multi_attribute",
-			"desc": "bonus.apotheosis_ascended:attr.desc",
+			"desc": "bonus.fallen_gems_affixes:attr.desc",
 			"gem_class": {
 				"key": "leggings",
 				"types": [
@@ -91,7 +91,7 @@
 		},
 		{
 			"type": "apotheosis:multi_attribute",
-			"desc": "bonus.apotheosis_ascended:attr.desc",
+			"desc": "bonus.fallen_gems_affixes:attr.desc",
 			"gem_class": {
 				"key": "boots",
 				"types": [

@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:attribute",
-	"attribute": "runiclib:hemolacria",
+	"attribute": "tipsylib:hemolacria",
 	"target": "BLOCK_ATTACKER",
 	"values": {
 		"rare": {
