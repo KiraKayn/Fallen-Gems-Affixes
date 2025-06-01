@@ -1,0 +1,15 @@
+{
+  "type": "fallen_gems_affixes:gem_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "cataclysm:entities/ignis"
+    },
+    {
+      "condition": "minecraft:killed_by_player"
+    }
+  ],
+  "drop_chance": 1.0,
+  "rarity": "apotheosis:ancient",
+  "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
+}
