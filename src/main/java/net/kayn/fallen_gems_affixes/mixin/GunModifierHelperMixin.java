@@ -17,9 +17,7 @@ public class GunModifierHelperMixin {
 
     @Unique
     private static double fallenGemsAffixes$getAttributeValue(ItemStack weapon, RegistryObject<Attribute> attributeRO) {
-        return weapon.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attributeRO.get()).stream()
-                .mapToDouble(AttributeModifier::getAmount)
-                .sum();
+        return weapon.getAttributeModifiers(EquipmentSlot.MAINHAND).get(attributeRO.get()).stream().mapToDouble(AttributeModifier::getAmount).sum();
     }
 
     @ModifyReturnValue(method = "getModifiedProjectileSpeed", at = @At("RETURN"))
@@ -31,7 +29,7 @@ public class GunModifierHelperMixin {
     @ModifyReturnValue(method = "getKickReduction", at = @At("RETURN"))
     private static float onGetKickReduction(float originalReduction, ItemStack weapon) {
         double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.KICK_REDUCTION);
-        return originalReduction + (float)(modifier * (1 - originalReduction));
+        return originalReduction + (float) (modifier * (1 - originalReduction));
     }
 
     @ModifyReturnValue(method = "getModifiedRate", at = @At("RETURN"))
@@ -43,13 +41,13 @@ public class GunModifierHelperMixin {
     @ModifyReturnValue(method = "getModifiedAmmoCapacity", at = @At("RETURN"))
     private static int onGetModifiedAmmoCapacity(int originalCapacity, ItemStack weapon, top.ribs.scguns.common.Gun modifiedGun) {
         double additionalAmmo = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.ADDITIONAL_AMMO);
-        return originalCapacity + (int)additionalAmmo;
+        return originalCapacity + (int) additionalAmmo;
     }
 
     @ModifyReturnValue(method = "getModifiedSpread", at = @At("RETURN"))
     private static float onGetModifiedSpread(float originalSpread, ItemStack weapon, float spread) {
         double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.SPREAD_REDUCTION);
-        return originalSpread * (float)(1 - modifier);
+        return originalSpread * (float) (1 - modifier);
     }
 
 
@@ -63,7 +61,6 @@ public class GunModifierHelperMixin {
     @ModifyReturnValue(method = "getModifiedProjectileDamage", at = @At("RETURN"))
     private static float onGetModifiedProjectileDamage(float originalDamage, ItemStack weapon, float damage) {
         double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.BULLET_DAMAGE);
-        return originalDamage * (float)(1 + modifier);
+        return originalDamage * (float) (1 + modifier);
     }
-
 }

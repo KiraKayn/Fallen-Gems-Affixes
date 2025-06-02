@@ -65,17 +65,17 @@
       "target": "attack_target",
       "values": {
         "epic": {
-          "duration": 100,
+          "duration": 60,
           "amplifier": 0,
           "cooldown": 500
         },
         "mythic": {
-          "duration": 140,
+          "duration": 80,
           "amplifier": 1,
           "cooldown": 500
         },
         "ancient": {
-          "duration": 200,
+          "duration": 100,
           "amplifier": 2,
           "cooldown": 500
         }
@@ -96,8 +96,8 @@
           "operation": "ADDITION",
           "values": {
             "epic": 0.05,
-            "mythic": 0.075,
-            "ancient": 0.1
+            "mythic": 0.1,
+            "ancient": 0.15
           }
         },
         {

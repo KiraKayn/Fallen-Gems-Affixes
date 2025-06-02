@@ -65,9 +65,9 @@
       "attribute": "attributeslib:dodge_chance",
       "operation": "ADDITION",
       "values": {
-        "epic": 0.1,
-        "mythic": 0.2,
-        "ancient": 0.3
+        "epic": 0.125,
+        "mythic": 0.175,
+        "ancient": 0.25
       }
     },
     {

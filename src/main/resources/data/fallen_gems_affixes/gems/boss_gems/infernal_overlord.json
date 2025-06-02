@@ -194,9 +194,9 @@
       "attribute": "attributeslib:healing_received",
       "operation": "ADDITION",
       "values": {
-        "epic": 0.10,
-        "mythic": 0.15,
-        "ancient": 0.20
+        "epic": 0.30,
+        "mythic": 0.40,
+        "ancient": 0.50
       }
     }
   ]

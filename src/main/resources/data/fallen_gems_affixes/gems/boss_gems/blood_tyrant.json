@@ -50,7 +50,7 @@
       "values": {
         "epic": 0.05,
         "mythic": 0.10,
-        "ancient": 0.20
+        "ancient": 0.15
       },
       "attributes": [
         "minecraft:generic.max_health",

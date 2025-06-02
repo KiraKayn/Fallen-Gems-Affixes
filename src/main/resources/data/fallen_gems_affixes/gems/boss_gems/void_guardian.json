@@ -101,9 +101,9 @@
           "attribute": "attributeslib:crit_chance",
           "operation": "ADDITION",
           "values": {
-            "epic": 0.25,
-            "mythic": 0.50,
-            "ancient": 0.75
+            "epic": 0.30,
+            "mythic": 0.40,
+            "ancient": 0.5
           }
         },
         {

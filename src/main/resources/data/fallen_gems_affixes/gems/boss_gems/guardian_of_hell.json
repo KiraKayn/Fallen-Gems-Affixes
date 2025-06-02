@@ -62,7 +62,7 @@
 				]
 			},
 			"attribute": "minecraft:generic.max_health",
-			"operation": "ADDITION",
+			"operation": "MULTIPLY_BASE",
 			"values": {
 				"epic": 0.20,
 				"mythic": 0.40,
@@ -149,11 +149,11 @@
 				},
 				{
 					"attribute": "attributeslib:fire_damage",
-					"operation": "ADDITION",
+					"operation": "MULTIPLY_TOTAL",
 					"values": {
-						"epic": 0.15,
-						"mythic": 0.30,
-						"ancient": 0.45
+						"epic": 0.25,
+						"mythic": 0.5,
+						"ancient": 0.75
 					}
 				}
 			]
