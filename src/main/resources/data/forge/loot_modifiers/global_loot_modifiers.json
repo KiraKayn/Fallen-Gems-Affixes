@@ -1,6 +1,12 @@
 {
   "entries": [
-    "fallen_gems_affixes:infernal_overlord_modifier"
+    "fallen_gems_affixes:infernal_overlord_modifier",
+    "fallen_gems_affixes:fallen_warrior_modifier",
+    "fallen_gems_affixes:blood_tyrant_modifier",
+    "fallen_gems_affixes:guardian_of_hell_modifier",
+    "fallen_gems_affixes:ruler_of_abyss_modifier",
+    "fallen_gems_affixes:void_guardian_modifier",
+    "fallen_gems_affixes:withered_sentinel_modifier"
   ],
   "replace": false
 }

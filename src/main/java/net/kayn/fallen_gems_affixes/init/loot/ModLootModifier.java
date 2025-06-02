@@ -9,9 +9,11 @@ import net.minecraftforge.registries.RegistryObject;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 
 public class ModLootModifier {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, FallenGemsAffixes.MOD_ID);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS =
+            DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, FallenGemsAffixes.MOD_ID);
 
-    public static final RegistryObject<Codec<GemLootModifier>> GEM_MODIFIER = LOOT_MODIFIERS.register("gem_modifier", GemLootModifier.CODEC);
+    public static final RegistryObject<Codec<GemLootModifier>> GEM_MODIFIER =
+            LOOT_MODIFIERS.register("gem_modifier", () -> GemLootModifier.CODEC.get());
 
     public static void register(IEventBus eventBus) {
         LOOT_MODIFIERS.register(eventBus);

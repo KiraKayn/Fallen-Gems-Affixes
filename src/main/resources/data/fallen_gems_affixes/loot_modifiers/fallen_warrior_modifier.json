@@ -3,7 +3,7 @@
   "conditions": [
     {
       "condition": "forge:loot_table_id",
-      "loot_table_id": "cataclysm:entities/ignis"
+      "loot_table_id": "cataclysm:entities/maledictus"
     },
     {
       "condition": "minecraft:killed_by_player"
@@ -11,17 +11,17 @@
   ],
   "gems": [
     {
-      "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
+      "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
       "rarity": "apotheosis:epic",
       "drop_chance": 1.0
     },
     {
-      "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
+      "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
       "rarity": "apotheosis:mythic",
       "drop_chance": 0.5
     },
     {
-      "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
+      "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
       "rarity": "apotheosis:ancient",
       "drop_chance": 0.25
     }
