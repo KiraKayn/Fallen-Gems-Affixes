@@ -5,7 +5,8 @@
   "attribute.fallen_gems_affixes.additional_ammo": "Additional Ammo",
   "attribute.fallen_gems_affixes.spread_reduction": "Spread Reduction",
   "attribute.fallen_gems_affixes.reload_speed": "Reload Speed Increase",
-  "attribute.fallen_gems_affixes.bullet_damage": "Damage",
+  "attribute.fallen_gems_affixes.bullet_damage": "Bullet Damage",
+  "attribute.fallen_gems_affixes.max_health_damage": "Max Health Damage",
 
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",
@@ -47,5 +48,8 @@
   "affix.fallen_gems_affixes:celestial_weapons/attribute/voidburst.suffix": "of the Abyss",
 
   "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend": "Voidrend",
-  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend.suffix": "of Dimensional Rupture"
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend.suffix": "of Dimensional Rupture",
+
+  "affix.fallen_gems_affixes:heavy_weapon/attribute/annihilate": "Annihilate",
+  "affix.fallen_gems_affixes:heavy_weapon/attribute/annihilate.suffix": "of the Devouring Void"
 }

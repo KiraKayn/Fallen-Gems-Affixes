@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
+import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,7 @@ public class FallenGemsAffixes {
 
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);
+        new MaxHealthDamageHandler();
 
 
 

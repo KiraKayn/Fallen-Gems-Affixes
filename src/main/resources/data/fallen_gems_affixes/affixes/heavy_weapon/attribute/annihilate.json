@@ -1,0 +1,40 @@
+{
+  "type": "apotheosis:attribute",
+  "attribute": "fallen_gems_affixes:max_health_damage",
+  "operation": "ADDITION",
+  "values": {
+    "common": {
+      "min": 0.05,
+      "steps": 5,
+      "step": 0.1
+    },
+    "uncommon": {
+      "min": 0.10,
+      "steps": 5,
+      "step": 0.1
+    },
+    "rare": {
+      "min": 0.15,
+      "steps": 10,
+      "step": 0.1
+    },
+    "epic": {
+      "min": 0.2,
+      "steps": 10,
+      "step": 0.1
+    },
+    "mythic": {
+      "min": 1,
+      "steps": 1,
+      "step": 0
+    },
+    "ancient": {
+      "min": 0.5,
+      "steps": 15,
+      "step": 0.1
+    }
+  },
+  "types": [
+    "heavy_weapon"
+  ]
+}

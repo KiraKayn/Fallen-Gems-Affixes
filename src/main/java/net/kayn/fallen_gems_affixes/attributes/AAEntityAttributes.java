@@ -17,5 +17,6 @@ public class AAEntityAttributes {
         event.add(EntityType.PLAYER, AAAttributes.SPREAD_REDUCTION.get());
         event.add(EntityType.PLAYER, AAAttributes.RELOAD_SPEED.get());
         event.add(EntityType.PLAYER, AAAttributes.BULLET_DAMAGE.get());
+        event.add(EntityType.PLAYER, AAAttributes.MAX_HEALTH_DAMAGE.get());
     }
 }

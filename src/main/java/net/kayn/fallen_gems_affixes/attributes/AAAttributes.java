@@ -32,4 +32,7 @@ public class AAAttributes {
     public static final RegistryObject<Attribute> BULLET_DAMAGE = ATTRIBUTES.register("bullet_damage",
             () -> new RangedAttribute("attribute.fallen_gems_affixes.bullet_damage", 0.0, -0.99, 10.0).setSyncable(true));
 
+    public static final RegistryObject<Attribute> MAX_HEALTH_DAMAGE = ATTRIBUTES.register("max_health_damage",
+            () -> new PercentageAttribute("attribute.fallen_gems_affixes.max_health_damage", 0.0D, 0.0D, 1.0D).setSyncable(true));
+
 }
