@@ -26,5 +26,26 @@
   "affix.fallen_gems_affixes:gun/attribute/reload_speed.suffix": "of Quick Hands",
 
   "affix.fallen_gems_affixes:gun/attribute/bullet_damage": "Powerful",
-  "affix.fallen_gems_affixes:gun/attribute/bullet_damage.suffix": "of Destruction"
+  "affix.fallen_gems_affixes:gun/attribute/bullet_damage.suffix": "of Destruction",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/astral": "Astral",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/astral.suffix": "of the Stars",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/astral_might": "Astral Might",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/astral_might.suffix": "of Cosmic Power",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/fateweaver": "Fateweaver",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/fateweaver.suffix": "of Twisting Fate",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/rift_dancer": "Rift Dancer",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/rift_dancer.suffix": "of Perfect Motion",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/soulflare": "Soulflare",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/soulflare.suffix": "of Burning Spirit",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidburst": "Voidburst",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidburst.suffix": "of the Abyss",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend": "Voidrend",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend.suffix": "of Dimensional Rupture"
 }

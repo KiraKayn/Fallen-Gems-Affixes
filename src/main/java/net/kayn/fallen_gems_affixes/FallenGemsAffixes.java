@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
+import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,8 +24,12 @@ public class FallenGemsAffixes {
 
         LOGGER.info("Loading Fallen Gems & Affixes");
 
+        CelestialLootCategory.CELESTIAL_WEAPONS.toString();
+
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);
+
+
 
         ModLootModifier.register(modEventBus);
 

@@ -63,4 +63,5 @@ public class GunModifierHelperMixin {
         double modifier = fallenGemsAffixes$getAttributeValue(weapon, AAAttributes.BULLET_DAMAGE);
         return originalDamage * (float) (1 + modifier);
     }
+
 }

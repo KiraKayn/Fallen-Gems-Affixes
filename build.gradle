@@ -65,7 +65,7 @@ repositories {
                 url = "https://api.modrinth.com/maven"
             }
         }
-        forRepositories(fg.repository) // Only add this if you're using ForgeGradle, otherwise remove this line
+        forRepositories(fg.repository)
         filter {
             includeGroup "maven.modrinth"
         }
@@ -144,6 +144,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:cataclysm-551586:5784694")
     runtimeOnly fg.deobf("curse.maven:cataclysm-1001614:5363774")
 
+    runtimeOnly fg.deobf("curse.maven:celestisynth-872712:5776930")
+
     runtimeOnly fg.deobf("curse.maven:alexs-caves-924854:5633305")
     runtimeOnly fg.deobf("curse.maven:citadel-331936:5633260")
 
@@ -155,6 +157,8 @@ dependencies {
 
     implementation fg.deobf("maven.modrinth:scorched-guns-2:${scorched_guns_version}")
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
+
+
 
 
 
