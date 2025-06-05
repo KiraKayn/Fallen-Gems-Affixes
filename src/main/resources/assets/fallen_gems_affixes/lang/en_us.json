@@ -51,5 +51,41 @@
   "affix.fallen_gems_affixes:celestial_weapons/attribute/voidrend.suffix": "of Dimensional Rupture",
 
   "affix.fallen_gems_affixes:heavy_weapon/attribute/annihilate": "Annihilate",
-  "affix.fallen_gems_affixes:heavy_weapon/attribute/annihilate.suffix": "of the Devouring Void"
+  "affix.fallen_gems_affixes:heavy_weapon/attribute/annihilate.suffix": "of the Devouring Void",
+
+  "affix.fallen_gems_affixes:staffs/attribute/mystic": "Mystic",
+  "affix.fallen_gems_affixes:staffs/attribute/mystic.suffix": "of Spellcasting",
+
+  "affix.fallen_gems_affixes:staffs/attribute/restorative": "Restorative",
+  "affix.fallen_gems_affixes:staffs/attribute/restorative.suffix": "of Mana Renewal",
+
+  "affix.fallen_gems_affixes:staffs/attribute/verdant": "Verdant",
+  "affix.fallen_gems_affixes:staffs/attribute/verdant.suffix": "of the Wild",
+
+  "affix.fallen_gems_affixes:staffs/attribute/wellspring": "Wellspring",
+  "affix.fallen_gems_affixes:staffs/attribute/wellspring.suffix": "of Inner Reserve",
+
+  "affix.fallen_gems_affixes:staffs/attribute/stormcharged": "Stormcharged",
+  "affix.fallen_gems_affixes:staffs/attribute/stormcharged.suffix": "of the Storm",
+
+  "affix.fallen_gems_affixes:staffs/attribute/frostbound": "Frostbound",
+  "affix.fallen_gems_affixes:staffs/attribute/frostbound.suffix": "of the Frozen Path",
+
+  "affix.fallen_gems_affixes:staffs/attribute/sanctified": "Sanctified",
+  "affix.fallen_gems_affixes:staffs/attribute/sanctified.suffix": "of Divine Light",
+
+  "affix.fallen_gems_affixes:staffs/attribute/blazing": "Blazing",
+  "affix.fallen_gems_affixes:staffs/attribute/blazing.suffix": "of Flame",
+
+  "affix.fallen_gems_affixes:staffs/attribute/empowered": "Empowered",
+  "affix.fallen_gems_affixes:staffs/attribute/empowered.suffix": "of Arcane Surge",
+
+  "affix.fallen_gems_affixes:staffs/attribute/voidtouched": "Voidtouched",
+  "affix.fallen_gems_affixes:staffs/attribute/voidtouched.suffix": "of the End",
+
+  "affix.fallen_gems_affixes:staffs/attribute/swift": "Swift",
+  "affix.fallen_gems_affixes:staffs/attribute/swift.suffix": "of Quick Casting",
+
+  "affix.fallen_gems_affixes:staffs/attribute/sanguine": "Sanguine",
+  "affix.fallen_gems_affixes:staffs/attribute/sanguine.suffix": "of Blood Magic"
 }

@@ -2,14 +2,14 @@ package net.kayn.fallen_gems_affixes.attributes;
 
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 
-public class PercentageAttribute extends RangedAttribute {
+public class PercentBasedAttribute extends RangedAttribute {
 
-    public PercentageAttribute(String id, double defaultValue, double minValue, double maxValue) {
+    public PercentBasedAttribute(String id, double defaultValue, double minValue, double maxValue) {
         super(id, defaultValue, minValue, maxValue);
     }
 
     @Override
-    public PercentageAttribute setSyncable(boolean syncable) {
+    public PercentBasedAttribute setSyncable(boolean syncable) {
         super.setSyncable(syncable);
         return this;
     }

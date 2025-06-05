@@ -24,7 +24,9 @@ public class MaxHealthDamageHandler {
         if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
             LivingEntity target = event.getEntity();
 
-            if (AttributesUtil.isPhysicalDamage(event.getSource())) {
+            if (AttributesUtil.isPhysicalDamage(event.getSource())
+                    && attacker.getAttributes().hasAttribute(AAAttributes.MAX_HEALTH_DAMAGE.get())) {
+
                 double attrValue = attacker.getAttributeValue(AAAttributes.MAX_HEALTH_DAMAGE.get());
                 if (attrValue > 0) {
                     float extraDamage = (float) (attrValue * target.getMaxHealth());

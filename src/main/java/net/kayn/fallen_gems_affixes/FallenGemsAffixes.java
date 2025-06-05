@@ -4,6 +4,7 @@ import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
+import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,6 +27,7 @@ public class FallenGemsAffixes {
         LOGGER.info("Loading Fallen Gems & Affixes");
 
         CelestialLootCategory.CELESTIAL_WEAPONS.toString();
+        StaffLootCategory.STAFF.toString();
 
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);

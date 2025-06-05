@@ -74,6 +74,12 @@
     "bonus.fallen_gems_affixes:multi_attr.desc.and_four": "%s, %s, %s, and %s",
     "bonus.fallen_gems_affixes:attr.desc": "%s",
 
+    "text.apotheosis.category.celestial_weapons": "Celestial Weapon",
+    "text.apotheosis.category.celestial_weapons.plural": "Celestial Weapons",
+
+    "text.apotheosis.category.staffs": "Staff",
+    "text.apotheosis.category.staffs.plural": "Staffs",
+
     "affix.apotheosis:luck": "Threatening",
     "affix.apotheosis:luck.suffix": "",
     "affix.apotheosis:luck.desc": "Added threat multiplier proportional to gear rarity"
