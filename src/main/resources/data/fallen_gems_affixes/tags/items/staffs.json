@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "irons_spellbooks:graybeard_staff",
+    "irons_spellbooks:ice_staff",
+    "irons_spellbooks:blood_staff",
+    "irons_spellbooks:hither_thither_wand",
+    "irons_spellbooks:lightning_rod",
+    "irons_spellbooks:artificer_cane",
+    "traveloptics:titanlord_scepter",
+    "traveloptics:titanlord_scepter_tectonic",
+    "traveloptics:titanlord_scepter_retro"
+  ]
+}
