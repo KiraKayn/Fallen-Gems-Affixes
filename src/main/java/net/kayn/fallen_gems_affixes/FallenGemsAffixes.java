@@ -2,6 +2,8 @@ package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
+import net.kayn.fallen_gems_affixes.compat.*;
+import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
@@ -23,7 +25,6 @@ public class FallenGemsAffixes {
         IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
-
         LOGGER.info("Loading Fallen Gems & Affixes");
 
         CelestialLootCategory.CELESTIAL_WEAPONS.toString();
@@ -32,19 +33,26 @@ public class FallenGemsAffixes {
         AALootCategories.init();
         AAAttributes.ATTRIBUTES.register(modEventBus);
         new MaxHealthDamageHandler();
-
-
-
         ModLootModifier.register(modEventBus);
+
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        modEventBus.register(this);
+        MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(KeresSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(AquafloraSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(PoltergeistSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
+        MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
+
+        MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
-
 
     public static ResourceLocation loc(String id) {
         return ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, id);
