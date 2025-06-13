@@ -50,14 +50,14 @@ public class CelestisynthAttributeHandler {
                         "Crescentia Ender Magic Resist Boost", 0.20,
                         AttributeModifier.Operation.MULTIPLY_BASE));
             }
-
             // Celestisynth Solaris
             else if (itemName.equals("celestisynth:solaris")) {
-                // +10% fire_spell_power
+                // +20% fire_spell_power
                 event.addModifier(AttributeRegistry.FIRE_SPELL_POWER.get(), new AttributeModifier(SOLARIS_UUID,
                         "Solaris Fire Spell Power Boost", 0.10,
                         AttributeModifier.Operation.MULTIPLY_BASE));
             }
+
 
             // Celestisynth Aquaflora
             else if (itemName.equals("celestisynth:aquaflora")) {
