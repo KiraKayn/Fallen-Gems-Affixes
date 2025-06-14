@@ -10,6 +10,7 @@ import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -38,16 +39,17 @@ public class FallenGemsAffixes {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(KeresSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(AquafloraSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(PoltergeistSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
-        MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
-
-        MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
+        if (ModList.get().isLoaded("celestisynth")) {
+            MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(KeresSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(AquafloraSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(PoltergeistSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
+            MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

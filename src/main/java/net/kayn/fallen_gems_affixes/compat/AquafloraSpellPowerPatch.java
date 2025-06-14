@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.compat;
 
-import com.aqutheseal.celestisynth.common.registry.CSItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -10,34 +9,42 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber
 public class AquafloraSpellPowerPatch {
 
+    private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
+    private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
+
+    private static final ResourceLocation AQUAFLORA_ID = new ResourceLocation("celestisynth", "aquaflora");
     private static final ResourceLocation NATURE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "nature_spell_power");
-    private static final Lazy<Attribute> NATURE_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(NATURE_SPELL_POWER_ID));
+    private static final Lazy<Attribute> NATURE_SPELL_POWER = Lazy.of(() -> {
+        if (!HAS_IRONS) return null;
+        return ForgeRegistries.ATTRIBUTES.getValue(NATURE_SPELL_POWER_ID);
+    });
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
+        if (!HAS_CELESTISYNTH || !HAS_IRONS) return;
+
         DamageSource source = event.getSource();
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!held.is(CSItems.AQUAFLORA.get())) return;
+        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(AQUAFLORA_ID)) return;
 
-        Attribute natureSpellAttr = NATURE_SPELL_POWER.get();
-        if (natureSpellAttr == null) return;
+        Attribute attr = NATURE_SPELL_POWER.get();
+        if (attr == null) return;
 
-        AttributeInstance natureSpellInstance = player.getAttribute(natureSpellAttr);
-        if (natureSpellInstance == null) return;
+        AttributeInstance instance = player.getAttribute(attr);
+        if (instance == null) return;
 
-        double natureSpellPower = natureSpellInstance.getValue();
-        if (natureSpellPower <= 0) return;
+        double value = instance.getValue();
+        if (value <= 0) return;
 
-        float original = event.getAmount();
-        float scaled = original + (original * (float) natureSpellPower);
-        event.setAmount(scaled);
+        event.setAmount(event.getAmount() + (event.getAmount() * (float) value));
     }
 }

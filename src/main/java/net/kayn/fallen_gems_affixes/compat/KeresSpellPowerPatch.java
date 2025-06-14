@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.compat;
 
-import com.aqutheseal.celestisynth.common.registry.CSItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -10,34 +9,39 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber
 public class KeresSpellPowerPatch {
 
+    private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
+    private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
+
+    private static final ResourceLocation KERES_ID = new ResourceLocation("celestisynth", "keres");
     private static final ResourceLocation BLOOD_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "blood_spell_power");
-    private static final Lazy<Attribute> BLOOD_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(BLOOD_SPELL_POWER_ID));
+    private static final Lazy<Attribute> BLOOD_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(BLOOD_SPELL_POWER_ID) : null);
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
+        if (!HAS_CELESTISYNTH || !HAS_IRONS) return;
+
         DamageSource source = event.getSource();
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!held.is(CSItems.KERES.get())) return;
+        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(KERES_ID)) return;
 
-        Attribute bloodSpellAttr = BLOOD_SPELL_POWER.get();
-        if (bloodSpellAttr == null) return;
+        Attribute attr = BLOOD_SPELL_POWER.get();
+        if (attr == null) return;
 
-        AttributeInstance bloodSpellInstance = player.getAttribute(bloodSpellAttr);
-        if (bloodSpellInstance == null) return;
+        AttributeInstance instance = player.getAttribute(attr);
+        if (instance == null) return;
 
-        double bloodSpellPower = bloodSpellInstance.getValue();
-        if (bloodSpellPower <= 0) return;
+        double value = instance.getValue();
+        if (value <= 0) return;
 
-        float original = event.getAmount();
-        float scaled = original + (original * (float) bloodSpellPower);
-        event.setAmount(scaled);
+        event.setAmount(event.getAmount() + (event.getAmount() * (float) value));
     }
 }
