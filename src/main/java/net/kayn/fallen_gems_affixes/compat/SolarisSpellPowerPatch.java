@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class SolarisSpellPowerPatch {
 
-    private static final ResourceLocation FIRE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "fire_spell_power");
+    private static final ResourceLocation FIRE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "fire_spell_power");
     private static final Lazy<Attribute> FIRE_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(FIRE_SPELL_POWER_ID));
 
     @SubscribeEvent

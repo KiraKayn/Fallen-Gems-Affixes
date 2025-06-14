@@ -16,6 +16,6 @@ public class CelestialLootCategory {
     );
 
     private static boolean isCelestialWeapon(ItemStack stack) {
-        return stack.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "celestial_weapons")));
+        return stack.is(ItemTags.create(new ResourceLocation("fallen_gems_affixes", "celestial_weapons")));
     }
 }

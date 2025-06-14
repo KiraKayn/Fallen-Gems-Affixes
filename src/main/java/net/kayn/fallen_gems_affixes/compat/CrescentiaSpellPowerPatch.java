@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class CrescentiaSpellPowerPatch {
 
-    private static final ResourceLocation ENDER_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "ender_spell_power");
+    private static final ResourceLocation ENDER_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "ender_spell_power");
     private static final Lazy<Attribute> ENDER_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(ENDER_SPELL_POWER_ID));
 
     @SubscribeEvent

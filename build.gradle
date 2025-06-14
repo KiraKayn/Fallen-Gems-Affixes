@@ -278,10 +278,6 @@ java {
     withSourcesJar()
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
-
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
 }
@@ -338,4 +334,10 @@ task publishAll {
     dependsOn('publishCurseForge')
     dependsOn('modrinth')
     group = 'publishing'
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.compilerArgs.removeAll(["-Werror"])
+        options.compilerArgs += ["-Xlint:deprecation"]
+    }
 }

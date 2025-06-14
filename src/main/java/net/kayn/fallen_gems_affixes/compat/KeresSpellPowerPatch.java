@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class KeresSpellPowerPatch {
 
-    private static final ResourceLocation BLOOD_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "blood_spell_power");
+    private static final ResourceLocation BLOOD_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "blood_spell_power");
     private static final Lazy<Attribute> BLOOD_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(BLOOD_SPELL_POWER_ID));
 
     @SubscribeEvent

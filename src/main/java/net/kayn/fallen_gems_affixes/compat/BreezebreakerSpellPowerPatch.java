@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class BreezebreakerSpellPowerPatch {
 
-    private static final ResourceLocation EVOCATION_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "evocation_spell_power");
+    private static final ResourceLocation EVOCATION_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "evocation_spell_power");
     private static final Lazy<Attribute> EVOCATION_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(EVOCATION_SPELL_POWER_ID));
 
     @SubscribeEvent

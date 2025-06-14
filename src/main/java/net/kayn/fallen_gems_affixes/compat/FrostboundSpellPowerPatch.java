@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class FrostboundSpellPowerPatch {
 
-    private static final ResourceLocation ICE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "ice_spell_power");
+    private static final ResourceLocation ICE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "ice_spell_power");
     private static final Lazy<Attribute> ICE_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(ICE_SPELL_POWER_ID));
 
     @SubscribeEvent

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(FallenGemsAffixes.MOD_ID)
 public class FallenGemsAffixes {
@@ -35,7 +36,6 @@ public class FallenGemsAffixes {
         new MaxHealthDamageHandler();
         ModLootModifier.register(modEventBus);
 
-
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
@@ -48,13 +48,12 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
 
         MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
-    public static ResourceLocation loc(String id) {
-        return ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, id);
+    public static ResourceLocation id(@NotNull String path) {
+        return new ResourceLocation(FallenGemsAffixes.MOD_ID, path);
     }
 }

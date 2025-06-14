@@ -16,6 +16,6 @@ public class StaffLootCategory {
     );
 
     private static boolean CastingItem (ItemStack stack) {
-        return stack.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "staffs")));
+        return stack.is(ItemTags.create(new ResourceLocation("fallen_gems_affixes", "staffs")));
     }
 }

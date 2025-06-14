@@ -63,7 +63,7 @@ public class GemLootModifier extends LootModifier {
     }
 
     private ItemStack createApotheosisGem(GemEntry entry) {
-        Item gemItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath("apotheosis", "gem"));
+        Item gemItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation("apotheosis", "gem"));
         if (gemItem == null) return ItemStack.EMPTY;
 
         ItemStack stack = new ItemStack(gemItem);

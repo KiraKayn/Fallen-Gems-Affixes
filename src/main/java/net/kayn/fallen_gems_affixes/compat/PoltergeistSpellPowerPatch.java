@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class PoltergeistSpellPowerPatch {
 
-    private static final ResourceLocation ELDRITCH_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "eldritch_spell_power");
+    private static final ResourceLocation ELDRITCH_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "eldritch_spell_power");
     private static final Lazy<Attribute> ELDRITCH_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(ELDRITCH_SPELL_POWER_ID));
 
     @SubscribeEvent

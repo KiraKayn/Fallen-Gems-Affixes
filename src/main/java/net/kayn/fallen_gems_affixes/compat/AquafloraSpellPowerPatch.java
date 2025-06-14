@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class AquafloraSpellPowerPatch {
 
-    private static final ResourceLocation NATURE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "nature_spell_power");
+    private static final ResourceLocation NATURE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "nature_spell_power");
     private static final Lazy<Attribute> NATURE_SPELL_POWER = Lazy.of(() -> ForgeRegistries.ATTRIBUTES.getValue(NATURE_SPELL_POWER_ID));
 
     @SubscribeEvent
