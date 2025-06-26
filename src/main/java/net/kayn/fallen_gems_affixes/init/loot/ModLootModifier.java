@@ -15,6 +15,9 @@ public class ModLootModifier {
     public static final RegistryObject<Codec<GemLootModifier>> GEM_MODIFIER =
             LOOT_MODIFIERS.register("gem_modifier", () -> GemLootModifier.CODEC.get());
 
+    public static final RegistryObject<Codec<SocketGemModifier>> SOCKET_GEM_MODIFIER =
+            LOOT_MODIFIERS.register("socket_gem_modifier", () -> SocketGemModifier.CODEC);
+
     public static void register(IEventBus eventBus) {
         LOOT_MODIFIERS.register(eventBus);
     }

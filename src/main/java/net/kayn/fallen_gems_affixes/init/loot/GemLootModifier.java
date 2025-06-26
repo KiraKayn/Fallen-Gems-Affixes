@@ -90,5 +90,6 @@ public class GemLootModifier extends LootModifier {
                         Codec.STRING.fieldOf("rarity").forGetter(GemEntry::rarity),
                         Codec.FLOAT.fieldOf("drop_chance").forGetter(GemEntry::drop_chance))
                 .apply(inst, GemEntry::new));
+
     }
 }
