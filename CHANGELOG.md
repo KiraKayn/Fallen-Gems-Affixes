@@ -1,3 +1,7 @@
+# 1.1.5
+- Added Gem of the Howling Storm for Scylla boss, reduced the drop chance for Cataclysm gems, epic: 50%, mythic: 25%, ancient: 5%
+  Fixed the Innate Blood Gem, Fixed the gun category not working, fixed all the errors that showed up in the log
+
 # 1.1.0
 - Added two new classes, SocketGemModifier, which is a global loot modifier that adds gems to affixed loot in chests, and MobGearInjector, which is an event that adds gems to boss gear. Default chance is 30%, can be changed between 0-1, and can be turned off in fallen_gems_affixes.common.toml
 
