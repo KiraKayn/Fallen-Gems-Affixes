@@ -1,54 +1,23 @@
 {
-	"type": "apotheosis:attribute",
-	"attribute": "tipsylib:hemolacria",
+	"type": "apotheosis:mob_effect",
+	"mob_effect": "tipsylib:hemolacria",
 	"target": "BLOCK_ATTACKER",
 	"values": {
-		"rare": {
-			"duration": {
-				"min": 150,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": {
-				"min": 0,
-				"steps": 1,
-				"step": 0
-			}
-		},
 		"epic": {
-			"duration": {
-				"min": 200,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": {
-				"min": 1,
-				"steps": 1,
-				"step": 0
-			}
+			"duration": 140,
+			"amplifier": 0,
+			"cooldown": 200
 		},
 		"mythic": {
-			"duration": {
-				"min": 250,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": {
-				"min": 2,
-				"steps": 1,
-				"step": 0
-			}
+			"duration": 160,
+			"amplifier": 1,
+			"cooldown": 200
 		},
 		"ancient": {
-			"duration": {
-				"min": 450,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 3
+			"duration": 180,
+			"amplifier": 2,
+			"cooldown": 200
 		}
 	},
-	"types": [
-		"shield"
-	]
+	"types": ["shield"]
 }

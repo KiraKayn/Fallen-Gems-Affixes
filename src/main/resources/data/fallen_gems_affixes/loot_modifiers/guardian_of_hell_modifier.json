@@ -13,17 +13,17 @@
     {
       "gem": "fallen_gems_affixes:boss_gems/guardian_of_hell",
       "rarity": "apotheosis:epic",
-      "drop_chance": 0.75
-    },
-    {
-      "gem": "fallen_gems_affixes:boss_gems/guardian_of_hell",
-      "rarity": "apotheosis:mythic",
       "drop_chance": 0.5
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/guardian_of_hell",
-      "rarity": "apotheosis:ancient",
+      "rarity": "apotheosis:mythic",
       "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/guardian_of_hell",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
     }
   ]
 }

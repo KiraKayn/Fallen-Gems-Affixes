@@ -1,43 +1,22 @@
 {
-	"type": "apotheosis:attribute",
-	"attribute": "tipsylib:perception",
+	"type": "apotheosis:mob_effect",
+	"mob_effect": "tipsylib:perception",
 	"target": "HURT_SELF",
 	"values": {
-		"rare": {
-			"duration": {
-				"min": 100,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 0,
-			"cooldown": 150
-		},
 		"epic": {
-			"duration": {
-				"min": 150,
-				"steps": 1,
-				"step": 0
-			},
+			"duration": 140,
 			"amplifier": 0,
-			"cooldown": 150
+			"cooldown": 200
 		},
 		"mythic": {
-			"duration": {
-				"min": 200,
-				"steps": 1,
-				"step": 0
-			},
+			"duration": 160,
 			"amplifier": 1,
-			"cooldown": 150
+			"cooldown": 200
 		},
 		"ancient": {
-			"duration": {
-				"min": 450,
-				"steps": 1,
-				"step": 0
-			},
+			"duration": 180,
 			"amplifier": 2,
-			"cooldown": 300
+			"cooldown": 200
 		}
 	},
 	"types": [

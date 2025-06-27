@@ -1,39 +1,27 @@
 {
-	"type": "apotheosis:attribute",
-	"attribute": "tipsylib:internal_bleeding",
-	"target": "ATTACK_TARGET",
-	"values": {
-		"epic": {
-			"duration": {
-				"min": 150,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 0,
-			"cooldown": 300
-		},
-		"mythic": {
-			"duration": {
-				"min": 250,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 0,
-			"cooldown": 300
-		},
-		"ancient": {
-			"duration": {
-				"min": 450,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 0,
-			"cooldown": 500
-		}
-	},
-	"types": [
-		"sword",
-		"trident",
-		"heavy_weapon"
-	]
+  "type": "apotheosis:mob_effect",
+  "mob_effect": "tipsylib:internal_bleeding",
+  "target": "ATTACK_TARGET",
+  "values": {
+    "epic": {
+      "duration": 140,
+      "amplifier": 0,
+      "cooldown": 200
+    },
+    "mythic": {
+      "duration": 160,
+      "amplifier": 1,
+      "cooldown": 200
+    },
+    "ancient": {
+      "duration": 180,
+      "amplifier": 2,
+      "cooldown": 200
+    }
+  },
+  "types": [
+    "sword",
+    "trident",
+    "heavy_weapon"
+  ]
 }

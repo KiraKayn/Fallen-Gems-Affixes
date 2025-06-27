@@ -13,17 +13,17 @@
     {
       "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
       "rarity": "apotheosis:epic",
-      "drop_chance": 0.75
-    },
-    {
-      "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
-      "rarity": "apotheosis:mythic",
       "drop_chance": 0.5
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
-      "rarity": "apotheosis:ancient",
+      "rarity": "apotheosis:mythic",
       "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
     }
   ]
 }

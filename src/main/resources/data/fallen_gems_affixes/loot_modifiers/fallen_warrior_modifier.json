@@ -13,17 +13,17 @@
     {
       "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
       "rarity": "apotheosis:epic",
-      "drop_chance": 0.75
-    },
-    {
-      "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
-      "rarity": "apotheosis:mythic",
       "drop_chance": 0.5
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
-      "rarity": "apotheosis:ancient",
+      "rarity": "apotheosis:mythic",
       "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/fallen_warrior",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
     }
   ]
 }

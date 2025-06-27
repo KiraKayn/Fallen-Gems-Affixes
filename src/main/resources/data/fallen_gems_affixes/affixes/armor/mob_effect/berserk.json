@@ -1,34 +1,22 @@
 {
-	"type": "apotheosis:attribute",
-	"attribute": "tipsylib,:berserk",
+	"type": "apotheosis:mob_effect",
+	"mob_effect": "tipsylib:berserk",
 	"target": "HURT_SELF",
 	"values": {
 		"epic": {
-			"duration": {
-				"min": 150,
-				"steps": 1,
-				"step": 0
-			},
+			"duration": 140,
 			"amplifier": 0,
-			"cooldown": 300
+			"cooldown": 200
 		},
 		"mythic": {
-			"duration": {
-				"min": 200,
-				"steps": 1,
-				"step": 0
-			},
+			"duration": 160,
 			"amplifier": 1,
-			"cooldown": 300
+			"cooldown": 200
 		},
 		"ancient": {
-			"duration": {
-				"min": 450,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 3,
-			"cooldown": 500
+			"duration": 180,
+			"amplifier": 2,
+			"cooldown": 200
 		}
 	},
 	"types": [

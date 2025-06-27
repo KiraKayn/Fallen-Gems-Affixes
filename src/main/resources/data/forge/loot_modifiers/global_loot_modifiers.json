@@ -7,6 +7,7 @@
     "fallen_gems_affixes:ruler_of_abyss_modifier",
     "fallen_gems_affixes:void_guardian_modifier",
     "fallen_gems_affixes:withered_sentinel_modifier",
+    "fallen_gems_affixes:howling_storm_modifier",
     "fallen_gems_affixes:socket_gem_modifier"
   ],
   "replace": false

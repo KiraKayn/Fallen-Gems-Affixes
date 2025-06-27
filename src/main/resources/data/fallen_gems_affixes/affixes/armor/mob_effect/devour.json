@@ -1,43 +1,22 @@
 {
-	"type": "apotheosis:attribute",
-	"attribute": "tipsylib:devour",
+	"type": "apotheosis:mob_effect",
+	"mob_effect": "tipsylib:devour",
 	"target": "HURT_SELF",
 	"values": {
-		"rare": {
-			"duration": {
-				"min": 100,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 1,
-			"cooldown": 250
-		},
 		"epic": {
-			"duration": {
-				"min": 150,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 3,
-			"cooldown": 250
+			"duration": 140,
+			"amplifier": 0,
+			"cooldown": 200
 		},
 		"mythic": {
-			"duration": {
-				"min": 200,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 5,
-			"cooldown": 250
+			"duration": 160,
+			"amplifier": 1,
+			"cooldown": 200
 		},
 		"ancient": {
-			"duration": {
-				"min": 300,
-				"steps": 1,
-				"step": 0
-			},
-			"amplifier": 9,
-			"cooldown": 350
+			"duration": 180,
+			"amplifier": 2,
+			"cooldown": 200
 		}
 	},
 	"types": [

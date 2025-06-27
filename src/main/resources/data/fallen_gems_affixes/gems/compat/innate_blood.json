@@ -10,7 +10,7 @@
 		"overworld"
 	],
 	"unique": true,
-	"min_rarity": "common",
+	"min_rarity": "rare",
 	"bonuses": [{
 			"type": "apotheosis:multi_attribute",
 			"desc": "bonus.fallen_gems_affixes:multi_attr.desc.and_three",

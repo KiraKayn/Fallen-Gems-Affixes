@@ -13,17 +13,17 @@
     {
       "gem": "fallen_gems_affixes:boss_gems/withered_sentinel",
       "rarity": "apotheosis:epic",
-      "drop_chance": 0.75
-    },
-    {
-      "gem": "fallen_gems_affixes:boss_gems/withered_sentinel",
-      "rarity": "apotheosis:mythic",
       "drop_chance": 0.5
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/withered_sentinel",
-      "rarity": "apotheosis:ancient",
+      "rarity": "apotheosis:mythic",
       "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/withered_sentinel",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
     }
   ]
 }

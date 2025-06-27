@@ -39,6 +39,8 @@ public class FallenGemsAffixes {
         CelestialLootCategory.CELESTIAL_WEAPONS.toString();
         StaffLootCategory.STAFF.toString();
 
+        AALootCategories.init();
+
         AAAttributes.ATTRIBUTES.register(modEventBus);
         new MaxHealthDamageHandler();
 
