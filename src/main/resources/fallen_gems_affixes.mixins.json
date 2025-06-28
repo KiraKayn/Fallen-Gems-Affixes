@@ -2,10 +2,10 @@
     "required": true,
     "package": "net.kayn.fallen_gems_affixes.mixin",
     "compatibilityLevel": "JAVA_17",
-    "refmap": "${modid}.refmap.json",
+    "refmap": "fallen_gems_affixes.refmap.json",
     "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
     "mixins": [
-        "GunModifierHelperMixin"
+        "GunModifierHelperMixin", "SocketHelperMixin"
     ],
     "client": [
     ],
