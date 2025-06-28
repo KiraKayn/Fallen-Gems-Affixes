@@ -19,6 +19,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SocketGemModifier extends LootModifier {
@@ -41,14 +42,17 @@ public class SocketGemModifier extends LootModifier {
         for (ItemStack stack : generatedLoot) {
             if (stack.isEmpty()) continue;
 
-            int socketCount = SocketHelper.getSockets(stack);
-            if (socketCount <= 0) continue;
+            int sockets = SocketHelper.getSockets(stack);
+            if (sockets <= 0) continue;
 
             LootCategory category = LootCategory.forItem(stack);
             if (category == null || category.isNone()) continue;
 
-            List<GemInstance> gems = new ArrayList<>();
-            for (int i = 0; i < socketCount; i++) {
+            List<GemInstance> gems = new ArrayList<>(Collections.nCopies(sockets, GemInstance.EMPTY));
+
+            for (int i = 0; i < sockets; i++) {
+                GemInstance selected = GemInstance.EMPTY;
+
                 if (rand.nextFloat() <= ModConfig.SOCKET_GEM_CHANCE.get()) {
                     ItemStack gemStack = GemRegistry.createRandomGemStack(rand, level, 1.0F, g ->
                             g.getBonuses().stream()
@@ -58,12 +62,12 @@ public class SocketGemModifier extends LootModifier {
                     if (!gemStack.isEmpty()) {
                         GemInstance instance = GemInstance.socketed(stack, gemStack);
                         if (instance.isValid()) {
-                            gems.add(instance);
-                            continue;
+                            selected = instance;
                         }
                     }
                 }
-                gems.add(GemInstance.EMPTY);
+
+                gems.set(i, selected);
             }
 
             SocketHelper.setGems(stack, new SocketedGems(gems));
