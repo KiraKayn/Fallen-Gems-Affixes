@@ -1,3 +1,6 @@
+# 1.1.6
+- Fixed the issue where the gear you have would change the gems on it when leaving & reentering the world
+
 # 1.1.5
 - Added Gem of the Howling Storm for Scylla boss, reduced the drop chance for Cataclysm gems, epic: 50%, mythic: 25%, ancient: 5%
   Fixed the Innate Blood Gem, Fixed the gun category not working, fixed all the errors that showed up in the log
