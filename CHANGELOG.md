@@ -1,6 +1,9 @@
+# 1.1.8
+- Added config for SocketHelperMixin, so if you don't want gaps between sockets you can turn it off
+
 # 1.1.7
 - Rewrote SocketGemModifier class to use the logic from MobGearGemInjector
-- Added SocketHelperMixin to allow sockets to have gaps inside them, made by rtxyd 
+- Added SocketHelperMixin to allow sockets to have gaps between them, made by rtxyd 
 
 # 1.1.6
 - Fixed the issue where the gear you have would change the gems on it when leaving & reentering the world
