@@ -21,10 +21,6 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        readTomlConfigEarly();
-    }
-
-    private void readTomlConfigEarly() {
         Path configPath = FMLPaths.CONFIGDIR.get().resolve("fallen_gems_affixes-common.toml");
         if (Files.notExists(configPath)) return;
 
@@ -36,23 +32,19 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
                     String[] parts = line.split("=", 2);
                     if (parts.length == 2) {
                         enableSocketMixin = Boolean.parseBoolean(parts[1].trim());
-                        break;
+                        return;
                     }
                 }
             }
-        } catch (IOException e) {
-            System.err.println("[Fallen Gems Affixes] Failed to read enableSocketHelperMixin from config: " + e.getMessage());
+        } catch (IOException ignored) {
+            enableSocketMixin = true;
         }
     }
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals(SOCKET_HELPER_MIXIN)) {
-            return enableSocketMixin;
-        }
-        if (mixinClassName.equals(GUN_MIXIN)) {
-            return isModLoaded("scguns");
-        }
+        if (mixinClassName.equals(SOCKET_HELPER_MIXIN)) return enableSocketMixin;
+        if (mixinClassName.equals(GUN_MIXIN)) return isModLoaded("scguns");
         return true;
     }
 

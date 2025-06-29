@@ -5,9 +5,9 @@
     "refmap": "fallen_gems_affixes.refmap.json",
     "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
     "mixins": [
-        "GunModifierHelperMixin", "SocketHelperMixin"
+        "GunModifierHelperMixin",
+        "SocketHelperMixin"
     ],
-    "client": [
-    ],
+    "client": [],
     "minVersion": "0.8"
 }

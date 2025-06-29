@@ -22,7 +22,7 @@ public class ModConfig {
 
         ENABLE_SOCKET_MIXIN = BUILDER
                 .comment("Enable the SocketHelperMixin that allows gaps between sockets")
-                .define("enableSocketHelperMixin", true);
+                .define("enableSocketHelperMixin", false);
 
         BUILDER.pop();
     }
