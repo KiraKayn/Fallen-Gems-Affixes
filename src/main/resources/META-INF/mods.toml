@@ -34,9 +34,9 @@ showAsResourcePack=false
   side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
-  modId="tipsylib"
+  modId="runiclib"
   mandatory=true
-  versionRange="[2.0.9]"
+  versionRange="[4,)"
   ordering="AFTER"
   side="BOTH"
 
