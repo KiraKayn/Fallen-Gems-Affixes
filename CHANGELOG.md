@@ -1,3 +1,7 @@
+# 1.1.9
+- Changed Howling Storm Gem texture, made by Chainsa
+- Made Forge 47.4.0 the min version needed
+
 # 1.1.8
 - Added config for SocketHelperMixin, so if you don't want gaps between sockets you can turn it off
 
