@@ -43,7 +43,7 @@ showAsResourcePack=false
 [[dependencies.fallen_gems_affixes]]
   modId="forge"
   mandatory=true
-  versionRange="[47,)"
+  versionRange= "[47.4.0,)"
   ordering="NONE"
   side="BOTH"
 
