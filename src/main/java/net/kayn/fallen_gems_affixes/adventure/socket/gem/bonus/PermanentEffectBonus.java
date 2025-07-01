@@ -22,7 +22,6 @@ public class PermanentEffectBonus extends GemBonus {
     private final MobEffect effect;
     private final Map<LootRarity, Integer> values;
 
-    // ✅ Made public so it can be accessed in InitNewCodecs
     public static final Codec<PermanentEffectBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("effect")
                     .xmap(BuiltInRegistries.MOB_EFFECT::get, BuiltInRegistries.MOB_EFFECT::getKey)
