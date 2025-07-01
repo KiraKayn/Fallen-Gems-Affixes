@@ -87,5 +87,9 @@
   "affix.fallen_gems_affixes:staffs/attribute/swift.suffix": "of Quick Casting",
 
   "affix.fallen_gems_affixes:staffs/attribute/sanguine": "Sanguine",
-  "affix.fallen_gems_affixes:staffs/attribute/sanguine.suffix": "of Blood Magic"
+  "affix.fallen_gems_affixes:staffs/attribute/sanguine.suffix": "of Blood Magic",
+
+  "bonus.fallen_gems_affixes.multi_effect.desc.and": "%s and %s",
+  "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
+  "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s"
 }

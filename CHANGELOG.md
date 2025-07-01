@@ -1,6 +1,8 @@
 # 1.1.9
 - Changed Howling Storm Gem texture, made by Chainsa
 - Made Forge 47.4.0 the min version needed
+- Nerfed Guardian of Hell Gem
+- Added Multi Effect gem bonus type, fallen_gems_affixes:multi_effect, example can be found on the page
 
 # 1.1.8
 - Added config for SocketHelperMixin, so if you don't want gaps between sockets you can turn it off

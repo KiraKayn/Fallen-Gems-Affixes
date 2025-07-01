@@ -5,6 +5,7 @@ import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
+import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
 import net.kayn.fallen_gems_affixes.event.MobGearGemInjector;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
@@ -30,24 +31,24 @@ public class FallenGemsAffixes {
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
+        LOGGER.info("Loading Fallen Gems & Affixes");
+
         ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(InitNewCodecs::init);
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
-
-        LOGGER.info("Loading Fallen Gems & Affixes");
+        AAAttributes.ATTRIBUTES.register(modEventBus);
 
         CelestialLootCategory.CELESTIAL_WEAPONS.toString();
         StaffLootCategory.STAFF.toString();
 
         AALootCategories.init();
 
-        AAAttributes.ATTRIBUTES.register(modEventBus);
         new MaxHealthDamageHandler();
 
         MinecraftForge.EVENT_BUS.register(MobGearGemInjector.class);
-
-            MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
 
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
@@ -59,7 +60,6 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
-
         }
     }
 
