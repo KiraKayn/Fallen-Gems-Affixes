@@ -121,8 +121,8 @@
           "boots"
         ]
       },
-      "mob_effect": "tipsylib:adrenaline",
-      "target": "attack_target",
+      "mob_effect": "runiclib:adrenaline",
+      "target": "hurt_self",
       "values": {
         "epic": {
           "duration": 150,
@@ -178,8 +178,8 @@
           "trident"
         ]
       },
-      "mob_effect": "tipsylib:smouldering",
-      "target": "attack_target",
+      "mob_effect": "runiclib:caffeinated",
+      "target": "attack_self",
       "values": {
         "epic": {
           "duration": 120,

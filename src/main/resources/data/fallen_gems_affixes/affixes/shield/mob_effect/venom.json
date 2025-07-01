@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:venom",
+	"mob_effect": "runiclib:venom",
 	"target": "BLOCK_ATTACKER",
 	"values": {
 		"epic": {

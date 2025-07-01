@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:caffeinated",
+	"mob_effect": "runiclib:caffeinated",
 	"target": "HURT_SELF",
 	"values": {
 		"epic": {
@@ -20,6 +20,6 @@
 		}
 	},
 	"types": [
-		"chestplate"
+		"chestplate", "helmet", "boots", "leggings"
 	]
 }

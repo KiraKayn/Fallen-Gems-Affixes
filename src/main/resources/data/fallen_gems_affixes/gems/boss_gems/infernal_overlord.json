@@ -76,7 +76,7 @@
           "leggings"
         ]
       },
-      "mob_effect": "tipsylib:burning_thorns",
+      "mob_effect": "runiclib:burning_thorns",
       "target": "attack_self",
       "values": {
         "epic": {
@@ -104,7 +104,7 @@
           "boots"
         ]
       },
-      "mob_effect": "tipsylib:lava_walking",
+      "mob_effect": "runiclib:lava_walking",
       "target": "attack_self",
       "values": {
         "epic": {

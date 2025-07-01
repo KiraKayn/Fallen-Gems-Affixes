@@ -34,8 +34,8 @@
           "chestplate"
         ]
       },
-      "mob_effect": "tipsylib:berserk",
-      "target": "attack_self",
+      "mob_effect": "runiclib:berserk",
+      "target": "hurt_self",
       "values": {
         "epic": {
           "duration": 140,
@@ -140,7 +140,7 @@
           "crossbow"
         ]
       },
-      "mob_effect": "tipsylib:internal_bleeding",
+      "mob_effect": "runiclib:bleeding",
       "target": "attack_target",
       "values": {
         "epic": {

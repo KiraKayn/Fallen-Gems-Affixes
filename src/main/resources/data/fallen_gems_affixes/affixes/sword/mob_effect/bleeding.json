@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:mob_effect",
-  "mob_effect": "tipsylib:internal_bleeding",
+  "mob_effect": "runiclib:bleeding",
   "target": "ATTACK_TARGET",
   "values": {
     "epic": {

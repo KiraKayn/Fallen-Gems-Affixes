@@ -61,7 +61,7 @@
           "leggings"
         ]
       },
-      "mob_effect": "tipsylib:shatterspleen",
+      "mob_effect": "runiclib:shatterspleen",
       "target": "attack_target",
       "values": {
         "epic": {
@@ -169,7 +169,7 @@
       }
     },
     {
-      "type": "apotheosis:mob_effect",
+      "type": "apotheosis:attribute",
       "gem_class": {
         "key": "ranged_weapon",
         "types": [
@@ -177,24 +177,12 @@
           "crossbow"
         ]
       },
-      "mob_effect": "tipsylib:hemolacria",
-      "target": "attack_target",
+      "attribute": "attributeslib:draw_speed",
+      "operation": "MULTIPLY_BASE",
       "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 150,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 2,
-          "cooldown": 500
-        }
+        "epic": 0.50,
+        "mythic": 0.70,
+        "ancient": 0.90
       }
     }
   ]

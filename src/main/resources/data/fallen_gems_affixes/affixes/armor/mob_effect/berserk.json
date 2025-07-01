@@ -1,6 +1,6 @@
 {
 	"type": "apotheosis:mob_effect",
-	"mob_effect": "tipsylib:berserk",
+	"mob_effect": "runiclib:berserk",
 	"target": "HURT_SELF",
 	"values": {
 		"epic": {
