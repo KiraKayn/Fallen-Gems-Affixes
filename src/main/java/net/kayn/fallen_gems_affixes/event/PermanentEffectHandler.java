@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -35,7 +36,7 @@ public class PermanentEffectHandler {
         addOrRemoveEffect(player, to, Operation.ADD);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onMobEffectRemove(MobEffectEvent.Remove event) {
         // flag to exclude when onEntityEquipmentChange triggers the event.
         if (!(event.getEntity() instanceof Player player) || flag) return;
