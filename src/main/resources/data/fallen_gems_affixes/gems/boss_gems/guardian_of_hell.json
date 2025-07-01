@@ -70,55 +70,31 @@
 			}
 		},
 		{
-			"type": "fallen_gems_affixes:multi_effect",
-			"desc": "bonus.fallen_gems_affixes.multi_effect.desc.and",
+			"type": "apotheosis:multi_attribute",
+			"desc": "bonus.apotheosis:multi_attr.desc.and",
 			"gem_class": {
 				"key": "boots",
 				"types": [
 					"boots"
 				]
 			},
-			"target": "attack_self",
-			"stack_on_reapply": false,
-			"effects": [
+			"modifiers": [
 				{
-					"mob_effect": "minecraft:strength",
+					"attribute": "forge:step_height_addition",
+					"operation": "ADDITION",
 					"values": {
-						"epic": {
-							"duration": 140,
-							"amplifier": 0,
-							"cooldown": 200
-						},
-						"mythic": {
-							"duration": 160,
-							"amplifier": 1,
-							"cooldown": 200
-						},
-						"ancient": {
-							"duration": 180,
-							"amplifier": 2,
-							"cooldown": 200
-						}
+						"epic": 1,
+						"mythic": 2,
+						"ancient": 3
 					}
 				},
 				{
-					"mob_effect": "minecraft:speed",
+					"attribute": "minecraft:generic.knockback_resistance",
+					"operation": "ADDITION",
 					"values": {
-						"epic": {
-							"duration": 140,
-							"amplifier": 0,
-							"cooldown": 0
-						},
-						"mythic": {
-							"duration": 160,
-							"amplifier": 0,
-							"cooldown": 0
-						},
-						"ancient": {
-							"duration": 180,
-							"amplifier": 1,
-							"cooldown": 0
-						}
+						"epic": 0.5,
+						"mythic": 0.75,
+						"ancient": 1.0
 					}
 				}
 			]
