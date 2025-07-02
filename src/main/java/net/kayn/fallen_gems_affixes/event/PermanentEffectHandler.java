@@ -26,9 +26,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID)
 public class PermanentEffectHandler {
     protected static Boolean flag = false;
+    // TODO: once the test passes, delete the LOGGER
     private static final Logger LOGGER = LogManager.getLogger();
     @SubscribeEvent
     public static void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
+        // TODO: exclude some hand item change to not trigger addOrRemoveEffect
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack from = event.getFrom();
         addOrRemoveEffect(player, from, Operation.REMOVE);
