@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
@@ -23,21 +22,18 @@ public class PermanentEffectBonus extends GemBonus {
     private final Map<LootRarity, Integer> values;
 
     public static final Codec<PermanentEffectBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            gemClass(),
             ResourceLocation.CODEC.fieldOf("effect")
                     .xmap(BuiltInRegistries.MOB_EFFECT::get, BuiltInRegistries.MOB_EFFECT::getKey)
                     .forGetter(b -> b.effect),
 
-            GemClass.CODEC.fieldOf("gem_class").forGetter(GemBonus::getGemClass),
-
             Codec.unboundedMap(LootRarity.CODEC, Codec.INT)
                     .fieldOf("values")
                     .forGetter(b -> b.values)
-    ).apply(inst, (effect, gemClass, values) ->
-            new PermanentEffectBonus(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), gemClass, effect, values)
-    ));
+    ).apply(inst, PermanentEffectBonus::new));
 
-    public PermanentEffectBonus(ResourceLocation id, GemClass gemClass, MobEffect effect, Map<LootRarity, Integer> values) {
-        super(id, gemClass);
+    public PermanentEffectBonus(GemClass gemClass, MobEffect effect, Map<LootRarity, Integer> values) {
+        super(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), gemClass);
         this.effect = effect;
         this.values = values;
     }
@@ -45,6 +41,7 @@ public class PermanentEffectBonus extends GemBonus {
     @Override
     public GemBonus validate() {
         Preconditions.checkNotNull(this.effect, "Null mob effect");
+        Preconditions.checkNotNull(this.values, "Null values map");
         return this;
     }
 
@@ -60,9 +57,21 @@ public class PermanentEffectBonus extends GemBonus {
 
     @Override
     public Component getSocketBonusTooltip(ItemStack itemStack, LootRarity lootRarity) {
-        MobEffectInstance inst = new MobEffectInstance(this.effect, Integer.MAX_VALUE, this.values.get(lootRarity));
-        MutableComponent comp = Component.translatable("armed").withStyle(ChatFormatting.YELLOW);
-        Component infinity = Component.translatable("infinity");
+        int amplifier = this.values.get(lootRarity);
+        MutableComponent effectName = Component.translatable(this.effect.getDescriptionId());
+
+        if (amplifier > 0) {
+            effectName = Component.translatable("potion.withAmplifier",
+                    effectName,
+                    Component.translatable("potion.potency." + amplifier));
+        }
+
+        effectName = effectName.withStyle(this.effect.getCategory().getTooltipFormatting());
+
+        MutableComponent comp = Component.translatable("bonus.fallen_gems_affixes:permanent_effect", effectName)
+                .withStyle(ChatFormatting.YELLOW);
+        Component infinity = Component.literal("[").append(Component.translatable("affix.fallen_gems_affixes.infinity")).append("]");
+
         return comp.append(" ").append(infinity);
     }
 

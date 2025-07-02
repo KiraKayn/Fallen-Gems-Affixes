@@ -18,13 +18,15 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID)
 public class PermanentEffectHandler {
     protected static Boolean flag = false;
-
+    private static final Logger LOGGER = LogManager.getLogger();
     @SubscribeEvent
     public static void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
@@ -32,12 +34,14 @@ public class PermanentEffectHandler {
         addOrRemoveEffect(player, from, Operation.REMOVE);
         ItemStack to = event.getTo();
         addOrRemoveEffect(player, to, Operation.ADD);
+        LOGGER.info("from: {}, to: {}", from, to);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onMobEffectRemove(MobEffectEvent.Remove event) {
         if (!(event.getEntity() instanceof Player player) || flag) return;
         MobEffect effect = event.getEffect();
+        LOGGER.info("effect: {}", effect);
         for (ItemStack equipment : player.getAllSlots()) {
             if (matches(player, equipment, effect)) {
                 event.setCanceled(true);
@@ -46,6 +50,7 @@ public class PermanentEffectHandler {
     }
 
     private static void checkGemBonus(Player player, ItemStack itemStack, BonusProcessor processor) {
+        LOGGER.info("into checkGemBonus");
         DynamicHolder<LootRarity> rarityHolder = AffixHelper.getRarity(itemStack);
         if (!rarityHolder.isBound()) return;
 
@@ -67,6 +72,7 @@ public class PermanentEffectHandler {
     }
 
     private static boolean matches(Player player, ItemStack itemStack, MobEffect effect) {
+        LOGGER.info("into matches");
         AtomicBoolean result = new AtomicBoolean(false);
         checkGemBonus(player, itemStack, (bonus, rarity) -> {
             if (bonus.getEffect() == effect) {
@@ -77,6 +83,7 @@ public class PermanentEffectHandler {
     }
 
     private static void addOrRemoveEffect(Player player, ItemStack itemStack, Operation operation) {
+        LOGGER.info("into addOrRemoveEffect");
         checkGemBonus(player, itemStack, (bonus, rarity) -> {
             addOrRemoveEffectInner(player, bonus.getEffect(), operation, bonus.getAmplifier(rarity));
         });
@@ -86,10 +93,12 @@ public class PermanentEffectHandler {
         flag = true;
         switch(operation) {
             case ADD -> {
+                LOGGER.info("add effect");
                 player.addEffect(new MobEffectInstance(effect, Integer.MAX_VALUE, amplifier));
                 flag = false;
             }
             case REMOVE -> {
+                LOGGER.info("remove effect");
                 player.removeEffect(effect);
                 flag = false;
             }
