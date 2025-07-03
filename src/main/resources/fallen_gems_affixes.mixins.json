@@ -10,7 +10,8 @@
         "SocketHelperMixin"
     ],
     "client": [
-        "client.ClientPlayerMixin"
+        "client.LivingEntityMixin",
+        "client.SlotMixin"
     ],
     "minVersion": "0.8"
 }

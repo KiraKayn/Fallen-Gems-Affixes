@@ -17,15 +17,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,6 +34,7 @@ public class PermanentEffectHandler {
     public static void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
         // TODO: exclude some hand item change to not trigger addOrRemoveEffect
         if (!(event.getEntity() instanceof Player player)) return;
+        LOGGER.info("{}", player.getClass());
         EquipmentSlot slot = event.getSlot();
         ItemStack from = event.getFrom();
         addOrRemoveEffect(player, from, slot, Operation.REMOVE);
@@ -69,6 +67,7 @@ public class PermanentEffectHandler {
 
     public static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
         LOGGER.info("into checkGemBonus");
+        if (itemStack.isEmpty()) return;
         DynamicHolder<LootRarity> rarityHolder = AffixHelper.getRarity(itemStack);
         if (!rarityHolder.isBound()) return;
         LOGGER.info("into checkGemBonus inner {}, {}", rarityHolder, itemStack);
@@ -117,18 +116,20 @@ public class PermanentEffectHandler {
     private static void addOrRemoveEffectInner(LivingEntity entity, MobEffect effect, Operation operation, int amplifier) {
         if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         map.setRemover(ProtectedMobEffectMap.EffectRemover.ON_EQUIP);
-        var currentEffectsMap = entity.getActiveEffectsMap();
         switch(operation) {
             case ADD -> {
                 LOGGER.info("add effect");
                 MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
                 entity.addEffect(inst);
-                map.addPermanentEffect(inst);
+                map.addPermanentEffect(effect, amplifier);
             }
             case REMOVE -> {
                 LOGGER.info("remove effect");
                 entity.removeEffect(effect);
-                map.removePermanentEffect(entity.getActiveEffectsMap().get(effect));
+                map.tryRemovePermanentEffect(effect, amplifier);
+                if (map.containsPermanent(effect)) {
+                    entity.addEffect(map.getLastPotentialEffectInst(effect));
+                }
             }
         }
         map.setRemover(ProtectedMobEffectMap.EffectRemover.EXTERNAL);

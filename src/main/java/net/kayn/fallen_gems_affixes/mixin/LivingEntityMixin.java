@@ -1,6 +1,8 @@
 package net.kayn.fallen_gems_affixes.mixin;
 
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
