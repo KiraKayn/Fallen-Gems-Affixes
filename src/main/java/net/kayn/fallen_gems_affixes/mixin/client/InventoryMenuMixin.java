@@ -38,46 +38,46 @@
 //    private static void onEquipItemPrefix(Player pPlayer, EquipmentSlot pSlot, ItemStack pNewItem, ItemStack pOldItem, CallbackInfo ci) {
 //        LOGGER.info("into onSetItemSlot");
 //        if (!(pPlayer instanceof LocalPlayer player)) return;
-//        var currentEffectsMap = player.getActiveEffectsMap();
-//        if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
-//            map.setRemover(ProtectedMobEffectMap.EffectRemover.ON_EQUIP);
-//            try {
-//                checkGemBonus(pOldItem, (bonus, rarity) -> {
-//                    MobEffect effect = bonus.getEffect();
-//                    int amplifier = bonus.getAmplifier(rarity);
-//                    MobEffectInstance effectInst = new MobEffectInstance(effect, -1, amplifier);
-//                    LOGGER.info("remove {}", effect);
-//                    player.removeEffect(effect);
-//                    map.tryRemovePermanentEffect(effect, amplifier);
-//                    if (map.containsPermanent(effect)) {
-//                        player.addEffect(map.getLastPotentialEffectInst(effect));
-//                    }
-//                });
-//                checkGemBonus(pNewItem, (bonus, rarity) -> {
-//                    MobEffect effect = bonus.getEffect();
-//                    int amplifier = bonus.getAmplifier(rarity);
-//                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-//                    player.addEffect(inst);
-//                    map.addPermanentEffect(effect, amplifier);
-//                });
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            LOGGER.info("effect map {}", map);
-//            map.setRemover(ProtectedMobEffectMap.EffectRemover.EXTERNAL);
-//        }
+////        var currentEffectsMap = player.getActiveEffectsMap();
+////        if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
+////            map.setRemover(ProtectedMobEffectMap.EffectRemover.ON_EQUIP);
+////            try {
+////                checkGemBonus(pOldItem, (bonus, rarity) -> {
+////                    MobEffect effect = bonus.getEffect();
+////                    int amplifier = bonus.getAmplifier(rarity);
+////                    MobEffectInstance effectInst = new MobEffectInstance(effect, -1, amplifier);
+////                    LOGGER.info("remove {}", effect);
+////                    player.removeEffect(effect);
+////                    map.tryRemovePermanentEffect(effect, amplifier);
+////                    if (map.containsPermanent(effect)) {
+////                        player.addEffect(map.getLastPotentialEffectInst(effect));
+////                    }
+////                });
+////                checkGemBonus(pNewItem, (bonus, rarity) -> {
+////                    MobEffect effect = bonus.getEffect();
+////                    int amplifier = bonus.getAmplifier(rarity);
+////                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+////                    player.addEffect(inst);
+////                    map.addPermanentEffect(effect, amplifier);
+////                });
+////            } catch (Exception e) {
+////                e.printStackTrace();
+////            }
+////            LOGGER.info("effect map {}", map);
+////            map.setRemover(ProtectedMobEffectMap.EffectRemover.EXTERNAL);
+////        }
 //    }
-
-//    @Unique
-//    private static ItemStack extractOldItemStack_$1(ItemStack old) {
-//        if (old.isEmpty()) {
-//            ItemStack itemstack = new ItemStack(Items.DIAMOND, old.getCount());
-//            itemstack.setPopTime(old.getPopTime());
-//            if (old.getTag() != null) {
-//                itemstack.setTag(old.getTag().copy());
-//            }
-//            return itemstack;
-//        }
-//        return old;
-//    }
-}
+//
+////    @Unique
+////    private static ItemStack extractOldItemStack_$1(ItemStack old) {
+////        if (old.isEmpty()) {
+////            ItemStack itemstack = new ItemStack(Items.DIAMOND, old.getCount());
+////            itemstack.setPopTime(old.getPopTime());
+////            if (old.getTag() != null) {
+////                itemstack.setTag(old.getTag().copy());
+////            }
+////            return itemstack;
+////        }
+////        return old;
+////    }
+//}

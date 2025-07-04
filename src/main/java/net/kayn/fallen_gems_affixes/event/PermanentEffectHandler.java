@@ -9,6 +9,8 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,6 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -100,39 +103,66 @@ public class PermanentEffectHandler {
         return result.get();
     }
 
-    private static void addOrRemoveEffect(LivingEntity entity, ItemStack itemStack, EquipmentSlot cSlot, Operation operation) {
+//    public static void addOrRemoveEffectWithCache(LivingEntity entity, ItemStack itemStack) {
+//        switch(operation) {
+//            case ADD -> {
+//                LOGGER.info("add effect");
+//                checkGemBonus(itemStack, (bonus, rarity) -> {
+//                    MobEffect effect = bonus.getEffect();
+//                    int amplifier = bonus.getAmplifier(rarity);
+//                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+//                    player.addEffect(inst);
+//                });
+//
+//            }
+//            case REMOVE -> {
+//                LOGGER.info("remove effect");
+//                checkGemBonus(itemStack, (bonus, rarity) -> {
+//                    MobEffect effect = bonus.getEffect();
+//                    int amplifier = bonus.getAmplifier(rarity);
+//                    player.removeEffect(effect);
+//                    if (map.containsPermanent(effect)) {
+//                        player.addEffect(map.getLastPotentialEffectInst(effect));
+//                    }
+//                });
+//            }
+//        }
+//    }
+
+    public static void addOrRemoveEffect(LivingEntity entity, @NotNull ItemStack itemStack, EquipmentSlot cSlot, Operation operation) {
         LOGGER.info("into addOrRemoveEffect");
         for (EquipmentSlot slot: LootCategory.forItem(itemStack).getSlots()) {
             LOGGER.info("effectSlot {}, slot {}", cSlot, slot);
             if (cSlot == slot) {
                 checkGemBonus(itemStack, (bonus, rarity) -> {
-                    addOrRemoveEffectInner(entity, bonus.getEffect(), operation, bonus.getAmplifier(rarity));
+                    addOrRemoveEffectInner(entity, bonus.getEffect(), EquipmentSlotUtil.getVanillaWrapper(cSlot), operation, bonus.getAmplifier(rarity));
                 });
                 break;
             }
         }
     }
 
-    private static void addOrRemoveEffectInner(LivingEntity entity, MobEffect effect, Operation operation, int amplifier) {
+    private static void addOrRemoveEffectInner(LivingEntity entity, MobEffect effect, EquipmentSlotWrapper slotWrapper, Operation operation, int amplifier) {
         if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
-        map.setRemover(ProtectedMobEffectMap.EffectRemover.ON_EQUIP);
+        map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
         switch(operation) {
             case ADD -> {
                 LOGGER.info("add effect");
                 MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
                 entity.addEffect(inst);
-                map.addPermanentEffect(effect, amplifier);
+                map.addPermanentEffect(slotWrapper, effect, amplifier);
             }
             case REMOVE -> {
                 LOGGER.info("remove effect");
                 entity.removeEffect(effect);
-                map.tryRemovePermanentEffect(effect, amplifier);
                 if (map.containsPermanent(effect)) {
                     entity.addEffect(map.getLastPotentialEffectInst(effect));
+                } else {
+                    map.tryRemovePermanentEffect(slotWrapper, effect, amplifier);
                 }
             }
         }
-        map.setRemover(ProtectedMobEffectMap.EffectRemover.EXTERNAL);
+        map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
     }
 
     public enum Operation {

@@ -1,11 +1,17 @@
 package net.kayn.fallen_gems_affixes.mixin.client;
 
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,22 +29,32 @@ import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGem
 public class SlotMixin {
     @Shadow @Final private int slot;
 
+    @Shadow @Final public Container container;
+
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
-        if (!(slot >= 36 && slot <= 39)) return;
+        if (!(this.container instanceof Inventory inv)) return;
         if (!(pPlayer instanceof LocalPlayer player)) return;
-        var currentEffectsMap = player.getActiveEffectsMap();
-        if (!(currentEffectsMap instanceof ProtectedMobEffectMap<?> map)) return;
-        map.setRemover(ProtectedMobEffectMap.EffectRemover.ON_EQUIP);
-        checkGemBonus(pStack, (bonus, rarity) -> {
-            MobEffect effect = bonus.getEffect();
-            int amplifier = bonus.getAmplifier(rarity);
-            player.removeEffect(effect);
-            map.tryRemovePermanentEffect(effect, amplifier);
-            if (map.containsPermanent(effect)) {
-                player.addEffect(map.getLastPotentialEffectInst(effect));
-            }
-        });
-        map.setRemover(ProtectedMobEffectMap.EffectRemover.EXTERNAL);
+        if (!(slot >= 36 && slot <= 39 || slot == 40)) return;
+        if (inv.player != pPlayer) return;
+        if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
+        if (pStack.isEmpty()) return;
+        try {
+            EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(LivingEntity.getEquipmentSlotForItem(pStack));
+            map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
+            map.setCurrentSlot(slotWrapper);
+            checkGemBonus(pStack, (bonus, rarity) -> {
+                MobEffect effect = bonus.getEffect();
+                player.removeEffect(effect);
+                if (map.containsPermanent(effect)) {
+                    player.addEffect(map.getLastPotentialEffectInst(effect));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
+            map.setCurrentSlot(EquipmentSlotWrappers.NONE);
+        }
     }
 }

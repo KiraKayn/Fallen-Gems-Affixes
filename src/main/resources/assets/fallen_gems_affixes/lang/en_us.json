@@ -7,6 +7,8 @@
   "attribute.fallen_gems_affixes.reload_speed": "Reload Speed Increase",
   "attribute.fallen_gems_affixes.bullet_damage": "Bullet Damage",
   "attribute.fallen_gems_affixes.max_health_damage": "Max Health Damage",
+  "affix.fallen_gems_affixes.infinity": "∞",
+  "bonus.fallen_gems_affixes:permanent_effect": "%s",
 
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",

@@ -12,6 +12,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -56,7 +58,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "onEffectRemoved", at = @At("HEAD"), cancellable = true)
-    private void onPermanentEffectRemoved(MobEffectInstance effect, CallbackInfo ci) {
+    private void onEffectRemovedPrefix(MobEffectInstance effect, CallbackInfo ci) {
         if ((Object) this instanceof Player player) {
             if (player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map && map.isExternalRemover() && map.containsPermanent(effect.getEffect())) {
                 ci.cancel();

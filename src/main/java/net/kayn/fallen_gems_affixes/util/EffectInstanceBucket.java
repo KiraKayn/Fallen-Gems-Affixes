@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.util;
 import net.minecraft.world.effect.MobEffect;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class EffectInstanceBucket {
     private final MobEffect effect;
