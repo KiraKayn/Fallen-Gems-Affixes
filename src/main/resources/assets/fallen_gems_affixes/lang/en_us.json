@@ -91,5 +91,5 @@
 
   "bonus.fallen_gems_affixes.multi_effect.desc.and": "%s and %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
-  "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s",
+  "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s"
 }
