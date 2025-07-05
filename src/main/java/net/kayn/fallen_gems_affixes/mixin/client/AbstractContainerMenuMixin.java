@@ -1,7 +1,5 @@
 package net.kayn.fallen_gems_affixes.mixin.client;
 
-import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import net.kayn.fallen_gems_affixes.mixin.InventoryMixin;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
@@ -12,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -26,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
@@ -37,27 +33,29 @@ public class AbstractContainerMenuMixin {
     /**
      * This method {@link AbstractContainerMenu#initializeContents} is triggered whenever a clientside container receives {@link ClientboundContainerSetContentPacket}.
      * <p>
-     * Server will send this packed when {@link LocalPlayer} is joining the world after {@link ServerPlayer} finished {@link Inventory#load(ListTag)}
+     * Server will send this packet when {@link LocalPlayer} is joining the world after {@link ServerPlayer} finished {@link Inventory#load(ListTag)}
+     * <p>
+     * Server will send this packet when valid container contents change is admitted, like change slot for an item stack.
      * <p>
      * This method is for initializing {@code currentPermanentEffects} inside {@code ProtectedMobEffectMap} on client first tick.
      * <p>
-     * This method is clientside.
+     * This method only triggers on clientside.
      */
-    @Inject(method = "initializeContents", at =@At("TAIL"))
+    @Inject(method = "initializeContents", at = @At("TAIL"))
     private void initializeContentsSuffix(int pStateId, List<ItemStack> pItems, ItemStack pCarried, CallbackInfo ci) {
-        if (!((Object)this instanceof InventoryMenu menu)) return;
+        if (!((Object) this instanceof InventoryMenu menu)) return;
         ProtectedMobEffectMap<?> map1 = null;
         try {
             for (int i = 0; i < 4; i++) {
                 Slot slot = menu.getSlot(40 - i);
-                var container =  slot.container;
+                var container = slot.container;
                 if (container instanceof Inventory inventory) {
                     Player player = inventory.player;
                     if (player == null) return;
                     if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
                     map1 = map;
                     int index = 0;
-                    for(ItemStack equipment : player.getAllSlots()) {
+                    for (ItemStack equipment : player.getAllSlots()) {
                         EquipmentSlot eSlot = EquipmentSlotUtil.slotFromAllSlotsIndex(index++);
                         if (eSlot == null) continue;
                         EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(eSlot);
@@ -69,7 +67,7 @@ public class AbstractContainerMenuMixin {
                                 MobEffect effect = bonus.getEffect();
                                 int amplifier = bonus.getAmplifier(rarity);
                                 MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                                player.addEffect(inst);
+                                player.forceAddEffect(inst, null);
                                 map.setLastEffectsProvider(equipment);
                             });
                         }

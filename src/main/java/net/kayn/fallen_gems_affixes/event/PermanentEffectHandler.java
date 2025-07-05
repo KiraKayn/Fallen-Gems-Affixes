@@ -149,14 +149,14 @@ public class PermanentEffectHandler {
             case ADD -> {
                 LOGGER.info("add effect");
                 MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                entity.addEffect(inst);
+                entity.forceAddEffect(inst, null);
                 map.addPermanentEffect(slotWrapper, effect, amplifier);
             }
             case REMOVE -> {
                 LOGGER.info("remove effect");
-                entity.removeEffect(effect);
+                entity.removeEffectNoUpdate(effect);
                 if (map.containsPermanent(effect)) {
-                    entity.addEffect(map.getLastPotentialEffectInst(effect));
+                    entity.forceAddEffect(map.getLastPotentialEffectInst(effect), null);
                 } else {
                     map.tryRemovePermanentEffect(slotWrapper, effect, amplifier);
                 }

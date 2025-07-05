@@ -21,15 +21,14 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     private final Map<EquipmentSlotWrapper, Set<MobEffect>> cachedEffectsBySlot = new HashMap<>();
     private final Set<MobEffect> currentPermanentEffects = new HashSet<>();
     private EffectOperator operator = EffectOperator.EXTERNAL;
-    private static final ThreadLocal<ItemStack> lastEffectsProvider = new ThreadLocal<>();
-    private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = new ThreadLocal<>();
+    private static final ThreadLocal<ItemStack> lastEffectsProvider = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
+    private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = ThreadLocal.withInitial(() -> EquipmentSlotWrappers.NONE);
 
     // TODO: once the test passes, delete the LOGGER
     private static final Logger LOGGER = LogManager.getLogger();
 
     public ProtectedMobEffectMap(E owner) {
         this.owner = owner;
-//        currentSlot.set(EquipmentSlotWrappers.NONE);
     }
 
     @Override

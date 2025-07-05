@@ -7,12 +7,10 @@ import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,18 +23,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
 
-/**
- * The method injected {@link Slot#onTake} triggers when player take item out of the slot which can be logical equipment slot by click.
- * <p>
- *
- */
 @Mixin(Slot.class)
 @OnlyIn(Dist.CLIENT)
 public class SlotMixin {
-    @Shadow @Final private int slot;
+    @Shadow
+    @Final
+    public Container container;
+    @Shadow
+    @Final
+    private int slot;
 
-    @Shadow @Final public Container container;
-
+    /**
+     * The method injected {@link Slot#onTake} triggers when player takes item out of the slot that can be logical equipment slot by a click.
+     */
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
         if (!(this.container instanceof Inventory inv)) return;
@@ -51,9 +50,9 @@ public class SlotMixin {
             map.setCurrentSlot(slotWrapper);
             checkGemBonus(pStack, (bonus, rarity) -> {
                 MobEffect effect = bonus.getEffect();
-                player.removeEffect(effect);
+                player.removeEffectNoUpdate(effect);
                 if (map.containsPermanent(effect)) {
-                    player.addEffect(map.getLastPotentialEffectInst(effect));
+                    player.forceAddEffect(map.getLastPotentialEffectInst(effect), null);
                 }
             });
         } catch (Exception e) {

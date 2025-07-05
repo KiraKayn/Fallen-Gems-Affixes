@@ -1,7 +1,9 @@
 package net.kayn.fallen_gems_affixes.mixin.client;
 
 
-import net.kayn.fallen_gems_affixes.util.*;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
+import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -10,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,18 +32,24 @@ import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGem
 @Mixin(Player.class)
 @OnlyIn(Dist.CLIENT)
 public abstract class PlayerMixin extends Entity {
-    @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot pSlot);
-
-    private static final Logger LOGGER = LogManager.getLogger();
-
     protected PlayerMixin(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
+    @Shadow
+    public abstract ItemStack getItemBySlot(EquipmentSlot pSlot);
 
+    /**
+     * This method triggers when {@link EquipmentSlot} {@link Slot} changes by player.
+     * <p>
+     * This method can be triggered when player equip item with {@link ItemStack#use}.
+     * <p>
+     * This method can be triggered when player try to put item into {@link EquipmentSlot} {@link Slot}.
+     * <p>
+     * Originally both server and client can trigger, but we care client here.
+     */
     @Inject(method = "setItemSlot", at = @At("HEAD"))
     private void onSetItemSlotPrefix(EquipmentSlot pSlot, ItemStack pStack, CallbackInfo ci) {
-        LOGGER.info("into onSetItemSlot");
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
@@ -50,9 +59,9 @@ public abstract class PlayerMixin extends Entity {
                 Set<MobEffect> cachedEffects = map.getEffectsFromCache(slotWrapper);
                 if (cachedEffects != null) {
                     cachedEffects.forEach(e -> {
-                        player.removeEffect(e);
+                        player.removeEffectNoUpdate(e);
                         if (map.containsPermanent(e)) {
-                            player.addEffect(map.getLastPotentialEffectInst(e));
+                            player.forceAddEffect(map.getLastPotentialEffectInst(e), null);
                         }
                     });
                 }
@@ -61,14 +70,14 @@ public abstract class PlayerMixin extends Entity {
                         MobEffect effect = bonus.getEffect();
                         int amplifier = bonus.getAmplifier(rarity);
                         MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                        player.addEffect(inst);
+                        player.forceAddEffect(inst, null);
+                        map.addPermanentEffect(slotWrapper, effect, amplifier);
                         map.setLastEffectsProvider(pStack);
                     });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                LOGGER.info("effect map {}", map);
                 map.finalizeOperation();
             }
         }
