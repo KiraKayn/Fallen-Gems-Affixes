@@ -9,16 +9,16 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
-import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
-import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
-import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
+import net.kayn.fallen_gems_affixes.util.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -163,6 +163,24 @@ public class PermanentEffectHandler {
             }
         }
         map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
+    }
+
+    public void addPermanentEffect(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        try {
+            map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+            map.addPermanentEffect(slot, effect, amplifier);
+        } finally {
+            map.finalizeOperation();
+        }
+    }
+
+    public void removePermanentEffect(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        try {
+            map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+            map.tryRemovePermanentEffect(slot, effect, amplifier);
+        } finally {
+            map.finalizeOperation();
+        }
     }
 
     public enum Operation {

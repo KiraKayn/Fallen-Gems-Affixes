@@ -37,6 +37,7 @@ public abstract class PlayerMixin extends Entity {
         super(pEntityType, pLevel);
     }
 
+
     @Inject(method = "setItemSlot", at = @At("HEAD"))
     private void onSetItemSlotPrefix(EquipmentSlot pSlot, ItemStack pStack, CallbackInfo ci) {
         LOGGER.info("into onSetItemSlot");
@@ -44,9 +45,8 @@ public abstract class PlayerMixin extends Entity {
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
             try {
-                map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(pSlot);
-                map.setCurrentSlot(slotWrapper);
+                map.initOperation(slotWrapper);
                 Set<MobEffect> cachedEffects = map.getEffectsFromCache(slotWrapper);
                 if (cachedEffects != null) {
                     cachedEffects.forEach(e -> {
@@ -56,18 +56,20 @@ public abstract class PlayerMixin extends Entity {
                         }
                     });
                 }
-                checkGemBonus(pStack, (bonus, rarity) -> {
-                    MobEffect effect = bonus.getEffect();
-                    int amplifier = bonus.getAmplifier(rarity);
-                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                    player.addEffect(inst);
-                });
+                if (map.getLastEffectsProvider() != pStack && EquipmentSlotUtil.matchesSlot(pStack, pSlot)) {
+                    checkGemBonus(pStack, (bonus, rarity) -> {
+                        MobEffect effect = bonus.getEffect();
+                        int amplifier = bonus.getAmplifier(rarity);
+                        MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+                        player.addEffect(inst);
+                        map.setLastEffectsProvider(pStack);
+                    });
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 LOGGER.info("effect map {}", map);
-                map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
-                map.setCurrentSlot(EquipmentSlotWrappers.NONE);
+                map.finalizeOperation();
             }
         }
     }

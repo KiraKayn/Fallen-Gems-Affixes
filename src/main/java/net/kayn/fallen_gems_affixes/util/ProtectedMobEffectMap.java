@@ -6,12 +6,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.BiFunction;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.collectPermanentEffects;
 
@@ -21,6 +21,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     private final Map<EquipmentSlotWrapper, Set<MobEffect>> cachedEffectsBySlot = new HashMap<>();
     private final Set<MobEffect> currentPermanentEffects = new HashSet<>();
     private EffectOperator operator = EffectOperator.EXTERNAL;
+    private static final ThreadLocal<ItemStack> lastEffectsProvider = new ThreadLocal<>();
     private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = new ThreadLocal<>();
 
     // TODO: once the test passes, delete the LOGGER
@@ -28,7 +29,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
     public ProtectedMobEffectMap(E owner) {
         this.owner = owner;
-        currentSlot.set(EquipmentSlotWrappers.NONE);
+//        currentSlot.set(EquipmentSlotWrappers.NONE);
     }
 
     @Override
@@ -155,7 +156,8 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
     public enum EffectOperator {
         ON_EQUIP,
-        ON_REMOVE,
+        ON_HANDLER,
+        ON_INIT,
         EXTERNAL
     }
 
@@ -179,7 +181,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         if (effect == null) return;
         currentPermanentEffects.add(effect);
         if (owner.level().isClientSide) {
-            updateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.REMOVE);
+            updateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.ADD);
         }
         EffectInstanceBucket potentialEffects = fallback.get(effect);
         if (potentialEffects == null) {
@@ -222,7 +224,13 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         return new MobEffectInstance(effect, -1, fallback.get(effect).getLast());
     }
 
-    public void initOperation(EffectOperator pOperator, EquipmentSlotWrapper slotWrapper) {
+    public void initOperation(EquipmentSlotWrapper slotWrapper, EffectOperator pOperator, ItemStack effectsProvide) {
+        operator = pOperator;
+        lastEffectsProvider.set(effectsProvide);
+        currentSlot.set(slotWrapper);
+    }
+
+    public void initOperation(EquipmentSlotWrapper slotWrapper, EffectOperator pOperator) {
         operator = pOperator;
         currentSlot.set(slotWrapper);
     }
@@ -235,5 +243,13 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     public void finalizeOperation() {
         operator = EffectOperator.EXTERNAL;
         currentSlot.set(EquipmentSlotWrappers.NONE);
+    }
+
+    public ItemStack getLastEffectsProvider() {
+        return lastEffectsProvider.get();
+    }
+
+    public void setLastEffectsProvider(ItemStack itemStack) {
+        lastEffectsProvider.set(itemStack);
     }
 }

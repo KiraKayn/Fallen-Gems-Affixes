@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.mixin;
 
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
@@ -36,15 +37,18 @@ public class InventoryMixin {
                 if (slot == null) continue;
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(slot);
                 if (slotWrapper == null) continue;
-                map.initOperation(slotWrapper);
-
-                checkGemBonus(equipment, (bonus, rarity) -> {
-                    MobEffect effect = bonus.getEffect();
-                    int amplifier = bonus.getAmplifier(rarity);
-                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                    player.addEffect(inst);
-                    map.addPermanentEffect(slotWrapper, effect, amplifier);
-                });
+                map.initOperation(slotWrapper, ProtectedMobEffectMap.EffectOperator.ON_INIT);
+                for (EquipmentSlot slot1 : LootCategory.forItem(equipment).getSlots()) {
+                    if (slot1 == slot) {
+                        checkGemBonus(equipment, (bonus, rarity) -> {
+                            MobEffect effect = bonus.getEffect();
+                            int amplifier = bonus.getAmplifier(rarity);
+                            MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+                            player.addEffect(inst);
+                            map.addPermanentEffect(slotWrapper, effect, amplifier);
+                        });
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

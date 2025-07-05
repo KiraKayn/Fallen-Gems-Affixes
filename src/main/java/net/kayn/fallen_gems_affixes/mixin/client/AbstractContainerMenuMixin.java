@@ -1,11 +1,18 @@
 package net.kayn.fallen_gems_affixes.mixin.client;
 
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
+import net.kayn.fallen_gems_affixes.mixin.InventoryMixin;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,6 +34,15 @@ import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGem
 @Mixin(AbstractContainerMenu.class)
 @OnlyIn(Dist.CLIENT)
 public class AbstractContainerMenuMixin {
+    /**
+     * This method {@link AbstractContainerMenu#initializeContents} is triggered whenever a clientside container receives {@link ClientboundContainerSetContentPacket}.
+     * <p>
+     * Server will send this packed when {@link LocalPlayer} is joining the world after {@link ServerPlayer} finished {@link Inventory#load(ListTag)}
+     * <p>
+     * This method is for initializing {@code currentPermanentEffects} inside {@code ProtectedMobEffectMap} on client first tick.
+     * <p>
+     * This method is clientside.
+     */
     @Inject(method = "initializeContents", at =@At("TAIL"))
     private void initializeContentsSuffix(int pStateId, List<ItemStack> pItems, ItemStack pCarried, CallbackInfo ci) {
         if (!((Object)this instanceof InventoryMenu menu)) return;
@@ -46,15 +62,17 @@ public class AbstractContainerMenuMixin {
                         if (eSlot == null) continue;
                         EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(eSlot);
                         if (slotWrapper == null) continue;
-                        map.initOperation(slotWrapper);
+                        map.initOperation(slotWrapper, ProtectedMobEffectMap.EffectOperator.ON_INIT);
 
-                        checkGemBonus(equipment, (bonus, rarity) -> {
-                            MobEffect effect = bonus.getEffect();
-                            int amplifier = bonus.getAmplifier(rarity);
-                            MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                            player.addEffect(inst);
-                            map.addPermanentEffect(slotWrapper, effect, amplifier);
-                        });
+                        if (map.getLastEffectsProvider() != equipment && EquipmentSlotUtil.matchesSlot(equipment, eSlot)) {
+                            checkGemBonus(equipment, (bonus, rarity) -> {
+                                MobEffect effect = bonus.getEffect();
+                                int amplifier = bonus.getAmplifier(rarity);
+                                MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+                                player.addEffect(inst);
+                                map.setLastEffectsProvider(equipment);
+                            });
+                        }
                     }
                     break;
                 }

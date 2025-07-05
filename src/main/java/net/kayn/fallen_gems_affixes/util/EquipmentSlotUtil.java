@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.util;
 
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -38,5 +39,12 @@ public class EquipmentSlotUtil {
             case 36 -> EquipmentSlot.HEAD;
             default -> null;
         };
+    }
+
+    public static boolean matchesSlot(ItemStack itemStack, EquipmentSlot givenSlot) {
+        for (EquipmentSlot slot : LootCategory.forItem(itemStack).getSlots()) {
+            if (givenSlot == slot) return true;
+        }
+        return false;
     }
 }
