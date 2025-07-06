@@ -31,7 +31,7 @@ public class KeresSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(KERES_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(KERES_ID))) return;
 
         Attribute attr = BLOOD_SPELL_POWER.get();
         if (attr == null) return;

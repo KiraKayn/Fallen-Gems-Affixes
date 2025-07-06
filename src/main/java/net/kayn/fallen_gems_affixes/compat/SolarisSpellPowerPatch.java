@@ -31,7 +31,7 @@ public class SolarisSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(SOLARIS_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(SOLARIS_ID))) return;
 
         Attribute attr = FIRE_SPELL_POWER.get();
         if (attr == null) return;
