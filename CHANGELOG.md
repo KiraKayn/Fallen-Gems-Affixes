@@ -3,7 +3,7 @@
 - Added Permanent Effect Bonus
 - Added Attribute Effect Bonus
 - Translated Staffs and Heavy Weapons category
-- Cleaned up most code so no warnings are given
+- Cleaned up most code so no warnings are given 
 
 # 1.1.9
 - Changed Howling Storm Gem texture, made by Chainsa
