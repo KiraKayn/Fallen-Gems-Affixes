@@ -54,10 +54,6 @@ public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry
         this.registerDefaultCodec(FallenGemsAffixes.id("extra_gem_bonus"), ExtraGemBonus.CODEC);
     }
 
-    public void initialize() {
-        this.onReload();
-    }
-
     private void applyExtraGemBonuses() {
         for (Gem gem : GemRegistry.INSTANCE.getValues()) {
             DynamicHolder<Gem> holder = GemRegistry.INSTANCE.holder(gem);
@@ -66,8 +62,7 @@ public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry
                 for (GemBonus bonus : extraBonus.bonuses()) {
                     try {
                         ((GemBonusExtension) gem).fallen_gems_affixes$appendExtraBonus(bonus);
-                    } catch (Exception ex) {
-                        // silently fail
+                    } catch (Exception ignored) {
                     }
                 }
             }
