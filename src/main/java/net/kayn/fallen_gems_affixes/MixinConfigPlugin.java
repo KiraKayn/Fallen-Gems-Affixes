@@ -44,13 +44,13 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.equals(SOCKET_HELPER_MIXIN)) return enableSocketMixin;
-        if (mixinClassName.equals(GUN_MIXIN)) return isModLoaded("scguns");
+        if (mixinClassName.equals(GUN_MIXIN)) return isModLoaded();
         return true;
     }
 
-    private static boolean isModLoaded(String modId) {
+    private static boolean isModLoaded() {
         return LoadingModList.get().getMods().stream()
-                .anyMatch(modInfo -> modId.equals(modInfo.getModId()));
+                .anyMatch(modInfo -> "scguns".equals(modInfo.getModId()));
     }
 
     @Override public String getRefMapperConfig() { return null; }
