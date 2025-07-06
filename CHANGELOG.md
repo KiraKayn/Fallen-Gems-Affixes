@@ -1,3 +1,8 @@
+# 1.2.0
+- Backported Extra Gem Bonus feature from 1.21.1 apotheosis
+- Added Permanent Effect Bonus
+- Translated Staffs and Heavy Weapons category
+
 # 1.1.9
 - Changed Howling Storm Gem texture, made by Chainsa
 - Made Forge 47.4.0 the min version needed

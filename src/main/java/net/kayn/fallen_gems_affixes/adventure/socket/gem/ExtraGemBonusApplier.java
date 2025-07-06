@@ -10,7 +10,6 @@ public class ExtraGemBonusApplier {
 
     @SubscribeEvent
     public static void onReload(AddReloadListenerEvent event) {
-        // Register the ExtraGemBonusRegistry as a reload listener
         event.addListener(ExtraGemBonusRegistry.INSTANCE);
     }
 }

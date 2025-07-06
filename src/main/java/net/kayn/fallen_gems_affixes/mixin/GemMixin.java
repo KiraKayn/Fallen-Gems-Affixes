@@ -42,13 +42,7 @@ public class GemMixin implements GemBonusExtension {
 
     @Override
     public void fallen_gems_affixes$clearExtraBonuses() {
-        // Clear the extra bonuses list
         this.fallen_gems_affixes$extraBonuses.clear();
-
-        // Also remove the extra bonuses from the bonusMap
-        // This is tricky because we need to identify which bonuses are "extra"
-        // For now, we'll just clear all and let the gem rebuild naturally
-        // A better approach would be to track which bonuses are original vs extra
     }
 
     @Unique
