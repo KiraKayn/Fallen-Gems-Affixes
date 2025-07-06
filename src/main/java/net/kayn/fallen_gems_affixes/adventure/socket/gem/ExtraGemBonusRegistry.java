@@ -1,15 +1,12 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.Gem;
@@ -19,113 +16,59 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.codec.CodecProvider;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
-import org.jetbrains.annotations.NotNull;
+import dev.shadowsoffire.placebo.reload.DynamicRegistry;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 
-public class ExtraGemBonusRegistry extends SimplePreparableReloadListener<Map<ResourceLocation, JsonElement>> {
+public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry.ExtraGemBonus> {
 
     public static final ExtraGemBonusRegistry INSTANCE = new ExtraGemBonusRegistry();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    protected Multimap<ResourceLocation, ExtraGemBonus> extraBonuses = HashMultimap.create();
-    private Map<ResourceLocation, JsonElement> pendingData = new HashMap<>();
-    private boolean hasAppliedBonuses = false;
+    protected Multimap<DynamicHolder<Gem>, ExtraGemBonus> extraBonuses = HashMultimap.create();
 
-    @Override
-    protected @NotNull Map<ResourceLocation, JsonElement> prepare(@NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
-        Map<ResourceLocation, JsonElement> map = new HashMap<>();
-        resourceManager.listResources("extra_gem_bonuses", location -> location.getPath().endsWith(".json")).forEach((location, resource) -> {
-            try {
-                JsonElement jsonElement = GSON.fromJson(resource.openAsReader(), JsonElement.class);
-                String path = location.getPath();
-                String filename = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
-                ResourceLocation key = new ResourceLocation(location.getNamespace(), filename);
-                map.put(key, jsonElement);
-            } catch (Exception ignored) {}
-        });
-        return map;
+    public ExtraGemBonusRegistry() {
+        super(FallenGemsAffixes.LOGGER, "extra_gem_bonuses", true, false);
     }
 
     @Override
-    protected void apply(@NotNull Map<ResourceLocation, JsonElement> prepared, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
-        this.pendingData = prepared;
-        this.hasAppliedBonuses = false;
-        this.extraBonuses.clear();
+    protected void beginReload() {
+        super.beginReload();
+        this.extraBonuses = HashMultimap.create();
         this.clearExtraGemBonuses();
-        if (!tryApplyBonuses()) {
-            scheduleDelayedApplication();
-        }
     }
 
-    private boolean tryApplyBonuses() {
-        if (GemRegistry.INSTANCE.getValues().isEmpty()) return false;
-        return parseAndApplyBonuses();
-    }
-
-    private boolean parseAndApplyBonuses() {
-        if (this.pendingData.isEmpty()) return false;
-
-        Map<ResourceLocation, ExtraGemBonus> parsedBonuses = new HashMap<>();
-        for (Map.Entry<ResourceLocation, JsonElement> entry : this.pendingData.entrySet()) {
-            ResourceLocation key = entry.getKey();
-            JsonElement jsonElement = entry.getValue();
-            var result = ExtraGemBonus.CODEC.parse(JsonOps.INSTANCE, jsonElement);
-            result.result().ifPresent(bonus -> parsedBonuses.put(key, bonus));
+    @Override
+    protected void onReload() {
+        super.onReload();
+        for (ExtraGemBonus extraBonus : this.getValues()) {
+            this.extraBonuses.put(extraBonus.gem, extraBonus);
         }
-
-        if (parsedBonuses.isEmpty()) return false;
-
-        for (ExtraGemBonus bonus : parsedBonuses.values()) {
-            this.extraBonuses.put(bonus.gemId(), bonus);
-        }
-
         this.applyExtraGemBonuses();
-        this.hasAppliedBonuses = true;
-        return true;
     }
 
-    private void scheduleDelayedApplication() {
-        CompletableFuture.runAsync(() -> {
-            int maxRetries = 10;
-            int retryDelay = 1000;
-            for (int i = 0; i < maxRetries; i++) {
-                try {
-                    Thread.sleep(retryDelay);
-                    if (tryApplyBonuses()) return;
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
-        });
+    public static Collection<ExtraGemBonus> getBonusesFor(DynamicHolder<Gem> gem) {
+        return INSTANCE.extraBonuses.get(gem);
     }
 
-    public void forceApplyBonuses() {
-        if (!this.hasAppliedBonuses && !this.pendingData.isEmpty()) {
-            tryApplyBonuses();
-        }
+    @Override
+    protected void registerBuiltinCodecs() {
+        this.registerDefaultCodec(FallenGemsAffixes.id("extra_gem_bonus"), ExtraGemBonus.CODEC);
     }
 
-    public static Collection<ExtraGemBonus> getBonusesFor(ResourceLocation gemId) {
-        return INSTANCE.extraBonuses.get(gemId);
+    public void initialize() {
+        this.onReload();
     }
 
-    public void applyExtraGemBonuses() {
+    private void applyExtraGemBonuses() {
         for (Gem gem : GemRegistry.INSTANCE.getValues()) {
             DynamicHolder<Gem> holder = GemRegistry.INSTANCE.holder(gem);
-            ResourceLocation gemId = holder.getId();
-            Collection<ExtraGemBonus> bonusesForGem = this.extraBonuses.get(gemId);
-            if (bonusesForGem.isEmpty()) continue;
-            for (ExtraGemBonus extraBonus : bonusesForGem) {
+
+            for (ExtraGemBonus extraBonus : this.extraBonuses.get(holder)) {
                 for (GemBonus bonus : extraBonus.bonuses()) {
                     try {
-                        if (gem instanceof GemBonusExtension extension) {
-                            extension.fallen_gems_affixes$appendExtraBonus(bonus);
-                        }
-                    } catch (Exception ignored) {}
+                        ((GemBonusExtension) gem).fallen_gems_affixes$appendExtraBonus(bonus);
+                    } catch (Exception ex) {
+                        // silently fail
+                    }
                 }
             }
         }
@@ -139,10 +82,12 @@ public class ExtraGemBonusRegistry extends SimplePreparableReloadListener<Map<Re
         }
     }
 
-    public record ExtraGemBonus(ResourceLocation gemId, List<GemBonus> bonuses) implements CodecProvider<ExtraGemBonus> {
+    public record ExtraGemBonus(DynamicHolder<Gem> gem,
+                                List<GemBonus> bonuses) implements CodecProvider<ExtraGemBonus> {
+
         public static final Codec<ExtraGemBonus> CODEC = RecordCodecBuilder.create(inst -> inst
                 .group(
-                        ResourceLocation.CODEC.fieldOf("gem").forGetter(ExtraGemBonus::gemId),
+                        GemRegistry.INSTANCE.holderCodec().fieldOf("gem").forGetter(ExtraGemBonus::gem),
                         GemBonus.CODEC.listOf().fieldOf("bonuses").forGetter(ExtraGemBonus::bonuses))
                 .apply(inst, ExtraGemBonus::new));
 
@@ -151,16 +96,17 @@ public class ExtraGemBonusRegistry extends SimplePreparableReloadListener<Map<Re
             return CODEC;
         }
 
-        public static Builder builder(ResourceLocation gemId) {
-            return new Builder(gemId);
+        public static Builder builder(DynamicHolder<Gem> gem) {
+            return new Builder(gem);
         }
 
         public static class Builder {
-            protected final ResourceLocation gemId;
+
+            protected final DynamicHolder<Gem> gem;
             protected List<GemBonus> bonuses = new ArrayList<>();
 
-            public Builder(ResourceLocation gemId) {
-                this.gemId = gemId;
+            public Builder(DynamicHolder<Gem> gem) {
+                this.gem = gem;
             }
 
             public Builder bonus(GemBonus bonus) {
@@ -179,7 +125,7 @@ public class ExtraGemBonusRegistry extends SimplePreparableReloadListener<Map<Re
             }
 
             public ExtraGemBonus build() {
-                return new ExtraGemBonus(this.gemId, this.bonuses);
+                return new ExtraGemBonus(this.gem, this.bonuses);
             }
         }
     }
