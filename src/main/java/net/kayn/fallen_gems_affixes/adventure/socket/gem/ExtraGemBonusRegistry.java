@@ -1,7 +1,5 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
@@ -10,9 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.Gem;
-import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemRegistry;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.codec.CodecProvider;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
@@ -43,10 +39,6 @@ public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry
             this.extraBonuses.put(extraBonus.gem, extraBonus);
         }
         this.applyExtraGemBonuses();
-    }
-
-    public static Collection<ExtraGemBonus> getBonusesFor(DynamicHolder<Gem> gem) {
-        return INSTANCE.extraBonuses.get(gem);
     }
 
     @Override
@@ -89,39 +81,6 @@ public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry
         @Override
         public Codec<? extends ExtraGemBonus> getCodec() {
             return CODEC;
-        }
-
-        public static Builder builder(DynamicHolder<Gem> gem) {
-            return new Builder(gem);
-        }
-
-        public static class Builder {
-
-            protected final DynamicHolder<Gem> gem;
-            protected List<GemBonus> bonuses = new ArrayList<>();
-
-            public Builder(DynamicHolder<Gem> gem) {
-                this.gem = gem;
-            }
-
-            public Builder bonus(GemBonus bonus) {
-                this.bonuses.add(bonus);
-                return this;
-            }
-
-            public Builder bonus(LootCategory cat, GemBonus bonus) {
-                this.bonuses.add(bonus);
-                return this;
-            }
-
-            public Builder bonus(GemClass gClass, GemBonus bonus) {
-                this.bonuses.add(bonus);
-                return this;
-            }
-
-            public ExtraGemBonus build() {
-                return new ExtraGemBonus(this.gem, this.bonuses);
-            }
         }
     }
 }
