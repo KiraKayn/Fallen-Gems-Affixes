@@ -63,11 +63,11 @@ public class GemMixin implements GemBonusExtension {
         for (GemBonus bonus : this.fallen_gems_affixes$extraBonuses) {
             if (!bonus.supports(rarity)) continue;
 
-            Component modifComp = bonus.getSocketBonusTooltip(gem, rarity);
+            Component modifyComp = bonus.getSocketBonusTooltip(gem, rarity);
             Component sum = Component.translatable("text.apotheosis.dot_prefix",
                     Component.translatable("%s: %s",
                             Component.translatable("gem_class." + bonus.getGemClass().key()),
-                            modifComp)).withStyle(ChatFormatting.GOLD);
+                            modifyComp)).withStyle(ChatFormatting.GOLD);
             list.accept(sum);
         }
     }

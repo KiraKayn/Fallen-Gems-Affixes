@@ -6,7 +6,6 @@ import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
-import net.kayn.fallen_gems_affixes.event.MobGearGemInjector;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
@@ -46,8 +45,6 @@ public class FallenGemsAffixes {
         AALootCategories.init();
 
         new MaxHealthDamageHandler();
-        MinecraftForge.EVENT_BUS.register(MobGearGemInjector.class);
-        MinecraftForge.EVENT_BUS.register(this);
 
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
