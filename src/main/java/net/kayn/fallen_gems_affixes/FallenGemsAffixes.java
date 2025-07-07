@@ -47,9 +47,6 @@ public class FallenGemsAffixes {
         AALootCategories.init();
 
         new MaxHealthDamageHandler();
-//        MinecraftForge.EVENT_BUS.register(new PermanentEffectHandler());
-//        MinecraftForge.EVENT_BUS.register(MobGearGemInjector.class);
-//        MinecraftForge.EVENT_BUS.register(this);
 
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
