@@ -60,10 +60,10 @@ public class PermanentEffectBonus extends GemBonus {
         int amplifier = this.values.get(lootRarity);
         MutableComponent effectName = Component.translatable(this.effect.getDescriptionId());
 
-        if (amplifier > 0) {
+        if (amplifier >= 0) {
             effectName = Component.translatable("potion.withAmplifier",
                     effectName,
-                    Component.translatable("potion.potency." + amplifier));
+                    Component.translatable("potion.potency." + (amplifier - 1)));
         }
 
         effectName = effectName.withStyle(this.effect.getCategory().getTooltipFormatting());
