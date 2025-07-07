@@ -34,7 +34,7 @@ public class FallenGemsAffixes {
 
         LOGGER.info("Loading Fallen Gems & Affixes");
 
-        ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
+        context.registerConfig(Type.COMMON, ModConfig.SPEC);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
@@ -47,9 +47,6 @@ public class FallenGemsAffixes {
         AALootCategories.init();
 
         new MaxHealthDamageHandler();
-        MinecraftForge.EVENT_BUS.register(new PermanentEffectHandler());
-        MinecraftForge.EVENT_BUS.register(MobGearGemInjector.class);
-        MinecraftForge.EVENT_BUS.register(this);
 
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);

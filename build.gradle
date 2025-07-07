@@ -36,6 +36,7 @@ minecraft {
         }
 
         client = {
+            jvmArgs '-Xms2G', '-Xmx4G'
         }
         server = {
             args "--nogui"
