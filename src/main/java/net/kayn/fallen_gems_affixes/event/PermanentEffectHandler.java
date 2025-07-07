@@ -48,6 +48,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Main logic on mod loading, set everything as intended.
+     */
     @SubscribeEvent
     public static void onModConfigEvent(ModConfigEvent event) {
         if (configLoaded) return;
@@ -72,6 +75,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         tickEventProtectedMapWrapper.put(uuid, new ProtectedMobEffectMap<>(entity));
     }
 
+    /**
+     * Main logic in both implementations, refreshing Permanent Effect when player's equipment changes.
+     */
     private void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         EquipmentSlot slot = event.getSlot();
@@ -81,6 +87,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         onEquip(player, to, slot, Operation.ADD);
     }
 
+    /**
+     * Main logic when use Tick Event to manage Permanent Effect.
+     */
     private void onTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         Player player = event.player;
@@ -109,13 +118,18 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         }
     }
 
+    /**
+     * Initialize the cached effects when player logged in.
+     * This should be bounded with Tick Event.
+     */
     private void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         tickEventProtectedMapWrapper.put(player.getUUID(), new ProtectedMobEffectMap<>(player));
     }
 
     /**
-     * remove cached permanent effect
+     * Remove cached permanent effects map when player leave the world.
+     * This should be bounded with Tick Event.
      */
     private void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         tickEventProtectedMapWrapper.remove(event.getEntity().getUUID());
@@ -176,6 +190,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         return result.get();
     }
 
+    /**
+     * Main logic when an Equipment Change Event triggers.
+     */
     private void onEquip(LivingEntity entity, @NotNull ItemStack itemStack, EquipmentSlot cSlot, Operation operation) {
         for (EquipmentSlot slot : LootCategory.forItem(itemStack).getSlots()) {
             if (cSlot == slot) {
@@ -193,6 +210,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         }
     }
 
+    /**
+     * Main logic when an Equipment Change Event triggers with Tick Event config.
+     */
     private void onEquipByTick(LivingEntity entity, MobEffect effect, EquipmentSlotWrapper slotWrapper, Operation operation, int amplifier) {
         var map = tickEventProtectedMapWrapper.get(entity.getUUID());
         map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
@@ -213,6 +233,9 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
     }
 
+    /**
+     * Main logic when an Equipment Change Event triggers with default config.
+     */
     private void onEquipDefault(LivingEntity entity, MobEffect effect, EquipmentSlotWrapper slotWrapper, Operation operation, int amplifier) {
         if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
@@ -228,9 +251,16 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
     }
 
+    /**
+     * A public method to add PermanentEffect to an entity.
+     */
     @Override
     public void addPermanentEffect(LivingEntity entity, EquipmentSlotWrapper slot, MobEffect effect, int amplifier, boolean altCondition) {
-        if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
+        var map1 = entity.getActiveEffectsMap();
+        if (useTickEvent) {
+            map1 = tickEventProtectedMapWrapper.get(entity.getUUID());
+        }
+        if (!(map1 instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
             entity.addEffect(new MobEffectInstance(effect, amplifier));
@@ -243,9 +273,16 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         }
     }
 
+    /**
+     * A public method to remove PermanentEffect to an entity.
+     */
     @Override
     public void removePermanentEffect(LivingEntity entity, EquipmentSlotWrapper slot, MobEffect effect, int amplifier, boolean altCondition) {
-        if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
+        var map1 = entity.getActiveEffectsMap();
+        if (useTickEvent) {
+            map1 = tickEventProtectedMapWrapper.get(entity.getUUID());
+        }
+        if (!(map1 instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
             entity.removeEffect(effect);

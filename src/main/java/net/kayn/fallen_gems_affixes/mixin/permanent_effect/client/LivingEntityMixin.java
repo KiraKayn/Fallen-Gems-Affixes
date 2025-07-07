@@ -40,7 +40,6 @@ public class LivingEntityMixin {
      */
     @Inject(method = "onEquipItem", at = @At("HEAD"))
     private void onEquipItemPrefix(EquipmentSlot pSlot, ItemStack pOldItem, ItemStack pNewItem, CallbackInfo ci) {
-//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {

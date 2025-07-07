@@ -36,10 +36,11 @@ public class SlotMixin {
 
     /**
      * The method injected {@link Slot#onTake} triggers when player takes item out of the slot that can be logical equipment slot by a click.
+     * <p>
+     * This method is clientside only.
      */
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
-//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!(this.container instanceof Inventory inv)) return;
         if (!(inv.player instanceof LocalPlayer player)) return;
         if (!(slot >= 36 && slot <= 40 || slot == inv.selected)) return;

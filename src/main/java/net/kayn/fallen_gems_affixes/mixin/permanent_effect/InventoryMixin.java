@@ -6,6 +6,7 @@ import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -27,9 +28,13 @@ public class InventoryMixin {
     @Final
     public Player player;
 
+    /**
+     * The load method is invoked when {@link ServerPlayer} enters the world first time.
+     * <p>
+     * This method is server side only.
+     */
     @Inject(method = "load", at = @At("TAIL"))
     private void onLoad(ListTag pListTag, CallbackInfo ci) {
-//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             int index = 0;

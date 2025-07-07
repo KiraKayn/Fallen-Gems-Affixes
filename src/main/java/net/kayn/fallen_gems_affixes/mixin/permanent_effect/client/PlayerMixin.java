@@ -44,7 +44,6 @@ public abstract class PlayerMixin {
      */
     @Inject(method = "setItemSlot", at = @At("HEAD"))
     private void onSetItemSlotPrefix(EquipmentSlot pSlot, ItemStack pStack, CallbackInfo ci) {
-//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {

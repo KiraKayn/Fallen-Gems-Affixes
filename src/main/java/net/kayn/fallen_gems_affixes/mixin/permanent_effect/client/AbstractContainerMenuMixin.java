@@ -47,7 +47,6 @@ public class AbstractContainerMenuMixin {
 //    private static boolean fallen_Gems_Affixes$flag = true;
     @Inject(method = "initializeContents", at = @At("TAIL"))
     private void initializeContentsSuffix(int pStateId, List<ItemStack> pItems, ItemStack pCarried, CallbackInfo ci) {
-//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof InventoryMenu menu)) return;
         ProtectedMobEffectMap<?> map1 = null;
         try {
