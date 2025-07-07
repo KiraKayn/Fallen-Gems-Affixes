@@ -1,5 +1,6 @@
-package net.kayn.fallen_gems_affixes.mixin.client;
+package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
@@ -38,6 +39,7 @@ public class SlotMixin {
      */
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
+        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!(this.container instanceof Inventory inv)) return;
         if (!(inv.player instanceof LocalPlayer player)) return;
         if (!(slot >= 36 && slot <= 40 || slot == inv.selected)) return;

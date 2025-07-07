@@ -1,5 +1,6 @@
-package net.kayn.fallen_gems_affixes.mixin.client;
+package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -41,13 +43,17 @@ public class AbstractContainerMenuMixin {
      * <p>
      * This method only triggers on clientside.
      */
+//    @Unique
+//    private static boolean fallen_Gems_Affixes$flag = true;
     @Inject(method = "initializeContents", at = @At("TAIL"))
     private void initializeContentsSuffix(int pStateId, List<ItemStack> pItems, ItemStack pCarried, CallbackInfo ci) {
+        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof InventoryMenu menu)) return;
         ProtectedMobEffectMap<?> map1 = null;
         try {
             for (int i = 0; i < 4; i++) {
                 Slot slot = menu.getSlot(40 - i);
+                if (slot == null) continue;
                 var container = slot.container;
                 if (container instanceof Inventory inventory) {
                     Player player = inventory.player;

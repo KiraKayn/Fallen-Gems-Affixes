@@ -30,7 +30,7 @@ public class EquipmentSlotUtil {
         };
     }
 
-    public static EquipmentSlot slotFromContainerIndex(int index) {
+    public static EquipmentSlot slotFromInventoryIndex(int index) {
         return switch (index) {
             case 40 -> EquipmentSlot.OFFHAND;
             case 39 -> EquipmentSlot.FEET;

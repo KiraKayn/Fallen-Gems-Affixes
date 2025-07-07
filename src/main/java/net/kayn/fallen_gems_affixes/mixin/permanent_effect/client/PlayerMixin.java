@@ -1,6 +1,7 @@
-package net.kayn.fallen_gems_affixes.mixin.client;
+package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
@@ -36,9 +37,6 @@ public abstract class PlayerMixin extends Entity {
         super(pEntityType, pLevel);
     }
 
-    @Shadow
-    public abstract ItemStack getItemBySlot(EquipmentSlot pSlot);
-
     /**
      * This method triggers when {@link EquipmentSlot} {@link Slot} changes by player.
      * <p>
@@ -50,6 +48,7 @@ public abstract class PlayerMixin extends Entity {
      */
     @Inject(method = "setItemSlot", at = @At("HEAD"))
     private void onSetItemSlotPrefix(EquipmentSlot pSlot, ItemStack pStack, CallbackInfo ci) {
+        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {

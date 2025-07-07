@@ -6,15 +6,15 @@
     "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
     "mixins": [
         "GunModifierHelperMixin",
-        "InventoryMixin",
-        "LivingEntityMixin",
+      "permanent_effect.InventoryMixin",
+      "permanent_effect.LivingEntityMixin",
         "SocketHelperMixin"
     ],
     "client": [
-        "client.AbstractContainerMenuMixin",
-        "client.LivingEntityMixin",
-        "client.PlayerMixin",
-        "client.SlotMixin"
+      "permanent_effect.client.AbstractContainerMenuMixin",
+      "permanent_effect.client.LivingEntityMixin",
+      "permanent_effect.client.PlayerMixin",
+      "permanent_effect.client.SlotMixin"
     ],
     "minVersion": "0.8"
 }

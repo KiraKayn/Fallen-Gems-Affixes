@@ -24,7 +24,6 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     private static final ThreadLocal<ItemStack> lastEffectsProvider = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
     private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = ThreadLocal.withInitial(() -> EquipmentSlotWrappers.NONE);
 
-    // TODO: once the test passes, delete the LOGGER
     private static final Logger LOGGER = LogManager.getLogger();
 
     public ProtectedMobEffectMap(E owner) {
@@ -41,15 +40,11 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
     @Override
     public MobEffectInstance remove(Object key) {
-        LOGGER.info("into remove {}", operator);
-        LOGGER.info("class : {}", this.owner.getClass());
         if (!(this.owner instanceof Player)) {
-            LOGGER.info("into player check {}", this.owner);
             return super.remove(key);
         }
         if (operator == EffectOperator.EXTERNAL) {
              if(this.currentPermanentEffects.contains((MobEffect) key)) {
-                 LOGGER.info("into remove inner {}", key);
                  return null;
              }
         }
@@ -65,10 +60,9 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
     @Override
     public void clear() {
-        LOGGER.info("into clear {}", operator);
         if (!(this.owner instanceof Player)) return;
         if (this.operator == EffectOperator.EXTERNAL) {
-            super.keySet().retainAll(collectPermanentEffects((LivingEntity) this.owner));
+            super.keySet().retainAll(collectPermanentEffects((LivingEntity) this.owner).keySet());
         }
         else {
             super.clear();
@@ -77,14 +71,11 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
     @Override
     public boolean remove(Object key, Object value) {
-        LOGGER.info("into remove2 {}", operator);
         if (!(this.owner instanceof Player)) {
-            LOGGER.info("into player check {}", this.owner);
             return super.remove(key, value);
         }
         if (operator == EffectOperator.EXTERNAL) {
             if(this.currentPermanentEffects.contains((MobEffect) key)) {
-                LOGGER.info("into remove inner {}", key);
                 return false;
             }
         }
@@ -120,9 +111,6 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
 
                     @Override
                     public void remove() {
-//                        LOGGER.info("Intercepted iterator.remove() for effect: {}", current);
-//                        LOGGER.info("{}, {}", current, remover);
-                        LOGGER.info("into iterator remove {}", operator);
                         if (operator == EffectOperator.EXTERNAL) {
                             if(currentPermanentEffects.contains(current.getEffect())) {
                                 return;

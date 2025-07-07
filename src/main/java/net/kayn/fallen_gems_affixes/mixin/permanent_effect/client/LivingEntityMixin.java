@@ -1,5 +1,6 @@
-package net.kayn.fallen_gems_affixes.mixin.client;
+package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
@@ -41,7 +42,7 @@ public class LivingEntityMixin {
      */
     @Inject(method = "onEquipItem", at = @At("HEAD"))
     private void onEquipItemPrefix(EquipmentSlot pSlot, ItemStack pOldItem, ItemStack pNewItem, CallbackInfo ci) {
-        LOGGER.info("into onSetItemSlot");
+        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {

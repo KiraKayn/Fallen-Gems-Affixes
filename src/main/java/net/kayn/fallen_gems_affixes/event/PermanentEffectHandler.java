@@ -9,6 +9,7 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
+import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.util.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,34 +17,50 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID)
-public class PermanentEffectHandler {
-    // TODO: once the test passes, delete the LOGGER
+@Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class PermanentEffectHandler implements IPermanentEffectHandler{
+    private static final PermanentEffectHandler INSTANCE = new PermanentEffectHandler();
+    // TODO: add a validate mechanic so there won't be invalid infinity potion effect
+    private static boolean useTickEvent = false;
+    private static boolean configLoaded = false;
+
     private static final Logger LOGGER = LogManager.getLogger();
+
     @SubscribeEvent
-    public static void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
-        // TODO: exclude some hand item change to not trigger addOrRemoveEffect
+    public static void onModConfigEvent(ModConfigEvent event) {
+        if (configLoaded) return;
+        useTickEvent = ModConfig.PERMANENT_EFFECT_USE_TICK_EVENT.get();
+        if (useTickEvent) {
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onTick);
+        } else {
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onEntityEquipmentChange);
+        }
+        configLoaded = true;
+    }
+
+    private void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         LOGGER.info("{}", player.getClass());
         EquipmentSlot slot = event.getSlot();
         ItemStack from = event.getFrom();
-        addOrRemoveEffect(player, from, slot, Operation.REMOVE);
+        onEquip(player, from, slot, Operation.REMOVE);
         ItemStack to = event.getTo();
-        addOrRemoveEffect(player, to, slot, Operation.ADD);
-        LOGGER.info("from: {}, to: {}", from, to);
+        onEquip(player, to, slot, Operation.ADD);
     }
 
 //    @SubscribeEvent(priority = EventPriority.HIGH)
@@ -58,26 +75,37 @@ public class PermanentEffectHandler {
 //        }
 //    }
 
-    public static Set<MobEffect> collectPermanentEffects(LivingEntity entity) {
-        Set<MobEffect> mobEffects = new HashSet<>();
+    private void onTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        Player player = event.player;
+        var permanentEffects = collectPermanentEffects(player);
+        if (permanentEffects.isEmpty()) return;
+        permanentEffects.forEach((effect, amplifier) -> {
+            player.addEffect(new MobEffectInstance(effect, amplifier));
+        });
+    }
+
+    public static boolean isUseTickEvent() {
+        return useTickEvent;
+    }
+
+    public static Map<MobEffect, Integer> collectPermanentEffects(LivingEntity entity) {
+        Map<MobEffect, Integer> mobEffects = new HashMap<>();
         for(ItemStack equipment : entity.getAllSlots()) {
             checkGemBonus(equipment, (bonus, rarity) -> {
-                mobEffects.add(bonus.getEffect());
+                mobEffects.put(bonus.getEffect(), bonus.getAmplifier(rarity));
             });
         }
         return mobEffects;
     }
 
     public static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
-        LOGGER.info("into checkGemBonus");
         if (itemStack.isEmpty()) return;
         DynamicHolder<LootRarity> rarityHolder = AffixHelper.getRarity(itemStack);
         if (!rarityHolder.isBound()) return;
-        LOGGER.info("into checkGemBonus inner {}, {}", rarityHolder, itemStack);
         LootCategory cat = LootCategory.forItem(itemStack);
         LootRarity rarity = rarityHolder.get();
         for (GemInstance g : SocketHelper.getGems(itemStack)) {
-            LOGGER.info("into gem inner {}", g);
             if (!g.isValid()) continue;
             Gem gem = g.gem().get();
             gem.getBonus(cat, rarity)
@@ -93,7 +121,6 @@ public class PermanentEffectHandler {
     }
 
     public static boolean matches(ItemStack itemStack, MobEffect effect) {
-        LOGGER.info("into matches");
         AtomicBoolean result = new AtomicBoolean(false);
         checkGemBonus(itemStack, (bonus, rarity) -> {
             if (bonus.getEffect() == effect) {
@@ -129,58 +156,75 @@ public class PermanentEffectHandler {
 //        }
 //    }
 
-    public static void addOrRemoveEffect(LivingEntity entity, @NotNull ItemStack itemStack, EquipmentSlot cSlot, Operation operation) {
-        LOGGER.info("into addOrRemoveEffect");
+    private void onEquip(LivingEntity entity, @NotNull ItemStack itemStack, EquipmentSlot cSlot, Operation operation) {
         for (EquipmentSlot slot: LootCategory.forItem(itemStack).getSlots()) {
-            LOGGER.info("effectSlot {}, slot {}", cSlot, slot);
             if (cSlot == slot) {
                 checkGemBonus(itemStack, (bonus, rarity) -> {
-                    addOrRemoveEffectInner(entity, bonus.getEffect(), EquipmentSlotUtil.getVanillaWrapper(cSlot), operation, bonus.getAmplifier(rarity));
+                    onEquipInner(entity, bonus.getEffect(), EquipmentSlotUtil.getVanillaWrapper(cSlot), operation, bonus.getAmplifier(rarity));
                 });
                 break;
             }
         }
     }
 
-    private static void addOrRemoveEffectInner(LivingEntity entity, MobEffect effect, EquipmentSlotWrapper slotWrapper, Operation operation, int amplifier) {
+    private void onEquipInner(LivingEntity entity, MobEffect effect, EquipmentSlotWrapper slotWrapper, Operation operation, int amplifier) {
         if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
         switch(operation) {
             case ADD -> {
-                LOGGER.info("add effect");
                 MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                entity.forceAddEffect(inst, null);
-                map.addPermanentEffect(slotWrapper, effect, amplifier);
+                entity.addEffect(inst);
             }
             case REMOVE -> {
-                LOGGER.info("remove effect");
-                entity.removeEffectNoUpdate(effect);
-                if (map.containsPermanent(effect)) {
-                    entity.forceAddEffect(map.getLastPotentialEffectInst(effect), null);
-                } else {
-                    map.tryRemovePermanentEffect(slotWrapper, effect, amplifier);
-                }
+                entity.removeEffect(effect);
             }
         }
         map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
     }
 
-    public void addPermanentEffect(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+    @Override
+    public void addPermanentEffect(LivingEntity entity, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+            entity.addEffect(new MobEffectInstance(effect, amplifier));
             map.addPermanentEffect(slot, effect, amplifier);
-        } finally {
+        }
+        catch (Exception e) {
+            LOGGER.error("Failed to add PermanentEffect {}", effect.getDisplayName());
+            e.printStackTrace();
+        }
+        finally {
             map.finalizeOperation();
         }
     }
 
-    public void removePermanentEffect(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+    @Override
+    public void removePermanentEffect(LivingEntity entity, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        if (!(entity.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+            entity.removeEffect(effect);
             map.tryRemovePermanentEffect(slot, effect, amplifier);
-        } finally {
+        }
+        catch (Exception e) {
+            LOGGER.error("Failed to remove PermanentEffect {}", effect.getDisplayName());
+            e.printStackTrace();
+        }
+        finally {
             map.finalizeOperation();
         }
+    }
+
+    @Override
+    public void setEffectPermanent(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        map.addPermanentEffect(slot, effect, amplifier);
+    }
+
+    @Override
+    public void unsetEffectPermanent(ProtectedMobEffectMap<?> map, EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+        map.initOperation(slot, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+        map.tryRemovePermanentEffect(slot, effect, amplifier);
     }
 
     public enum Operation {
