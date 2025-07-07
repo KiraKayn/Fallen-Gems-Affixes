@@ -145,8 +145,10 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
 
     public static Map<MobEffect, Integer> collectPermanentEffects(LivingEntity entity) {
         Map<MobEffect, Integer> mobEffects = new HashMap<>();
+        int index = 0;
         for (ItemStack equipment : entity.getAllSlots()) {
-            EquipmentSlot slot1 = LivingEntity.getEquipmentSlotForItem(equipment);
+            EquipmentSlot slot1 = EquipmentSlotUtil.slotFromAllSlotsIndex(index++);
+            if (slot1 == null) continue;
             for (EquipmentSlot slot : LootCategory.forItem(equipment).getSlots()) {
                 if (slot1 == slot) {
                     checkGemBonus(equipment, (bonus, rarity) -> {
