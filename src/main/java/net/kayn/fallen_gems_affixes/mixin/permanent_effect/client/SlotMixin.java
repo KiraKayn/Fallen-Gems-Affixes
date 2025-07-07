@@ -64,30 +64,4 @@ public class SlotMixin {
             map.setCurrentSlot(EquipmentSlotWrappers.NONE);
         }
     }
-//
-//    @Inject(method = "set", at = @At("HEAD"))
-//    private void onSetPrefix(ItemStack pStack, CallbackInfo ci) {
-//        if (!(this.container instanceof Inventory inv)) return;
-//        if (!(inv.player instanceof LocalPlayer player)) return;
-//        if (!(slot >= 36 && slot <= 40 || slot == inv.selected)) return;
-//        if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
-//        if (pStack.isEmpty()) return;
-//        try {
-//            EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(LivingEntity.getEquipmentSlotForItem(pStack));
-//            map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
-//            map.setCurrentSlot(slotWrapper);
-//            checkGemBonus(pStack, (bonus, rarity) -> {
-//                MobEffect effect = bonus.getEffect();
-//                player.removeEffect(effect);
-//                if (map.containsPermanent(effect)) {
-//                    player.addEffect(map.getLastPotentialEffectInst(effect));
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
-//            map.setCurrentSlot(EquipmentSlotWrappers.NONE);
-//        }
-//    }
 }
