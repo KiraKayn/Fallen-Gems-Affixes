@@ -1,14 +1,20 @@
 {
-  "required": true,
-  "package": "net.kayn.fallen_gems_affixes.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "fallen_gems_affixes.refmap.json",
-  "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
-  "mixins": [
-    "GunModifierHelperMixin",
-    "SocketHelperMixin",
-    "GemMixin"
-  ],
-  "client": [],
-  "minVersion": "0.8"
+    "required": true,
+    "package": "net.kayn.fallen_gems_affixes.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "fallen_gems_affixes.refmap.json",
+    "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
+    "mixins": [
+        "GunModifierHelperMixin",
+      "permanent_effect.InventoryMixin",
+      "permanent_effect.LivingEntityMixin",
+        "SocketHelperMixin"
+    ],
+    "client": [
+      "permanent_effect.client.AbstractContainerMenuMixin",
+      "permanent_effect.client.LivingEntityMixin",
+      "permanent_effect.client.PlayerMixin",
+      "permanent_effect.client.SlotMixin"
+    ],
+    "minVersion": "0.8"
 }

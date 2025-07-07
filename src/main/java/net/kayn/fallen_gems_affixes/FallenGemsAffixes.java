@@ -32,7 +32,7 @@ public class FallenGemsAffixes {
 
         LOGGER.info("Loading Fallen Gems & Affixes");
 
-        ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
+        context.registerConfig(Type.COMMON, ModConfig.SPEC);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
