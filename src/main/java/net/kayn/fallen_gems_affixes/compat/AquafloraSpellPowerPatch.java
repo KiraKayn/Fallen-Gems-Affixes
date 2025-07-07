@@ -34,7 +34,7 @@ public class AquafloraSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(AQUAFLORA_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(AQUAFLORA_ID))) return;
 
         Attribute attr = NATURE_SPELL_POWER.get();
         if (attr == null) return;

@@ -31,7 +31,7 @@ public class CrescentiaSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(CRESCENTIA_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(CRESCENTIA_ID))) return;
 
         Attribute attr = ENDER_SPELL_POWER.get();
         if (attr == null) return;

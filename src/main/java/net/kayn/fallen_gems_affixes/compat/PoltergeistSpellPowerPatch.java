@@ -35,7 +35,7 @@ public class PoltergeistSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(POLTERGEIST_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(POLTERGEIST_ID))) return;
 
         Attribute attr = ELDRITCH_SPELL_POWER.get();
         if (attr == null) return;

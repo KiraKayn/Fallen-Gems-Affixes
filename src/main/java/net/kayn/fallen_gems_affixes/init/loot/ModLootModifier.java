@@ -13,7 +13,7 @@ public class ModLootModifier {
             DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, FallenGemsAffixes.MOD_ID);
 
     public static final RegistryObject<Codec<GemLootModifier>> GEM_MODIFIER =
-            LOOT_MODIFIERS.register("gem_modifier", () -> GemLootModifier.CODEC.get());
+            LOOT_MODIFIERS.register("gem_modifier", GemLootModifier.CODEC);
 
     public static final RegistryObject<Codec<SocketGemModifier>> SOCKET_GEM_MODIFIER =
             LOOT_MODIFIERS.register("socket_gem_modifier", () -> SocketGemModifier.CODEC);

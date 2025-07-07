@@ -6,8 +6,6 @@ import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
-import net.kayn.fallen_gems_affixes.event.MobGearGemInjector;
-import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
@@ -27,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 @Mod(FallenGemsAffixes.MOD_ID)
 public class FallenGemsAffixes {
     public static final String MOD_ID = "fallen_gems_affixes";
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();

@@ -2,8 +2,9 @@ package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.ExtraGemBonusRegistry;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.AttributeEffectBonus;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.MultiEffectBonus;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,7 +16,8 @@ public class InitNewCodecs {
     public static void init(FMLCommonSetupEvent e) {
         e.enqueueWork(() -> {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "multi_effect"), MultiEffectBonus.CODEC);
-            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
+            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
+            ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });
     }
 }

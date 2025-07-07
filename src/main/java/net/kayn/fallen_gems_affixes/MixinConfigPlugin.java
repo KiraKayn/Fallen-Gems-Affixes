@@ -72,9 +72,9 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         };
     }
 
-    private static boolean isModLoaded(String modId) {
+    private static boolean isModLoaded() {
         return LoadingModList.get().getMods().stream()
-                .anyMatch(modInfo -> modId.equals(modInfo.getModId()));
+                .anyMatch(modInfo -> "scguns".equals(modInfo.getModId()));
     }
 
     @Override public String getRefMapperConfig() { return null; }

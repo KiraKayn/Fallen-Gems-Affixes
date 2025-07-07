@@ -143,7 +143,7 @@ dependencies {
     compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
     runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
 
-    runtimeOnly fg.deobf("curse.maven:cataclysm-551586:6681690")
+    runtimeOnly fg.deobf("curse.maven:lendercataclysm-551586:6720983")
     runtimeOnly fg.deobf("curse.maven:lionfish-api-1001614:5922047")
 
     implementation fg.deobf("curse.maven:celestisynth-872712:5776930")

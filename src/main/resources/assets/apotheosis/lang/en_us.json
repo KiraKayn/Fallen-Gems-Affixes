@@ -56,5 +56,7 @@
     "text.apotheosis.category.staffs.plural": "Staffs",
     "affix.apotheosis:luck": "Threatening",
     "affix.apotheosis:luck.suffix": "",
-    "affix.apotheosis:luck.desc": "Added threat multiplier proportional to gear rarity"
+    "affix.apotheosis:luck.desc": "Added threat multiplier proportional to gear rarity",
+    "gem_class.staffs": "Staffs",
+    "gem_class.heavy_weapons": "Heavy Weapons"
 }

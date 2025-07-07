@@ -31,7 +31,7 @@ public class FrostboundSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(FROSTBOUND_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(FROSTBOUND_ID))) return;
 
         Attribute attr = ICE_SPELL_POWER.get();
         if (attr == null) return;

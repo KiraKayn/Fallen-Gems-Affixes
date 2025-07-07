@@ -31,7 +31,7 @@ public class RainfallSpellPowerPatch {
         if (!(source.getEntity() instanceof Player player)) return;
 
         ItemStack held = player.getMainHandItem();
-        if (!ForgeRegistries.ITEMS.getKey(held.getItem()).equals(RAINFALL_SERENITY_ID)) return;
+        if (!held.is(ForgeRegistries.ITEMS.getValue(RAINFALL_SERENITY_ID))) return;
 
         Attribute attr = LIGHTNING_SPELL_POWER.get();
         if (attr == null) return;
