@@ -27,8 +27,6 @@ import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGem
 @Mixin(LivingEntity.class)
 @OnlyIn(Dist.CLIENT)
 public class LivingEntityMixin {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     /**
      * This method triggers when player **equip** an item.
      * <p>
@@ -42,15 +40,14 @@ public class LivingEntityMixin {
      */
     @Inject(method = "onEquipItem", at = @At("HEAD"))
     private void onEquipItemPrefix(EquipmentSlot pSlot, ItemStack pOldItem, ItemStack pNewItem, CallbackInfo ci) {
-        if (PermanentEffectHandler.isUseTickEvent()) return;
+//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
             try {
-                map.setOperator(ProtectedMobEffectMap.EffectOperator.ON_EQUIP);
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(pSlot);
-                map.setCurrentSlot(slotWrapper);
                 Set<MobEffect> cachedEffects = map.getEffectsFromCache(slotWrapper);
+                map.initOperation(slotWrapper);
                 if (cachedEffects != null) {
                     cachedEffects.forEach(e -> {
                         player.removeEffectNoUpdate(e);
@@ -71,9 +68,7 @@ public class LivingEntityMixin {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                LOGGER.info("effect map {}", map);
-                map.setOperator(ProtectedMobEffectMap.EffectOperator.EXTERNAL);
-                map.setCurrentSlot(EquipmentSlotWrappers.NONE);
+                map.finalizeOperation();
             }
         }
     }

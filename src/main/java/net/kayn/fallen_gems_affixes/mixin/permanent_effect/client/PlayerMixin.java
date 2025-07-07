@@ -32,11 +32,7 @@ import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGem
 
 @Mixin(Player.class)
 @OnlyIn(Dist.CLIENT)
-public abstract class PlayerMixin extends Entity {
-    protected PlayerMixin(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
+public abstract class PlayerMixin {
     /**
      * This method triggers when {@link EquipmentSlot} {@link Slot} changes by player.
      * <p>
@@ -48,7 +44,7 @@ public abstract class PlayerMixin extends Entity {
      */
     @Inject(method = "setItemSlot", at = @At("HEAD"))
     private void onSetItemSlotPrefix(EquipmentSlot pSlot, ItemStack pStack, CallbackInfo ci) {
-        if (PermanentEffectHandler.isUseTickEvent()) return;
+//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
@@ -70,7 +66,7 @@ public abstract class PlayerMixin extends Entity {
                         int amplifier = bonus.getAmplifier(rarity);
                         MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
                         player.forceAddEffect(inst, null);
-                        map.addPermanentEffect(slotWrapper, effect, amplifier);
+                        map.addPermanentEffect(slotWrapper, effect, amplifier, false);
                         map.setLastEffectsProvider(pStack);
                     });
                 }

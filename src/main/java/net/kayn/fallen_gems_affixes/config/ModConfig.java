@@ -27,8 +27,8 @@ public class ModConfig {
 
         PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
                 .comment("Switch the implementation type of PermanentEffectBonus")
-                .comment("True: Enable tick event, PermanentEffectBonus will try to apply every tick")
-                .comment("False: Use default implementation, aggressive but no tick event, better when there are many players with many gems")
+                .comment("True: Switches to Player Tick event, Permanent Effect Bonus will apply every tick, worse performance but better compatibility")
+                .comment("False: Use default implementation, aggressive but no Player Tick event, better for performance")
                 .define("permanentEffectUseTickEvent", false);
 
 

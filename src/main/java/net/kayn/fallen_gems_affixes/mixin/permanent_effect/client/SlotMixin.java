@@ -39,7 +39,7 @@ public class SlotMixin {
      */
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
-        if (PermanentEffectHandler.isUseTickEvent()) return;
+//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!(this.container instanceof Inventory inv)) return;
         if (!(inv.player instanceof LocalPlayer player)) return;
         if (!(slot >= 36 && slot <= 40 || slot == inv.selected)) return;

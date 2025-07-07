@@ -17,7 +17,7 @@ public class EffectInstanceBucket {
         instances.add(amplifier);
     }
 
-    public Boolean contains(int amplifier) {
+    public boolean contains(int amplifier) {
         return instances.contains(amplifier);
     }
 

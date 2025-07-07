@@ -29,7 +29,7 @@ public class InventoryMixin {
 
     @Inject(method = "load", at = @At("TAIL"))
     private void onLoad(ListTag pListTag, CallbackInfo ci) {
-        if (PermanentEffectHandler.isUseTickEvent()) return;
+//        if (PermanentEffectHandler.isUseTickEvent()) return;
         if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
             int index = 0;

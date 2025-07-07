@@ -3,19 +3,16 @@ package net.kayn.fallen_gems_affixes.util;
 import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.collectPermanentEffects;
 
-public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, MobEffectInstance> {
+public class ProtectedMobEffectMap<E extends LivingEntity> extends HashMap<MobEffect, MobEffectInstance>{
     private final E owner;
     private final Map<MobEffect, EffectInstanceBucket> fallback = new HashMap<>();
     private final Map<EquipmentSlotWrapper, Set<MobEffect>> cachedEffectsBySlot = new HashMap<>();
@@ -24,7 +21,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     private static final ThreadLocal<ItemStack> lastEffectsProvider = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
     private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = ThreadLocal.withInitial(() -> EquipmentSlotWrappers.NONE);
 
-    private static final Logger LOGGER = LogManager.getLogger();
+//    private static final Logger LOGGER = LogManager.getLogger();
 
     public ProtectedMobEffectMap(E owner) {
         this.owner = owner;
@@ -33,7 +30,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
     @Override
     public MobEffectInstance put(MobEffect effect, MobEffectInstance effectInst) {
         if (this.owner instanceof Player && operator != EffectOperator.EXTERNAL) {
-            addPermanentEffect(currentSlot.get(), effect, effectInst.getAmplifier());
+            addPermanentEffect(currentSlot.get(), effect, effectInst.getAmplifier(), false);
         }
         return super.put(effect, effectInst);
     }
@@ -51,7 +48,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         else {
             MobEffectInstance effectInst = super.remove(key);
             if (effectInst != null) {
-                tryRemovePermanentEffect(currentSlot.get(), (MobEffect) key, effectInst.getAmplifier());
+                tryRemovePermanentEffect(currentSlot.get(), (MobEffect) key, effectInst.getAmplifier(), false);
             }
             return effectInst;
         }
@@ -81,7 +78,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         }
         else {
             if (value != null) {
-                tryRemovePermanentEffect(currentSlot.get(), (MobEffect) key,((MobEffectInstance) value).getAmplifier());
+                tryRemovePermanentEffect(currentSlot.get(), (MobEffect) key,((MobEffectInstance) value).getAmplifier(), false);
             }
             return true;
         }
@@ -118,7 +115,7 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
                         }
                         else {
                             if (current != null) {
-                                tryRemovePermanentEffect(currentSlot.get(), current.getEffect(), current.getAmplifier());
+                                tryRemovePermanentEffect(currentSlot.get(), current.getEffect(), current.getAmplifier(), false);
                             }
                         }
                         originalIterator.remove();
@@ -164,12 +161,10 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         this.operator = EffectOperator.EXTERNAL;
     }
 
-    public void addPermanentEffect(EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+    public void addPermanentEffect(EquipmentSlotWrapper slot, MobEffect effect, int amplifier, boolean isAltCondition) {
         if (effect == null) return;
         currentPermanentEffects.add(effect);
-        if (owner.level().isClientSide) {
-            updateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.ADD);
-        }
+        tryUpdateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.ADD, isAltCondition);
         EffectInstanceBucket potentialEffects = fallback.get(effect);
         if (potentialEffects == null) {
             potentialEffects = new EffectInstanceBucket(effect);
@@ -194,16 +189,20 @@ public class ProtectedMobEffectMap<E extends Entity> extends HashMap<MobEffect, 
         }
     }
 
-    public void tryRemovePermanentEffect(EquipmentSlotWrapper slot, MobEffect effect, int amplifier) {
+    public void tryRemovePermanentEffect(EquipmentSlotWrapper slot, MobEffect effect, int amplifier, boolean altCondition) {
         if (effect == null) return;
         var potentialEffects = fallback.get(effect);
         if (potentialEffects == null) return;
         potentialEffects.remove(amplifier);
         if (potentialEffects.size() == 0) {
             currentPermanentEffects.remove(effect);
-            if (owner.level().isClientSide) {
-                updateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.REMOVE);
-            }
+            tryUpdateCachedMobEffectsForSlot(slot, effect, PermanentEffectHandler.Operation.REMOVE, altCondition);
+        }
+    }
+
+    private void tryUpdateCachedMobEffectsForSlot(EquipmentSlotWrapper slot, MobEffect effect, PermanentEffectHandler.Operation operation, boolean isAltCondition) {
+        if (owner.level().isClientSide || isAltCondition) {
+            updateCachedMobEffectsForSlot(slot, effect, operation);
         }
     }
 
