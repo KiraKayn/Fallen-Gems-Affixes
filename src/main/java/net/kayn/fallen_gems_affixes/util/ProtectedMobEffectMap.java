@@ -21,8 +21,6 @@ public class ProtectedMobEffectMap<E extends LivingEntity> extends HashMap<MobEf
     private static final ThreadLocal<ItemStack> lastEffectsProvider = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
     private static final ThreadLocal<EquipmentSlotWrapper> currentSlot = ThreadLocal.withInitial(() -> EquipmentSlotWrappers.NONE);
 
-//    private static final Logger LOGGER = LogManager.getLogger();
-
     public ProtectedMobEffectMap(E owner) {
         this.owner = owner;
     }

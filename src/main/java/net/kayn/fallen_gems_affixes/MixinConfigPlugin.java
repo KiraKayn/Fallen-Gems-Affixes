@@ -23,7 +23,6 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     private static final String PE_INVENTORY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.InventoryMixin";
     private static final String PE_LIVING_ENTITY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.LivingEntityMixin";
 
-
     private static boolean enableSocketMixin = true;
     private static boolean enablePermanentEffectDefaultMixin = true;
 
