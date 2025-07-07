@@ -5,7 +5,6 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketedGems;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
-import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -23,7 +22,6 @@ import static dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper.getSock
 public class SocketHelperMixin {
     @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")}, cancellable = true)
     private static void getGemsImplTweak(ItemStack stack, CallbackInfoReturnable<SocketedGems> cir) {
-        if (!ModConfig.ENABLE_SOCKET_MIXIN.get()) return;
         int size = getSockets(stack);
         if (size > 0 && !stack.isEmpty()) {
             LootCategory cat = LootCategory.forItem(stack);
