@@ -67,7 +67,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             case PE_CLIENT_SLOT_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_INVENTORY_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_LIVING_ENTITY_MIXIN -> enablePermanentEffectDefaultMixin;
-            case GUN_MIXIN -> isModLoaded("scguns");
+            case GUN_MIXIN -> isModLoaded();
             default -> true;
         };
     }
