@@ -100,7 +100,7 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
                     EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(slot);
                     cached.initOperation(slotWrapper);
                     Set<MobEffect> effects = cached.getEffectsFromCache(slotWrapper);
-                    if (effects == null) return;
+                    if (effects == null) continue;
                     checkGemBonus(equipment, (bonus, rarity) -> {
                         MobEffect effect = bonus.getEffect();
                         if (!player.getActiveEffectsMap().containsKey(effect) && effects.contains(effect)) {
