@@ -1,7 +1,5 @@
 package net.kayn.fallen_gems_affixes.mixin.permanent_effect;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
@@ -14,6 +12,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
+import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.onHotBarSelectedChange;
 
 @Mixin(Inventory.class)
 public class InventoryMixin {
@@ -62,6 +63,18 @@ public class InventoryMixin {
             e.printStackTrace();
         } finally {
             map.finalizeOperation();
+        }
+    }
+
+    /**
+     * This method triggers when use keybind to change the hot bar selected slot.
+     * This method only triggers on clientside.
+     */
+    @OnlyIn(Dist.CLIENT)
+    @Inject(method = "swapPaint", at = @At("TAIL"))
+    private void swapPaint(double pDirection, CallbackInfo ci) {
+        if (player != null) {
+            onHotBarSelectedChange(player);
         }
     }
 }

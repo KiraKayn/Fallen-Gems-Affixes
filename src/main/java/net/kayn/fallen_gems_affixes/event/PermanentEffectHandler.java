@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.event;
 
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
@@ -133,8 +132,7 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         Player player = event.getEntity();
         if (useTickEvent) {
             tickEventProtectedMapWrapper.remove(player.getUUID());
-        }
-        else {
+        } else {
             if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
             try {
                 var allPermanentEffects = collectPermanentEffects(player).keySet();
@@ -304,6 +302,49 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
             map.tryRemovePermanentEffect(slot, effect, amplifier, altCondition);
         } catch (Exception e) {
             LOGGER.error("Failed to remove PermanentEffect {}", effect.getDisplayName());
+            e.printStackTrace();
+        } finally {
+            map.finalizeOperation();
+        }
+    }
+
+    /**
+     * This triggers when main hand slot changes.
+     * This method is clientside only.
+     * This method is for Default setting.
+     */
+    public static void onHotBarSelectedChange(Player player) {
+        if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
+        ItemStack itemStack = player.getMainHandItem();
+        effectOperationBySlot(map, player, EquipmentSlotWrappers.MAIN_HAND, itemStack);
+    }
+
+    /**
+     * Client only.
+     */
+    public static void effectOperationBySlot(ProtectedMobEffectMap<?> map, Player player, EquipmentSlotWrapper slotWrapper, ItemStack itemStack) {
+        try {
+            var cachedEffects = map.getEffectsFromCache(slotWrapper);
+            map.initOperation(slotWrapper);
+            if (cachedEffects != null) {
+                // To not trigger concurrent exception
+                for (MobEffect effect : Set.copyOf(cachedEffects)) {
+                    player.removeEffectNoUpdate(effect);
+                    if (map.containsPermanent(effect)) {
+                        player.forceAddEffect(map.getLastPotentialEffectInst(effect), null);
+                    }
+                }
+            }
+            if (EquipmentSlotUtil.matchesSlot(itemStack, slotWrapper.getSlot())) {
+                checkGemBonus(itemStack, (bonus, rarity) -> {
+                    MobEffect effect = bonus.getEffect();
+                    int amplifier = bonus.getAmplifier(rarity);
+                    MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
+                    player.forceAddEffect(inst, null);
+                    map.setLastEffectsProvider(itemStack);
+                });
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             map.finalizeOperation();

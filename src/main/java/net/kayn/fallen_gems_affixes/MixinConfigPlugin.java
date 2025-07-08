@@ -20,6 +20,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     private static final String PE_CLIENT_ABSTRACT_CONTAINER_MENU_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.AbstractContainerMenuMixin";
     private static final String PE_CLIENT_PLAYER_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.PlayerMixin";
     private static final String PE_CLIENT_SLOT_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.SlotMixin";
+    private static final String PE_CLIENT_MINECRAFT_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.MinecraftMixin";
     private static final String PE_INVENTORY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.InventoryMixin";
     private static final String PE_LIVING_ENTITY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.LivingEntityMixin";
 
@@ -65,6 +66,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             case PE_CLIENT_ABSTRACT_CONTAINER_MENU_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_CLIENT_PLAYER_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_CLIENT_SLOT_MIXIN -> enablePermanentEffectDefaultMixin;
+            case PE_CLIENT_MINECRAFT_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_INVENTORY_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_LIVING_ENTITY_MIXIN -> enablePermanentEffectDefaultMixin;
             case GUN_MIXIN -> isModLoaded();
