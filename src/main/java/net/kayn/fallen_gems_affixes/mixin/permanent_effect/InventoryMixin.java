@@ -1,5 +1,7 @@
 package net.kayn.fallen_gems_affixes.mixin.permanent_effect;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
@@ -36,8 +38,10 @@ public class InventoryMixin {
     private void onLoad(ListTag pListTag, CallbackInfo ci) {
         if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
-            int index = 0;
-            for (ItemStack equipment : player.getAllSlots()) {
+            // Exclude the first slot to fix the login issue.
+            // 1 means start from offhand.
+            int index = 1;
+            for (ItemStack equipment : EquipmentSlotUtil.getOffHandAndArmors(player)) {
                 EquipmentSlot slot = EquipmentSlotUtil.slotFromAllSlotsIndex(index++);
                 if (slot == null) continue;
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(slot);

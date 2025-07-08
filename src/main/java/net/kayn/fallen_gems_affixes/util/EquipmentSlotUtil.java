@@ -1,7 +1,10 @@
 package net.kayn.fallen_gems_affixes.util;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,5 +49,9 @@ public class EquipmentSlotUtil {
             if (givenSlot == slot) return true;
         }
         return false;
+    }
+
+    public static Iterable<ItemStack> getOffHandAndArmors(Player player){
+        return Iterables.concat(Lists.newArrayList(player.getOffhandItem()), player.getArmorSlots());
     }
 }
