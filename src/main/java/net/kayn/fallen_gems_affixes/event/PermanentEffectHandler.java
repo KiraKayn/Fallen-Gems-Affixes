@@ -10,10 +10,7 @@ import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
-import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
-import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
-import net.kayn.fallen_gems_affixes.util.IPermanentEffectHandler;
-import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
+import net.kayn.fallen_gems_affixes.util.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -64,6 +61,7 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onTick);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onEntityEquipmentChange);
         } else {
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onPlayerLogout);
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, INSTANCE::onEntityEquipmentChange);
         }
         configLoaded = true;
@@ -129,10 +127,25 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
 
     /**
      * Remove cached permanent effects map when player leave the world.
-     * This should be bounded with Tick Event.
+     * This should be bounded with both Tick Event and Default.
      */
     private void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        tickEventProtectedMapWrapper.remove(event.getEntity().getUUID());
+        Player player = event.getEntity();
+        if (useTickEvent) {
+            tickEventProtectedMapWrapper.remove(player.getUUID());
+        }
+        else {
+            if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
+            try {
+                var allPermanentEffects = collectPermanentEffects(player).keySet();
+                map.initOperation(EquipmentSlotWrappers.NONE, ProtectedMobEffectMap.EffectOperator.ON_HANDLER);
+                allPermanentEffects.forEach(player::removeEffect);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                map.finalizeOperation();
+            }
+        }
     }
 
     public static boolean isUseTickEvent() {
