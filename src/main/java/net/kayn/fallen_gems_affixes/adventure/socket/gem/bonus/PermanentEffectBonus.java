@@ -63,7 +63,7 @@ public class PermanentEffectBonus extends GemBonus {
         if (amplifier >= 0) {
             effectName = Component.translatable("potion.withAmplifier",
                     effectName,
-                    Component.translatable("potion.potency." + (amplifier + 1)));
+                    Component.translatable("potion.potency." + (amplifier - 1)));
         }
 
         effectName = effectName.withStyle(this.effect.getCategory().getTooltipFormatting());
