@@ -11,7 +11,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
 
     static {
-        BUILDER.push("Socket Gem Modifier");
+        BUILDER.push("Mod Config");
 
         ENABLE_SOCKET_GEM_MODIFIER = BUILDER
                 .comment("Enable gem socket injection into items via loot modifier")
