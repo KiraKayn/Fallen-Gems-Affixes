@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
   "type": "apotheosis:attribute",
   "attribute": "irons_spellbooks:nature_spell_power",
   "operation": "MULTIPLY_BASE",

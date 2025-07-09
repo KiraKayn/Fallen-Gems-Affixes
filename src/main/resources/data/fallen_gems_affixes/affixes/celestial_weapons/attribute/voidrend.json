@@ -36,7 +36,7 @@
     },
     "ancient": {
       "min": 0.40,
-      "steps": 10,
+      "steps": 20,
       "step": 0.01
     }
   },

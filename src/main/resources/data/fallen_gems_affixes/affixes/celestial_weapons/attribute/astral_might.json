@@ -30,12 +30,12 @@
       "step": 0.25
     },
     "mythic": {
-      "min": 4,
+      "min": 5,
       "steps": 8,
       "step": 0.25
     },
     "ancient": {
-      "min": 4,
+      "min": 7,
       "steps": 12,
       "step": 0.25
     }

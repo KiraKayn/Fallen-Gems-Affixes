@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
   "type": "apotheosis:attribute",
   "attribute": "irons_spellbooks:mana_regen",
   "operation": "MULTIPLY_BASE",
