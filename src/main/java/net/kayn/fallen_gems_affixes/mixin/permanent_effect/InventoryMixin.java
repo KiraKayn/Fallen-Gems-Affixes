@@ -12,6 +12,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
+import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.onHotBarSelectedChange;
 
 @Mixin(Inventory.class)
 public class InventoryMixin {
@@ -36,8 +39,10 @@ public class InventoryMixin {
     private void onLoad(ListTag pListTag, CallbackInfo ci) {
         if (!(player.getActiveEffectsMap() instanceof ProtectedMobEffectMap<?> map)) return;
         try {
-            int index = 0;
-            for (ItemStack equipment : player.getAllSlots()) {
+            // Exclude the first slot to fix the login issue.
+            // 1 means start from offhand.
+            int index = 1;
+            for (ItemStack equipment : EquipmentSlotUtil.getOffHandAndArmors(player)) {
                 EquipmentSlot slot = EquipmentSlotUtil.slotFromAllSlotsIndex(index++);
                 if (slot == null) continue;
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(slot);
@@ -58,6 +63,18 @@ public class InventoryMixin {
             e.printStackTrace();
         } finally {
             map.finalizeOperation();
+        }
+    }
+
+    /**
+     * This method triggers when use keybind to change the hot bar selected slot.
+     * This method only triggers on clientside.
+     */
+    @OnlyIn(Dist.CLIENT)
+    @Inject(method = "swapPaint", at = @At("TAIL"))
+    private void swapPaint(double pDirection, CallbackInfo ci) {
+        if (player != null) {
+            onHotBarSelectedChange(player);
         }
     }
 }

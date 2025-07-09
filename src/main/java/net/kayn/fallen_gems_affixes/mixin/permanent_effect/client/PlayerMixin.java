@@ -5,8 +5,6 @@ import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -18,9 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Set;
-
-import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
+import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.effectOperationBySlot;
 
 @Mixin(Player.class)
 @OnlyIn(Dist.CLIENT)
@@ -39,33 +35,8 @@ public abstract class PlayerMixin {
         if (!((Object) this instanceof LocalPlayer player)) return;
         var currentEffectsMap = player.getActiveEffectsMap();
         if (currentEffectsMap instanceof ProtectedMobEffectMap<?> map) {
-            try {
-                EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(pSlot);
-                map.initOperation(slotWrapper);
-                Set<MobEffect> cachedEffects = map.getEffectsFromCache(slotWrapper);
-                if (cachedEffects != null) {
-                    cachedEffects.forEach(e -> {
-                        player.removeEffectNoUpdate(e);
-                        if (map.containsPermanent(e)) {
-                            player.forceAddEffect(map.getLastPotentialEffectInst(e), null);
-                        }
-                    });
-                }
-                if (map.getLastEffectsProvider() != pStack && EquipmentSlotUtil.matchesSlot(pStack, pSlot)) {
-                    checkGemBonus(pStack, (bonus, rarity) -> {
-                        MobEffect effect = bonus.getEffect();
-                        int amplifier = bonus.getAmplifier(rarity);
-                        MobEffectInstance inst = new MobEffectInstance(effect, -1, amplifier);
-                        player.forceAddEffect(inst, null);
-                        map.addPermanentEffect(slotWrapper, effect, amplifier, false);
-                        map.setLastEffectsProvider(pStack);
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                map.finalizeOperation();
-            }
+            EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(pSlot);
+            effectOperationBySlot(map, player, slotWrapper, pStack);
         }
     }
 }

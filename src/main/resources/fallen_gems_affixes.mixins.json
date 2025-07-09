@@ -5,15 +5,16 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
+    "GemMixin",
     "GunModifierHelperMixin",
-    "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin",
     "SocketHelperMixin",
-    "GemMixin"
+    "permanent_effect.InventoryMixin",
+    "permanent_effect.LivingEntityMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",
     "permanent_effect.client.LivingEntityMixin",
+    "permanent_effect.client.MinecraftMixin",
     "permanent_effect.client.PlayerMixin",
     "permanent_effect.client.SlotMixin"
   ],
