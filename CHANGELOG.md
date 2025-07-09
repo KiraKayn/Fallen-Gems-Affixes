@@ -1,3 +1,6 @@
+# 1.2.2
+- Added Adaptive Spell Affixes
+
 # 1.2.1
 - Added compat to Apotheotic Additions rarities, requires Esoteric Reforging too
 - Added Forge conditions to all staff affixes
