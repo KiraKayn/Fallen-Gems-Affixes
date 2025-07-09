@@ -1,3 +1,7 @@
+# 1.2.1
+- Added compat to Apotheotic Additions rarities, requires Esoteric Reforging too
+- Added Forge conditions to all staff affixes
+
 # 1.2.0
 - Backported Extra Gem Bonus feature from 1.21.1 apotheosis
 - Added Permanent Effect Bonus
