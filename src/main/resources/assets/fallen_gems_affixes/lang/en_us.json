@@ -93,5 +93,62 @@
 
   "bonus.fallen_gems_affixes.multi_effect.desc.and": "%s and %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
-  "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s"
+  "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral": "Astral",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral.suffix": "of the Stars",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral_might": "Astral Might",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral_might.suffix": "of Cosmic Power",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/fateweaver": "Fateweaver",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/fateweaver.suffix": "of Twisting Fate",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/rift_dancer": "Rift Dancer",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/rift_dancer.suffix": "of Perfect Motion",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/soulflare": "Soulflare",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/soulflare.suffix": "of Burning Spirit",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidburst": "Voidburst",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidburst.suffix": "of the Abyss",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidrend": "Voidrend",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidrend.suffix": "of Dimensional Rupture",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/mystic": "Mystic",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/mystic.suffix": "of Spellcasting",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/restorative": "Restorative",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/restorative.suffix": "of Mana Renewal",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/verdant": "Verdant",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/verdant.suffix": "of the Wild",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/wellspring": "Wellspring",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/wellspring.suffix": "of Inner Reserve",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/stormcharged": "Stormcharged",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/stormcharged.suffix": "of the Storm",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/frostbound": "Frostbound",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/frostbound.suffix": "of the Frozen Path",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanctified": "Sanctified",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanctified.suffix": "of Divine Light",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/blazing": "Blazing",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/blazing.suffix": "of Flame",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/empowered": "Empowered",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/empowered.suffix": "of Arcane Surge",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidtouched": "Voidtouched",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidtouched.suffix": "of the End",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/swift": "Swift",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/swift.suffix": "of Quick Casting",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanguine": "Sanguine",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanguine.suffix": "of Blood Magic"
 }

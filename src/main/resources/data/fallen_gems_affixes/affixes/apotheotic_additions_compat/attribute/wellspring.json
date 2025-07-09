@@ -1,0 +1,35 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "apotheotic_additions"
+    }
+  ],
+  "type": "apotheosis:attribute",
+  "attribute": "irons_spellbooks:max_mana",
+  "operation": "ADDITION",
+  "values": {
+    "apotheotic_additions:heirloom": {
+      "min": 60,
+      "steps": 1,
+      "step": 5
+    },
+    "apotheotic_additions:artifact": {
+      "min": 80,
+      "steps": 1,
+      "step": 5
+    },
+    "apotheotic_additions:esoteric": {
+      "min": 100,
+      "steps": 1,
+      "step": 5
+    }
+  },
+  "types": [
+    "staffs"
+  ]
+}
