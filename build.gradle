@@ -284,12 +284,17 @@ tasks.register('generateUpdateJson') {
 
     doLast {
         def modVersion = project.version.toString()
+        def mcVersion = mc_version
+        def map = [
+                "{{MCVERSION}}": mcVersion,
+                "{{VERSION}}": modVersion
+        ]
         def content = inputFile.getText("UTF-8")
-                .replace("{{VERSION}}", modVersion)
+                .replace(map)
 
         outputFile.parentFile.mkdirs()
         outputFile.write(content, "UTF-8")
-        println "Generated update.json with version ${modVersion}"
+        println "Generated update.json with ${mcVersion}-${modVersion}"
     }
 }
 
