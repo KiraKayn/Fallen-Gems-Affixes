@@ -13,7 +13,7 @@ base {
     archivesName = "${fileName}-${mc_version}"
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(project.properties.javaVersion)
+java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
 
 jarJar.enable()
 
@@ -273,6 +273,29 @@ tasks.named('jar', Jar).configure {
     }
 
     finalizedBy 'reobfJar'
+}
+
+tasks.register('generateUpdateJson') {
+    def inputFile = file(".github/update_template.json")
+    def outputFile = file("update.json")
+
+    inputs.file(inputFile)
+    outputs.file(outputFile)
+
+    doLast {
+        def modVersion = project.version.toString()
+        def content = inputFile.getText("UTF-8")
+                .replace("{{VERSION}}", modVersion)
+
+        outputFile.parentFile.mkdirs()
+        outputFile.write(content, "UTF-8")
+        println "Generated update.json with version ${modVersion}"
+    }
+}
+
+// auto processing before build
+tasks.named("processResources").configure {
+    dependsOn tasks.named("generateUpdateJson")
 }
 
 java {
