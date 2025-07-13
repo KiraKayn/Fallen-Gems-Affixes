@@ -80,7 +80,7 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
                 ResourceLocation attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
                 if (attrId != null) {
                     String path = attrId.getPath();
-                    if (path.endsWith("_spell_power") && path.length() > "_spell_power".length()) {
+                    if (path.endsWith("spell_power") && path.length() != 11) {
                         String schoolName = path.replace("_spell_power", "");
                         ResourceLocation schoolResource = new ResourceLocation(attrId.getNamespace(), schoolName);
                         SchoolType matchedSchool = SchoolRegistry.getSchool(schoolResource);
