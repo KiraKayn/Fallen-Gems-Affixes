@@ -9,6 +9,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.DoubleValue SOCKET_GEM_CHANCE;
     public static final ForgeConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
     public static final ForgeConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
+    public static final ForgeConfigSpec.BooleanValue STRICT_SCHOOL_MATCH;
 
     static {
         BUILDER.push("Mod Config");
@@ -27,11 +28,12 @@ public class ModConfig {
 
         PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
                 .comment("Switch the implementation type of PermanentEffectBonus")
-                .comment("True: Switches to Player Tick event, Permanent Effect Bonus will apply every tick, worse performance but better compatibility")
-                .comment("False: Use default implementation, aggressive but no Player Tick event, better for performance")
                 .define("permanentEffectUseTickEvent", false);
 
-
+        STRICT_SCHOOL_MATCH = BUILDER
+                .comment("If true, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
+                .comment("If false, affixes will only apply to items that already grant spell power of the matching school.")
+                .define("strictSpellSchoolMatching", false);
 
         BUILDER.pop();
     }
