@@ -113,6 +113,33 @@
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starstep": "Fleet",
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starstep.suffix": "of Starstep",
 
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/solar_flare": "Solar Flare",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/solar_flare.suffix": "of the Sunfire",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/stellar_bloom": "Stellar Bloom",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/stellar_bloom.suffix": "of Cosmic Growth",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/radiant_dawn": "Radiant Dawn",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/radiant_dawn.suffix": "of Ascension",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/cosmic_whisper": "Cosmic Whisper",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/cosmic_whisper.suffix": "of the Voidmind",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/storm_star": "Storm Star",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/storm_star.suffix": "of Skyfire",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/nova_impact": "Nova Impact",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/nova_impact.suffix": "of Evocation",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/glacial_orbit": "Glacial Orbit",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/glacial_orbit.suffix": "of Deep Winter",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/red_moon": "Red Moon",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/red_moon.suffix": "of Sanguine Eclipse",
+
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/void_echo": "Void Echo",
+  "affix.fallen_gems_affixes:celestial_weapons/attribute/void_echo.suffix": "of the End",
+
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral": "Astral",
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral.suffix": "of the Stars",
 
@@ -186,5 +213,5 @@
   "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starbreak.suffix": "of Starbreak",
 
   "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starstep": "Fleet",
-  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starstep.suffix": "of Starstep"
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starstep.suffix": "of Starstep",
 }

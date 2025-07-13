@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:adaptive_spell_power",
+  "attribute": "irons_spellbooks:ender_spell_power",
+  "operation": "MULTIPLY_BASE",
+  "values": {
+    "common": {
+      "min": 0.05,
+      "steps": 1,
+      "step": 0.0
+    },
+    "uncommon": {
+      "min": 0.10,
+      "steps": 1,
+      "step": 0.0
+    },
+    "rare": {
+      "min": 0.15,
+      "steps": 1,
+      "step": 0.0
+    },
+    "epic": {
+      "min": 0.20,
+      "steps": 1,
+      "step": 0.0
+    },
+    "mythic": {
+      "min": 0.25,
+      "steps": 1,
+      "step": 0.0
+    },
+    "ancient": {
+      "min": 0.30,
+      "steps": 1,
+      "step": 0.0
+    }
+  },
+  "types": [
+    "celestial_weapons"
+  ],
+  "school": "irons_spellbooks:ender"
+}
