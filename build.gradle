@@ -116,6 +116,7 @@ repositories {
 }
 
 dependencies {
+    // Minecraft
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     // Mixin
@@ -125,30 +126,38 @@ dependencies {
         jarJar.ranged(it, "[${mixin_extras_version},)")
     }
 
-    // Required Deps
+    // Required Dependencies
     implementation fg.deobf("dev.shadowsoffire:Placebo:${mc_version}-${placebo_version}")
     implementation fg.deobf("dev.shadowsoffire:ApothicAttributes:${mc_version}-${attributeslib_version}")
     implementation fg.deobf("dev.shadowsoffire:Apotheosis:${mc_version}-${apotheosis_version}")
-    runtimeOnly fg.deobf("curse.maven:additional-attributes-986624:5668766")
-    runtimeOnly fg.deobf("curse.maven:runiclib-880879:6628573")
+    runtimeOnly fg.deobf("curse.maven:attributefix-280510:4911084")
 
     // Dev Env Mods
     implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6608233")
 
-
-    // Optional Integrations
+    // Main Integrations (still optional)
     implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
     compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
     runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
 
+    runtimeOnly fg.deobf("curse.maven:additional-attributes-986624:5668766")
+    runtimeOnly fg.deobf("curse.maven:runiclib-880879:6628573")
+
     runtimeOnly fg.deobf("curse.maven:lendercataclysm-551586:6720983")
-    runtimeOnly fg.deobf("curse.maven:lionfish-api-1001614:5922047")
 
-    implementation fg.deobf("curse.maven:celestisynth-872712:5776930")
-    runtimeOnly fg.deobf("curse.maven:celestisynth-872712:5776930")
+    implementation fg.deobf("maven.modrinth:scorched-guns-2:${scorched_guns_version}")
 
+    runtimeOnly fg.deobf("curse.maven:apotheotic-additions-924640:6393313")
+    runtimeOnly fg.deobf("curse.maven:esoteric-reforging-forge-1150370:5989440")
+
+    runtimeOnly fg.deobf("curse.maven:to-tweaks-irons-spells-1046916:6322784")
+    runtimeOnly fg.deobf("curse.maven:cataclysm-spellbooks-1099461:6758057")
+    runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:6250904")
+
+    // Optional Integrations
     runtimeOnly fg.deobf("curse.maven:alexs-caves-924854:5848216")
     runtimeOnly fg.deobf("curse.maven:citadel-331936:6002521")
 
@@ -158,25 +167,16 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:farmers-delight-398521:5051242")
 
-    implementation fg.deobf("maven.modrinth:scorched-guns-2:${scorched_guns_version}")
-    runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
-
-    runtimeOnly fg.deobf("curse.maven:to-tweaks-irons-spells-1046916:6322784")
-
-    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6608233")
-    runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
-
-    runtimeOnly fg.deobf("curse.maven:apotheotic-additions-924640:6393313")
-    runtimeOnly fg.deobf("curse.maven:esoteric-reforging-forge-1150370:5989440")
-
-
-    // Shared Libs
+    // Libs
+    runtimeOnly fg.deobf("curse.maven:azurelib-817423:6747998")
+    runtimeOnly fg.deobf("curse.maven:lionfish-api-1001614:5922047")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
     runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}")
     runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${geckolib_version}")
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
-    runtimeOnly fg.deobf("curse.maven:attributefix-280510:4911084")
+    runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
+    runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
 
 }
 
