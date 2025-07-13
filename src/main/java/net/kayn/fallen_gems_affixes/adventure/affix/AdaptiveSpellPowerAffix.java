@@ -42,8 +42,6 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
     protected final ResourceLocation schoolId;
     protected final SchoolType school;
 
-    private static final ThreadLocal<Boolean> callGuard = ThreadLocal.withInitial(() -> false);
-
     public AdaptiveSpellPowerAffix(Attribute attr, AttributeModifier.Operation op, Map<LootRarity, StepFunction> values, Set<LootCategory> types, ResourceLocation schoolId) {
         super(attr, op, values, types);
         this.schoolId = schoolId;
@@ -55,45 +53,39 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
-        if (callGuard.get()) return false;
-        callGuard.set(true);
-        try {
-            if (!super.canApplyTo(stack, cat, rarity)) return false;
-            if (cat == null || cat.isNone()) return false;
+        if (!super.canApplyTo(stack, cat, rarity)) return false;
+        if (cat == null || cat.isNone()) return false;
 
-            EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
-            Item item = stack.getItem();
-            Set<Attribute> foundAttributes = new HashSet<>();
+        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+        Item item = stack.getItem();
+        Set<Attribute> foundAttributes = new HashSet<>();
 
-            // Curios compatibility
-            if (item instanceof ICurioItem curio) {
-                Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
-                for (String slotId : slots) {
-                    SlotContext context = new SlotContext(slotId, null, -1, false, true);
-                    foundAttributes.addAll(curio.getAttributeModifiers(context, UUID.randomUUID(), stack).keySet());
-                }
-            } else {
-                foundAttributes = stack.getAttributeModifiers(slot).keySet();
+        // Curios compatibility
+        if (item instanceof ICurioItem curio) {
+            Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
+            for (String slotId : slots) {
+                SlotContext context = new SlotContext(slotId, null, -1, false, true);
+                foundAttributes.addAll(curio.getAttributeModifiers(context, UUID.randomUUID(), stack).keySet());
             }
+        } else {
+            foundAttributes = item.getAttributeModifiers(slot, stack).keySet();
+        }
 
-            for (Attribute attribute : foundAttributes) {
-                ResourceLocation attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
-                if (attrId != null) {
-                    String path = attrId.getPath();
-                    if (path.endsWith("spell_power") && path.length() != 11) {
-                        String schoolName = path.replace("_spell_power", "");
-                        ResourceLocation schoolResource = new ResourceLocation(attrId.getNamespace(), schoolName);
-                        SchoolType matchedSchool = SchoolRegistry.getSchool(schoolResource);
-                        if (school != null && school.equals(matchedSchool)) {
-                            return true;
-                        }
+        for (Attribute attribute : foundAttributes) {
+            ResourceLocation attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
+            if (attrId != null) {
+                String path = attrId.getPath();
+                if (path.endsWith("spell_power") && path.length() != 11) {
+                    String schoolName = path.replace("_spell_power", "");
+                    ResourceLocation schoolResource = new ResourceLocation(attrId.getNamespace(), schoolName);
+                    SchoolType matchedSchool = SchoolRegistry.getSchool(schoolResource);
+                    if (school != null && school.equals(matchedSchool)) {
+                        return true;
                     }
                 }
             }
-            return !ModConfig.STRICT_SCHOOL_MATCH.get();
-        } finally {
-            callGuard.set(false);
         }
+        return !ModConfig.STRICT_SCHOOL_MATCH.get();
     }
 
     @Override
