@@ -1,0 +1,47 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "apotheotic_additions"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "mob_effect": "minecraft:speed",
+  "target": "ATTACK_SELF",
+  "values": {
+    "apotheotic_additions:heirloom": {
+      "duration": {
+        "min": 140,
+        "steps": 6,
+        "step": 20
+      },
+      "amplifier": 2,
+      "cooldown": 300
+    },
+    "apotheotic_additions:artifact": {
+      "duration": {
+        "min": 180,
+        "steps": 8,
+        "step": 20
+      },
+      "amplifier": 3,
+      "cooldown": 300
+    },
+    "apotheotic_additions:esoteric": {
+      "duration": {
+        "min": 200,
+        "steps": 10,
+        "step": 20
+      },
+      "amplifier": 4,
+      "cooldown": 300
+    }
+  },
+  "types": [
+    "celestial_weapons"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "apotheotic_additions"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "mob_effect": "attributeslib:bleeding",
+  "target": "ATTACK_TARGET",
+  "stack_on_reapply": true,
+  "values": {
+    "apotheotic_additions:heirloom": {
+      "duration": {
+        "min": 80,
+        "steps": 1,
+        "step": 20
+      },
+      "amplifier": 2,
+      "cooldown": 80
+    },
+    "apotheotic_additions:artifact": {
+      "duration": {
+        "min": 120,
+        "steps": 2,
+        "step": 20
+      },
+      "amplifier": 3,
+      "cooldown": 80
+    },
+    "apotheotic_additions:esoteric": {
+      "duration": {
+        "min": 150,
+        "steps": 3,
+        "step": 20
+      },
+      "amplifier": 4,
+      "cooldown": 80
+    }
+  },
+  "types": [
+    "celestial_weapons"
+  ]
+}
