@@ -9,7 +9,7 @@
       "modid": "apotheotic_additions"
     }
   ],
-  "type": "apotheosis:attribute",
+  "type": "fallen_gems_affixes:adaptive_spell_power",
   "attribute": "irons_spellbooks:lightning_spell_power",
   "operation": "MULTIPLY_BASE",
   "values": {
