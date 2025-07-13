@@ -1,12 +1,6 @@
 {
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "irons_spellbooks"
-    }
-  ],
-  "variant": "eldritch",
-  "weight": 0,
+  "variant": "lightning",
+  "weight": 5,
   "quality": 0,
   "dimensions": [],
   "bonuses": [
@@ -23,7 +17,7 @@
           "staffs"
         ]
       },
-      "attribute": "irons_spellbooks:eldritch_spell_power",
+      "attribute": "irons_spellbooks:lightning_spell_power",
       "operation": "MULTIPLY_TOTAL",
       "values": {
         "common": {

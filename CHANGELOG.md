@@ -1,6 +1,7 @@
 # 1.2.2
 - Added Adaptive Spell Affixes
 - Added Spell Heal and Spell Damage targets, spell_heal, spell_damage 
+- Added bunch of new affixes for loot categories, (Celestial Weapons, Staffs)
 - Added Spell Power affixes to Celestial Weapons category
 - Reworked all gems, this includes base apotheosis gems too
 - Made Runiclib and Additional Attributes not a required dependency
