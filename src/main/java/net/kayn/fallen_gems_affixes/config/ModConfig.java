@@ -31,9 +31,9 @@ public class ModConfig {
                 .define("permanentEffectUseTickEvent", false);
 
         STRICT_SCHOOL_MATCH = BUILDER
-                .comment("If true, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
-                .comment("If false, affixes will only apply to items that already grant spell power of the matching school.")
-                .define("strictSpellSchoolMatching", false);
+                .comment("If false, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
+                .comment("If true, affixes will only apply to items that already grant spell power of the matching school.")
+                .define("strictSpellSchoolMatching", true);
 
         BUILDER.pop();
     }
