@@ -42,7 +42,6 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
     protected final ResourceLocation schoolId;
     protected final SchoolType school;
 
-    // Prevent infinite recursion
     private static final ThreadLocal<Boolean> callGuard = ThreadLocal.withInitial(() -> false);
 
     public AdaptiveSpellPowerAffix(Attribute attr, AttributeModifier.Operation op, Map<LootRarity, StepFunction> values, Set<LootCategory> types, ResourceLocation schoolId) {
