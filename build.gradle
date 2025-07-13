@@ -158,6 +158,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:6250904")
     runtimeOnly fg.deobf("curse.maven:ice-and-fire-spellbooks-977855:5844739")
 
+    runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:5633453")
+
     // Optional Integrations
     runtimeOnly fg.deobf("curse.maven:alexs-caves-924854:5848216")
     runtimeOnly fg.deobf("curse.maven:citadel-331936:6002521")
