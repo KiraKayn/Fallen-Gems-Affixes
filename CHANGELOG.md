@@ -6,8 +6,10 @@
 - Reworked all gems, this includes base apotheosis gems too - Kayn
 - Made Runiclib and Additional Attributes not a required dependency - Kayn
 - Added config for Celestisynth compat - Kayn
+- Improved Staffs category, so now all Staffs work, and not pulled by tag - Kayn
+- Added compat to Alshanex's Familiars, T.O Tweaks and Cataclysm Spellbooks - Kayn
 
-- The AdaptiveSpellPowerAffix and new targets have been backported from the amazing Apotheosis x Iron's Spellbooks mod, so makes sure to check that out if you want these features on 1.21+ :D
+- The AdaptiveSpellPowerAffix and new targets have been backported from the amazing Apotheosis x Iron's Spellbooks mod, so makes sure to check that out if you are playing 1.21+ :D
 
 # 1.2.1
 - Added compat to Apotheotic Additions rarities, requires Esoteric Reforging too

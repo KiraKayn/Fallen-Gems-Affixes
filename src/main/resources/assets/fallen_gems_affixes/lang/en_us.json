@@ -94,6 +94,18 @@
   "affix.fallen_gems_affixes:staffs/attribute/sanguine": "Sanguine",
   "affix.fallen_gems_affixes:staffs/attribute/sanguine.suffix": "of Blood Magic",
 
+  "affix.fallen_gems_affixes:staffs/attribute/resonant": "Resonant",
+  "affix.fallen_gems_affixes:staffs/attribute/resonant.suffix": "of Sound",
+
+  "affix.fallen_gems_affixes:staffs/attribute/voidbound": "Voidbound",
+  "affix.fallen_gems_affixes:staffs/attribute/voidbound.suffix": "of the Abyss",
+
+  "affix.fallen_gems_affixes:staffs/attribute/overclocked": "Overclocked",
+  "affix.fallen_gems_affixes:staffs/attribute/overclocked.suffix": "of Technomancy",
+
+  "affix.fallen_gems_affixes:staffs/attribute/drenched": "Drenched",
+  "affix.fallen_gems_affixes:staffs/attribute/drenched.suffix": "of the Sea",
+
   "bonus.fallen_gems_affixes.multi_effect.desc.and": "%s and %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s",
@@ -240,5 +252,17 @@
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/red_moon.suffix": "of Sanguine Eclipse",
 
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/void_echo": "Void Echo",
-  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/void_echo.suffix": "of the End"
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/void_echo.suffix": "of the End",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/resonant": "Resonant",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/resonant.suffix": "of Sound",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidbound": "Voidbound",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/voidbound.suffix": "of the Abyss",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/overclocked": "Overclocked",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/overclocked.suffix": "of Technomancy",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/drenched": "Drenched",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/drenched.suffix": "of the Sea"
 }

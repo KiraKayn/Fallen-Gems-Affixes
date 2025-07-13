@@ -143,6 +143,8 @@ dependencies {
     compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
     runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
 
+    implementation fg.deobf("curse.maven:celestisynth-872712:5776930")
+
     runtimeOnly fg.deobf("curse.maven:additional-attributes-986624:5668766")
     runtimeOnly fg.deobf("curse.maven:runiclib-880879:6628573")
 
