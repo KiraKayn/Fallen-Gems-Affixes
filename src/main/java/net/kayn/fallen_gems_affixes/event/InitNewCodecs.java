@@ -1,7 +1,9 @@
 package net.kayn.fallen_gems_affixes.event;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.ExtraGemBonusRegistry;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.AttributeEffectBonus;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.MultiEffectBonus;
@@ -19,6 +21,7 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "multi_effect"), MultiEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
+            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
             ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });
     }
