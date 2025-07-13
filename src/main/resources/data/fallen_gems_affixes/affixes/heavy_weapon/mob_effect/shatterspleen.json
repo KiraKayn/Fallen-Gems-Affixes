@@ -1,4 +1,10 @@
 {
+	"conditions": [
+		{
+			"type": "forge:mod_loaded",
+			"modid": "runiclib"
+		}
+	],
 	"type": "apotheosis:mob_effect",
 	"mob_effect": "runiclib:shatterspleen",
 	"target": "ATTACK_TARGET",
@@ -20,6 +26,7 @@
 		}
 	},
 	"types": [
-		"heavy_weapon"
+		"heavy_weapon",
+		"celestial_weapons"
 	]
 }

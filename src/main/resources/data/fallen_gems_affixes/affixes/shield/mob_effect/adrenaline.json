@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "runiclib"
+    }
+  ],
   "type": "apotheosis:mob_effect",
   "mob_effect": "runiclib:adrenaline",
   "target": "BLOCK_SELF",

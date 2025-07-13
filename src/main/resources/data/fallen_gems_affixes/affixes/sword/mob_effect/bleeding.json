@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "runiclib"
+    }
+  ],
   "type": "apotheosis:mob_effect",
   "mob_effect": "runiclib:bleeding",
   "target": "ATTACK_TARGET",
@@ -22,6 +28,7 @@
   "types": [
     "sword",
     "trident",
-    "heavy_weapon"
+    "heavy_weapon",
+    "celestial_weapons"
   ]
 }

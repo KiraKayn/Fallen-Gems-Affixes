@@ -95,6 +95,21 @@
   "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s",
 
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom": "Enlightened",
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom.suffix": "of Insight",
+
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/blood_moon": "Crimson",
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/blood_moon.suffix": "of the Blood Moon",
+
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/eclipsing": "Shaded",
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/eclipsing.suffix": "of Eclipse",
+
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starbreak": "Fractured",
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starbreak.suffix": "of Starbreak",
+
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starstep": "Fleet",
+  "affix.fallen_gems_affixes:celestial_weapons/mob_effect/starstep.suffix": "of Starstep",
+
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral": "Astral",
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/astral.suffix": "of the Stars",
 
