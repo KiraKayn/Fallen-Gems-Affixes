@@ -5,7 +5,7 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "apotheosis:attribute",
+  "type": "fallen_gems_affixes:adaptive_spell_power",
   "attribute": "irons_spellbooks:blood_spell_power",
   "operation": "MULTIPLY_BASE",
   "values": {
@@ -42,5 +42,6 @@
   },
   "types": [
     "staffs"
-  ]
+  ],
+  "school": "irons_spellbooks:blood"
 }
