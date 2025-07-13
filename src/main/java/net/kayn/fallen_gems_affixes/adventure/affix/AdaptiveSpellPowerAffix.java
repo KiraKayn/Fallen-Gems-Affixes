@@ -12,6 +12,7 @@ import dev.shadowsoffire.placebo.util.StepFunction;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,6 +29,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.*;
 
 public class AdaptiveSpellPowerAffix extends AttributeAffix {
+
     public static final Codec<AdaptiveSpellPowerAffix> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(
                     ForgeRegistries.ATTRIBUTES.getCodec().fieldOf("attribute").forGetter(a -> a.attribute),
@@ -39,9 +41,9 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
 
     protected final ResourceLocation schoolId;
     protected final SchoolType school;
-    // this is a record, it may be used some time, like manually control school types in config.
-    protected static final Map<Item, SchoolType> recorded_irons_items = new HashMap<>();
 
+    // Prevent infinite recursion
+    private static final ThreadLocal<Boolean> callGuard = ThreadLocal.withInitial(() -> false);
 
     public AdaptiveSpellPowerAffix(Attribute attr, AttributeModifier.Operation op, Map<LootRarity, StepFunction> values, Set<LootCategory> types, ResourceLocation schoolId) {
         super(attr, op, values, types);
@@ -54,41 +56,45 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
-        if (!super.canApplyTo(stack, cat, rarity)) {
-            return false;
-        }
-        if (cat == null || cat.isNone()) {
-            return false;
-        }
-        // get the EquipmentSlot.
-        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
-        Item item = stack.getItem();
-        Set<Attribute> modifiers1 = new HashSet<>();
-        // curio compat.
-        if (item instanceof ICurioItem curio) {
-            Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
-            for (String slot1 : slots) {
-                SlotContext slotContext = new SlotContext(slot1, null, -1, false, true);
-                modifiers1.addAll(curio.getAttributeModifiers(slotContext, UUID.fromString("667ad88f-901d-4691-b2a2-3664e42026d3"), stack).keySet());
+        if (callGuard.get()) return false;
+        callGuard.set(true);
+        try {
+            if (!super.canApplyTo(stack, cat, rarity)) return false;
+            if (cat == null || cat.isNone()) return false;
+
+            EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+            Item item = stack.getItem();
+            Set<Attribute> foundAttributes = new HashSet<>();
+
+            // Curios compatibility
+            if (item instanceof ICurioItem curio) {
+                Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
+                for (String slotId : slots) {
+                    SlotContext context = new SlotContext(slotId, null, -1, false, true);
+                    foundAttributes.addAll(curio.getAttributeModifiers(context, UUID.randomUUID(), stack).keySet());
+                }
+            } else {
+                foundAttributes = stack.getAttributeModifiers(slot).keySet();
             }
-        } else {
-            modifiers1 = stack.getAttributeModifiers(slot).keySet();
-        }
-        for (Attribute attribute : modifiers1) {
-            var attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
-            var path = attrId.getPath();
-            if (attrId != null && path.endsWith("spell_power")) {
-                if (path.length() != 11) {
-                    String schoolName = attrId.getPath().replace("_spell_power", "");
-                    ResourceLocation schoolResource = ResourceLocation.fromNamespaceAndPath(attrId.getNamespace(), schoolName);
-                    SchoolType school1 = SchoolRegistry.getSchool(schoolResource);
-                    if (school != null && school == school1) return true;
+
+            for (Attribute attribute : foundAttributes) {
+                ResourceLocation attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
+                if (attrId != null) {
+                    String path = attrId.getPath();
+                    if (path.endsWith("_spell_power") && path.length() > "_spell_power".length()) {
+                        String schoolName = path.replace("_spell_power", "");
+                        ResourceLocation schoolResource = new ResourceLocation(attrId.getNamespace(), schoolName);
+                        SchoolType matchedSchool = SchoolRegistry.getSchool(schoolResource);
+                        if (school != null && school.equals(matchedSchool)) {
+                            return true;
+                        }
+                    }
                 }
             }
+            return !ModConfig.STRICT_SCHOOL_MATCH.get();
+        } finally {
+            callGuard.set(false);
         }
-        // if modifier is empty, it can take this affix? Or not?
-        // default
-        return true;
     }
 
     @Override
