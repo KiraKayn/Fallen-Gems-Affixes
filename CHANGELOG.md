@@ -5,6 +5,7 @@
 - Added Spell Power affixes to Celestial Weapons category
 - Reworked all gems, this includes base apotheosis gems too
 - Made Runiclib and Additional Attributes not a required dependency
+- Added config for Celestisynth compat
 
 # 1.2.1
 - Added compat to Apotheotic Additions rarities, requires Esoteric Reforging too
