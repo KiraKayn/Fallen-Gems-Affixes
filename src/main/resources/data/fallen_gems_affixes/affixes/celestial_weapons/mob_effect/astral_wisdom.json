@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
   "type": "apotheosis:mob_effect",
   "mob_effect": "attributeslib:knowledge",
   "target": "ATTACK_SELF",
@@ -18,11 +24,7 @@
         "steps": 4,
         "step": 20
       },
-      "amplifier": {
-        "min": 0,
-        "steps": 8,
-        "step": 0.26
-      },
+      "amplifier": 1,
       "cooldown": 400
     },
     "ancient": {

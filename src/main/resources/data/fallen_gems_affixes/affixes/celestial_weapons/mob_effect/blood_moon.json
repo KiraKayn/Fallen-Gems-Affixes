@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
   "type": "apotheosis:mob_effect",
   "mob_effect": "attributeslib:bleeding",
   "target": "ATTACK_TARGET",
@@ -24,11 +30,7 @@
         "steps": 1,
         "step": 20
       },
-      "amplifier": {
-        "min": 0,
-        "steps": 8,
-        "step": 0.126
-      },
+      "amplifier": 1,
       "cooldown": 80
     },
     "ancient": {
@@ -37,15 +39,11 @@
         "steps": 2,
         "step": 20
       },
-      "amplifier": {
-        "min": 0,
-        "steps": 16,
-        "step": 0.126
-      },
+      "amplifier": 3,
       "cooldown": 80
     }
   },
   "types": [
-"celestial_weapons"
+    "celestial_weapons"
   ]
 }

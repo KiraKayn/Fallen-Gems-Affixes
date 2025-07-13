@@ -85,6 +85,9 @@
   "affix.fallen_gems_affixes:staffs/attribute/voidtouched": "Voidtouched",
   "affix.fallen_gems_affixes:staffs/attribute/voidtouched.suffix": "of the End",
 
+  "affix.fallen_gems_affixes:staffs/attribute/whispered": "Whispering",
+  "affix.fallen_gems_affixes:staffs/attribute/whispered.suffix": "of the Eldritch",
+
   "affix.fallen_gems_affixes:staffs/attribute/swift": "Swift",
   "affix.fallen_gems_affixes:staffs/attribute/swift.suffix": "of Quick Casting",
 
@@ -165,5 +168,23 @@
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/swift.suffix": "of Quick Casting",
 
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanguine": "Sanguine",
-  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanguine.suffix": "of Blood Magic"
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/sanguine.suffix": "of Blood Magic",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/whispered": "Whispering",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/whispered.suffix": "of the Eldritch",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/astral_wisdom": "Enlightened",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/astral_wisdom.suffix": "of Insight",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/blood_moon": "Crimson",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/blood_moon.suffix": "of the Blood Moon",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/eclipsing": "Shaded",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/eclipsing.suffix": "of Eclipse",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starbreak": "Fractured",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starbreak.suffix": "of Starbreak",
+
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starstep": "Fleet",
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/mob_effect/starstep.suffix": "of Starstep"
 }

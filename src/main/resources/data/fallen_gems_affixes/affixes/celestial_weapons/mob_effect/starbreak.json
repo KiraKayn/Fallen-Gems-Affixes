@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
   "type": "apotheosis:mob_effect",
   "mob_effect": "attributeslib:sundering",
   "target": "ATTACK_TARGET",
@@ -18,24 +24,16 @@
         "steps": 5,
         "step": 20
       },
-      "amplifier": {
-        "min": 0,
-        "steps": 4,
-        "step": 0.26
-      },
+      "amplifier": 1,
       "cooldown": 300
     },
     "ancient": {
       "duration": {
-        "min": 200,
-        "steps": 10,
+        "min": 120,
+        "steps": 8,
         "step": 20
       },
-      "amplifier": {
-        "min": 0,
-        "steps": 8,
-        "step": 0.26
-      },
+      "amplifier": 3,
       "cooldown": 500
     }
   },
