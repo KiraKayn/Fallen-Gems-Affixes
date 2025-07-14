@@ -43,7 +43,6 @@ public class ModConfig {
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
                 .comment("modid:itemid|modid:schoolid")
-                .comment("minecraft:sword|irons_spellbooks:evocation")
                 .define("irons_items", List.of(
                         "celestisynth:crescentia|irons_spellbooks:ender",
                         "celestisynth:solaris|irons_spellbooks:fire",
