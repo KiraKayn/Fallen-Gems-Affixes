@@ -13,7 +13,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber
 public class FrostboundSpellPowerPatch {
 
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");

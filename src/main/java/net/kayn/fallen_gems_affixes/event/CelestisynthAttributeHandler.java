@@ -13,7 +13,6 @@ import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID)
 public class CelestisynthAttributeHandler {
 
     // Unique UUIDs for each item to avoid conflicts

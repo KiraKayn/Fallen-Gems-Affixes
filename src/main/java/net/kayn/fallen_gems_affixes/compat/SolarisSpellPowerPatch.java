@@ -13,7 +13,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber
 public class SolarisSpellPowerPatch {
 
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");

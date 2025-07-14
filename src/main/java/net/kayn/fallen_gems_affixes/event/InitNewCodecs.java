@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID)
 public class InitNewCodecs {
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent e) {
