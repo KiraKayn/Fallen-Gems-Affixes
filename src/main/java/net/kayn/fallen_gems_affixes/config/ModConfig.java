@@ -12,6 +12,8 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
     public static final ForgeConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
     public static final ForgeConfigSpec.BooleanValue STRICT_SCHOOL_MATCH;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_CELESTISYNTH_ATTRIBUTES;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_SPELL_POWER_PATCH;
     public static final ForgeConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
 
     static {
@@ -31,14 +33,23 @@ public class ModConfig {
 
         PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
                 .comment("Switch the implementation type of PermanentEffectBonus")
-                .comment("if true, switches to Player Tick event, Permanent Effect Bonus will apply every tick, worse performance but better compatibility")
-                .comment("if false, use default implementation, aggressive but no Player Tick event, better for performance")
+                .comment("If true, switches to Player Tick event. Better compatibility, worse performance.")
+                .comment("If false, uses default impl. More performant, less compatible.")
                 .define("permanentEffectUseTickEvent", false);
 
         STRICT_SCHOOL_MATCH = BUILDER
                 .comment("If false, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
                 .comment("If true, affixes will only apply to items that already grant spell power of the matching school.")
                 .define("strictSpellSchoolMatching", true);
+
+        ENABLE_CELESTISYNTH_ATTRIBUTES = BUILDER
+                .comment("If true, applies Spell Power attributes to Celestisynth weapons via ItemAttributeModifierEvent.")
+                .define("enableCelestisynthAttributes", true);
+
+        ENABLE_SPELL_POWER_PATCH = BUILDER
+                .comment("If true, enables Celestisynth weapons patch to increase weapon damage when held, scaled by the respective Spell Power on the item")
+                .define("enableCelestisynthSpellPowerPatch", true);
+
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")

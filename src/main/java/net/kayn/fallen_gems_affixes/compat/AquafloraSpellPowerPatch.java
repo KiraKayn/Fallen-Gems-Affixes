@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.compat;
 
+import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -27,6 +28,7 @@ public class AquafloraSpellPowerPatch {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
+        if (!ModConfig.ENABLE_SPELL_POWER_PATCH.get()) return;
         if (!HAS_CELESTISYNTH || !HAS_IRONS) return;
 
         DamageSource source = event.getSource();
