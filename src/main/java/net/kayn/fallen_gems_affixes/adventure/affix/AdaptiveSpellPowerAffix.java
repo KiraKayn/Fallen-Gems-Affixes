@@ -77,20 +77,18 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
-        if (!super.canApplyTo(stack, cat, rarity)) return false;
-        if (cat == null || cat.isNone()) return false;
-
-        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+        // Validation part.
+        if (cat.isNone()) return false;
+        if (!this.modifiers.containsKey(rarity)) return false;
+        if (this.types.isEmpty()) return true;
         Item item = stack.getItem();
 
         // This should be checked at first.
         Set<SchoolType> schoolTypes = recordedIronsItems.get(item);
-        if (schoolTypes != null) {
-            for (SchoolType schoolType : schoolTypes) {
-                if (schoolType == this.school) return true;
-            }
-        }
+        if (schoolTypes != null && schoolTypes.contains(this.school)) return true;
+        if (!this.types.contains(cat)) return false;
 
+        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
         Set<Attribute> foundAttributes = new HashSet<>();
 
         // Curios compatibility
