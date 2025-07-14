@@ -33,6 +33,8 @@ public class ModConfig {
 
         PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
                 .comment("Switch the implementation type of PermanentEffectBonus")
+                .comment("if true, switches to Player Tick event, Permanent Effect Bonus will apply every tick, worse performance but better compatibility")
+                .comment("if false, use default implementation, aggressive but no Player Tick event, better for performance")
                 .define("permanentEffectUseTickEvent", false);
 
         STRICT_SCHOOL_MATCH = BUILDER
@@ -42,6 +44,8 @@ public class ModConfig {
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
+                .comment("modid:itemid|modid:schoolid")
+                .comment("minecraft:sword|irons_spellbooks:evocation")
                 .define("irons_items", List.of(
                         "celestisynth:crescentia|irons_spellbooks:ender",
                         "celestisynth:solaris|irons_spellbooks:fire",
