@@ -21,6 +21,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -42,6 +44,28 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
     protected final ResourceLocation schoolId;
     protected final SchoolType school;
 
+    public static final Map<Item, Set<SchoolType>> recordedIronsItems = new HashMap<>();
+
+    @SubscribeEvent
+    public static void loadingIronsItemsFromConfig(ModConfigEvent event) {
+        List<String> raw = ModConfig.IRONS_ITEMS_MAP.get();
+        raw.forEach((entry) -> {
+            String[] split = entry.trim().split("\\|", 0);
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(split[0]));
+            if (item == null) return;
+            Set<SchoolType> schoolTypes = new HashSet<>();
+            for (int i = 1; i < split.length; i++) {
+                SchoolType school = SchoolRegistry.getSchool(new ResourceLocation(split[i]));
+                if (school != null) {
+                    schoolTypes.add(school);
+                }
+            }
+            if (!schoolTypes.isEmpty()) {
+                recordedIronsItems.put(item, schoolTypes);
+            }
+        });
+    }
+
     public AdaptiveSpellPowerAffix(Attribute attr, AttributeModifier.Operation op, Map<LootRarity, StepFunction> values, Set<LootCategory> types, ResourceLocation schoolId) {
         super(attr, op, values, types);
         this.schoolId = schoolId;
@@ -58,6 +82,15 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
 
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
         Item item = stack.getItem();
+
+        // This should be checked at first.
+        Set<SchoolType> schoolTypes = recordedIronsItems.get(item);
+        if (schoolTypes != null) {
+            for (SchoolType schoolType : schoolTypes) {
+                if (schoolType == this.school) return true;
+            }
+        }
+
         Set<Attribute> foundAttributes = new HashSet<>();
 
         // Curios compatibility
@@ -79,7 +112,7 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
                     String schoolName = path.replace("_spell_power", "");
                     ResourceLocation schoolResource = new ResourceLocation(attrId.getNamespace(), schoolName);
                     SchoolType matchedSchool = SchoolRegistry.getSchool(schoolResource);
-                    if (school != null && school.equals(matchedSchool)) {
+                    if (matchedSchool != null && school == matchedSchool) {
                         return true;
                     }
                 }

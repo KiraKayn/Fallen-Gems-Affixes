@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes;
 
+import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.compat.*;
@@ -35,6 +36,7 @@ public class FallenGemsAffixes {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
+        modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
