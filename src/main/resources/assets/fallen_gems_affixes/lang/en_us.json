@@ -10,8 +10,8 @@
   "affix.fallen_gems_affixes.infinity": "∞",
   "bonus.fallen_gems_affixes:permanent_effect": "%s",
 
-  "affix.fallen_gems_affixes.target.spell_damage_self": "On spell impact, gain %s",
-  "affix.fallen_gems_affixes.target.spell_damage_target": "On spell impact, inflict %s",
+  "affix.fallen_gems_affixes.target.spell_damage_self": "On spell damage, gain %s",
+  "affix.fallen_gems_affixes.target.spell_damage_target": "On spell damage, inflict %s",
   "affix.fallen_gems_affixes.target.spell_heal_self": "On spell heal, gain %s",
   "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, inflict %s",
 
