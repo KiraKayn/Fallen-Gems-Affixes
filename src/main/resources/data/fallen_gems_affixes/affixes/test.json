@@ -40,6 +40,7 @@
       "cooldown": 500
     }
   },
+  "stacking_limit": 255,
   "types": [
     "staffs"
   ]
