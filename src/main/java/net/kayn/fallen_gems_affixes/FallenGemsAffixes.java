@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
+import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.compat.*;
@@ -37,6 +38,7 @@ public class FallenGemsAffixes {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
         modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
+
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
@@ -47,6 +49,8 @@ public class FallenGemsAffixes {
 
         new MaxHealthDamageHandler();
 
+        MinecraftForge.EVENT_BUS.addListener(SpellEffectAffix::onSpellHeal);
+        MinecraftForge.EVENT_BUS.addListener(SpellEffectAffix::onSpellDamage);
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
