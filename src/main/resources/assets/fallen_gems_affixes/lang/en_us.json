@@ -13,7 +13,7 @@
   "affix.fallen_gems_affixes.target.spell_damage_self": "On spell damage, gain %s",
   "affix.fallen_gems_affixes.target.spell_damage_target": "On spell damage, inflict %s",
   "affix.fallen_gems_affixes.target.spell_heal_self": "On spell heal, gain %s",
-  "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, inflict %s",
+  "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, grant %s",
 
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",
