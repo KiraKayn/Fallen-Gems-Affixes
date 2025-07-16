@@ -30,7 +30,7 @@ showAsResourcePack=false
   modId="additional_attributes"
   mandatory=false
   versionRange="[1.1.0,)"
-  ordering="AFTER"
+  ordering="BEFORE"
   side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
@@ -72,5 +72,12 @@ showAsResourcePack=false
 modId="cataclysm"
 mandatory=false
 versionRange="[2.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
+modId="cataclysm_spellbooks"
+mandatory=false
+versionRange="[1.0,)"
 ordering="AFTER"
 side="BOTH"
