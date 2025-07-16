@@ -50,7 +50,6 @@ public class ModConfig {
                 .comment("If true, enables Celestisynth weapons patch to increase weapon damage when held, scaled by the respective Spell Power on the item")
                 .define("enableCelestisynthSpellPowerPatch", true);
 
-
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
                 .comment("Example: modid:itemid|modid:schoolid")
