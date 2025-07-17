@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "forge:true"
+    }
+  ],
+  "weight": 0,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "mythic",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:spell_effect",
+      "gem_class": {
+        "key": "light_weapon",
+        "types": [
+          "sword",
+          "trident"
+        ]
+      },
+      "mob_effect": "attributeslib:detonation",
+      "target": "spell_damage_self",
+      "values": {
+        "mythic": {
+          "duration": 100,
+          "amplifier": 0,
+          "cooldown": 1200
+        },
+        "ancient": {
+          "duration": 100,
+          "amplifier": 1,
+          "cooldown": 1200
+        }
+      }
+    }
+  ]
+}

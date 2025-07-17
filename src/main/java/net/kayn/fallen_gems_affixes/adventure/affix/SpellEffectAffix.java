@@ -43,7 +43,7 @@ public class SpellEffectAffix extends Affix {
 
     protected final int cooldown;
     protected final MobEffect effect;
-    protected final Target target;
+    public final Target target;
     protected final Map<LootRarity, EffectData> values;
     protected final Set<LootCategory> types;
     protected final int stackingLimit;
@@ -59,43 +59,6 @@ public class SpellEffectAffix extends Affix {
         this.types = types;
         this.stackOnReapply = stackOnReapply;
         this.stackingLimit = stackingLimit;
-    }
-
-    @SubscribeEvent
-    public static void onSpellDamage(SpellDamageEvent event) {
-        LivingEntity target = event.getEntity();
-        if (target.level().isClientSide) return;
-        SpellDamageSource source = event.getSpellDamageSource();
-        Entity entity = source.getEntity();
-        if (!(entity instanceof LivingEntity caster)) return;
-        for (ItemStack stack : caster.getAllSlots()) {
-            AffixHelper.streamAffixes(stack).forEach(inst -> {
-                if (inst.affix().get() instanceof SpellEffectAffix affix) {
-                    if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_TARGET) {
-                        affix.applyEffect(event.getEntity(), inst.rarity().get(), inst.level());
-                    } else if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_SELF) {
-                        affix.applyEffect(caster, inst.rarity().get(), inst.level());
-                    }
-                }
-            });
-        }
-    }
-
-    @SubscribeEvent
-    public static void onSpellHeal(SpellHealEvent event) {
-        if (event.getEntity().level().isClientSide()) return;
-
-        for (ItemStack stack : event.getEntity().getAllSlots()) {
-            AffixHelper.streamAffixes(stack).forEach(inst -> {
-                if (inst.affix().get() instanceof SpellEffectAffix affix) {
-                    if (affix.target == SpellEffectAffix.Target.SPELL_HEAL_TARGET) {
-                        affix.applyEffect(event.getTargetEntity(), inst.rarity().get(), inst.level());
-                    } else if (affix.target == SpellEffectAffix.Target.SPELL_HEAL_SELF) {
-                        affix.applyEffect(event.getEntity(), inst.rarity().get(), inst.level());
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -175,7 +138,7 @@ public class SpellEffectAffix extends Affix {
         }
     }
 
-    private void applyEffect(LivingEntity target, LootRarity rarity, float level) {
+    public void applyEffect(LivingEntity target, LootRarity rarity, float level) {
         if (target.level().isClientSide()) return;
 
         int cooldown = this.getCooldown(rarity);

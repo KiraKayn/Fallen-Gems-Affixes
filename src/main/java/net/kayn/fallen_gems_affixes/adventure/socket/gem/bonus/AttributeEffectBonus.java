@@ -1,14 +1,8 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.BiConsumer;
-
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.PotionAffix.Target;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
@@ -23,6 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -42,6 +37,10 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class AttributeEffectBonus extends GemBonus {
 
@@ -67,7 +66,7 @@ public class AttributeEffectBonus extends GemBonus {
 
     public AttributeEffectBonus(GemClass gemClass, Attribute attribute, Operation operation, Map<LootRarity, StepFunction> attributeValues,
                                 MobEffect effect, Target target, Map<LootRarity, EffectData> effectValues, boolean stackOnReapply) {
-        super(Apotheosis.loc("attribute_effect"), gemClass);
+        super(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), gemClass);
         this.attribute = attribute;
         this.operation = operation;
         this.attributeValues = attributeValues;
@@ -152,8 +151,7 @@ public class AttributeEffectBonus extends GemBonus {
             if (arrow.getOwner() instanceof LivingEntity owner) {
                 this.applyEffect(gemStack, owner, rarity);
             }
-        }
-        else if (this.target == Target.ARROW_TARGET) {
+        } else if (this.target == Target.ARROW_TARGET) {
             if (res.getType() == Type.ENTITY && ((EntityHitResult) res).getEntity() instanceof LivingEntity target) {
                 this.applyEffect(gemStack, target, rarity);
             }
@@ -164,8 +162,7 @@ public class AttributeEffectBonus extends GemBonus {
     public float onShieldBlock(ItemStack gem, LootRarity rarity, LivingEntity entity, DamageSource source, float amount) {
         if (this.target == Target.BLOCK_SELF) {
             this.applyEffect(gem, entity, rarity);
-        }
-        else if (this.target == Target.BLOCK_ATTACKER && source.getDirectEntity() instanceof LivingEntity target) {
+        } else if (this.target == Target.BLOCK_ATTACKER && source.getDirectEntity() instanceof LivingEntity target) {
             this.applyEffect(gem, target, rarity);
         }
         return amount;
@@ -185,8 +182,7 @@ public class AttributeEffectBonus extends GemBonus {
         if (this.stackOnReapply && inst != null) {
             var newInst = new MobEffectInstance(this.effect, Math.max(inst.getDuration(), data.duration), inst.getAmplifier() + 1 + data.amplifier);
             target.addEffect(newInst);
-        }
-        else {
+        } else {
             target.addEffect(data.build(this.effect));
         }
         Affix.startCooldown(this.getCooldownId(gemStack), target);
