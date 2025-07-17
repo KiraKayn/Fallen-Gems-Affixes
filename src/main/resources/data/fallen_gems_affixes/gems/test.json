@@ -18,6 +18,8 @@
           "trident"
         ]
       },
+      "stack_on_reapply": true,
+      "staking_limit": 255,
       "mob_effect": "attributeslib:detonation",
       "target": "spell_damage_self",
       "values": {
