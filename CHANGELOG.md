@@ -1,14 +1,13 @@
 # 1.2.2
-- Added AdaptiveSpellPowerAffix Class - Rtxyd
-- Added Spell Heal and Spell Damage targets, SPELL_DAMAGE_SELF, SPELL_DAMAGE_TARGET, SPELL_HEAL_SELF, SPELL_HEAL_TARGET - Rtxyd
-- Added bunch of new affixes for loot categories (Celestial Weapons, Staffs) - Kayn
-- Added Spell Power affixes to Celestial Weapons category - Kayn
-- Reworked all gems, this includes base apotheosis gems too - Kayn
-- Made Runiclib and Additional Attributes not a required dependency - Kayn
-- Added config for Celestisynth compat - Kayn
-- Improved Staffs category, so now all Staffs work, and not pulled by tag - Kayn
-- Added compat to Alshanex's Familiars, T.O Tweaks and Cataclysm Spellbooks - Kayn
-
+- Added AdaptiveSpellPowerAffix Class
+- Added Spell Heal and Spell Damage targets, SPELL_DAMAGE_SELF, SPELL_DAMAGE_TARGET, SPELL_HEAL_SELF, SPELL_HEAL_TARGET
+- Added bunch of new affixes for loot categories (Celestial Weapons, Staffs)
+- Added Spell Power affixes to Celestial Weapons category
+- Reworked all gems, this includes base apotheosis gems too
+- Made Runiclib and Additional Attributes not a required dependency
+- Added config for Celestisynth compat
+- Improved Staffs category, so now all Staffs work, and not pulled by tag 
+- Added compat to Alshanex's Familiars, T.O Tweaks and Cataclysm Spellbooks 
 - The AdaptiveSpellPowerAffix and new targets have been backported from the amazing Apotheosis x Iron's Spellbooks mod, so makes sure to check that out if you are playing 1.21+ :D
 
 # 1.2.1
