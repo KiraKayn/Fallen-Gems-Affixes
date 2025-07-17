@@ -417,5 +417,12 @@
   "attribute.additional_attributes.spell_type_wither_skull.desc": "Modifies the level of this spell",
   "attribute.additional_attributes.spell_type_wololo": "Wololo Spell Level",
   "attribute.additional_attributes.spell_type_wololo.desc": "Modifies the level of this spell",
-  "ui.additional_attributes.cast_error_no_spell_level": "You do not possess the knowledge required to cast this spell"
+  "ui.additional_attributes.cast_error_no_spell_level": "You do not possess the knowledge required to cast this spell",
+
+  "attribute.additional_attributes.innate_spell/traveloptics/ashen_breath": "Ashen Breath",
+  "attribute.additional_attributes.innate_spell/traveloptics/nullflare": "Nullflare",
+  "attribute.additional_attributes.innate_spell/cataclysm_spellbooks/cursed_rush": "Cursed Rush",
+  "attribute.additional_attributes.innate_spell/cataclysm_spellbooks/desert_winds": "Desert Winds",
+  "attribute.additional_attributes.innate_spell/traveloptics/aerial_collapse": "Aerial Collapse",
+  "attribute.additional_attributes.innate_spell/traveloptics/reversal": "Reversal"
 }
