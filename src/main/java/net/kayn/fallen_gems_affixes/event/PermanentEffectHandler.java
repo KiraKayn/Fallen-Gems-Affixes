@@ -178,7 +178,7 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         for (GemInstance g : SocketHelper.getGems(itemStack)) {
             if (!g.isValid()) continue;
             DynamicHolder<LootRarity> rarityHolder = g.rarity();
-            if (!rarityHolder.isBound()) return;
+            if (!rarityHolder.isBound()) continue;
             LootRarity rarity = rarityHolder.get();
             Gem gem = g.gem().get();
             gem.getBonus(cat, rarity)
