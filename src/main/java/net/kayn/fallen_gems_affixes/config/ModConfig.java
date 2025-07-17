@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModConfig {
@@ -54,7 +55,7 @@ public class ModConfig {
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
                 .comment("Example: modid:itemid|modid:schoolid")
                 .comment("You can also set multiple schools: modid:itemid|modid:schoolid|modid:schoolid")
-                .define("irons_items", List.of(
+                .define("irons_items", new ArrayList<>(List.of(
                         "celestisynth:crescentia|irons_spellbooks:ender",
                         "celestisynth:solaris|irons_spellbooks:fire",
                         "celestisynth:aquaflora|irons_spellbooks:nature",
@@ -62,7 +63,7 @@ public class ModConfig {
                         "celestisynth:poltergeist|irons_spellbooks:eldritch",
                         "celestisynth:rainfall_serenity|irons_spellbooks:lightning",
                         "celestisynth:keres|irons_spellbooks:blood"
-                ));
+                )));
 
         BUILDER.pop();
     }
