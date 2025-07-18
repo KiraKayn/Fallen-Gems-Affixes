@@ -32,9 +32,9 @@
 		{
 			"type": "apotheosis:attribute",
 			"gem_class": {
-				"key": "boots",
+				"key": "leggings",
 				"types": [
-					"boots"
+					"leggings"
 				]
 			},
 			"attribute": "irons_spellbooks:ice_magic_resist",
