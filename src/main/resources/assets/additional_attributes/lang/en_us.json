@@ -424,5 +424,6 @@
   "attribute.additional_attributes.innate_spell/cataclysm_spellbooks/cursed_rush": "Cursed Rush",
   "attribute.additional_attributes.innate_spell/cataclysm_spellbooks/desert_winds": "Desert Winds",
   "attribute.additional_attributes.innate_spell/traveloptics/aerial_collapse": "Aerial Collapse",
-  "attribute.additional_attributes.innate_spell/traveloptics/reversal": "Reversal"
+  "attribute.additional_attributes.innate_spell/traveloptics/reversal": "Reversal",
+  "attribute.additional_attributes.innate_spell/traveloptics/em_pulse": "EM-Pulse"
 }

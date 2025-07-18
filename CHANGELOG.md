@@ -1,3 +1,8 @@
+# 1.2.3
+- Fixed untranslated spell on Thunderheart Fragment gem
+- Fixed a few Gem Bonuses not showing up
+- Made ISS integration optional so no crashes occur
+
 # 1.2.2
 - Added AdaptiveSpellPowerAffix Class
 - Added Spell Heal and Spell Damage targets, SPELL_DAMAGE_SELF, SPELL_DAMAGE_TARGET, SPELL_HEAL_SELF, SPELL_HEAL_TARGET

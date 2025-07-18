@@ -41,8 +41,6 @@ public class FallenGemsAffixes {
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
-        CelestialLootCategory.CELESTIAL_WEAPONS.toString();
-
         AALootCategories.init();
         new MaxHealthDamageHandler();
 
@@ -53,6 +51,7 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
         }
         if (ModList.get().isLoaded("celestisynth")) {
+            CelestialLootCategory.CELESTIAL_WEAPONS.toString();
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
