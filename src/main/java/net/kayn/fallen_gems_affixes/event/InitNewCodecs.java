@@ -10,7 +10,9 @@ import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.MultiEffectBonus;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class InitNewCodecs {
@@ -20,9 +22,11 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "multi_effect"), MultiEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
-            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
-            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
-            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectAffix.CODEC);
+            if (ModList.get().isLoaded("irons_spellbooks")) {
+                GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectAffix.CODEC);
+            }
             ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });
     }

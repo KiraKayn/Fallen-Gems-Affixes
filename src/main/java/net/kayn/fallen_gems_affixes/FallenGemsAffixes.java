@@ -37,19 +37,21 @@ public class FallenGemsAffixes {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
-        modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
 
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
         CelestialLootCategory.CELESTIAL_WEAPONS.toString();
-        StaffLootCategory.STAFF.toString();
 
         AALootCategories.init();
         new MaxHealthDamageHandler();
 
-        MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
-        MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
+        if (ModList.get().isLoaded("irons_spellbooks")) {
+            StaffLootCategory.STAFF.toString();
+            modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
+            MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
+            MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
+        }
         if (ModList.get().isLoaded("celestisynth")) {
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
