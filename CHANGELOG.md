@@ -1,3 +1,6 @@
+# 1.2.4HF
+- Fixed Ragnarok gem having 3 rarities, while it should have all
+
 # 1.2.4
 - Added BossSlayerBonus and BossSlayerHandler classes
 - Added Ragnarok gem, which has the bonus + damage against bosses, you can define bosses in a tag located at fallen_gems_affixes:tags/entity_types/boss_slayer.json
