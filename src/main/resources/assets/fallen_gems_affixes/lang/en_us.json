@@ -8,7 +8,7 @@
   "attribute.fallen_gems_affixes.bullet_damage": "Bullet Damage",
   "attribute.fallen_gems_affixes.max_health_damage": "Max Health Damage",
   "affix.fallen_gems_affixes.infinity": "∞",
-  "bonus.fallen_gems_affixes:permanent_effect": "%s",
+  "bonus.fallen_gems_affixes:permanent_effect": "Gain %s",
 
   "affix.fallen_gems_affixes.target.spell_damage_self": "On spell damage, gain %s",
   "affix.fallen_gems_affixes.target.spell_damage_target": "On spell damage, inflict %s",
