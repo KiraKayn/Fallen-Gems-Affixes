@@ -1,3 +1,7 @@
+# 1.2.4
+- Added BossSlayerBonus and BossSlayerHandler classes
+- Added Ragnarok gem, which has the bonus + damage against bosses, you can define bosses in a tag located at fallen_gems_affixes:tags/entity_types/boss_slayer.json
+
 # 1.2.3
 - Fixed untranslated spell on Thunderheart Fragment gem
 - Fixed a few Gem Bonuses not showing up
