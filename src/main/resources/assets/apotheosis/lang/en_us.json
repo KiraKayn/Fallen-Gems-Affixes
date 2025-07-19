@@ -27,6 +27,7 @@
     "item.apotheosis.gem.fallen_gems_affixes:boss_gems/void_guardian": "Gem of the Void Guardian",
     "item.apotheosis.gem.fallen_gems_affixes:boss_gems/withered_sentinel": "Gem of the Withered Sentinel",
     "item.apotheosis.gem.fallen_gems_affixes:boss_gems/howling_storm": "Gem of the Howling Storm",
+    "item.apotheosis.gem.fallen_gems_affixes:ragnarok": "Ragnarok Gem",
     "affix.fallen_gems_affixes:armor/mob_effect/berserk": "Berserking",
     "affix.fallen_gems_affixes:armor/mob_effect/berserk.suffix": "of the Berserker",
     "affix.fallen_gems_affixes:armor/mob_effect/burning_thorns": "Burning",
@@ -58,5 +59,6 @@
     "affix.apotheosis:luck.suffix": "",
     "affix.apotheosis:luck.desc": "Added threat multiplier proportional to gear rarity",
     "gem_class.staffs": "Staffs",
-    "gem_class.celestial_weapons": "Celestial Weapons"
+    "gem_class.celestial_weapons": "Celestial Weapons",
+    "gem_class.melee_ranged": "Weapons"
 }
