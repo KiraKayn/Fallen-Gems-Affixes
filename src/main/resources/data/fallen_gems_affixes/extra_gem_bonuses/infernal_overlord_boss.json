@@ -1,0 +1,21 @@
+{
+  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:boss_slayer",
+      "gem_class": {
+        "key": "celestial_weapons",
+        "types": [
+          "celestial_weapons"
+        ]
+      },
+      "entity_tag": "fallen_gems_affixes:boss_slayer",
+      "values": {
+        "epic": 0.2,
+        "mythic": 0.25,
+        "ancient": 0.3
+      }
+    }
+  ]
+}

@@ -157,6 +157,9 @@
   "bonus.fallen_gems_affixes:multi_effect.desc.and_but": "%s and %s, but %s",
   "bonus.fallen_gems_affixes:multi_effect.desc.but_and": "%s, but %s and %s",
 
+  "bonus.fallen_gems_affixes.boss_slayer": "Boss Slayer",
+  "bonus.fallen_gems_affixes.boss_slayer.desc": "+%s%% Damage to Bosses",
+
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom": "Enlightened",
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom.suffix": "of Insight",
 
