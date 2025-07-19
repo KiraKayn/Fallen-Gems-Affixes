@@ -60,34 +60,6 @@
       }
     },
     {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "boots",
-        "types": [
-          "boots"
-        ]
-      },
-      "mob_effect": "irons_spellbooks:evasion",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 160,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 220,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
-    },
-    {
       "type": "apotheosis:multi_attribute",
       "desc": "bonus.apotheosis:multi_attr.desc.and",
       "gem_class": {
@@ -116,35 +88,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "light_weapon",
-        "types": [
-          "sword",
-          "trident"
-        ]
-      },
-      "mob_effect": "irons_spellbooks:echoing_strikes",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 160,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 220,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 300,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
     }
   ]
 }

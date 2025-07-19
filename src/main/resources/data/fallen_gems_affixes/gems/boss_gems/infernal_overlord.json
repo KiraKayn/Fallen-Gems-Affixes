@@ -11,31 +11,18 @@
   "min_rarity": "epic",
   "bonuses": [
     {
-      "type": "apotheosis:mob_effect",
+      "type": "fallen_gems_affixes:permanent_effect",
       "gem_class": {
         "key": "helmet",
         "types": [
           "helmet"
         ]
       },
-      "mob_effect": "minecraft:regeneration",
-      "target": "attack_self",
+      "effect": "minecraft:regeneration",
       "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 140,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 2,
-          "cooldown": 500
-        }
+        "epic": 0,
+        "mythic": 1,
+        "ancient": 2
       }
     },
     {
@@ -67,62 +54,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "leggings",
-        "types": [
-          "leggings"
-        ]
-      },
-      "mob_effect": "runiclib:burning_thorns",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 140,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "boots",
-        "types": [
-          "boots"
-        ]
-      },
-      "mob_effect": "runiclib:lava_walking",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": -1,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": -1,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": -1,
-          "amplifier": 0,
-          "cooldown": 500
-        }
-      }
     },
     {
       "type": "apotheosis:mob_effect",

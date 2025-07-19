@@ -11,34 +11,6 @@
   "min_rarity": "epic",
   "bonuses": [
     {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "helmet",
-        "types": [
-          "helmet"
-        ]
-      },
-      "mob_effect": "irons_spellbooks:abyssal_shroud",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 140,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 0,
-          "cooldown": 500
-        }
-      }
-    },
-    {
       "type": "apotheosis:all_stats",
       "gem_class": {
         "key": "chestplate",
@@ -116,34 +88,6 @@
     {
       "type": "apotheosis:mob_effect",
       "gem_class": {
-        "key": "boots",
-        "types": [
-          "boots"
-        ]
-      },
-      "mob_effect": "runiclib:adrenaline",
-      "target": "hurt_self",
-      "values": {
-        "epic": {
-          "duration": 150,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 200,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 300,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
         "key": "heavy_weapon",
         "types": [
           "heavy_weapon"
@@ -165,36 +109,7 @@
         "ancient": {
           "duration": 30,
           "amplifier": 5,
-          "cooldown": 500
-        }
-      }
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "light_weapon",
-        "types": [
-          "sword",
-          "trident"
-        ]
-      },
-      "mob_effect": "runiclib:caffeinated",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 120,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 160,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 260,
-          "amplifier": 2,
-          "cooldown": 500
+          "cooldown": 50
         }
       }
     }

@@ -11,34 +11,6 @@
   "min_rarity": "epic",
   "bonuses": [
     {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "helmet",
-        "types": [
-          "helmet"
-        ]
-      },
-      "mob_effect": "irons_spellbooks:charged",
-      "target": "attack_self",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 200,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 300,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
-    },
-    {
       "type": "apotheosis:damage_reduction",
       "gem_class": {
         "key": "chestplate",
