@@ -2,7 +2,7 @@
   "weight": 5,
   "quality": 0,
   "unique": true,
-  "min_rarity": "epic",
+  "min_rarity": "common",
   "bonuses": [
     {
       "type": "fallen_gems_affixes:boss_slayer",
