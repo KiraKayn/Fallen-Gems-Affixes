@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
+import net.kayn.fallen_gems_affixes.util.BossUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -24,9 +25,8 @@ public class BossSlayerHandler {
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         LivingEntity target = event.getEntity();
-        if (!target.getType().is(BOSS_TAG)) return;
-
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
+        if (!BossUtil.isBoss(target, BOSS_TAG)) return;
 
         ItemStack weapon = attacker.getMainHandItem();
         LootCategory category = LootCategory.forItem(weapon);
