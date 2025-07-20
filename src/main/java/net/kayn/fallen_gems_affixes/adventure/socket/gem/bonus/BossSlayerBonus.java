@@ -5,9 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.util.GemClassWrapper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class BossSlayerBonus extends GemBonus {
 
     public static final Codec<BossSlayerBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            gemClass(),
+            GemClassWrapper.CODEC.fieldOf("gem_class").forGetter(b -> b.gemClassWrapper),
             ResourceLocation.CODEC.fieldOf("entity_tag").forGetter(b -> b.entityTag.location()),
             VALUES_CODEC.fieldOf("values").forGetter(b -> b.values)
     ).apply(inst, (gemClass, tagId, values) ->
@@ -30,9 +31,11 @@ public class BossSlayerBonus extends GemBonus {
 
     public final TagKey<EntityType<?>> entityTag;
     public final Map<LootRarity, StepFunction> values;
+    public final GemClassWrapper gemClassWrapper;
 
-    public BossSlayerBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(Apotheosis.loc("boss_slayer"), gemClass);
+    public BossSlayerBonus(GemClassWrapper gemClassWrapper, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
+        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "boss_slayer"), gemClassWrapper.instance);
+        this.gemClassWrapper = gemClassWrapper;
         this.entityTag = tag;
         this.values = values;
     }

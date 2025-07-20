@@ -8,12 +8,17 @@
       "type": "fallen_gems_affixes:boss_slayer",
       "gem_class": {
         "key": "melee_ranged",
+        "con_cat": [
+          {
+            "modid": "celestisynth",
+            "category": "celestial_weapons"
+          }
+        ],
         "types": [
           "sword",
           "bow",
           "crossbow",
           "heavy_weapon",
-          "celestial_weapons",
           "trident"
         ]
       },
