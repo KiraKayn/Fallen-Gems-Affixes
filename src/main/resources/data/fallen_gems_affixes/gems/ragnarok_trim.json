@@ -1,8 +1,11 @@
 {
   "conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "celestisynth"
+      "forge": "not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "celestisynth"
+      }
     }
   ],
   "weight": 5,
@@ -19,7 +22,6 @@
           "bow",
           "crossbow",
           "heavy_weapon",
-          "celestial_weapons",
           "trident"
         ]
       },
