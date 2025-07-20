@@ -28,7 +28,6 @@
   "types": [
     "sword",
     "trident",
-    "heavy_weapon",
-    "celestial_weapons"
+    "heavy_weapon"
   ]
 }
