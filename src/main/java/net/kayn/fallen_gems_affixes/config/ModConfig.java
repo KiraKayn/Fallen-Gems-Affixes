@@ -62,7 +62,8 @@ public class ModConfig {
                         "celestisynth:breezebreaker|irons_spellbooks:evocation",
                         "celestisynth:poltergeist|irons_spellbooks:eldritch",
                         "celestisynth:rainfall_serenity|irons_spellbooks:lightning",
-                        "celestisynth:keres|irons_spellbooks:blood"
+                        "celestisynth:keres|irons_spellbooks:blood",
+                        "celestisynth:frostbound|irons_spellbooks:ice"
                 )));
 
         BUILDER.pop();
