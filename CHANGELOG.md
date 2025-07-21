@@ -1,7 +1,7 @@
 # 1.2.5
 - Fixed Ragnarok Gem not showing up if celestisynth is not installed
 - Fixed the "bleeding" mob effect for swords not showing up if celestisynth is not installed
-- Added new Codec céass (ConditonalLootCategory) for conditional loot categories, example can be seen in the Ragnarok gem file
+- Added new Codec class (ConditonalLootCategory) for conditional loot categories, example can be seen in the Ragnarok gem file
 - Improved the Boss Slayer bonus so it supports invaders (bosses) from Apotheosis
 - Added BossUtils class for the change above
 - Improved BossSlayerBonus code
