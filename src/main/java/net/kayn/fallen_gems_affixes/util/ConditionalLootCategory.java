@@ -2,11 +2,12 @@ package net.kayn.fallen_gems_affixes.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraftforge.fml.ModList;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public record ConditionalLootCategory(Optional<String> modid, String cat) {
     public static final Codec<ConditionalLootCategory> CODEC = RecordCodecBuilder.create((inst) -> inst
