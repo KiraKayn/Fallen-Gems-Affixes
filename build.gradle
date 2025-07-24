@@ -1,0 +1,307 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.99'
+    id 'idea'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+repositories {
+    // Add here additional repositories if required by some of the dependencies below.
+    // NeoForge
+    maven {
+        url = "https://maven.neoforged.net/releases"
+    }
+
+    // CurseMaven
+    maven {
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
+    // Modrinth
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    // Curios
+    maven {
+        url = "https://maven.theillusivec4.top"
+        content {
+            includeGroupByRegex "top\\.theillusivec4.*"
+            includeGroupByRegex "com\\.illusivesoulworks.*"
+        }
+    }
+
+    // The One Probe
+    maven {
+        url = "https://maven.k-4u.nl"
+        content {
+            includeGroup "mcjty.theoneprobe"
+        }
+    }
+
+    // Patchouli、JEI
+    maven {
+        url = "https://maven.blamejared.com"
+        content {
+            includeGroup "vazkii.patchouli"
+            includeGroupByRegex "net\\.darkhax.*"
+            includeGroupByRegex "com\\.blamejared.*"
+            includeGroup "org.openzen.zencode"
+            includeGroup "mezz.jei"
+        }
+    }
+
+    // Shadows of Fire（Placebo / Apotheosis）
+    maven {
+        // Shadows
+        url "https://maven.shadowsoffire.dev/releases"
+        content {
+            includeGroup "dev.shadowsoffire"
+            includeGroup "snownee.jade"
+        }
+    }
+
+    maven { url = "https://maven.shedaniel.me/" } // Cloth Config
+    maven { url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" } // Geckolib
+    maven { url = "https://maven.kosmx.dev/" } // Player Animator
+    maven { url = "https://jitpack.io" }
+
+    // Iron's Spellbooks
+    maven {
+        name = "Iron's Maven - Release"
+        url = "https://code.redspace.io/releases"
+    }
+    maven {
+        name = "Iron's Maven - Snapshots"
+        url = "https://code.redspace.io/snapshots"
+    }
+}
+
+base {
+    archivesName = mod_id
+}
+
+// Mojang ships Java 21 to end users in 1.21, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    // This line is optional. Access Transformers are automatically detected
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            client()
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // gameDirectory = project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        // applies to all the run configs above
+        configureEach {
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        // define mod <-> source bindings
+        // these are used to tell the game which sources are for which mod
+        // multi mod projects should define one per mod
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // Required Dependencies
+    implementation ("dev.shadowsoffire:Placebo:${minecraft_version}-${placebo_version}"){
+        exclude group: 'io.github.llamalad7', module: 'mixinextras-common'
+        exclude group: 'io.github.llamalad7', module: 'mixinextras-forge'
+        exclude group: 'io.github.llamalad7', module: 'mixinextras-neoforge'
+        exclude group: 'io.github.llamalad7', module: 'mixinextras'
+    }
+    implementation "dev.shadowsoffire:ApothicAttributes:${minecraft_version}-${apothicAttributesVersion}"
+    implementation "dev.shadowsoffire:Apotheosis:${minecraft_version}-${apotheosis_version}"
+    implementation "dev.shadowsoffire:ApothicSpawners:${minecraft_version}-${apothicSpawnersVersion}"
+    implementation "dev.shadowsoffire:ApothicEnchanting:${minecraft_version}-${apothicEnchantingVersion}"
+    runtimeOnly "curse.maven:attributefix-280510:5824104"
+
+    // Dev Env Mods
+    implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    implementation "curse.maven:jade-324717:${jade_file_id}"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
+    runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:6608246"
+
+    // Main Integrations
+    implementation "io.redspace:irons_spellbooks:${irons_spells_version}"
+//    compileOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"
+//    runtimeOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"
+
+//    implementation "curse.maven:celestisynth-872712:5776930"
+    runtimeOnly "curse.maven:additional-attributes-986624:6388896"
+    runtimeOnly "curse.maven:runiclib-880879:6604840"
+    runtimeOnly "curse.maven:lendercataclysm-551586:6769151"
+
+//    implementation "maven.modrinth:scorched-guns-2:${scorched_guns_version}"
+//    runtimeOnly "curse.maven:apotheotic-additions-924640:6393313"
+//    runtimeOnly "curse.maven:esoteric-reforging-forge-1150370:5989440"
+    runtimeOnly "curse.maven:to-tweaks-irons-spells-1046916:6342780"
+    runtimeOnly "curse.maven:cataclysm-spellbooks-1099461:6427259"
+    runtimeOnly "curse.maven:alshanexs-familiars-1171602:6539981"
+//    runtimeOnly "curse.maven:ice-and-fire-spellbooks-977855:5844739"
+//    runtimeOnly "curse.maven:iceandfire-ce-1040076:6758480"
+//    runtimeOnly "curse.maven:ice-and-fire-dragons-264231:5633453"
+
+    // Optional Integrations
+//    runtimeOnly "curse.maven:alexs-caves-924854:5848216"
+//    runtimeOnly "curse.maven:citadel-331936:6002521"
+//    runtimeOnly "curse.maven:galosphere-631098:4983871"
+//    runtimeOnly "curse.maven:delightful-637529:5654704"
+    runtimeOnly "curse.maven:farmers-delight-398521:6597295"
+
+    // Libs
+    runtimeOnly "curse.maven:azurelib-817423:6747999"
+    runtimeOnly "curse.maven:lionfish-api-1001614:6168249"
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    runtimeOnly "dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}"
+    runtimeOnly ("software.bernie.geckolib:geckolib-neoforge-${geckolib_version}") {
+        exclude group: 'io.github.llamalad7', module: 'mixinextras-forge'
+        exclude group: 'io.github.llamalad7', module: 'mixinextras-common'
+    }
+    implementation "curse.maven:bookshelf-228525:6717571"
+    implementation "curse.maven:prickle-1023259:6546240"
+    runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
+//    runtimeOnly "curse.maven:framework-549225:5692398"
+    runtimeOnly "curse.maven:selene-499980:6699385"
+}
+
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+// Include the output of "generateModMetadata" as an input directory for the build
+// this works with both building through Gradle and the IDE.
+sourceSets.main.resources.srcDir generateModMetadata
+// To avoid having to run "generateModMetadata" manually, make it run on every project reload
+neoForge.ideSyncTask generateModMetadata
+
+// Example configuration to allow publishing using the maven-publish plugin
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
