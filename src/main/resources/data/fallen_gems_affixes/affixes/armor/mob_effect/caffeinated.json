@@ -1,0 +1,54 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "runiclib"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "mob_effect": "runiclib:caffeinated",
+  "target": "hurt_self",
+  "types": [
+    "apotheosis:chestplate",
+    "apotheosis:helmet",
+    "apotheosis:boots",
+    "apotheosis:leggings"
+  ],
+  "values": {
+    "apotheosis:epic": {
+      "duration": {
+        "min": 140.0,
+        "max": 140.0,
+        "step": 0.0
+      },
+      "amplifier": 0.0,
+      "cooldown": 200
+    },
+    "apotheosis:mythic": {
+      "duration": {
+        "min": 160.0,
+        "max": 160.0,
+        "step": 0.0
+      },
+      "amplifier": 1.0,
+      "cooldown": 200
+    },
+    "apotheosis:ancient": {
+      "duration": {
+        "min": 180.0,
+        "max": 180.0,
+        "step": 0.0
+      },
+      "amplifier": 2.0,
+      "cooldown": 200
+    }
+  }
+}

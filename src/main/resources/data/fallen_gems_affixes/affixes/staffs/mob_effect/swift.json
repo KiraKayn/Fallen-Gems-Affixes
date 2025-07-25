@@ -1,0 +1,66 @@
+{
+	"type": "apotheosis:mob_effect",
+	"definition": {
+		"affix_type": "basic_effect",
+		"exclusive_set": [],
+		"weights": {
+			"quality": 0.1,
+			"weight": 25
+		}
+	},
+	"mob_effect": "minecraft:haste",
+	"target": "spell_damage_self",
+	"types": [
+		"fallen_gems_affixes:staffs"
+	],
+	"values": {
+		"apotheosis:rare": {
+			"duration": {
+				"min": 200,
+				"max": 280,
+				"step": 20
+			},
+			"amplifier": 0,
+			"cooldown": 600
+		},
+		"apotheosis:epic": {
+			"duration": {
+				"min": 200,
+				"max": 300,
+				"step": 20
+			},
+			"amplifier": {
+				"min": 0,
+				"max": 0.68,
+				"step": 0.34
+			},
+			"cooldown": 600
+		},
+		"apotheosis:mythic": {
+			"duration": {
+				"min": 240,
+				"max": 340,
+				"step": 20
+			},
+			"amplifier": {
+				"min": 0,
+				"max": 1.7,
+				"step": 0.34
+			},
+			"cooldown": 600
+		},
+		"apotheosis:ancient": {
+			"duration": {
+				"min": 240,
+				"max": 340,
+				"step": 20
+			},
+			"amplifier": {
+				"min": 1,
+				"max": 2.7,
+				"step": 0.34
+			},
+			"cooldown": 500
+		}
+	}
+}

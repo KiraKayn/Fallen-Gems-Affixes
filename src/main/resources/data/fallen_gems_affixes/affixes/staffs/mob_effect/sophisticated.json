@@ -1,0 +1,49 @@
+{
+	"type": "apotheosis:mob_effect",
+	"definition": {
+		"affix_type": "basic_effect",
+		"exclusive_set": [],
+		"weights": {
+			"quality": 0.1,
+			"weight": 25
+		}
+	},
+	"mob_effect": "apothic_attributes:knowledge",
+	"target": "spell_heal_self",
+	"types": [
+		"fallen_gems_affixes:staffs"
+	],
+	"values": {
+		"apotheosis:epic": {
+			"duration": {
+				"min": 80,
+				"max": 140,
+				"step": 20
+			},
+			"amplifier": 0,
+			"cooldown": 400
+		},
+		"apotheosis:mythic": {
+			"duration": {
+				"min": 100,
+				"max": 160,
+				"step": 20
+			},
+			"amplifier": {
+				"min": 0,
+				"max": 1.82,
+				"step": 0.26
+			},
+			"cooldown": 400
+		},
+		"apotheosis:ancient": {
+			"duration": {
+				"min": 100,
+				"max": 200,
+				"step": 20
+			},
+			"amplifier": 3,
+			"cooldown": 400
+		}
+	}
+}

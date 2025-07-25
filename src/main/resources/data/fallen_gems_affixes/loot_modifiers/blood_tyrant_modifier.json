@@ -1,0 +1,29 @@
+{
+  "type": "fallen_gems_affixes:gem_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "cataclysm:entities/ancient_remnant"
+    },
+    {
+      "condition": "minecraft:killed_by_player"
+    }
+  ],
+  "gems": [
+    {
+      "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
+      "rarity": "apotheosis:epic",
+      "drop_chance": 0.5
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
+      "rarity": "apotheosis:mythic",
+      "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/blood_tyrant",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
+    }
+  ]
+}

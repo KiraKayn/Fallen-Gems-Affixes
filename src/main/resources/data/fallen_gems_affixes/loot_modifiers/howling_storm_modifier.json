@@ -1,0 +1,29 @@
+{
+  "type": "fallen_gems_affixes:gem_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "cataclysm:entities/scylla"
+    },
+    {
+      "condition": "minecraft:killed_by_player"
+    }
+  ],
+  "gems": [
+    {
+      "gem": "fallen_gems_affixes:boss_gems/howling_storm",
+      "rarity": "apotheosis:epic",
+      "drop_chance": 0.50
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/howling_storm",
+      "rarity": "apotheosis:mythic",
+      "drop_chance": 0.25
+    },
+    {
+      "gem": "fallen_gems_affixes:boss_gems/howling_storm",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
+    }
+  ]
+}
