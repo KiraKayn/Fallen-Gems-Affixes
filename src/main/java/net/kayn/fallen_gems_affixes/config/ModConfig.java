@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.config;
 
-import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ public class ModConfig {
     public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
     public static final ModConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
     public static final ModConfigSpec.BooleanValue STRICT_SCHOOL_MATCH;
-    public static final ModConfigSpec.BooleanValue ENABLE_CELESTISYNTH_ATTRIBUTES;
-    public static final ModConfigSpec.BooleanValue ENABLE_SPELL_POWER_PATCH;
     public static final ModConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
 
     static {
@@ -43,14 +40,6 @@ public class ModConfig {
                 .comment("If false, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
                 .comment("If true, affixes will only apply to items that already grant spell power of the matching school.")
                 .define("strictSpellSchoolMatching", true);
-
-        ENABLE_CELESTISYNTH_ATTRIBUTES = BUILDER
-                .comment("If true, applies Spell Power attributes to Celestisynth weapons via ItemAttributeModifierEvent.")
-                .define("enableCelestisynthAttributes", true);
-
-        ENABLE_SPELL_POWER_PATCH = BUILDER
-                .comment("If true, enables Celestisynth weapons patch to increase weapon damage when held, scaled by the respective Spell Power on the item")
-                .define("enableCelestisynthSpellPowerPatch", true);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
