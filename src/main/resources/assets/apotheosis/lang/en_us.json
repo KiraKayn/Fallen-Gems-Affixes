@@ -57,5 +57,6 @@
     "affix.apotheosis:luck.suffix": "",
     "affix.apotheosis:luck.desc": "Added threat multiplier proportional to gear rarity",
     "gem_class.staffs": "Staffs",
-    "gem_class.melee_ranged": "Weapons"
+    "gem_class.melee_ranged": "Weapons",
+    "loot_category.fallen_gems_affixes.staffs.plural": "Staffs"
 }
