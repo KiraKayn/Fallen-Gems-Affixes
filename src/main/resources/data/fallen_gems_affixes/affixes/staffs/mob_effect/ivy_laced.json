@@ -15,40 +15,32 @@
 		"fallen_gems_affixes:staffs"
 	],
 	"values": {
+		"apotheosis:rare": {
+			"duration": {
+				"min": 120.0,
+				"max": 120.0,
+				"step": 0.0
+			},
+			"amplifier": 0.0,
+			"cooldown": 200
+		},
 		"apotheosis:epic": {
 			"duration": {
-				"min": 80,
-				"max": 120,
-				"step": 20
+				"min": 140.0,
+				"max": 140.0,
+				"step": 0.0
 			},
-			"amplifier": {
-				"min": 0,
-				"max": 0.78,
-				"step": 0.26
-			},
-			"cooldown": 40
+			"amplifier": 1,
+			"cooldown": 200
 		},
 		"apotheosis:mythic": {
 			"duration": {
-				"min": 80,
-				"max": 120,
-				"step": 20
-			},
-			"amplifier": {
-				"min": 0,
-				"max": 0.78,
-				"step": 0.26
-			},
-			"cooldown": 40
-		},
-		"apotheosis:ancient": {
-			"duration": {
-				"min": 80,
-				"max": 120,
-				"step": 20
+				"min": 160.0,
+				"max": 160.0,
+				"step": 0.0
 			},
 			"amplifier": 2,
-			"cooldown": 40
+			"cooldown": 200
 		}
 	}
 }

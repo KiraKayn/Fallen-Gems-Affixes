@@ -1,7 +1,7 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "runiclib"
     }
   ],
@@ -36,15 +36,6 @@
         "step": 0.0
       },
       "amplifier": 1.0,
-      "cooldown": 200
-    },
-    "apotheosis:ancient": {
-      "duration": {
-        "min": 180.0,
-        "max": 180.0,
-        "step": 0.0
-      },
-      "amplifier": 2.0,
       "cooldown": 200
     }
   }
