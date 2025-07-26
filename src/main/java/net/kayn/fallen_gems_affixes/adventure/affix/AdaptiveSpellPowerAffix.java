@@ -91,7 +91,6 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
         if (schoolTypes != null && schoolTypes.contains(this.school)) return true;
         if (!this.categories.contains(cat)) return false;
 
-        EquipmentSlot slot = stack.getEquipmentSlot();
         Set<Holder<Attribute>> foundAttributes = new HashSet<>();
 
         // Curios compatibility

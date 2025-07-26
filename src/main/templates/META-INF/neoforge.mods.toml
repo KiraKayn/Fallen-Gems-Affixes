@@ -14,6 +14,9 @@ credits="me"
 authors="Kayn, Rtxyd"
 description=''' An Apotheosis addon focusing on integration and compatibility'''
 
+[[mixins]]
+config="fallen_gems_affixes.mixins.json"
+
 [[dependencies.fallen_gems_affixes]]
 modId="neoforge"
 type="required"
@@ -29,29 +32,36 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
-modId="cataclysm_spellbooks"
-mandatory=false
-versionRange="[1.0,)"
+modId="additional_attributes"
+type="required"
+versionRange="[1.2.2,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
+modId="cataclysm_spellbooks"
+type="optional"
+versionRange="[1.0,)"
+ordering="BEFORE"
+side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
 modId="cataclysm"
-mandatory=false
+type="optional"
 versionRange="[2.0,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
 modId="irons_spellbooks"
-mandatory=false
+type="optional"
 versionRange="[1.0,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
 modId="apotheosis"
-mandatory=true
+type="required"
 versionRange="[8.3.0,)"
 ordering="AFTER"
 side="BOTH"
