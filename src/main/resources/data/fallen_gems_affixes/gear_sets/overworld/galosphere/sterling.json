@@ -1,20 +1,23 @@
 {
-	"conditions": [{
-		"type": "forge:mod_loaded",
+	"neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "galosphere"
 	}],
+	"type": "placebo:gear_set",
 	"weight": 90,
 	"quality": 2.5,
 	"mainhands": [{
 			"weight": 3,
 			"stack": {
-				"item": "minecraft:iron_sword"
+				"count": 1,
+				"id": "minecraft:iron_sword"
 			}
 		},
 		{
 			"weight": 3,
 			"stack": {
-				"item": "minecraft:iron_axe"
+				"count": 1,
+				"id": "minecraft:iron_axe"
 			}
 		}
 	],
@@ -22,38 +25,48 @@
         {
 			"weight": 3,
 			"stack": {
-				"item": "minecraft:shield"
+				"count": 1,
+				"id": "minecraft:shield"
 			}
 		}
     ],
 	"boots": [{
 		"weight": 1,
 		"stack": {
-			"item": "galosphere:sterling_boots"
+			"count": 1,
+			"id": "galosphere:sterling_boots"
 		}
 	}],
 	"leggings": [{
 		"weight": 1,
 		"stack": {
-			"item": "galosphere:sterling_leggings"
+			"count": 1,
+			"id": "galosphere:sterling_leggings"
 		}
 	}],
 	"chestplates": [{
 		"weight": 1,
 		"stack": {
-			"item": "galosphere:sterling_chestplate"
+			"count": 1,
+			"id": "galosphere:sterling_chestplate"
 		}
 	}],
 	"helmets": [{
 		"weight": 3,
 		"stack": {
-			"item": "galosphere:sterling_helmet"
+			"count": 1,
+			"id": "galosphere:sterling_helmet"
 		}
 	}],
 	"tags": [
 		"overworld",
         "galosphere",
         "common",
-        "zombie_gear"
+        "zombie_gear",
+		"frontier_melee",
+		"ascent_melee",
+		"summit_melee",
+		"pinnacle_melee",
+		"haven_melee"
 	]
 }
