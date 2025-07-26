@@ -46,13 +46,6 @@ public class ModConfig {
                 .comment("Example: modid:itemid|modid:schoolid")
                 .comment("You can also set multiple schools: modid:itemid|modid:schoolid|modid:schoolid")
                 .define("irons_items", new ArrayList<>(List.of(
-                        "celestisynth:crescentia|irons_spellbooks:ender",
-                        "celestisynth:solaris|irons_spellbooks:fire",
-                        "celestisynth:aquaflora|irons_spellbooks:nature",
-                        "celestisynth:breezebreaker|irons_spellbooks:evocation",
-                        "celestisynth:poltergeist|irons_spellbooks:eldritch",
-                        "celestisynth:rainfall_serenity|irons_spellbooks:lightning",
-                        "celestisynth:keres|irons_spellbooks:blood"
                 )));
 
         BUILDER.pop();
