@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "fallen_gems_affixes:boss_gems/void_guardian",
   "bonuses": [
     {
@@ -13,23 +13,23 @@
       "gem_class": {
         "key": "boots",
         "types": [
-          "boots"
+          "apotheosis:boots"
         ]
       },
       "mob_effect": "irons_spellbooks:evasion",
       "target": "attack_self",
       "values": {
-        "epic": {
+        "normal": {
           "duration": 100,
           "amplifier": 0,
           "cooldown": 500
         },
-        "mythic": {
+        "flawless": {
           "duration": 160,
           "amplifier": 1,
           "cooldown": 500
         },
-        "ancient": {
+        "perfect": {
           "duration": 220,
           "amplifier": 2,
           "cooldown": 500

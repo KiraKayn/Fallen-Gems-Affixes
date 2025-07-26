@@ -7,6 +7,7 @@ import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
 import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
+import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -38,7 +39,7 @@ public class FallenGemsAffixes {
         new MaxHealthDamageHandler();
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
-//            StaffLootCategory.STAFF.toString();
+          StaffLootCategory.STAFF.toString();
             modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);

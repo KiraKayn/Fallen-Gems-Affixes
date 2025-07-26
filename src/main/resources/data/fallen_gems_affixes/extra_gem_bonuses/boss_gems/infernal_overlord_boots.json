@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "runiclib"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "fallen_gems_affixes:boss_gems/infernal_overlord",
   "bonuses": [
     {
@@ -13,14 +13,14 @@
       "gem_class": {
         "key": "boots",
         "types": [
-          "boots"
+          "apotheosis:boots"
         ]
       },
       "effect": "runiclib:lava_walking",
       "values": {
-        "epic": 0,
-        "mythic": 1,
-        "ancient": 2
+        "normal": 0,
+        "flawless": 1,
+        "perfect": 2
       }
     }
   ]

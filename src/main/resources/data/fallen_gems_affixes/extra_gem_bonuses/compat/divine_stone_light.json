@@ -1,15 +1,15 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "additional_attributes"
     },
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "fallen_gems_affixes:compat/divine_stone",
   "bonuses": [
     {
@@ -17,16 +17,17 @@
       "gem_class": {
         "key": "light_weapon",
         "types": [
-          "sword", "trident"
+          "apotheosis:melee_weapon",
+          "apotheosis:trident"
         ]
       },
       "attribute": "additional_attributes:innate_spell/irons_spellbooks/divine_smite",
-      "operation": "ADDITION",
+      "operation": "add_value",
       "values": {
-        "rare": 1,
-        "epic": 2,
-        "mythic": 3,
-        "ancient": 4
+        "flawed": 1,
+        "normal": 2,
+        "flawless": 3,
+        "perfect": 4
       }
     }
   ]

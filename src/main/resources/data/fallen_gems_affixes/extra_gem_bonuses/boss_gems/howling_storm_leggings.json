@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "fallen_gems_affixes:boss_gems/howling_storm",
   "bonuses": [
     {
@@ -13,14 +13,14 @@
       "gem_class": {
         "key": "leggings",
         "types": [
-          "leggings"
+          "apotheosis:leggings"
         ]
       },
       "effect": "irons_spellbooks:charged",
       "values": {
-        "epic": 0,
-        "mythic": 1,
-        "ancient": 2
+        "normal": 0,
+        "flawless": 1,
+        "perfect": 2
       }
     }
   ]

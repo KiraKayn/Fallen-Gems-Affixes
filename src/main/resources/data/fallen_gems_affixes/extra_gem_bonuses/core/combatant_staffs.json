@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "apotheosis:core/combatant",
   "bonuses": [
     {
@@ -13,18 +13,18 @@
       "gem_class": {
         "key": "staffs",
         "types": [
-          "staffs"
+          "fallen_gems_affixes:staffs"
         ]
       },
       "attribute": "irons_spellbooks:max_mana",
-      "operation": "ADDITION",
+      "operation": "add_value",
       "values": {
-        "common": 50,
-        "uncommon": 75,
-        "rare": 100,
-        "epic": 125,
-        "mythic": 150,
-        "ancient": 175
+        "cracked": 50,
+        "chipped": 75,
+        "flawed": 100,
+        "normal": 125,
+        "flawless": 150,
+        "perfect": 175
       }
     }
   ]

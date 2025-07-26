@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "apotheosis:core/lunar",
   "bonuses": [
     {
@@ -13,18 +13,18 @@
       "gem_class": {
         "key": "staffs",
         "types": [
-          "staffs"
+          "fallen_gems_affixes:staffs"
         ]
       },
       "attribute": "irons_spellbooks:ice_spell_power",
-      "operation": "MULTIPLY_TOTAL",
+      "operation": "add_multiplied_total",
       "values": {
-        "common": 0.03,
-        "uncommon": 0.06,
-        "rare": 0.09,
-        "epic": 0.12,
-        "mythic": 0.15,
-        "ancient": 0.2
+        "cracked": 0.03,
+        "chipped": 0.06,
+        "flawed": 0.09,
+        "normal": 0.12,
+        "flawless": 0.15,
+        "perfect": 0.2
       }
     }
   ]

@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "fallen_gems_affixes:compat/hemolith_shard",
   "bonuses": [
     {
@@ -13,28 +13,28 @@
       "gem_class": {
         "key": "ranged_weapon",
         "types": [
-          "bow", "crossbow"
+          "apotheosis:bow"
         ]
       },
       "mob_effect": "cataclysm_spellbooks:hemophilia",
       "target": "arrow_target",
       "values": {
-        "rare": {
+        "flawed": {
           "duration": 70,
           "amplifier": 0,
           "cooldown": 500
         },
-        "epic": {
+        "normal": {
           "duration": 140,
           "amplifier": 1,
           "cooldown": 500
         },
-        "mythic": {
+        "flawless": {
           "duration": 210,
           "amplifier": 2,
           "cooldown": 500
         },
-        "ancient": {
+        "perfect": {
           "duration": 280,
           "amplifier": 3,
           "cooldown": 500

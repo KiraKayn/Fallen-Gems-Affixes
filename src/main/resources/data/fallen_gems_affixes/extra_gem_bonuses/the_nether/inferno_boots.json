@@ -1,11 +1,11 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "apotheosis:extra_gem_bonus",
   "gem": "apotheosis:the_nether/inferno",
   "bonuses": [
     {
@@ -13,16 +13,16 @@
       "gem_class": {
         "key": "boots",
         "types": [
-          "boots"
+          "apotheosis:boots"
         ]
       },
       "attribute": "irons_spellbooks:max_mana",
-      "operation": "MULTIPLY_TOTAL",
+      "operation": "add_multiplied_total",
       "values": {
-        "rare": 0.15,
-        "epic": 0.20,
-        "mythic": 0.25,
-        "ancient": 0.30
+        "flawed": 0.15,
+        "normal": 0.20,
+        "flawless": 0.25,
+        "perfect": 0.30
       }
     }
   ]
