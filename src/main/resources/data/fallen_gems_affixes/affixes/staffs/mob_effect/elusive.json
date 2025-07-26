@@ -1,5 +1,5 @@
 {
-	"type": "apotheosis:mob_effect",
+	"type": "fallen_gems_affixes:spell_effect",
 	"definition": {
 		"affix_type": "basic_effect",
 		"exclusive_set": [],
@@ -10,9 +10,6 @@
 	},
 	"mob_effect": "minecraft:speed",
 	"target": "spell_damage_self",
-	"types": [
-		"fallen_gems_affixes:staffs"
-	],
 	"values": {
 		"apotheosis:rare": {
 			"duration": {
@@ -41,5 +38,8 @@
 			"amplifier": 2,
 			"cooldown": 200
 		}
-	}
+	},
+	"types": [
+		"fallen_gems_affixes:staffs"
+	]
 }

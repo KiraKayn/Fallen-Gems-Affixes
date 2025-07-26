@@ -16,10 +16,6 @@
   },
   "mob_effect": "runiclib:bleeding",
   "target": "attack_target",
-  "types": [
-    "apotheosis:melee_weapon",
-    "apotheosis:trident"
-  ],
   "values": {
     "apotheosis:rare": {
       "duration": {
@@ -48,5 +44,9 @@
       "amplifier": 2,
       "cooldown": 200
     }
-  }
+  },
+  "types": [
+    "apotheosis:melee_weapon",
+    "apotheosis:trident"
+  ]
 }

@@ -1,21 +1,18 @@
 package net.kayn.fallen_gems_affixes.loot;
 
 import com.google.common.base.Predicates;
-import dev.shadowsoffire.apotheosis.Apoth;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
+import io.redspace.ironsspellbooks.item.CastingItem;
 import net.kayn.fallen_gems_affixes.util.LootCategoryUtil;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class LootCategories {
     // we can't define predicate in this loot category, because it's sub-category of melee weapon, we don't want to overlap it.
@@ -25,6 +22,14 @@ public class LootCategories {
             1,
             false
     );
+
+    public static final LootCategory STAFFS = LootCategoryUtil.registerLootCategoryOrFalse("staffs",
+            ALObjects.EquipmentSlotGroups.MAINHAND,
+            Predicates.alwaysFalse(),
+            1200,
+            false
+    );
+
 //    public static final LootCategory LIGHT_WEAPON = LootCategoryUtil.registerLootCategoryOrFalse("light_weapon",
 //            ALObjects.EquipmentSlotGroups.MAINHAND,
 //            Predicates.alwaysFalse(),
@@ -53,6 +58,10 @@ public class LootCategories {
             }
             if (flag1 && flag2) return true;
             return false;
+        }
+
+        public static boolean staffCheck(ItemStack i) {
+            return i.getItem() instanceof CastingItem;
         }
 
 //        public static boolean lightWeaponCheck(ItemStack i) {
