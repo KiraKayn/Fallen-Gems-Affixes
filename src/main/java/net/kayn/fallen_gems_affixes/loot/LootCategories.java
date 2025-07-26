@@ -4,6 +4,7 @@ import com.google.common.base.Predicates;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import io.redspace.ironsspellbooks.item.CastingItem;
+import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 import net.kayn.fallen_gems_affixes.util.LootCategoryUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -25,9 +26,9 @@ public class LootCategories {
 
     public static final LootCategory STAFFS = LootCategoryUtil.registerLootCategoryOrFalse("staffs",
             ALObjects.EquipmentSlotGroups.MAINHAND,
-            Predicates.alwaysFalse(),
+            i -> i.getItem() instanceof StaffItem,
             1200,
-            false
+            true
     );
 
 //    public static final LootCategory LIGHT_WEAPON = LootCategoryUtil.registerLootCategoryOrFalse("light_weapon",
