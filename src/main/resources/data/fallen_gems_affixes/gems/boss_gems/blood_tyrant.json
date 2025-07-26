@@ -1,28 +1,31 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "apotheosis:all_stats",
       "gem_class": {
         "key": "chestplate",
         "types": [
-          "chestplate"
+          "apotheosis:chestplate"
         ]
       },
-      "operation": "multiply_total",
+      "operation": "add_multiplied_total",
       "values": {
-        "epic": 0.05,
-        "mythic": 0.10,
-        "ancient": 0.15
+        "normal": 0.05,
+        "flawless": 0.10,
+        "perfect": 0.15
       },
       "attributes": [
         "minecraft:generic.max_health",
@@ -34,27 +37,28 @@
         "minecraft:generic.armor",
         "minecraft:generic.armor_toughness",
         "minecraft:generic.luck",
-        "attributeslib:armor_pierce",
-        "attributeslib:armor_shred",
-        "attributeslib:arrow_damage",
-        "attributeslib:arrow_velocity",
-        "attributeslib:cold_damage",
-        "attributeslib:crit_chance",
-        "attributeslib:crit_damage",
-        "attributeslib:dodge_chance",
-        "attributeslib:draw_speed",
-        "attributeslib:experience_gained",
-        "attributeslib:fire_damage",
-        "attributeslib:ghost_health",
-        "attributeslib:healing_received",
-        "attributeslib:mining_speed",
-        "attributeslib:overheal",
-        "attributeslib:prot_pierce",
-        "attributeslib:prot_shred",
-        "forge:swim_speed",
-        "forge:block_reach",
-        "forge:entity_reach",
-        "forge:step_height_addition"
+        "minecraft:generic.step_height",
+        "minecraft:player.block_interaction_range",
+        "minecraft:player.entity_interaction_range",
+        "apothic_attributes:armor_pierce",
+        "apothic_attributes:armor_shred",
+        "apothic_attributes:arrow_damage",
+        "apothic_attributes:arrow_velocity",
+        "apothic_attributes:cold_damage",
+        "apothic_attributes:crit_chance",
+        "apothic_attributes:crit_damage",
+        "apothic_attributes:current_hp_damage",
+        "apothic_attributes:dodge_chance",
+        "apothic_attributes:experience_gained",
+        "apothic_attributes:fire_damage",
+        "apothic_attributes:ghost_health",
+        "apothic_attributes:healing_received",
+        "apothic_attributes:life_steal",
+        "apothic_attributes:mining_speed",
+        "apothic_attributes:overheal",
+        "apothic_attributes:prot_pierce",
+        "apothic_attributes:prot_shred",
+        "neoforge:swim_speed"
       ]
     },
     {
@@ -62,23 +66,23 @@
       "gem_class": {
         "key": "leggings",
         "types": [
-          "leggings"
+          "apotheosis:leggings"
         ]
       },
       "mob_effect": "cataclysm:bone_fracture",
       "target": "attack_target",
       "values": {
-        "epic": {
+        "normal": {
           "duration": 100,
           "amplifier": 0,
           "cooldown": 500
         },
-        "mythic": {
+        "flawless": {
           "duration": 140,
           "amplifier": 1,
           "cooldown": 500
         },
-        "ancient": {
+        "perfect": {
           "duration": 200,
           "amplifier": 2,
           "cooldown": 500
@@ -88,25 +92,25 @@
     {
       "type": "apotheosis:mob_effect",
       "gem_class": {
-        "key": "heavy_weapon",
+        "key": "light_weapon",
         "types": [
-          "heavy_weapon"
+          "apotheosis:melee_weapon"
         ]
       },
       "mob_effect": "cataclysm:stun",
       "target": "attack_target",
       "values": {
-        "epic": {
+        "normal": {
           "duration": 10,
-          "amplifier": 1,
+          "amplifier": 1.0,
           "cooldown": 500
         },
-        "mythic": {
+        "flawless": {
           "duration": 20,
-          "amplifier": 3,
+          "amplifier": 3.0,
           "cooldown": 500
         },
-        "ancient": {
+        "perfect": {
           "duration": 30,
           "amplifier": 5,
           "cooldown": 50
