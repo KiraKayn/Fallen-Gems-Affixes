@@ -1,26 +1,30 @@
 {
-	"conditions": [{
-		"type": "forge:mod_loaded",
+	"neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "irons_spellbooks"
 	}],
+	"type": "placebo:gear_set",
 	"weight": 10,
 	"quality": 7,
 	"mainhands": [{
 			"weight": 5,
 			"stack": {
-				"item": "minecraft:netherite_sword"
+				"count": 1,
+				"id": "minecraft:netherite_sword"
 			}
 		},
 		{
 			"weight": 5,
 			"stack": {
-				"item": "minecraft:netherite_axe"
+				"count": 1,
+				"id": "minecraft:netherite_axe"
 			}
 		},
         {
 			"weight": 3,
 			"stack": {
-				"item": "irons_spellbooks:keeper_flamberge"
+				"count": 1,
+				"id": "irons_spellbooks:keeper_flamberge"
 			}
 		}
 	],
@@ -28,30 +32,38 @@
 	"boots": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:netherite_mage_boots"
+			"count": 1,
+			"id": "irons_spellbooks:netherite_mage_boots"
 		}
 	}],
 	"leggings": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:netherite_mage_leggings"
+			"count": 1,
+			"id": "irons_spellbooks:netherite_mage_leggings"
 		}
 	}],
 	"chestplates": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:netherite_mage_chestplate"
+			"count": 1,
+			"id": "irons_spellbooks:netherite_mage_chestplate"
 		}
 	}],
 	"helmets": [{
 		"weight": 3,
 		"stack": {
-			"item": "irons_spellbooks:netherite_mage_helmet"
+			"count": 1,
+			"id": "irons_spellbooks:netherite_mage_helmet"
 		}
 	}],
 	"tags": [
 		"the_nether",
         "irons_spellbooks",
+		"frontier_melee",
+		"ascent_melee",
+		"summit_melee",
+		"pinnacle_melee",
         "rare"
 	]
 }

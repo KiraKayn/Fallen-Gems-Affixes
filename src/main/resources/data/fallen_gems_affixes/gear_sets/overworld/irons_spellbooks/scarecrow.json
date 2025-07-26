@@ -1,20 +1,23 @@
 {
-	"conditions": [{
-		"type": "forge:mod_loaded",
+	"neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "irons_spellbooks"
 	}],
+	"type": "placebo:gear_set",
 	"weight": 40,
 	"quality": 3,
 	"mainhands": [{
 			"weight": 3,
 			"stack": {
-				"item": "irons_spellbooks:artificer_cane"
+				"count": 1,
+				"id": "irons_spellbooks:artificer_cane"
 			}
 		},
 		{
 			"weight": 3,
 			"stack": {
-				"item": "irons_spellbooks:graybeard_staff"
+				"count": 1,
+				"id": "irons_spellbooks:graybeard_staff"
 			}
 		}
 	],
@@ -22,25 +25,29 @@
 	"boots": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:pumpkin_boots"
+			"count": 1,
+			"id": "irons_spellbooks:pumpkin_boots"
 		}
 	}],
 	"leggings": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:pumpkin_leggings"
+			"count": 1,
+			"id": "irons_spellbooks:pumpkin_leggings"
 		}
 	}],
 	"chestplates": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:pumpkin_chestplate"
+			"count": 1,
+			"id": "irons_spellbooks:pumpkin_chestplate"
 		}
 	}],
 	"helmets": [{
 		"weight": 3,
 		"stack": {
-			"item": "irons_spellbooks:pumpkin_helmet"
+			"count": 1,
+			"id": "irons_spellbooks:pumpkin_helmet"
 		}
 	}],
 	"tags": [
@@ -49,6 +56,10 @@
         "irons_spellbooks",
         "uncommon",
         "wizard_gear",
+		"frontier_melee",
+		"ascent_melee",
+		"summit_melee",
+		"pinnacle_melee",
         "scarecrow"
 	]
 }

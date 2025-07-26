@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes;
 
+import dev.shadowsoffire.placebo.registry.DeferredHelper;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
@@ -7,6 +8,7 @@ import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
 import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
+import net.kayn.fallen_gems_affixes.loot.LootCategories;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -22,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 @Mod(FallenGemsAffixes.MOD_ID)
 public class FallenGemsAffixes {
     public static final String MOD_ID = "fallen_gems_affixes";
+    public static final DeferredHelper R = DeferredHelper.create(MOD_ID);
     public static final Logger LOGGER = LogManager.getLogger();
 
     public FallenGemsAffixes(IEventBus modEventBus, ModContainer modContainer) {
@@ -34,7 +37,8 @@ public class FallenGemsAffixes {
 
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
-
+        modEventBus.register(R);
+        LootCategories.bootstrap();
 //        AALootCategories.init();
         new MaxHealthDamageHandler();
 

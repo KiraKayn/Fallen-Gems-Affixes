@@ -1,14 +1,16 @@
 {
-	"conditions": [{
-		"type": "forge:mod_loaded",
+	"neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "irons_spellbooks"
 	}],
+	"type": "placebo:gear_set",
 	"weight": 10,
 	"quality": 7,
 	"mainhands": [{
 			"weight": 3,
 			"stack": {
-				"item": "irons_spellbooks:lightning_rod"
+				"count": 1,
+				"id": "irons_spellbooks:lightning_rod"
 			}
 		}
 	],
@@ -16,25 +18,29 @@
 	"boots": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:electromancer_boots"
+			"count": 1,
+			"id": "irons_spellbooks:electromancer_boots"
 		}
 	}],
 	"leggings": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:electromancer_leggings"
+			"count": 1,
+			"id": "irons_spellbooks:electromancer_leggings"
 		}
 	}],
 	"chestplates": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:electromancer_chestplate"
+			"count": 1,
+			"id": "irons_spellbooks:electromancer_chestplate"
 		}
 	}],
 	"helmets": [{
 		"weight": 3,
 		"stack": {
-			"item": "irons_spellbooks:electromancer_helmet"
+			"count": 1,
+			"id": "irons_spellbooks:electromancer_helmet"
 		}
 	}],
 	"tags": [
@@ -42,6 +48,10 @@
         "irons_spellbooks",
         "rare",
         "wizard_gear",
+		"frontier_melee",
+		"ascent_melee",
+		"summit_melee",
+		"pinnacle_melee",
         "electromancer"
 	]
 }

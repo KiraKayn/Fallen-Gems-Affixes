@@ -1,14 +1,16 @@
 {
-    "conditions": [{
-		"type": "forge:mod_loaded",
+    "neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "irons_spellbooks"
 	}],
+	"type": "placebo:gear_set",
 	"weight": 10,
 	"quality": 7,
 	"mainhands": [{
 			"weight": 9,
 			"stack": {
-				"item": "irons_spellbooks:amethyst_rapier"
+				"count": 1,
+				"id": "irons_spellbooks:amethyst_rapier"
 			}
 		}
 	],
@@ -16,25 +18,29 @@
 	"boots": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:shadowwalker_boots"
+			"count": 1,
+			"id": "irons_spellbooks:shadowwalker_boots"
 		}
 	}],
 	"leggings": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:shadowwalker_leggings"
+			"count": 1,
+			"id": "irons_spellbooks:shadowwalker_leggings"
 		}
 	}],
 	"chestplates": [{
 		"weight": 1,
 		"stack": {
-			"item": "irons_spellbooks:shadowwalker_chestplate"
+			"count": 1,
+			"id": "irons_spellbooks:shadowwalker_chestplate"
 		}
 	}],
 	"helmets": [{
 		"weight": 3,
 		"stack": {
-			"item": "irons_spellbooks:shadowwalker_helmet"
+			"count": 1,
+			"id": "irons_spellbooks:shadowwalker_helmet"
 		}
 	}],
 	"tags": [
@@ -42,6 +48,10 @@
         "irons_spellbooks",
         "rare",
         "wizard_gear",
+        "frontier_melee",
+        "ascent_melee",
+        "summit_melee",
+        "pinnacle_melee",
         "shadowwalker"
 	]
 }
