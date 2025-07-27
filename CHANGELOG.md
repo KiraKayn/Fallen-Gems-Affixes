@@ -1,3 +1,6 @@
+# 1.2.6
+- Fixed Fallen Warrior gem not showing up (sorry)
+
 # 1.2.5
 - Fixed Ragnarok Gem not showing up if celestisynth is not installed
 - Fixed the "bleeding" mob effect for swords not showing up if celestisynth is not installed
