@@ -1,28 +1,31 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "apotheosis:damage_reduction",
       "gem_class": {
         "key": "chestplate",
         "types": [
-          "chestplate"
+          "apotheosis:chestplate"
         ]
       },
       "damage_type": "explosion",
       "values": {
-        "epic": 0.1,
-        "mythic": 0.20,
-        "ancient": 0.30
+        "normal": 0.1,
+        "flawless": 0.20,
+        "perfect": 0.30
       }
     },
     {
@@ -30,15 +33,15 @@
       "gem_class": {
         "key": "leggings",
         "types": [
-          "leggings"
+          "apotheosis:leggings"
         ]
       },
       "attribute": "minecraft:generic.armor",
-      "operation": "MULTIPLY_BASE",
+      "operation": "add_multiplied_base",
       "values": {
-        "epic": 0.10,
-        "mythic": 0.20,
-        "ancient": 0.30
+        "normal": 0.10,
+        "flawless": 0.20,
+        "perfect": 0.30
       }
     },
     {
@@ -47,45 +50,29 @@
       "gem_class": {
         "key": "boots",
         "types": [
-          "boots"
+          "apotheosis:boots"
         ]
       },
       "modifiers": [
         {
-          "attribute": "attributeslib:armor_shred",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:armor_shred",
+          "operation": "add_value",
           "values": {
-            "epic": 0.1,
-            "mythic": 0.2,
-            "ancient": 0.3
+            "normal": 0.1,
+            "flawless": 0.2,
+            "perfect": 0.3
           }
         },
         {
-          "attribute": "attributeslib:armor_pierce",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:armor_pierce",
+          "operation": "add_value",
           "values": {
-            "epic": 2.5,
-            "mythic": 5,
-            "ancient": 7.5
+            "normal": 2.5,
+            "flawless": 5,
+            "perfect": 7.5
           }
         }
       ]
-    },
-    {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "heavy_weapon",
-        "types": [
-          "heavy_weapon"
-        ]
-      },
-      "attribute": "minecraft:generic.attack_speed",
-      "operation": "MULTIPLY_BASE",
-      "values": {
-        "epic": 0.40,
-        "mythic": 0.60,
-        "ancient": 0.80
-      }
     },
     {
       "type": "apotheosis:multi_attribute",
@@ -93,27 +80,26 @@
       "gem_class": {
         "key": "ranged_weapon",
         "types": [
-          "bow",
-          "crossbow"
+          "apotheosis:bow"
         ]
       },
       "modifiers": [
         {
-          "attribute": "attributeslib:arrow_damage",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:arrow_damage",
+          "operation": "add_value",
           "values": {
-            "epic": 0.25,
-            "mythic": 0.35,
-            "ancient": 0.45
+            "normal": 0.25,
+            "flawless": 0.35,
+            "perfect": 0.45
           }
         },
         {
-          "attribute": "attributeslib:arrow_velocity",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:arrow_velocity",
+          "operation": "add_value",
           "values": {
-            "epic": 0.60,
-            "mythic": 0.75,
-            "ancient": 0.9
+            "normal": 0.60,
+            "flawless": 0.75,
+            "perfect": 0.9
           }
         }
       ]

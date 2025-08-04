@@ -1,32 +1,35 @@
 {
-	"conditions": [
+	"neoforge:conditions": [
 		{
-			"type": "forge:mod_loaded",
+			"type": "neoforge:mod_loaded",
 			"modid": "irons_spellbooks"
 		}
 	],
-	"weight": 10,
-	"quality": 0,
+	"type": "apotheosis:gem",
+	"weights": {
+		"quality": 0,
+		"weight": 10
+	},
 	"dimensions": [
 	],
 	"unique": true,
-	"min_rarity": "rare",
+	"min_purity": "flawed",
 	"bonuses": [
 		{
 			"type": "apotheosis:attribute",
 			"gem_class": {
 				"key": "staffs",
 				"types": [
-					"staffs"
+					"fallen_gems_affixes:staffs"
 				]
 			},
 			"attribute": "irons_spellbooks:ice_spell_power",
-			"operation": "MULTIPLY_TOTAL",
+			"operation": "add_multiplied_total",
 			"values": {
-				"rare": 0.15,
-				"epic": 0.175,
-				"mythic": 0.2,
-				"ancient": 0.25
+				"flawed": 0.15,
+				"normal": 0.175,
+				"flawless": 0.2,
+				"perfect": 0.25
 			}
 		},
 		{
@@ -34,16 +37,16 @@
 			"gem_class": {
 				"key": "leggings",
 				"types": [
-					"leggings"
+					"apotheosis:leggings"
 				]
 			},
 			"attribute": "irons_spellbooks:ice_magic_resist",
-			"operation": "MULTIPLY_BASE",
+			"operation": "add_multiplied_base",
 			"values": {
-				"rare": 0.10,
-				"epic": 0.125,
-				"mythic": 0.15,
-				"ancient": 0.2
+				"flawed": 0.10,
+				"normal": 0.125,
+				"flawless": 0.15,
+				"perfect": 0.2
 			}
 		},
 		{
@@ -51,28 +54,28 @@
 			"gem_class": {
 				"key": "chestplate",
 				"types": [
-					"chestplate"
+					"apotheosis:chestplate"
 				]
 			},
 			"mob_effect": "irons_spellbooks:chilled",
 			"target": "spell_damage_target",
 			"values": {
-				"rare": {
+				"flawed": {
 					"duration": 70,
 					"amplifier": 0,
 					"cooldown": 500
 				},
-				"epic": {
+				"normal": {
 					"duration": 140,
 					"amplifier": 1,
 					"cooldown": 500
 				},
-				"mythic": {
+				"flawless": {
 					"duration": 210,
 					"amplifier": 2,
 					"cooldown": 500
 				},
-				"ancient": {
+				"perfect": {
 					"duration": 280,
 					"amplifier": 3,
 					"cooldown": 500

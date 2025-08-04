@@ -1,8 +1,11 @@
 {
-  "weight": 5,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 5
+  },
   "unique": true,
-  "min_rarity": "common",
+  "min_purity": "cracked",
   "bonuses": [
     {
       "type": "fallen_gems_affixes:con_cat_bonus",
@@ -17,21 +20,19 @@
         "gem_class": {
           "key": "melee_ranged",
           "types": [
-            "sword",
-            "bow",
-            "crossbow",
-            "heavy_weapon",
-            "trident"
+            "apotheosis:melee_weapon",
+            "apotheosis:bow",
+            "apotheosis:trident"
           ]
         },
         "entity_tag": "fallen_gems_affixes:boss_slayer",
         "values": {
-          "common": 0.15,
-          "uncommon": 0.30,
-          "rare": 0.45,
-          "epic": 0.60,
-          "mythic": 0.75,
-          "ancient": 0.9
+          "cracked": 0.15,
+          "chipped": 0.30,
+          "flawed": 0.45,
+          "normal": 0.60,
+          "flawless": 0.75,
+          "perfect": 0.9
         }
       }
     }

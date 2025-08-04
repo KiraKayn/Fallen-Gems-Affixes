@@ -1,30 +1,33 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "apotheosis:enchantment",
       "gem_class": {
         "key": "helmet",
         "types": [
-          "helmet"
+          "apotheosis:helmet"
         ]
       },
       "enchantment": "sharpness",
       "_comment": "The enchantment field is unused when global=true, but still must be a valid name",
       "global": true,
       "values": {
-        "epic": 2,
-        "mythic": 3,
-        "ancient": 4
+        "normal": 2,
+        "flawless": 3,
+        "perfect": 4
       }
     },
     {
@@ -32,15 +35,15 @@
       "gem_class": {
         "key": "chestplate",
         "types": [
-          "chestplate"
+          "apotheosis:chestplate"
         ]
       },
       "attribute": "minecraft:generic.armor_toughness",
-      "operation": "MULTIPLY_BASE",
+      "operation": "add_multiplied_base",
       "values": {
-        "epic": 0.10,
-        "mythic": 0.20,
-        "ancient": 0.30
+        "normal": 0.10,
+        "flawless": 0.20,
+        "perfect": 0.30
       }
     },
     {
@@ -48,46 +51,16 @@
       "gem_class": {
         "key": "leggings",
         "types": [
-          "leggings"
+          "apotheosis:leggings"
         ]
       },
       "attribute": "minecraft:generic.knockback_resistance",
-      "operation": "ADDITION",
+      "operation": "add_value",
       "values": {
-        "epic": 0.5,
-        "mythic": 0.75,
-        "ancient": 1
+        "normal": 0.5,
+        "flawless": 0.75,
+        "perfect": 1
       }
-    },
-    {
-      "type": "apotheosis:multi_attribute",
-      "desc": "bonus.apotheosis:multi_attr.desc.and",
-      "gem_class": {
-        "key": "heavy_weapon",
-        "types": [
-          "heavy_weapon"
-        ]
-      },
-      "modifiers": [
-        {
-          "attribute": "attributeslib:crit_chance",
-          "operation": "ADDITION",
-          "values": {
-            "epic": 0.30,
-            "mythic": 0.40,
-            "ancient": 0.5
-          }
-        },
-        {
-          "attribute": "attributeslib:crit_damage",
-          "operation": "ADDITION",
-          "values": {
-            "epic": 0.2,
-            "mythic": 0.3,
-            "ancient": 0.4
-          }
-        }
-      ]
     }
   ]
 }

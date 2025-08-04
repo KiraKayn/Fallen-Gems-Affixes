@@ -1,29 +1,32 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "apotheosis:attribute",
       "gem_class": {
         "key": "helmet",
         "types": [
-          "helmet"
+          "apotheosis:helmet"
         ]
       },
-      "attribute": "attributeslib:cold_damage",
-      "operation": "MULTIPLY_BASE",
+      "attribute": "apothic_attributes:cold_damage",
+      "operation": "add_multiplied_base",
       "values": {
-        "epic": 0.50,
-        "mythic": 0.75,
-        "ancient": 1
+        "normal": 0.50,
+        "flawless": 0.75,
+        "perfect": 1
       }
     },
     {
@@ -31,31 +34,15 @@
       "gem_class": {
         "key": "leggings",
         "types": [
-          "leggings"
+          "apotheosis:leggings"
         ]
       },
-      "attribute": "attributeslib:dodge_chance",
-      "operation": "ADDITION",
+      "attribute": "apothic_attributes:dodge_chance",
+      "operation": "add_value",
       "values": {
-        "epic": 0.125,
-        "mythic": 0.175,
-        "ancient": 0.25
-      }
-    },
-    {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "heavy_weapon",
-        "types": [
-          "heavy_weapon"
-        ]
-      },
-      "attribute": "attributeslib:current_hp_damage",
-      "operation": "ADDITION",
-      "values": {
-        "epic": 0.1,
-        "mythic": 0.2,
-        "ancient": 0.3
+        "normal": 0.125,
+        "flawless": 0.175,
+        "perfect": 0.25
       }
     },
     {
@@ -63,18 +50,17 @@
       "gem_class": {
         "key": "light_weapon",
         "types": [
-          "sword",
-          "trident"
+          "apotheosis:melee_weapon",
+          "apotheosis:trident"
         ]
       },
-      "attribute": "attributeslib:overheal",
-      "operation": "ADDITION",
+      "attribute": "apothic_attributes:overheal",
+      "operation": "add_value",
       "values": {
-        "epic": 0.1,
-        "mythic": 0.2,
-        "ancient": 0.3
+        "normal": 0.1,
+        "flawless": 0.2,
+        "perfect": 0.3
       }
-    }
     }
   ]
 }

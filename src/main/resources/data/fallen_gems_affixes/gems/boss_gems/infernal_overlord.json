@@ -1,28 +1,31 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "fallen_gems_affixes:permanent_effect",
       "gem_class": {
         "key": "helmet",
         "types": [
-          "helmet"
+          "apotheosis:helmet"
         ]
       },
       "effect": "minecraft:regeneration",
       "values": {
-        "epic": 0,
-        "mythic": 1,
-        "ancient": 2
+        "normal": 0,
+        "flawless": 1,
+        "perfect": 2
       }
     },
     {
@@ -31,57 +34,29 @@
       "gem_class": {
         "key": "chestplate",
         "types": [
-          "chestplate"
+          "apotheosis:chestplate"
         ]
       },
       "modifiers": [
         {
           "attribute": "minecraft:generic.armor",
-          "operation": "ADDITION",
+          "operation": "add_value",
           "values": {
-            "epic": 5,
-            "mythic": 7,
-            "ancient": 10
+            "normal": 5,
+            "flawless": 7,
+            "perfect": 10
           }
         },
         {
           "attribute": "minecraft:generic.armor_toughness",
-          "operation": "ADDITION",
+          "operation": "add_value",
           "values": {
-            "epic": 3,
-            "mythic": 4,
-            "ancient": 5
+            "normal": 3,
+            "flawless": 4,
+            "perfect": 5
           }
         }
       ]
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
-        "key": "heavy_weapon",
-        "types": [
-          "heavy_weapon"
-        ]
-      },
-      "mob_effect": "cataclysm:blazing_brand",
-      "target": "attack_target",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 150,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
     },
     {
       "type": "apotheosis:multi_attribute",
@@ -89,27 +64,27 @@
       "gem_class": {
         "key": "light_weapon",
         "types": [
-          "sword",
-          "trident"
+          "apotheosis:melee_weapon",
+          "apotheosis:trident"
         ]
       },
       "modifiers": [
         {
-          "attribute": "attributeslib:life_steal",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:life_steal",
+          "operation": "add_value",
           "values": {
-            "epic": 0.05,
-            "mythic": 0.07,
-            "ancient": 0.1
+            "normal": 0.05,
+            "flawless": 0.07,
+            "perfect": 0.1
           }
         },
         {
-          "attribute": "attributeslib:current_hp_damage",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:current_hp_damage",
+          "operation": "add_value",
           "values": {
-            "epic": 0.05,
-            "mythic": 0.07,
-            "ancient": 0.1
+            "normal": 0.05,
+            "flawless": 0.07,
+            "perfect": 0.1
           }
         }
       ]
@@ -119,15 +94,15 @@
       "gem_class": {
         "key": "shield",
         "types": [
-          "shield"
+          "apotheosis:shield"
         ]
       },
-      "attribute": "attributeslib:healing_received",
-      "operation": "ADDITION",
+      "attribute": "apothic_attributes:healing_received",
+      "operation": "add_value",
       "values": {
-        "epic": 0.30,
-        "mythic": 0.40,
-        "ancient": 0.50
+        "normal": 0.30,
+        "flawless": 0.40,
+        "perfect": 0.50
       }
     }
   ]

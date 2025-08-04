@@ -1,28 +1,31 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "cataclysm"
     }
   ],
-  "weight": 0,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 0
+  },
   "unique": true,
-  "min_rarity": "epic",
+  "min_purity": "normal",
   "bonuses": [
     {
       "type": "apotheosis:damage_reduction",
       "gem_class": {
         "key": "chestplate",
         "types": [
-          "chestplate"
+          "apotheosis:chestplate"
         ]
       },
       "damage_type": "magic",
       "values": {
-        "epic": 0.1,
-        "mythic": 0.20,
-        "ancient": 0.30
+        "normal": 0.1,
+        "flawless": 0.20,
+        "perfect": 0.30
       }
     },
     {
@@ -31,26 +34,26 @@
       "gem_class": {
         "key": "boots",
         "types": [
-          "boots"
+          "apotheosis:boots"
         ]
       },
       "modifiers": [
         {
-          "attribute": "attributeslib:dodge_chance",
-          "operation": "ADDITION",
+          "attribute": "apothic_attributes:dodge_chance",
+          "operation": "add_value",
           "values": {
-            "epic": 0.05,
-            "mythic": 0.1,
-            "ancient": 0.15
+            "normal": 0.05,
+            "flawless": 0.1,
+            "perfect": 0.15
           }
         },
         {
-          "attribute": "forge:swim_speed",
-          "operation": "ADDITION",
+          "attribute": "neoforge:swim_speed",
+          "operation": "add_value",
           "values": {
-            "epic": 0.4,
-            "mythic": 0.6,
-            "ancient": 0.8
+            "normal": 0.4,
+            "flawless": 0.6,
+            "perfect": 0.8
           }
         }
       ]
@@ -58,54 +61,26 @@
     {
       "type": "apotheosis:mob_effect",
       "gem_class": {
-        "key": "heavy_weapon",
-        "types": [
-          "heavy_weapon"
-        ]
-      },
-      "mob_effect": "cataclysm:abyssal_curse",
-      "target": "attack_target",
-      "values": {
-        "epic": {
-          "duration": 100,
-          "amplifier": 0,
-          "cooldown": 500
-        },
-        "mythic": {
-          "duration": 150,
-          "amplifier": 1,
-          "cooldown": 500
-        },
-        "ancient": {
-          "duration": 200,
-          "amplifier": 2,
-          "cooldown": 500
-        }
-      }
-    },
-    {
-      "type": "apotheosis:mob_effect",
-      "gem_class": {
         "key": "light_weapon",
         "types": [
-          "sword",
-          "trident"
+          "apotheosis:melee_weapon",
+          "apotheosis:trident"
         ]
       },
       "mob_effect": "cataclysm:abyssal_fear",
       "target": "attack_target",
       "values": {
-        "epic": {
+        "normal": {
           "duration": 100,
           "amplifier": 0,
           "cooldown": 500
         },
-        "mythic": {
+        "flawless": {
           "duration": 150,
           "amplifier": 1,
           "cooldown": 500
         },
-        "ancient": {
+        "perfect": {
           "duration": 200,
           "amplifier": 2,
           "cooldown": 500
@@ -117,16 +92,15 @@
       "gem_class": {
         "key": "ranged_weapon",
         "types": [
-          "bow",
-          "crossbow"
+          "apotheosis:bow"
         ]
       },
-      "attribute": "attributeslib:draw_speed",
-      "operation": "MULTIPLY_BASE",
+      "attribute": "apothic_attributes:draw_speed",
+      "operation": "add_multiplied_base",
       "values": {
-        "epic": 0.50,
-        "mythic": 0.70,
-        "ancient": 0.90
+        "normal": 0.50,
+        "flawless": 0.70,
+        "perfect": 0.90
       }
     }
   ]

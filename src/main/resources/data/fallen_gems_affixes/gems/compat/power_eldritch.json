@@ -1,13 +1,16 @@
 {
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
     }
   ],
   "variant": "eldritch",
-  "weight": 5,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 10
+  },
   "dimensions": [],
   "bonuses": [
     {
@@ -15,43 +18,43 @@
       "gem_class": {
         "key": "anything",
         "types": [
-          "helmet",
-          "chestplate",
-          "leggings",
-          "boots",
-          "curios:spellbook",
-          "staffs"
+          "apotheosis:helmet",
+          "apotheosis:chestplate",
+          "apotheosis:leggings",
+          "apotheosis:boots",
+          "fallen_gems_affixes:spellbook",
+          "fallen_gems_affixes:staffs"
         ]
       },
       "attribute": "irons_spellbooks:eldritch_spell_power",
-      "operation": "MULTIPLY_TOTAL",
+      "operation": "add_multiplied_total",
       "values": {
-        "common": {
+        "cracked": {
           "min": 0.01,
           "steps": 1,
           "step": 0
         },
-        "uncommon": {
+        "chipped": {
           "min": 0.03,
           "steps": 1,
           "step": 0
         },
-        "rare": {
+        "flawed": {
           "min": 0.05,
           "steps": 1,
           "step": 0
         },
-        "epic": {
+        "normal": {
           "min": 0.07,
           "steps": 1,
           "step": 0
         },
-        "mythic": {
+        "flawless": {
           "min": 0.10,
           "steps": 1,
           "step": 0
         },
-        "ancient": {
+        "perfect": {
           "min": 0.15,
           "steps": 1,
           "step": 0

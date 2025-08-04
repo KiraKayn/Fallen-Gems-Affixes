@@ -1,12 +1,15 @@
 {
-	"conditions": [{
-		"type": "forge:mod_loaded",
+	"neoforge:conditions": [{
+		"type": "neoforge:mod_loaded",
 		"modid": "irons_spellbooks"
 	}],
 	"variant": "spell_ender",
-	"weight": 5,
-	"quality": 0,
-	"min_rarity": "epic",
+	"type": "apotheosis:gem",
+	"weights": {
+		"quality": 0,
+		"weight": 5
+	},
+	"min_purity": "normal",
 	"unique": true,
 	"dimensions": [],
 	"bonuses": [{
@@ -14,15 +17,15 @@
 			"gem_class": {
 				"key": "helmet",
 				"types": [
-					"helmet"
+					"apotheosis:helmet"
 				]
 			},
-			"attribute": "additional_attributes:spell_school_ender",
-			"operation": "ADDITION",
+			"attribute": "additional_attributes:school/irons_spellbooks/ender",
+			"operation": "add_value",
 			"values": {
-				"epic": 1,
-				"mythic": 2,
-				"ancient": 3
+				"normal": 1,
+				"flawless": 2,
+				"perfect": 3
 			}
 		}
 	]

@@ -1,12 +1,14 @@
 {
-    "conditions": [
-        { "type": "forge:false" }
+    "neoforge:conditions": [
+        { "type": "neoforge:false" }
     ],
-	
 	"variant": "spell_general",
-	"weight": 5,
-	"quality": 0,
-	"min_rarity": "mythic",
+	"type": "apotheosis:gem",
+	"weights": {
+		"quality": 0,
+		"weight": 5
+	},
+	"min_purity": "flawless",
 	"unique": true,
 	"dimensions": [],
 	"bonuses": [{
@@ -14,14 +16,14 @@
 			"gem_class": {
 				"key": "helmet",
 				"types": [
-					"helmet"
+					"apotheosis:helmet"
 				]
 			},
 			"attribute": "additional_attributes:spell_general",
-			"operation": "ADDITION",
+			"operation": "add_value",
 			"values": {
-				"mythic": 1,
-				"ancient": 2
+				"flawless": 1,
+				"perfect": 2
 			}
 		}
 	]
