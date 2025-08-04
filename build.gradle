@@ -209,7 +209,7 @@ dependencies {
     implementation "curse.maven:jade-324717:${jade_file_id}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
     runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:6608246"
-    implementation "curse.maven:patchouli-306770:6164617"
+    implementation "curse.maven:patchouli-306770:6842247"
 
     // Main Integrations
     implementation "io.redspace:irons_spellbooks:${irons_spells_version}"
