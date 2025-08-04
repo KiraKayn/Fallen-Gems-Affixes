@@ -12,21 +12,20 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import static net.kayn.fallen_gems_affixes.FallenGemsAffixes.R;
+import static net.kayn.fallen_gems_affixes.Fallen.R;
 
 public class LootCategoryUtil {
 
     public static CurioEquipmentSlot registerCurioSlot(String slot) {
         CurioEquipmentSlot curioEquipmentSlot = new CurioEquipmentSlot(slot);
         R.customDH(
-            slot,
-            ALObjects.BuiltInRegs.ENTITY_EQUIPMENT_SLOT.key(),
-            () -> curioEquipmentSlot
+                slot,
+                ALObjects.BuiltInRegs.ENTITY_EQUIPMENT_SLOT.key(),
+                () -> curioEquipmentSlot
         );
         return curioEquipmentSlot;
     }
@@ -47,7 +46,7 @@ public class LootCategoryUtil {
                 path,
                 Apoth.BuiltInRegs.LOOT_CATEGORY.key(),
                 () -> lootCategory
-            );
+        );
         return lootCategory;
     }
 

@@ -1,19 +1,13 @@
 package net.kayn.fallen_gems_affixes.loot;
 
-import com.google.common.base.Predicates;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import io.redspace.ironsspellbooks.item.CastingItem;
-import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 import net.kayn.fallen_gems_affixes.util.LootCategoryUtil;
-import net.minecraft.core.Holder;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.MaceItem;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.bus.api.IEventBus;
+
+import static net.kayn.fallen_gems_affixes.Fallen.R;
 
 public class LootCategories {
     public static final LootCategory STAFFS = LootCategoryUtil.registerLootCategoryOrFalse("staffs",
@@ -22,7 +16,10 @@ public class LootCategories {
             1200,
             true
     );
-    public static void bootstrap() {}
+
+    public static void bootstrap(IEventBus bus) {
+        bus.register(R);
+    }
 
     public static class Check {
         public static boolean staffCheck(ItemStack i) {
