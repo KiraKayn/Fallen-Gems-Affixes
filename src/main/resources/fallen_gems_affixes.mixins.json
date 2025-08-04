@@ -6,7 +6,6 @@
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
     "GemClassMixin",
-    "LootControllerMixin",
     "SocketHelperMixin",
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin"

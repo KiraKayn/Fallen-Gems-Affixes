@@ -202,13 +202,14 @@ dependencies {
     implementation "dev.shadowsoffire:Apotheosis:${minecraft_version}-${apotheosis_version}"
     implementation "dev.shadowsoffire:ApothicSpawners:${minecraft_version}-${apothicSpawnersVersion}"
     implementation "dev.shadowsoffire:ApothicEnchanting:${minecraft_version}-${apothicEnchantingVersion}"
-    runtimeOnly "curse.maven:attributefix-280510:5824104"
+    implementation "curse.maven:attributefix-280510:5824104"
 
     // Dev Env Mods
     implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     implementation "curse.maven:jade-324717:${jade_file_id}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
     runtimeOnly "curse.maven:mmmmmmmmmmmm-225738:6608246"
+    implementation "curse.maven:patchouli-306770:6164617"
 
     // Main Integrations
     implementation "io.redspace:irons_spellbooks:${irons_spells_version}"

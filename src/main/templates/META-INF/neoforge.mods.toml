@@ -35,14 +35,14 @@ side="BOTH"
 modId="additional_attributes"
 type="required"
 versionRange="[1.2.2,)"
-ordering="AFTER"
+ordering="BEFORE"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
 modId="cataclysm_spellbooks"
 type="optional"
 versionRange="[1.0,)"
-ordering="BEFORE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.fallen_gems_affixes]]
@@ -63,5 +63,26 @@ side="BOTH"
 modId="apotheosis"
 type="required"
 versionRange="[8.3.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
+modId="patchouli"
+type="required"
+versionRange="[1.21-88,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
+modId="attributefix"
+type="optional"
+versionRange="[21.1.2,)"
+ordering="BEFORE"
+side="BOTH"
+
+[[dependencies.fallen_gems_affixes]]
+modId="prickle"
+type="optional"
+versionRange="[21.1.8,)"
 ordering="AFTER"
 side="BOTH"
