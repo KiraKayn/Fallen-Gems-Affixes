@@ -1,3 +1,6 @@
+# 1.2.7
+- Added Soulbound Affix
+
 # 1.2.6
 - Fixed Fallen Warrior gem not showing up (sorry)
 
