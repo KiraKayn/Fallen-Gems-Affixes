@@ -7,6 +7,7 @@ import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
+import net.kayn.fallen_gems_affixes.event.SoulboundEventHandler;
 import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
@@ -43,6 +44,8 @@ public class FallenGemsAffixes {
 
         AALootCategories.init();
         new MaxHealthDamageHandler();
+
+        MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
