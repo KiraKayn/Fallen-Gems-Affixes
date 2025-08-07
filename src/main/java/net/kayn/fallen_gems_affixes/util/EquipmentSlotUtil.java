@@ -3,11 +3,9 @@ package net.kayn.fallen_gems_affixes.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
-import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import dev.shadowsoffire.apothic_attributes.compat.CurioEquipmentSlot;
 import dev.shadowsoffire.apothic_attributes.modifiers.EntityEquipmentSlot;
 import dev.shadowsoffire.apothic_attributes.modifiers.EntitySlotGroup;
-import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
@@ -15,14 +13,15 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -77,34 +76,36 @@ public class EquipmentSlotUtil {
     public static EquipmentSlot slotFromInventoryIndex(int index) {
         return switch (index) {
             case 40 -> EquipmentSlot.OFFHAND;
-            case 39 -> EquipmentSlot.FEET;
-            case 38 -> EquipmentSlot.LEGS;
-            case 37 -> EquipmentSlot.CHEST;
-            case 36 -> EquipmentSlot.HEAD;
+            case 39 -> EquipmentSlot.HEAD;
+            case 38 -> EquipmentSlot.CHEST;
+            case 37 -> EquipmentSlot.LEGS;
+            case 36 -> EquipmentSlot.FEET;
             default -> null;
         };
     }
 
     public static boolean matchesSlot(ItemStack itemStack, EquipmentSlotWrapper slotWrapper) {
         LootCategory category = LootCategory.forItem(itemStack);
-        if (category.isNone()) return false;
+        if (slotWrapper.isEmpty()) return false;
         return category.getSlots().test(slotWrapper.extractHolder());
     }
 
     public static boolean simpleMatchesSlot(ItemStack itemStack, EquipmentSlot slot) {
         EquipmentSlotWrapper wrapper = getVanillaWrapper(slot);
+        if (wrapper.isEmpty()) return false;
         Holder<EntityEquipmentSlot> eSlot = wrapper.extractHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
 
     public static boolean simpleMatchesSlot(ItemStack itemStack, EquipmentSlotWrapper slotWrapper) {
+        if (slotWrapper.isEmpty()) return false;
         Holder<EntityEquipmentSlot> eSlot = slotWrapper.extractHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
 
     public static boolean simpleMatchesCurioSlot(LivingEntity entity, ItemStack itemStack, String slot) {
         EquipmentSlotWrapper wrapper = getCurioWrapper(entity, itemStack, slot);
-        if (wrapper == EquipmentSlotWrappers.NONE) return false;
+        if (wrapper.isEmpty()) return false;
         Holder<EntityEquipmentSlot> eSlot = wrapper.extractHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
@@ -131,7 +132,7 @@ public class EquipmentSlotUtil {
         EntitySlotGroup slotGroup1 = LootCategory.forItem(itemStack).getSlots();
         HolderSet<EntityEquipmentSlot> holderSet = slotGroup1.slots();
         Iterator<Holder<EntityEquipmentSlot>> iterator = holderSet.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Holder<EntityEquipmentSlot> varSlot = iterator.next();
             if (varSlot.value() instanceof CurioEquipmentSlot slot) {
                 boolean flag = false;

@@ -22,7 +22,7 @@ public class EquipmentSlotWrapper {
     private static final Map<String, Holder<EntityEquipmentSlot>> extraEntries = new HashMap<>();
     private static final Map<Holder<EntityEquipmentSlot>, EquipmentSlotWrapper> instanceEntries = new IdentityHashMap<>();
 
-    public EquipmentSlotWrapper(@Nullable EquipmentSlot slot, @NotNull String identifier, @Nullable Holder<EntityEquipmentSlot> extra) {
+    public EquipmentSlotWrapper(@Nullable EquipmentSlot slot, @NotNull String identifier, Holder<EntityEquipmentSlot> extra) {
         this.slot = slot;
         if (slot != null) {
             vanillaEquipmentWrapper.put(slot, this);
@@ -54,6 +54,10 @@ public class EquipmentSlotWrapper {
 
     public Holder<EntityEquipmentSlot> extractHolder() {
         return extraEntries.get(identifier);
+    }
+
+    public boolean isEmpty() {
+        return this == EquipmentSlotWrappers.NONE || this.extractHolder() == null;
     }
 
     public static EquipmentSlotWrapper byESlot(Holder<EntityEquipmentSlot> eSlot) {
