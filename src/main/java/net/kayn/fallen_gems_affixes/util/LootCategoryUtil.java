@@ -15,19 +15,19 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static net.kayn.fallen_gems_affixes.Fallen.R;
 
 public class LootCategoryUtil {
 
-    public static CurioEquipmentSlot registerCurioSlot(String slot) {
+    public static Holder<EntityEquipmentSlot> registerCurioSlot(String slot) {
         CurioEquipmentSlot curioEquipmentSlot = new CurioEquipmentSlot(slot);
-        R.customDH(
+        return R.customDH(
                 slot,
                 ALObjects.BuiltInRegs.ENTITY_EQUIPMENT_SLOT.key(),
                 () -> curioEquipmentSlot
         );
-        return curioEquipmentSlot;
     }
 
     public static EntitySlotGroup registerSlotGroup(String path, List<Holder<EntityEquipmentSlot>> slots) {
@@ -55,6 +55,16 @@ public class LootCategoryUtil {
             return registerLootCategory(path, group, validator, priority);
         } else {
             return registerLootCategory(path, group, Predicates.alwaysFalse(), priority);
+        }
+    }
+
+    public static LootCategory registerCurioCategoryOrFalse(String slot, Predicate<ItemStack> validator, int priority, boolean flag) {
+        Holder<EntityEquipmentSlot> varSlot = registerCurioSlot(slot);
+        EntitySlotGroup group = registerSlotGroup(slot, List.of(varSlot));
+        if (validator != null && flag) {
+            return registerLootCategory(slot, group, validator, priority);
+        } else {
+            return registerLootCategory(slot, group, Predicates.alwaysFalse(), priority);
         }
     }
 }

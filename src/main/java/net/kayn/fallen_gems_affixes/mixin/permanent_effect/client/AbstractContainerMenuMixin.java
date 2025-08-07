@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.ProtectedMobEffectMap;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class AbstractContainerMenuMixin {
      */
     @Inject(method = "initializeContents", at = @At("TAIL"))
     private void initializeContentsSuffix(int pStateId, List<ItemStack> pItems, ItemStack pCarried, CallbackInfo ci) {
+        PermanentEffectHandler.onInitializeCurioContents.accept(this);
         if (!((Object) this instanceof InventoryMenu menu)) return;
         ProtectedMobEffectMap<?> map1 = null;
         try {
@@ -64,7 +67,7 @@ public class AbstractContainerMenuMixin {
                         if (slotWrapper == null) continue;
                         map.initOperation(slotWrapper, ProtectedMobEffectMap.EffectOperator.ON_INIT);
 
-                        if (map.getLastEffectsProvider() != equipment && EquipmentSlotUtil.matchesSlot(equipment, eSlot)) {
+                        if (map.getLastEffectsProvider() != equipment && EquipmentSlotUtil.matchesSlot(equipment, slotWrapper)) {
                             checkGemBonus(equipment, (bonus, rarity) -> {
                                 Holder<MobEffect> effect = bonus.getEffect();
                                 int amplifier = bonus.getAmplifier(rarity);

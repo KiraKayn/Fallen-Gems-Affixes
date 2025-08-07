@@ -1,0 +1,26 @@
+{
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 5
+  },
+  "unique": true,
+  "min_purity": "normal",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:permanent_effect",
+      "gem_class": {
+        "key": "spellbook",
+        "types": [
+          "fallen_gems_affixes:spellbook"
+        ]
+      },
+      "effect": "minecraft:regeneration",
+      "values": {
+        "normal": 0,
+        "flawless": 1,
+        "perfect": 2
+      }
+    }
+  ]
+}

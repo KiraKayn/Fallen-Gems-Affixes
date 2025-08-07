@@ -5,9 +5,11 @@ import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.LootCategories;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -31,10 +33,12 @@ public class FallenGemsAffixes {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
+        modEventBus.addListener(EquipmentSlotWrappers::initializeWrappers);
 
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
         LootCategories.bootstrap(modEventBus);
+        PermanentEffectHandler.INSTANCE.bootstrap();
 //        AALootCategories.init();
         new MaxHealthDamageHandler();
 

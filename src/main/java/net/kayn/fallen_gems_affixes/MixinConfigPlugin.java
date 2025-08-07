@@ -24,6 +24,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     private static final String PE_CLIENT_MINECRAFT_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.MinecraftMixin";
     private static final String PE_INVENTORY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.InventoryMixin";
     private static final String PE_LIVING_ENTITY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.LivingEntityMixin";
+    private static final String PE_PLAYER_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.PlayerMixin";
 
     private static boolean enableSocketMixin = true;
     private static boolean enablePermanentEffectDefaultMixin = true;
@@ -47,7 +48,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
                 if (line.startsWith("permanentEffectUseTickEvent")) {
                     String[] parts = line.split("=", 2);
                     if (parts.length == 2) {
-                        enablePermanentEffectDefaultMixin = Boolean.parseBoolean(parts[1].trim());
+                        enablePermanentEffectDefaultMixin = !Boolean.parseBoolean(parts[1].trim());
                         return;
                     }
 
@@ -70,6 +71,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             case PE_CLIENT_MINECRAFT_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_INVENTORY_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_LIVING_ENTITY_MIXIN -> enablePermanentEffectDefaultMixin;
+            case PE_PLAYER_MIXIN -> !enablePermanentEffectDefaultMixin;
             case GUN_MIXIN -> isModLoaded();
             default -> true;
         };

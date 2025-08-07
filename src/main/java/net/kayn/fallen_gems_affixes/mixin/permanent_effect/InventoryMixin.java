@@ -49,7 +49,7 @@ public class InventoryMixin {
                 EquipmentSlotWrapper slotWrapper = EquipmentSlotUtil.getVanillaWrapper(slot);
                 if (slotWrapper == null) continue;
                 map.initOperation(slotWrapper, ProtectedMobEffectMap.EffectOperator.ON_INIT);
-                if (EquipmentSlotUtil.simpleMatchesSlot(equipment, slot)) {
+                if (EquipmentSlotUtil.simpleMatchesSlot(equipment, slotWrapper)) {
                     checkGemBonus(equipment, (bonus, rarity) -> {
                         Holder<MobEffect> effect = bonus.getEffect();
                         int amplifier = bonus.getAmplifier(rarity);

@@ -241,8 +241,8 @@ dependencies {
     // Libs
     runtimeOnly "curse.maven:azurelib-817423:6747999"
     runtimeOnly "curse.maven:lionfish-api-1001614:6168249"
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+//    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}"
     runtimeOnly ("software.bernie.geckolib:geckolib-neoforge-${geckolib_version}") {
         exclude group: 'io.github.llamalad7', module: 'mixinextras-forge'

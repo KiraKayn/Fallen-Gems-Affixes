@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
+import net.kayn.fallen_gems_affixes.event.PermanentEffectHandler;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
@@ -21,6 +22,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
+import top.theillusivec4.curios.common.inventory.CurioSlot;
+import top.theillusivec4.curios.common.inventory.container.CuriosContainer;
 
 import static net.kayn.fallen_gems_affixes.event.PermanentEffectHandler.checkGemBonus;
 
@@ -41,6 +45,7 @@ public class SlotMixin {
      */
     @Inject(method = "onTake", at = @At("HEAD"))
     private void onTakePrefix(Player pPlayer, ItemStack pStack, CallbackInfo ci) {
+        PermanentEffectHandler.onTakeCurio.apply(pPlayer, pStack, this);
         if (!(this.container instanceof Inventory inv)) return;
         if (!(inv.player instanceof LocalPlayer player)) return;
         if (!(slot >= 36 && slot <= 40 || slot == inv.selected)) return;

@@ -6,12 +6,13 @@
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
     "GemClassMixin",
-    "SocketHelperMixin",
     "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin"
+    "permanent_effect.LivingEntityMixin",
+    "permanent_effect.PlayerMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",
+    "permanent_effect.client.ClientPacketListenerMixin",
     "permanent_effect.client.LivingEntityMixin",
     "permanent_effect.client.MinecraftMixin",
     "permanent_effect.client.PlayerMixin",

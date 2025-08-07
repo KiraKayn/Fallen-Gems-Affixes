@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.mixin.permanent_effect.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
