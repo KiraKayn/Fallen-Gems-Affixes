@@ -68,19 +68,27 @@ public class SoulboundEventHandler {
             for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
                 ItemStack stack = soulboundItems.get(t);
                 if (i >= 36) {
+                    boolean added = false;
                     for (;i >= 36; i--) {
                         if (i == 40 || LivingEntity.getEquipmentSlotForItem(stack) == EquipmentSlotUtil.slotFromInventoryIndex(i)) {
                             if (inv.getItem(i).isEmpty()) {
                                 if (!inv.add(i, stack) && !inv.add(stack)) {
                                     player.drop(stack, false);
                                 }
+                                added = true;
                             } else {
                                 if (!inv.add(stack)) {
                                     player.drop(stack, false);
                                 }
+                                added = true;
                             }
                             if (i == 40) i--;
                             break;
+                        }
+                    }
+                    if (!added) {
+                        if (!inv.add(stack)) {
+                            player.drop(stack, false);
                         }
                     }
                 }
