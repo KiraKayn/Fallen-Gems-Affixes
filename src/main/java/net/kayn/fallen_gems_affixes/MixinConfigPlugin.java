@@ -40,14 +40,13 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
                     String[] parts = line.split("=", 2);
                     if (parts.length == 2) {
                         enableSocketMixin = Boolean.parseBoolean(parts[1].trim());
-                        return;
                     }
                 }
                 if (line.startsWith("permanentEffectUseTickEvent")) {
                     String[] parts = line.split("=", 2);
                     if (parts.length == 2) {
-                        enablePermanentEffectDefaultMixin = Boolean.parseBoolean(parts[1].trim());
-                        return;
+                        enablePermanentEffectDefaultMixin = !Boolean.parseBoolean(parts[1].trim());
+                        break;
                     }
 
                 }
