@@ -65,13 +65,19 @@ public class SoulboundEventHandler {
         List<ItemStack> soulboundItems = getSoulboundItems(player);
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
-            for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--, i--) {
+            for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
                 ItemStack stack = soulboundItems.get(t);
                 if (i >= 36) {
                     for (;i >= 36; i--) {
                         if (LivingEntity.getEquipmentSlotForItem(stack) == EquipmentSlotUtil.slotFromInventoryIndex(i)) {
-                            if (inv.getItem(i).isEmpty() && !inv.add(i, stack) && !inv.add(stack)) {
-                                player.drop(stack, false);
+                            if (inv.getItem(i).isEmpty()) {
+                                if (!inv.add(i, stack) && !inv.add(stack)) {
+                                    player.drop(stack, false);
+                                }
+                            } else {
+                                if (!inv.add(stack)) {
+                                    player.drop(stack, false);
+                                }
                             }
                             break;
                         }
