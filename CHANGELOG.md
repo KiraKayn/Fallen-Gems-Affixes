@@ -1,3 +1,8 @@
+# 1.2.8
+- Improved on the Soulbound affix by making it so armors stay in their slot, and improved on the code overall
+- Fixed Permanent Effect config not working
+- Added missing translations for Soulbound affix and changed the tooltip a little
+
 # 1.2.7
 - Added Soulbound Affix
 
