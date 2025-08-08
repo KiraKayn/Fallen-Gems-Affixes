@@ -15,7 +15,7 @@
   "affix.fallen_gems_affixes.target.spell_heal_self": "On spell heal, gain %s",
   "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, grant %s",
 
-  "affix.fallen_gems_affixes.soulbound.desc": "Item stays with you after death",
+  "affix.fallen_gems_affixes.soulbound.desc": "This item stays with you after death",
   "affix.fallen_gems_affixes.soulbound": "Bounded",
   "affix.fallen_gems_affixes.soulbound.suffix": "of the Soul",
 
