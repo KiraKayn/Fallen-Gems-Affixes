@@ -16,8 +16,8 @@
   "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, grant %s",
 
   "affix.fallen_gems_affixes.soulbound.desc": "This item stays with you after death",
-  "affix.fallen_gems_affixes.soulbound": "Bounded",
-  "affix.fallen_gems_affixes.soulbound.suffix": "of the Soul",
+  "affix.fallen_gems_affixes:soulbound": "Bounded",
+  "affix.fallen_gems_affixes:soulbound.suffix": "of the Soul",
 
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
   "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",
