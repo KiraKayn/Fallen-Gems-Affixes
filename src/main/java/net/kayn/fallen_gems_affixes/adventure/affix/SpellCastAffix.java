@@ -7,7 +7,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixType;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
-import dev.shadowsoffire.placebo.util.StepFunction;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.util.RandomSource;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -85,13 +85,13 @@ public class SpellCastAffix extends Affix {
         return this.cooldown;
     }
 
-    public void triggerSpell(LivingEntity caster, LivingEntity target, LootRarity rarity, float affixLevel) {
+    public void triggerSpell(LivingEntity caster, LivingEntity target, LootRarity rarity, int spellLevelOverride) {
         if (isCurrentlyTriggering(caster)) return;
 
         TriggerData data = this.values.get(rarity);
         if (data == null || caster.level().isClientSide()) return;
 
-        int spellLevel = data.level().getInt(affixLevel);
+        int spellLevel = spellLevelOverride > 0 ? spellLevelOverride : data.level().getRandomLevel(caster.getRandom());
         String spellId = this.spell.getSpellId();
 
         MagicData magicData = MagicData.getPlayerMagicData(caster);
@@ -130,7 +130,8 @@ public class SpellCastAffix extends Affix {
         TriggerData data = this.values.get(rarity);
         if (data == null) return Component.empty();
 
-        int spellLevel = data.level().getInt(affixLevel);
+        int spellLevel = data.level().min() + Math.round(affixLevel * (data.level().max() - data.level().min()));
+
         Component coloredSpellName = this.spell.getDisplayName(null).copy()
                 .append(" ").append(Component.translatable("enchantment.level." + spellLevel))
                 .withStyle(this.spell.getSchoolType().getDisplayName().getStyle());
@@ -153,21 +154,14 @@ public class SpellCastAffix extends Affix {
         TriggerData data = this.values.get(rarity);
         if (data == null) return Component.empty();
 
-        int currentLevel = data.level().getInt(affixLevel);
+        int spellLevel = data.level().min() + Math.round(affixLevel * (data.level().max() - data.level().min()));
+
         Component coloredSpellName = this.spell.getDisplayName(null).copy()
-                .append(" ").append(Component.translatable("enchantment.level." + currentLevel))
+                .append(" ").append(Component.translatable("enchantment.level." + spellLevel))
                 .withStyle(this.spell.getSchoolType().getDisplayName().getStyle());
 
         boolean isSelfCast = this.target.map(t -> t == TargetType.SELF).orElse(false);
         MutableComponent comp = this.trigger.toComponent(coloredSpellName, isSelfCast);
-
-        int minLevel = data.level().getInt(0);
-        int maxLevel = data.level().getInt(1);
-        if (minLevel != maxLevel) {
-            Component minComp = Component.translatable("enchantment.level." + minLevel);
-            Component maxComp = Component.translatable("enchantment.level." + maxLevel);
-            comp.append(valueBounds(minComp, maxComp));
-        }
 
         int cooldownTicks = this.getCooldown(rarity);
         if (cooldownTicks != 0) {
@@ -184,7 +178,7 @@ public class SpellCastAffix extends Affix {
                              LivingEntity user, @Nullable Entity target) {
         if (this.trigger == TriggerType.MELEE_HIT && target instanceof LivingEntity livingTarget) {
             LivingEntity actualTarget = determineTarget(user, livingTarget);
-            triggerSpell(user, actualTarget, rarity, affixLevel);
+            triggerSpell(user, actualTarget, rarity, 0);
         }
     }
 
@@ -195,7 +189,7 @@ public class SpellCastAffix extends Affix {
             LivingEntity defaultTarget = this.target.map(t -> t == TargetType.TARGET ? livingAttacker : user)
                     .orElse(user);
             LivingEntity actualTarget = determineTarget(user, defaultTarget);
-            triggerSpell(user, actualTarget, rarity, affixLevel);
+            triggerSpell(user, actualTarget, rarity, 0);
         }
     }
 
@@ -207,7 +201,7 @@ public class SpellCastAffix extends Affix {
                 entityHit.getEntity() instanceof LivingEntity hitEntity &&
                 arrow.getOwner() instanceof LivingEntity owner) {
             LivingEntity actualTarget = determineTarget(owner, hitEntity);
-            triggerSpell(owner, actualTarget, rarity, affixLevel);
+            triggerSpell(owner, actualTarget, rarity, 0);
         }
     }
 
@@ -237,9 +231,22 @@ public class SpellCastAffix extends Affix {
         public static final Codec<TargetType> CODEC = PlaceboCodecs.enumCodec(TargetType.class);
     }
 
-    public record TriggerData(StepFunction level, int cooldown) {
+    public record LevelRange(int min, int max) {
+        public static final Codec<LevelRange> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.INT.fieldOf("min").forGetter(LevelRange::min),
+                        Codec.INT.fieldOf("max").forGetter(LevelRange::max)
+                ).apply(inst, LevelRange::new)
+        );
+
+        public int getRandomLevel(RandomSource random) {
+            return min + random.nextInt(max - min + 1);
+        }
+    }
+
+    public record TriggerData(LevelRange level, int cooldown) {
         public static final Codec<TriggerData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-                StepFunction.CODEC.optionalFieldOf("level", StepFunction.constant(1)).forGetter(TriggerData::level),
+                LevelRange.CODEC.fieldOf("level").forGetter(TriggerData::level),
                 PlaceboCodecs.nullableField(Codec.INT, "cooldown", -1).forGetter(TriggerData::cooldown)
         ).apply(inst, TriggerData::new));
     }

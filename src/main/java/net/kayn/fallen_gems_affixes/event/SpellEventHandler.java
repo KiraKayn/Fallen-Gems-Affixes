@@ -48,7 +48,7 @@ public class SpellEventHandler {
                 } else if (inst.affix().get() instanceof SpellCastAffix affix &&
                         affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, target);
-                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), inst.level());
+                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
                 }
             });
 
@@ -82,7 +82,7 @@ public class SpellEventHandler {
                 } else if (inst.affix().get() instanceof SpellCastAffix affix &&
                         affix.trigger == SpellCastAffix.TriggerType.SPELL_HEAL) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, healTarget);
-                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), inst.level());
+                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
                 }
             });
 
