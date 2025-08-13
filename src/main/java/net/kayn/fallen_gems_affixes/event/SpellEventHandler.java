@@ -10,6 +10,7 @@ import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
+import net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
 import net.minecraft.world.entity.Entity;
@@ -17,14 +18,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Optional;
+
 public class SpellEventHandler {
+
+    private static LivingEntity getSpellTarget(Optional<SpellCastAffix.TargetType> targetType, LivingEntity caster, LivingEntity contextTarget) {
+        return targetType.filter(type -> type == SpellCastAffix.TargetType.SELF).map(type -> caster).orElse(contextTarget);
+    }
+
     @SubscribeEvent
     public static void onSpellDamage(SpellDamageEvent event) {
         LivingEntity target = event.getEntity();
         if (target.level().isClientSide) return;
+
         SpellDamageSource source = event.getSpellDamageSource();
         Entity entity = source.getEntity();
         if (!(entity instanceof LivingEntity caster)) return;
+
+        if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
+
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof SpellEffectAffix affix) {
@@ -33,8 +45,13 @@ public class SpellEventHandler {
                     } else if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_SELF) {
                         affix.applyEffect(caster, inst.rarity().get(), inst.level());
                     }
+                } else if (inst.affix().get() instanceof SpellCastAffix affix &&
+                        affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
+                    LivingEntity actualTarget = getSpellTarget(affix.target, caster, target);
+                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), inst.level());
                 }
             });
+
             checkGemBonus(stack, (gem, bonus, rarity) -> {
                 if (bonus.target == SpellEffectAffix.Target.SPELL_DAMAGE_TARGET) {
                     bonus.applyEffect(gem, target, rarity);
@@ -49,21 +66,31 @@ public class SpellEventHandler {
     public static void onSpellHeal(SpellHealEvent event) {
         if (event.getEntity().level().isClientSide()) return;
 
-        for (ItemStack stack : event.getEntity().getAllSlots()) {
+        LivingEntity caster = event.getEntity();
+        if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
+
+        LivingEntity healTarget = event.getTargetEntity();
+
+        for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof SpellEffectAffix affix) {
                     if (affix.target == SpellEffectAffix.Target.SPELL_HEAL_TARGET) {
-                        affix.applyEffect(event.getTargetEntity(), inst.rarity().get(), inst.level());
+                        affix.applyEffect(healTarget, inst.rarity().get(), inst.level());
                     } else if (affix.target == SpellEffectAffix.Target.SPELL_HEAL_SELF) {
-                        affix.applyEffect(event.getEntity(), inst.rarity().get(), inst.level());
+                        affix.applyEffect(caster, inst.rarity().get(), inst.level());
                     }
+                } else if (inst.affix().get() instanceof SpellCastAffix affix &&
+                        affix.trigger == SpellCastAffix.TriggerType.SPELL_HEAL) {
+                    LivingEntity actualTarget = getSpellTarget(affix.target, caster, healTarget);
+                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), inst.level());
                 }
             });
+
             checkGemBonus(stack, (gem, bonus, rarity) -> {
                 if (bonus.target == SpellEffectAffix.Target.SPELL_HEAL_TARGET) {
-                    bonus.applyEffect(gem, event.getTargetEntity(), rarity);
+                    bonus.applyEffect(gem, healTarget, rarity);
                 } else if (bonus.target == SpellEffectAffix.Target.SPELL_HEAL_SELF) {
-                    bonus.applyEffect(gem, event.getEntity(), rarity);
+                    bonus.applyEffect(gem, caster, rarity);
                 }
             });
         }

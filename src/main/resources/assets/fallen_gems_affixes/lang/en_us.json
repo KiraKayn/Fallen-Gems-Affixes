@@ -15,6 +15,17 @@
   "affix.fallen_gems_affixes.target.spell_heal_self": "On spell heal, gain %s",
   "affix.fallen_gems_affixes.target.spell_heal_target": "On spell heal, grant %s",
 
+  "affix.fallen_gems_affixes.trigger.spell_damage": "On spell damage, cast %s",
+  "affix.fallen_gems_affixes.trigger.spell_damage.self": "On spell damage, self-cast %s",
+  "affix.fallen_gems_affixes.trigger.spell_heal": "On spell heal, cast %s",
+  "affix.fallen_gems_affixes.trigger.spell_heal.self": "On spell heal, self-cast %s",
+  "affix.fallen_gems_affixes.trigger.melee_hit": "On hit, cast %s",
+  "affix.fallen_gems_affixes.trigger.melee_hit.self": "On hit, self-cast %s",
+  "affix.fallen_gems_affixes.trigger.projectile_hit": "On projectile hit, cast %s",
+  "affix.fallen_gems_affixes.trigger.projectile_hit.self": "On projectile hit, self-cast %s",
+  "affix.fallen_gems_affixes.trigger.hurt": "When attacked, cast %s",
+  "affix.fallen_gems_affixes.trigger.hurt.self": "When attacked, self-cast %s",
+
   "affix.fallen_gems_affixes.soulbound.desc": "This item stays with you after death",
   "affix.fallen_gems_affixes:soulbound": "Bounded",
   "affix.fallen_gems_affixes:soulbound.suffix": "of the Soul",
