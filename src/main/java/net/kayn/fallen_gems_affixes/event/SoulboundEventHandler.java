@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +46,6 @@ public class SoulboundEventHandler {
             storeSoulboundItems(player, soulboundItems);
         }
     }
-
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
@@ -66,45 +66,57 @@ public class SoulboundEventHandler {
         List<ItemStack> soulboundItems = getSoulboundItems(player);
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
-
-            List<ItemStack> remainingItems = new ArrayList<>();
-
-            for (ItemStack stack : soulboundItems) {
-                EquipmentSlot equipmentSlot = LivingEntity.getEquipmentSlotForItem(stack);
-                boolean placed = false;
-
-                if (equipmentSlot != EquipmentSlot.MAINHAND) {
-                    int slotIndex = getInventorySlotForEquipmentSlot(equipmentSlot);
-                    if (slotIndex != -1 && inv.getItem(slotIndex).isEmpty()) {
-                        inv.setItem(slotIndex, stack);
-                        placed = true;
+            for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
+                ItemStack stack = soulboundItems.get(t);
+                if (i >= 36) {
+                    boolean added = false;
+                    for (;i >= 36; i--) {
+                        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
+                        if (i == 40 ||  slot == EquipmentSlotUtil.slotFromInventoryIndex(i)) {
+                            if (i == 40) {
+                                if (slot != EquipmentSlot.OFFHAND) {
+                                    for (int k = i; k >= 36; k--) {
+                                        if (slot == EquipmentSlotUtil.slotFromInventoryIndex(k)) {
+                                            safeAddToSlot(inv, player, stack, k);
+                                            added = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                i--;
+                            }
+                            if (!added) {
+                                safeAddToSlot(inv, player, stack, i);
+                                added = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        if (!inv.add(stack)) {
+                            player.drop(stack, false);
+                        }
+                        added = true;
                     }
                 }
-
-                if (!placed) {
-                    remainingItems.add(stack);
-                }
-            }
-
-            for (ItemStack stack : remainingItems) {
-                if (!inv.add(stack)) {
+                else if (!inv.add(stack)) {
                     player.drop(stack, false);
                 }
             }
-
             clearSoulboundItems(player);
         }
     }
 
-    private static int getInventorySlotForEquipmentSlot(EquipmentSlot equipmentSlot) {
-        return switch (equipmentSlot) {
-            case HEAD -> 39;
-            case CHEST -> 38;
-            case LEGS -> 37;
-            case FEET -> 36;
-            case OFFHAND -> 40;
-            case MAINHAND -> -1;
-        };
+    private static void safeAddToSlot(Inventory inv, Player player, ItemStack stack, int slot) {
+        if (inv.getItem(slot).isEmpty()) {
+            if (!inv.add(slot, stack) && !inv.add(stack)) {
+                player.drop(stack, false);
+            }
+        } else {
+            if (!inv.add(stack)) {
+                player.drop(stack, false);
+            }
+        }
     }
 
     private static void storeSoulboundItems(Player player, List<ItemStack> items) {
