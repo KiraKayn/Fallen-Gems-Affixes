@@ -66,6 +66,13 @@ public class SoulboundEventHandler {
         List<ItemStack> soulboundItems = getSoulboundItems(player);
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
+            if (inv.getContainerSize() < 41) {
+                for (ItemStack stack01 : soulboundItems) {
+                    if (!inv.add(stack01)) {
+                        player.drop(stack01, false);
+                    }
+                }
+            };
             for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
                 ItemStack stack = soulboundItems.get(t);
                 if (i >= 36) {
