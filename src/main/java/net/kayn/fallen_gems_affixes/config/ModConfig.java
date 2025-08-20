@@ -10,8 +10,8 @@ public class ModConfig {
 
     public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_GEM_MODIFIER;
     public static final ModConfigSpec.DoubleValue SOCKET_GEM_CHANCE;
-    public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
-    public static final ModConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
+//    public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
+//    public static final ModConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
     public static final ModConfigSpec.BooleanValue STRICT_SCHOOL_MATCH;
     public static final ModConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
 
@@ -26,15 +26,15 @@ public class ModConfig {
                 .comment("Chance to insert a random gem into each socket slot, 1.0 means 100%")
                 .defineInRange("socketGemChance", 0.3, 0.0, 1.0);
 
-        ENABLE_SOCKET_MIXIN = BUILDER
-                .comment("Enable the SocketHelperMixin that allows gaps between sockets")
-                .define("enableSocketHelperMixin", true);
-
-        PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
-                .comment("Switch the implementation type of PermanentEffectBonus")
-                .comment("If true, switches to Player Tick event. Better compatibility, worse performance.")
-                .comment("If false, uses default impl. More performant, less compatible.")
-                .define("permanentEffectUseTickEvent", false);
+//        ENABLE_SOCKET_MIXIN = BUILDER
+//                .comment("Enable the SocketHelperMixin that allows gaps between sockets")
+//                .define("enableSocketHelperMixin", true);
+//
+//        PERMANENT_EFFECT_USE_TICK_EVENT = BUILDER
+//                .comment("Switch the implementation type of PermanentEffectBonus")
+//                .comment("If true, switches to Player Tick event. Better compatibility, worse performance.")
+//                .comment("If false, uses default impl. More performant, less compatible.")
+//                .define("permanentEffectUseTickEvent", false);
 
         STRICT_SCHOOL_MATCH = BUILDER
                 .comment("If false, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")

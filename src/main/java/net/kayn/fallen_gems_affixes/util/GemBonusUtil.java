@@ -6,8 +6,7 @@ import dev.shadowsoffire.apotheosis.Apoth;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
-import dev.shadowsoffire.apothic_attributes.api.ALObjects;
-import net.kayn.fallen_gems_affixes.mixin.GemClassMixin;
+import net.kayn.fallen_gems_affixes.mixin.accessor.GemClassAccessor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +34,7 @@ public class GemBonusUtil {
                                 if (optNewCategories.isPresent()) {
                                     List<Holder<LootCategory>> newCategories = new ArrayList<>(optNewCategories.get());
                                     newCategories.add(reg.wrapAsHolder(category));
-                                    ((GemClassMixin)(Object) gemClass).setTypes(HolderSet.direct(newCategories));
+                                    ((GemClassAccessor)(Object) gemClass).setTypes(HolderSet.direct(newCategories));
                                 }
                             }
                         }

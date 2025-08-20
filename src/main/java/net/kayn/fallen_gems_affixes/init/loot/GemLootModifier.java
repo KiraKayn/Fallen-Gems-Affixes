@@ -5,13 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.Apoth;
-import dev.shadowsoffire.apotheosis.loot.modifiers.AffixConvertLootModifier;
-import dev.shadowsoffire.apotheosis.socket.gem.Gem;
 import dev.shadowsoffire.apotheosis.socket.gem.GemRegistry;
 import dev.shadowsoffire.apotheosis.socket.gem.Purity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -23,6 +20,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class GemLootModifier extends LootModifier {
@@ -75,7 +73,7 @@ public class GemLootModifier extends LootModifier {
 
         ItemStack stack = new ItemStack(gemItem);
 
-        stack.set(Apoth.Components.PURITY, Purity.valueOf(entry.purity));
+        stack.set(Apoth.Components.PURITY, Purity.valueOf(entry.purity.toUpperCase(Locale.ROOT)));
         stack.set(Apoth.Components.GEM, GemRegistry.INSTANCE.holder(ResourceLocation.tryParse(entry.gem)));
 
         return stack;

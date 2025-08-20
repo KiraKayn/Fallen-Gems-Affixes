@@ -25,15 +25,4 @@ public class EquipmentSlotWrappers {
     public static final EquipmentSlotWrapper FEET = new EquipmentSlotWrapper(EquipmentSlot.FEET, EquipmentSlot.FEET.getName(), ALObjects.EquipmentSlots.FEET);
     public static final EquipmentSlotWrapper MAIN_HAND = new EquipmentSlotWrapper(EquipmentSlot.MAINHAND, EquipmentSlot.MAINHAND.getName(), ALObjects.EquipmentSlots.MAINHAND);
     public static final EquipmentSlotWrapper OFF_HAND = new EquipmentSlotWrapper(EquipmentSlot.OFFHAND, EquipmentSlot.OFFHAND.getName(), ALObjects.EquipmentSlots.OFFHAND);
-
-    public static void initializeWrappers(FMLLoadCompleteEvent event) {
-        if (ModList.get().isLoaded("curios")) {
-            curioWrappers.putAll(
-                    ALObjects.BuiltInRegs.ENTITY_EQUIPMENT_SLOT.holders()
-                            .filter(a -> a.getDelegate().isBound() && a.getDelegate().value() instanceof CurioEquipmentSlot)
-                            .map(a -> new EquipmentSlotWrapper(null, ((CurioEquipmentSlot) a.getDelegate().value()).curioType(), a.getDelegate()))
-                            .collect(Collectors.toMap(EquipmentSlotWrapper::toString, Function.identity()))
-            );
-        }
-    }
 }

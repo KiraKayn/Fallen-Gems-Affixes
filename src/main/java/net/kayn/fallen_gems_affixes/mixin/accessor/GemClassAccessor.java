@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.mixin;
+package net.kayn.fallen_gems_affixes.mixin.accessor;
 
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(value = GemClass.class, remap = false)
-public interface GemClassMixin {
+public interface GemClassAccessor {
 
     @Accessor("types")
     void setTypes(HolderSet<LootCategory> types);

@@ -1,0 +1,118 @@
+package net.kayn.fallen_gems_affixes.event.permanent_effect_v2;
+
+import dev.shadowsoffire.apotheosis.loot.LootCategory;
+import dev.shadowsoffire.apotheosis.socket.SocketHelper;
+import dev.shadowsoffire.apotheosis.socket.gem.Gem;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
+import dev.shadowsoffire.apotheosis.socket.gem.Purity;
+import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
+import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.EffectsTickEvent;
+import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.PermanentEffectCapability;
+import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import top.theillusivec4.curios.api.event.CurioChangeEvent;
+
+import java.util.function.BiConsumer;
+
+@EventBusSubscriber
+public class MiscEventsHandler {
+    @SubscribeEvent
+    public static void onEntityEquipmentChange(LivingEquipmentChangeEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            EquipmentSlot slot = event.getSlot();
+            ItemStack from = event.getFrom();
+            onEquip(player, from, slot, true);
+            ItemStack to = event.getTo();
+            onEquip(player, to, slot, false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCurioEquipmentChange(CurioChangeEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        String slot = event.getIdentifier();
+        ItemStack from = event.getFrom();
+        onCurioEquip(player, from, slot, true);
+        ItemStack to = event.getTo();
+        onCurioEquip(player, to, slot, false);
+    }
+
+    @SubscribeEvent
+    public static void onEffectsTick(EffectsTickEvent.Pre event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof ServerPlayer player) {
+            PermanentEffectCapability cap = player.getCapability(Fallen.Capabilities.PE_CAP);
+            if (cap != null) {
+                cap.getContainer().forEachEffect((effect, levels) -> {
+                    if (!player.hasEffect(effect)) {
+                        cap.addEffectSilent(effect, levels.getLast());
+                    }
+                });
+            }
+        }
+    }
+
+    @SubscribeEvent(receiveCanceled = true)
+    public static void onEffectRemove(MobEffectEvent.Remove event) {
+        if (event.getEntity() instanceof ServerPlayer) {
+            var a = event.getEntity().getCapability(Fallen.Capabilities.PE_CAP);
+            if (a != null) {
+                if (a.containsEffect(event.getEffect())) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    private static void onCurioEquip(LivingEntity entity, ItemStack itemStack, String slot, boolean remove) {
+        if (EquipmentSlotUtil.curioSlotMatches(itemStack, entity, slot)) {
+            checkGemBonus(itemStack, (bonus, rarity) -> {
+                onEquipDefault(entity, bonus.getEffect(), bonus.getAmplifier(rarity), remove);
+            });
+        }
+    }
+
+    public static void checkGemBonus(ItemStack itemStack, BiConsumer<PermanentEffectBonus, Purity> processor) {
+        if (itemStack.isEmpty()) return;
+        LootCategory cat = LootCategory.forItem(itemStack);
+        for (GemInstance g : SocketHelper.getGems(itemStack)) {
+            if (!g.isValid()) continue;
+            Purity purity = g.purity();
+            Gem gem = g.gem().get();
+            gem.getBonus(cat, purity)
+                    .filter(b -> b instanceof PermanentEffectBonus)
+                    .map(b -> (PermanentEffectBonus) b)
+                    .ifPresent(bonus -> processor.accept(bonus, purity));
+        }
+    }
+
+    private static void onEquip(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, boolean remove) {
+        if (EquipmentSlotUtil.vanillaSlotMatches(itemStack, slot)) {
+            checkGemBonus(itemStack, (bonus, rarity) -> {
+                onEquipDefault(entity, bonus.getEffect(), bonus.getAmplifier(rarity), remove);
+            });
+        }
+    }
+
+    private static void onEquipDefault(LivingEntity entity, Holder<MobEffect> effect, int amplifier, boolean remove) {
+        var cap = entity.getCapability(Fallen.Capabilities.PE_CAP);
+        if (cap != null) {
+            if (remove) {
+                cap.removeEffect(effect, amplifier);
+            }
+            else {
+                cap.addEffect(effect, amplifier);
+            }
+        }
+    }
+}

@@ -1,18 +1,12 @@
 package net.kayn.fallen_gems_affixes.util;
 
 import dev.shadowsoffire.apothic_attributes.modifiers.EntityEquipmentSlot;
-import dev.shadowsoffire.apothic_attributes.modifiers.EntitySlotGroup;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.*;
 
 public class EquipmentSlotWrapper {
     public final EquipmentSlot slot;
@@ -43,25 +37,18 @@ public class EquipmentSlotWrapper {
         return allEquipmentWrappers;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj || this.slot != null && this.slot == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        EquipmentSlotWrapper other = (EquipmentSlotWrapper) obj;
-
-        return this.identifier.equals(other.identifier);
-    }
-
-    public Holder<EntityEquipmentSlot> extractHolder() {
+    public Holder<EntityEquipmentSlot> extractApothHolder() {
         return extraEntries.get(identifier);
     }
 
     public boolean isEmpty() {
-        return this == EquipmentSlotWrappers.NONE || this.extractHolder() == null;
+        return this == EquipmentSlotWrappers.NONE || this.extractApothHolder() == null;
     }
 
     public static EquipmentSlotWrapper byESlot(Holder<EntityEquipmentSlot> eSlot) {
-        return instanceEntries.get(eSlot);
+        EquipmentSlotWrapper wrapper = instanceEntries.get(eSlot);
+        if (wrapper == null) return EquipmentSlotWrappers.NONE;
+        return wrapper;
     }
 
     @Override

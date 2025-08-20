@@ -6,24 +6,22 @@ import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apothic_attributes.compat.CurioEquipmentSlot;
 import dev.shadowsoffire.apothic_attributes.modifiers.EntityEquipmentSlot;
 import dev.shadowsoffire.apothic_attributes.modifiers.EntitySlotGroup;
+import net.kayn.fallen_gems_affixes.types.util.Indexed;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class EquipmentSlotUtil {
     public static EquipmentSlotWrapper getVanillaWrapper(EquipmentSlot slot) {
@@ -35,23 +33,37 @@ public class EquipmentSlotUtil {
                 case FEET -> EquipmentSlotWrappers.FEET;
                 case OFFHAND -> EquipmentSlotWrappers.OFF_HAND;
                 case MAINHAND -> EquipmentSlotWrappers.MAIN_HAND;
-                default -> null;
+                default -> EquipmentSlotWrappers.NONE;
             };
         }
         return EquipmentSlotWrappers.NONE;
     }
 
+    public static EquipmentSlotWrapper getWrapperByIdentifier(String identifier) {
+        EquipmentSlotWrapper wrapper = EquipmentSlotWrapper.getAll().get(identifier);
+        if (wrapper == null) return EquipmentSlotWrappers.NONE;
+        return wrapper;
+    }
+
+    public static EquipmentSlotWrapper getWrapper(LivingEntity entity, ItemStack stack, String identifier) {
+        EquipmentSlotWrapper wrapper = getWrapperByIdentifier(identifier);
+        if (entity != null && !stack.isEmpty() && CuriosApi.getCurio(stack).isPresent()) {
+            return getCurioWrapper(entity, stack, identifier);
+        }
+        return wrapper;
+    }
+
+    @Deprecated
     public static EquipmentSlotWrapper getOrCreateWrapper(ItemStack itemStack, @Nullable EquipmentSlot slot) {
         EntitySlotGroup slotGroup1 = LootCategory.forItem(itemStack).getSlots();
         HolderSet<EntityEquipmentSlot> holderSet = slotGroup1.slots();
-        Set<Holder<EntityEquipmentSlot>> slotSet = holderSet.stream().collect(Collectors.toSet());
         if (CuriosApi.getCurio(itemStack).isPresent()) {
             Map<String, ISlotType> curioSlotMap = CuriosApi.getItemStackSlots(itemStack, false);
             for (String slot0 : curioSlotMap.keySet()) {
-                for (Holder<EntityEquipmentSlot> slot1 : slotSet) {
+                for (Holder<EntityEquipmentSlot> slot1 : holderSet) {
                     if (!(slot1.value() instanceof CurioEquipmentSlot curioSlot)) continue;
                     if (curioSlot.curioType().equals(slot0)) {
-                        EquipmentSlotWrapper wrapper = EquipmentSlotWrapper.getAll().get(slot0);
+                        EquipmentSlotWrapper wrapper = getWrapperByIdentifier(slot0);
                         if (wrapper != null) return wrapper;
                         return new EquipmentSlotWrapper(null, slot0, slot1);
                     }
@@ -87,26 +99,26 @@ public class EquipmentSlotUtil {
     public static boolean matchesSlot(ItemStack itemStack, EquipmentSlotWrapper slotWrapper) {
         LootCategory category = LootCategory.forItem(itemStack);
         if (slotWrapper.isEmpty()) return false;
-        return category.getSlots().test(slotWrapper.extractHolder());
+        return category.getSlots().test(slotWrapper.extractApothHolder());
     }
 
     public static boolean simpleMatchesSlot(ItemStack itemStack, EquipmentSlot slot) {
         EquipmentSlotWrapper wrapper = getVanillaWrapper(slot);
         if (wrapper.isEmpty()) return false;
-        Holder<EntityEquipmentSlot> eSlot = wrapper.extractHolder();
+        Holder<EntityEquipmentSlot> eSlot = wrapper.extractApothHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
 
     public static boolean simpleMatchesSlot(ItemStack itemStack, EquipmentSlotWrapper slotWrapper) {
         if (slotWrapper.isEmpty()) return false;
-        Holder<EntityEquipmentSlot> eSlot = slotWrapper.extractHolder();
+        Holder<EntityEquipmentSlot> eSlot = slotWrapper.extractApothHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
 
     public static boolean simpleMatchesCurioSlot(LivingEntity entity, ItemStack itemStack, String slot) {
         EquipmentSlotWrapper wrapper = getCurioWrapper(entity, itemStack, slot);
         if (wrapper.isEmpty()) return false;
-        Holder<EntityEquipmentSlot> eSlot = wrapper.extractHolder();
+        Holder<EntityEquipmentSlot> eSlot = wrapper.extractApothHolder();
         return LootCategory.forItem(itemStack).getSlots().test(eSlot);
     }
 
@@ -115,21 +127,38 @@ public class EquipmentSlotUtil {
         return getVanillaWrapper(slot);
     }
 
-    @Nullable
-    public static EquipmentSlotWrapper getCurioWrapper(String identifier) {
-        return EquipmentSlotWrapper.getAll().get(identifier);
-    }
-
-    public static EquipmentSlotWrapper getCurioWrapper(LivingEntity entity, ItemStack stack, String identifier) {
-        EquipmentSlotWrapper wrapper = EquipmentSlotWrapper.getAll().get(identifier);
+    public static EquipmentSlotWrapper getCurioWrapper(@NotNull LivingEntity entity, ItemStack stack, String identifier) {
+        EquipmentSlotWrapper wrapper = getWrapperByIdentifier(identifier);
         if (wrapper == null) {
             wrapper = getCurioWrapper(stack, entity);
         }
         return wrapper;
     }
 
-    public static EquipmentSlotWrapper getCurioWrapper(ItemStack itemStack, LivingEntity entity) {
-        EntitySlotGroup slotGroup1 = LootCategory.forItem(itemStack).getSlots();
+    public static boolean curioSlotMatches(ItemStack itemStack, LivingEntity entity, String slot) {
+        LootCategory cat = LootCategory.forItem(itemStack);
+        if (cat.isNone()) return false;
+        EquipmentSlotWrapper wrapper = EquipmentSlotUtil.getCurioWrapper(entity, itemStack, slot);
+        if (!wrapper.isEmpty()) {
+            return cat.getSlots().test(wrapper.extractApothHolder());
+        }
+        return false;
+    }
+
+    public static boolean vanillaSlotMatches(ItemStack itemStack, EquipmentSlot slot) {
+        LootCategory cat = LootCategory.forItem(itemStack);
+        if (cat.isNone()) return false;
+        EquipmentSlotWrapper wrapper = EquipmentSlotUtil.getVanillaWrapper(slot);
+        if (!wrapper.isEmpty()) {
+            return cat.getSlots().test(wrapper.extractApothHolder());
+        }
+        return false;
+    }
+
+    public static EquipmentSlotWrapper getCurioWrapper(ItemStack itemStack, @NotNull LivingEntity entity) {
+        LootCategory cat = LootCategory.forItem(itemStack);
+        if (cat.isNone()) return EquipmentSlotWrappers.NONE;
+        EntitySlotGroup slotGroup1 = cat.getSlots();
         HolderSet<EntityEquipmentSlot> holderSet = slotGroup1.slots();
         Iterator<Holder<EntityEquipmentSlot>> iterator = holderSet.iterator();
         while (iterator.hasNext()) {
@@ -144,7 +173,7 @@ public class EquipmentSlotUtil {
                 }
                 if (flag) {
                     EquipmentSlotWrapper wrapper = EquipmentSlotWrapper.byESlot(varSlot);
-                    if (wrapper != null) return wrapper;
+                    if (!wrapper.isEmpty()) return wrapper;
                     else {
                         return new EquipmentSlotWrapper(null, slot.curioType(), varSlot);
                     }
@@ -178,8 +207,24 @@ public class EquipmentSlotUtil {
         return Iterables.concat(Lists.newArrayList(player.getOffhandItem()), player.getArmorSlots());
     }
 
-    public static Iterable<ItemStack> getAllSlots(LivingEntity entity) {
-        NonNullList<ItemStack> allSlots = NonNullList.create();
+    public static Map<Indexed<String>, ItemStack> getAllSlotsMap(LivingEntity entity) {
+        Map<Indexed<String>, ItemStack> allSlotsMap = new LinkedHashMap<>();
+        for (ItemStack stack : entity.getAllSlots()) {
+            EquipmentSlot slot = stack.getEquipmentSlot();
+            if (slot == null) continue;
+            allSlotsMap.put(Indexed.simple(0, slot.getName()), stack);
+        }
+        return allSlotsMap;
+    }
+
+    public static Map<Indexed<String>, ItemStack> getAllSlotsMapWithCurio(LivingEntity entity) {
+        Map<Indexed<String>, ItemStack> result = getAllSlotsMap(entity);
+        result.putAll(getCurioAllSlots(entity));
+        return result;
+    }
+
+    public static Map<Indexed<String>, ItemStack> getCurioAllSlots(LivingEntity entity) {
+        Map<Indexed<String>, ItemStack> allSlotsMap = new LinkedHashMap<>();
         ICuriosItemHandler handler = CuriosApi.getCuriosInventory(entity).orElse(null);
         if (handler != null) {
             for (Map.Entry<String, ICurioStacksHandler> entry : handler.getCurios().entrySet()) {
@@ -187,13 +232,14 @@ public class EquipmentSlotUtil {
                 try {
                     for (int i = 0; i < slotHandler.getSlots(); i++) {
                         ItemStack equippedStack = slotHandler.getStacks().getStackInSlot(i);
-                        allSlots.add(equippedStack);
+                        if (equippedStack.isEmpty()) continue;
+                        allSlotsMap.put(Indexed.simple(i, entry.getKey()), equippedStack);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        return Iterables.concat(allSlots, entity.getAllSlots());
+        return allSlotsMap;
     }
 }

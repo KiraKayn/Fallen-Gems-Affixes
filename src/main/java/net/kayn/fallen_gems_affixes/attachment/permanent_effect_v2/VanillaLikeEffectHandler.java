@@ -1,0 +1,138 @@
+package net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2;
+
+import net.kayn.fallen_gems_affixes.mixin.accessor.ServerPlayerAccessor;
+import net.kayn.fallen_gems_affixes.network.ClientlikeUpdatePermanentEffectPacket;
+import net.kayn.fallen_gems_affixes.types.IVanillaLikeEffectHandler;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.*;
+
+import javax.annotation.Nullable;
+import java.util.Set;
+
+public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
+    LivingEntity entity;
+
+    public VanillaLikeEffectHandler(LivingEntity entity) {
+        this.entity = entity;
+    }
+
+    @Override
+    public void refreshDirtyAttributes() {
+        Set<AttributeInstance> set = this.entity.getAttributes().getAttributesToUpdate();
+
+        for(AttributeInstance attributeinstance : set) {
+            this.onAttributeUpdated(attributeinstance.getAttribute());
+        }
+
+        set.clear();
+    }
+
+    @Override
+    public void onEffectUpdated(MobEffectInstance effectInstance, boolean forced, @Nullable Entity source) {
+        if (forced && !this.entity.level().isClientSide) {
+            MobEffect mobeffect = effectInstance.getEffect().value();
+            mobeffect.removeAttributeModifiers(this.entity.getAttributes());
+            mobeffect.addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
+            this.refreshDirtyAttributes();
+        }
+    }
+
+    @Override
+    public void onAttributeUpdated(Holder<Attribute> attribute) {
+        if (attribute.is(Attributes.MAX_HEALTH)) {
+            float f = this.entity.getMaxHealth();
+            if (this.entity.getHealth() > f) {
+                this.entity.setHealth(f);
+            }
+        } else if (attribute.is(Attributes.MAX_ABSORPTION)) {
+            float f1 = this.entity.getMaxAbsorption();
+            if (this.entity.getAbsorptionAmount() > f1) {
+                this.entity.setAbsorptionAmount(f1);
+            }
+        }
+    }
+
+    @Override
+    public MobEffectInstance addEffectRet(MobEffectInstance effectInstance) {
+        return this.addEffectRet(effectInstance, null);
+    }
+
+    @Override
+    public void addEffectSilent(MobEffectInstance effectInstance) {
+        MobEffectInstance mobeffectinstance = this.entity.getActiveEffectsMap().get(effectInstance.getEffect());
+        if (mobeffectinstance == null) {
+            this.entity.getActiveEffectsMap().put(effectInstance.getEffect(), effectInstance);
+            if (!this.entity.level().isClientSide) {
+                effectInstance.getEffect().value().addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
+            }
+        } else if (mobeffectinstance.update(effectInstance)) {
+            this.onEffectUpdated(mobeffectinstance, true, null);
+        }
+    }
+
+    public MobEffectInstance addEffectRet(MobEffectInstance effectInstance, LivingEntity source) {
+        MobEffectInstance mobeffectinstance = this.entity.getActiveEffectsMap().get(effectInstance.getEffect());
+        if (mobeffectinstance == null) {
+            this.entity.getActiveEffectsMap().put(effectInstance.getEffect(), effectInstance);
+            this.onEffectAdded(effectInstance, source);
+            return effectInstance;
+        } else if (mobeffectinstance.update(effectInstance)) {
+            this.onEffectUpdated(mobeffectinstance, true, source);
+            if (this.entity instanceof ServerPlayer serverPlayer) {
+                serverPlayer.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), false));
+            }
+            return mobeffectinstance;
+        }
+        return null;
+    }
+
+    @Override
+    public void onEffectAdded(MobEffectInstance effectInstance, LivingEntity source) {
+        if (!this.entity.level().isClientSide) {
+            effectInstance.getEffect().value().addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
+            if (this.entity instanceof ServerPlayer serverPlayer) {
+                serverPlayer.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), false));
+            }
+        }
+    }
+
+    @Override
+    public boolean addEffect(MobEffectInstance effectInstance, LivingEntity source) {
+        return this.addEffectRet(effectInstance, source) != null;
+    }
+
+
+    @Override
+    public boolean removeEffect(Holder<MobEffect> effect) {
+        return this.removeEffectRet(effect) != null;
+    }
+
+    @Override
+    public MobEffectInstance removeEffectRet(Holder<MobEffect> effect) {
+        MobEffectInstance mobeffectinstance = this.entity.getActiveEffectsMap().remove(effect);
+        if (mobeffectinstance != null) {
+            mobeffectinstance.getEffect().value().removeAttributeModifiers(this.entity.getAttributes());
+            this.onEffectRemoved(mobeffectinstance);
+            this.refreshDirtyAttributes();
+            return mobeffectinstance;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void onEffectRemoved(MobEffectInstance effectInstance) {
+        if (this.entity instanceof ServerPlayer player) {
+            if (effectInstance.getEffect().is(MobEffects.LEVITATION)) {
+                ((ServerPlayerAccessor)player).setLevitationStartPos(null);
+            }
+            player.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), true));
+        }
+    }
+}
