@@ -60,6 +60,10 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
         this.dataMap.clear();
     }
 
+    public Iterator<Map.Entry<Holder<MobEffect>, List<Integer>>> getIterator() {
+        return this.dataMap.entrySet().iterator();
+    }
+
     public void forEachEffect(BiConsumer<Holder<MobEffect>, List<Integer>> consumer) {
         this.dataMap.forEach(consumer);
     }

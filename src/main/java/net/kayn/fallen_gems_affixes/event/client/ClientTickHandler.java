@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.event.permanent_effect_v2.client;
+package net.kayn.fallen_gems_affixes.event.client;
 
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.minecraft.client.Minecraft;

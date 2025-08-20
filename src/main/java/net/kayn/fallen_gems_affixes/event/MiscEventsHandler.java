@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.event.permanent_effect_v2;
+package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.socket.SocketHelper;
@@ -9,6 +9,7 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.PermanentEffectBonus;
 import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.EffectsTickEvent;
 import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.PermanentEffectCapability;
+import net.kayn.fallen_gems_affixes.network.ClientlikeClearPermanentEffectPacket;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +25,9 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 @EventBusSubscriber
@@ -70,11 +74,14 @@ public class MiscEventsHandler {
         if (entity instanceof ServerPlayer player) {
             PermanentEffectCapability cap = player.getCapability(Fallen.Capabilities.PE_CAP);
             if (cap != null) {
-                cap.getContainer().forEachEffect((effect, levels) -> {
-                    if (player.hasEffect(effect)) {
-                        cap.removeEffect(effect, levels.getLast());
+                for (Iterator<Map.Entry<Holder<MobEffect>, List<Integer>>> it = cap.getContainer().getIterator(); it.hasNext(); ) {
+                    Map.Entry<Holder<MobEffect>, List<Integer>> entry = it.next();
+                    if (player.hasEffect(entry.getKey())) {
+                        cap.getEffectHandler().removeEffectNoSync(entry.getKey());
+                        it.remove();
                     }
-                });
+                }
+                player.connection.send(new ClientlikeClearPermanentEffectPacket());
             }
         }
     }

@@ -13,5 +13,7 @@ public interface IEffectHandler {
 
     MobEffectInstance removeEffectRet(Holder<MobEffect> effect);
 
+    void removeEffectNoSync(Holder<MobEffect> effect);
+
     MobEffectInstance removeEffectRet(Holder<MobEffect> effect, int amplifier);
 }
