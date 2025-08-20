@@ -51,9 +51,8 @@ public class PermanentEffectCapability {
     }
 
     public MobEffectInstance removeEffect(Holder<MobEffect> effect, int amplifier) {
-        MobEffectInstance inst = this.effectHandler.removeEffectRet(effect);
-        this.pEContainer.tryRemoveEffect(effect, amplifier);
-        return inst;
+        int level = this.pEContainer.tryRemoveEffect(effect, amplifier);
+        return level >= 0 ? this.effectHandler.removeEffectRet(effect, amplifier) : null;
     }
 
     public boolean containsEffect(Holder<MobEffect> effect) {

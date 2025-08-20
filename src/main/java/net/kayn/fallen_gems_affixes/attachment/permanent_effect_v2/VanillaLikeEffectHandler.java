@@ -1,10 +1,13 @@
 package net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2;
 
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.mixin.accessor.LivingEntityAccessor;
 import net.kayn.fallen_gems_affixes.mixin.accessor.ServerPlayerAccessor;
 import net.kayn.fallen_gems_affixes.network.ClientlikeUpdatePermanentEffectPacket;
+import net.kayn.fallen_gems_affixes.types.IEffectHandler;
 import net.kayn.fallen_gems_affixes.types.IVanillaLikeEffectHandler;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,7 +19,7 @@ import net.minecraft.world.entity.ai.attributes.*;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
+public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler, IEffectHandler {
     LivingEntity entity;
 
     public VanillaLikeEffectHandler(LivingEntity entity) {
@@ -121,6 +124,10 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
         return this.removeEffectRet(effect) != null;
     }
 
+    public boolean removeEffect(Holder<MobEffect> effect, int amplifier) {
+        return this.removeEffectRet(effect, amplifier) != null;
+    }
+
     @Override
     public MobEffectInstance removeEffectRet(Holder<MobEffect> effect) {
         MobEffectInstance mobeffectinstance = this.entity.getActiveEffectsMap().remove(effect);
@@ -134,14 +141,40 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
         }
     }
 
+    public MobEffectInstance removeEffectRet(Holder<MobEffect> effect, int amplifier) {
+        MobEffectInstance mobeffectinstance = this.entity.getActiveEffectsMap().remove(effect);
+        if (mobeffectinstance != null) {
+            mobeffectinstance.getEffect().value().removeAttributeModifiers(this.entity.getAttributes());
+            this.onEffectRemoved(mobeffectinstance);
+            this.refreshDirtyAttributes();
+            return mobeffectinstance;
+        } else {
+            // must sync to client.
+            FallenGemsAffixes.LOGGER.warn("Detected null, sync client");
+            this.onEffectRemoved(effect, amplifier);
+            this.refreshDirtyAttributes();
+            return null;
+        }
+    }
+
     @Override
     public void onEffectRemoved(MobEffectInstance effectInstance) {
         ((LivingEntityAccessor)this.entity).setEffectsDirty(true);
         if (this.entity instanceof ServerPlayer player) {
+            player.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), true));
             if (effectInstance.getEffect().is(MobEffects.LEVITATION)) {
                 ((ServerPlayerAccessor)player).setLevitationStartPos(null);
             }
-            player.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), true));
+        }
+    }
+
+    public void onEffectRemoved(Holder<MobEffect> effect, int amplifier) {
+        ((LivingEntityAccessor)this.entity).setEffectsDirty(true);
+        if (this.entity instanceof ServerPlayer player) {
+            player.connection.send(new ClientlikeUpdatePermanentEffectPacket(effect, amplifier, true));
+            if (effect.is(MobEffects.LEVITATION)) {
+                ((ServerPlayerAccessor)player).setLevitationStartPos(null);
+            }
         }
     }
 }

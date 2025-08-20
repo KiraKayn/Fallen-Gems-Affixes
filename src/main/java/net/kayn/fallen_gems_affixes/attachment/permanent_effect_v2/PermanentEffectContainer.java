@@ -4,7 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +27,7 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
     }
 
     public void addEffect(Holder<MobEffect> effect, int amplifier) {
-        this.dataMap.compute(effect, (a,b)-> {
+        this.dataMap.compute(effect, (a, b) -> {
             if (b == null) {
                 b = new ArrayList<>();
                 b.add(amplifier);
@@ -43,12 +46,8 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
                 this.removeEffect(effect);
             } else {
                 levels.remove(Integer.valueOf(amplifier));
-                if (levels.size() > 1) {
-                    return levels.get(levels.size() - 2);
-                } else {
-                    return levels.getFirst();
-                }
             }
+            return amplifier;
         }
         return -1;
     }
@@ -57,7 +56,9 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
         this.dataMap.remove(effect);
     }
 
-    public void clearEffects() {this.dataMap.clear();}
+    public void clearEffects() {
+        this.dataMap.clear();
+    }
 
     public void forEachEffect(BiConsumer<Holder<MobEffect>, List<Integer>> consumer) {
         this.dataMap.forEach(consumer);
@@ -70,9 +71,9 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
     @Override
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {
         ListTag listTag = new ListTag();
-        for (Map.Entry<Holder<MobEffect>, List<Integer>> data: this.dataMap.entrySet()) {
+        for (Map.Entry<Holder<MobEffect>, List<Integer>> data : this.dataMap.entrySet()) {
             if (data == null) continue;
-            Optional<Tag> effectTag =  HOLDER_MOB_EFFECT_CODEC.encodeStart(NbtOps.INSTANCE, data.getKey())
+            Optional<Tag> effectTag = HOLDER_MOB_EFFECT_CODEC.encodeStart(NbtOps.INSTANCE, data.getKey())
                     .resultOrPartial(error -> FallenGemsAffixes.LOGGER.error("Error encoding effect: {}", error));
             if (effectTag.isPresent()) {
                 CompoundTag tag = new CompoundTag();

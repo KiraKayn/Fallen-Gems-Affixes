@@ -9,7 +9,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import javax.annotation.Nullable;
 
-public interface IVanillaLikeEffectHandler extends IEffectHandler{
+public interface IVanillaLikeEffectHandler {
 
     boolean removeEffect(Holder<MobEffect> effect);
 

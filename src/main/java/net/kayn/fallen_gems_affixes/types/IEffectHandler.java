@@ -12,4 +12,6 @@ public interface IEffectHandler {
     void addEffectSilent(MobEffectInstance effectInstance);
 
     MobEffectInstance removeEffectRet(Holder<MobEffect> effect);
+
+    MobEffectInstance removeEffectRet(Holder<MobEffect> effect, int amplifier);
 }
