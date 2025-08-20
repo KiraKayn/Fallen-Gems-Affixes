@@ -71,7 +71,7 @@ public class MiscEventsHandler {
             PermanentEffectCapability cap = player.getCapability(Fallen.Capabilities.PE_CAP);
             if (cap != null) {
                 cap.getContainer().forEachEffect((effect, levels) -> {
-                    if (!player.hasEffect(effect)) {
+                    if (player.hasEffect(effect)) {
                         cap.removeEffect(effect, levels.getLast());
                     }
                 });
