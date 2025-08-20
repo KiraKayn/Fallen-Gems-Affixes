@@ -53,7 +53,7 @@ public class FallenGemsAffixes {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerCapabilities);
-        modEventBus.addListener(this::registerCommands);
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
         modEventBus.addListener(this::registerPackets);
         modEventBus.addListener(this::postRegister);
 //        modEventBus.addListener(InitNewCodecs::init);
