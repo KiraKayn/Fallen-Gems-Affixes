@@ -1,54 +1,65 @@
 {
   "variant": "intelligent",
-  "weight": 5,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 5
+  },
   "dimensions": [],
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "anything",
-        "types": [
-          "helmet",
-          "chestplate",
-          "leggings",
-          "boots",
-          "curios:spellbook",
-          "staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:max_mana",
-      "operation": "ADDITION",
-      "values": {
-        "common": {
-          "min": 0,
-          "steps": 10,
-          "step": 1
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "apothiccurios",
+          "category": "curios:spellbook"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "anything",
+          "types": [
+            "apotheosis:helmet",
+            "apotheosis:chestplate",
+            "apotheosis:leggings",
+            "apotheosis:boots",
+            "fallen_gems_affixes:staffs"
+          ]
         },
-        "uncommon": {
-          "min": 10,
-          "steps": 10,
-          "step": 1
-        },
-        "rare": {
-          "min": 20,
-          "steps": 10,
-          "step": 1
-        },
-        "epic": {
-          "min": 30,
-          "steps": 10,
-          "step": 1
-        },
-        "mythic": {
-          "min": 40,
-          "steps": 10,
-          "step": 1
-        },
-        "ancient": {
-          "min": 50,
-          "steps": 10,
-          "step": 1
+        "attribute": "irons_spellbooks:max_mana",
+        "operation": "add_value",
+        "values": {
+          "cracked": {
+            "min": 0,
+            "steps": 10,
+            "step": 1
+          },
+          "chipped": {
+            "min": 10,
+            "steps": 10,
+            "step": 1
+          },
+          "flawed": {
+            "min": 20,
+            "steps": 10,
+            "step": 1
+          },
+          "normal": {
+            "min": 30,
+            "steps": 10,
+            "step": 1
+          },
+          "flawless": {
+            "min": 40,
+            "steps": 10,
+            "step": 1
+          },
+          "perfect": {
+            "min": 50,
+            "steps": 10,
+            "step": 1
+          }
         }
       }
     }

@@ -2,7 +2,7 @@
   "type": "fallen_gems_affixes:gem_modifier",
   "conditions": [
     {
-      "condition": "forge:loot_table_id",
+      "condition": "neoforge:loot_table_id",
       "loot_table_id": "cataclysm:entities/the_leviathan"
     },
     {
@@ -12,17 +12,17 @@
   "gems": [
     {
       "gem": "fallen_gems_affixes:boss_gems/ruler_of_abyss",
-      "rarity": "apotheosis:epic",
+      "purity": "normal",
       "drop_chance": 0.5
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/ruler_of_abyss",
-      "rarity": "apotheosis:mythic",
+      "purity": "flawless",
       "drop_chance": 0.25
     },
     {
       "gem": "fallen_gems_affixes:boss_gems/ruler_of_abyss",
-      "rarity": "apotheosis:ancient",
+      "purity": "perfect",
       "drop_chance": 0.05
     }
   ]

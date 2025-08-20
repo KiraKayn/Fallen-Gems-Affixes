@@ -1,54 +1,41 @@
 {
   "variant": "cast_time",
-  "weight": 5,
-  "quality": 0,
+  "type": "apotheosis:gem",
+  "weights": {
+    "quality": 0,
+    "weight": 5
+  },
   "dimensions": [],
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "anything",
-        "types": [
-          "helmet",
-          "chestplate",
-          "leggings",
-          "boots",
-          "curios:spellbook",
-          "staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:cast_time_reduction",
-      "operation": "MULTIPLY_TOTAL",
-      "values": {
-        "common": {
-          "min": 0.01,
-          "steps": 1,
-          "step": 0
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "apothiccurios",
+          "category": "curios:spellbook"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "anything",
+          "types": [
+            "apotheosis:helmet",
+            "apotheosis:chestplate",
+            "apotheosis:leggings",
+            "apotheosis:boots",
+            "fallen_gems_affixes:staffs"
+          ]
         },
-        "uncommon": {
-          "min": 0.03,
-          "steps": 1,
-          "step": 0
-        },
-        "rare": {
-          "min": 0.05,
-          "steps": 1,
-          "step": 0
-        },
-        "epic": {
-          "min": 0.07,
-          "steps": 1,
-          "step": 0
-        },
-        "mythic": {
-          "min": 0.10,
-          "steps": 1,
-          "step": 0
-        },
-        "ancient": {
-          "min": 0.15,
-          "steps": 1,
-          "step": 0
+        "attribute": "irons_spellbooks:cast_time_reduction",
+        "operation": "add_multiplied_total",
+        "values": {
+          "cracked": 0.01,
+          "chipped": 0.03,
+          "flawed": 0.05,
+          "normal": 0.07,
+          "flawless": 0.10,
+          "perfect": 0.15
         }
       }
     }
