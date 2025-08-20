@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2;
 
+import net.kayn.fallen_gems_affixes.mixin.accessor.LivingEntityAccessor;
 import net.kayn.fallen_gems_affixes.mixin.accessor.ServerPlayerAccessor;
 import net.kayn.fallen_gems_affixes.network.ClientlikeUpdatePermanentEffectPacket;
 import net.kayn.fallen_gems_affixes.types.IVanillaLikeEffectHandler;
@@ -35,6 +36,7 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
 
     @Override
     public void onEffectUpdated(MobEffectInstance effectInstance, boolean forced, @Nullable Entity source) {
+        ((LivingEntityAccessor)this.entity).setEffectsDirty(true);
         if (forced && !this.entity.level().isClientSide) {
             MobEffect mobeffect = effectInstance.getEffect().value();
             mobeffect.removeAttributeModifiers(this.entity.getAttributes());
@@ -72,7 +74,12 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
                 effectInstance.getEffect().value().addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
             }
         } else if (mobeffectinstance.update(effectInstance)) {
-            this.onEffectUpdated(mobeffectinstance, true, null);
+            if (!this.entity.level().isClientSide) {
+                MobEffect mobeffect = effectInstance.getEffect().value();
+                mobeffect.removeAttributeModifiers(this.entity.getAttributes());
+                mobeffect.addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
+                this.refreshDirtyAttributes();
+            }
         }
     }
 
@@ -94,6 +101,7 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
 
     @Override
     public void onEffectAdded(MobEffectInstance effectInstance, LivingEntity source) {
+        ((LivingEntityAccessor)this.entity).setEffectsDirty(true);
         if (!this.entity.level().isClientSide) {
             effectInstance.getEffect().value().addAttributeModifiers(this.entity.getAttributes(), effectInstance.getAmplifier());
             if (this.entity instanceof ServerPlayer serverPlayer) {
@@ -128,6 +136,7 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler {
 
     @Override
     public void onEffectRemoved(MobEffectInstance effectInstance) {
+        ((LivingEntityAccessor)this.entity).setEffectsDirty(true);
         if (this.entity instanceof ServerPlayer player) {
             if (effectInstance.getEffect().is(MobEffects.LEVITATION)) {
                 ((ServerPlayerAccessor)player).setLevitationStartPos(null);

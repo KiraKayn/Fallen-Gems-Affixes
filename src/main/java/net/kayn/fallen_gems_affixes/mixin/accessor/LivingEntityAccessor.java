@@ -15,6 +15,9 @@ import java.util.Map;
 @Mixin(value = LivingEntity.class, remap = false)
 public interface LivingEntityAccessor {
 
+    @Accessor("effectsDirty")
+    void setEffectsDirty(boolean value);
+
     @Accessor("activeEffects")
     Map<Holder<MobEffect>, MobEffectInstance> getActiveEffects();
 
