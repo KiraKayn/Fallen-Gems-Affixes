@@ -15,11 +15,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
 
 import java.util.function.BiConsumer;
@@ -56,6 +58,21 @@ public class MiscEventsHandler {
                 cap.getContainer().forEachEffect((effect, levels) -> {
                     if (!player.hasEffect(effect)) {
                         cap.addEffectSilent(effect, levels.getLast());
+                    }
+                });
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        Player entity = event.getEntity();
+        if (entity instanceof ServerPlayer player) {
+            PermanentEffectCapability cap = player.getCapability(Fallen.Capabilities.PE_CAP);
+            if (cap != null) {
+                cap.getContainer().forEachEffect((effect, levels) -> {
+                    if (!player.hasEffect(effect)) {
+                        cap.removeEffect(effect, levels.getLast());
                     }
                 });
             }

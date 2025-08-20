@@ -42,10 +42,6 @@ public class PermanentEffectCapability {
         return inst;
     }
 
-//    public void addRawEffect(Holder<MobEffect> effect, int amplifier) {
-//        this.effectHandler.addEffectRet(new MobEffectInstance(effect, -1, amplifier));
-//    }
-
     public void addEffectSilent(Holder<MobEffect> effect, int amplifier) {
         this.effectHandler.addEffectSilent(new MobEffectInstance(effect, -1, amplifier));
     }

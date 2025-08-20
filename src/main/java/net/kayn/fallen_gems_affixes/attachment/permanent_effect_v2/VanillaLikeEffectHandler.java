@@ -98,8 +98,14 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler, IEff
                 serverPlayer.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), false));
             }
             return mobeffectinstance;
+        } else {
+            // must sync to client.
+            if (this.entity instanceof ServerPlayer serverPlayer) {
+                FallenGemsAffixes.LOGGER.warn("Added nothing, sync client");
+                serverPlayer.connection.send(new ClientlikeUpdatePermanentEffectPacket(effectInstance.getEffect(), effectInstance.getAmplifier(), false));
+            }
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -150,9 +156,10 @@ public class VanillaLikeEffectHandler implements IVanillaLikeEffectHandler, IEff
             return mobeffectinstance;
         } else {
             // must sync to client.
-            FallenGemsAffixes.LOGGER.warn("Detected null, sync client");
-            this.onEffectRemoved(effect, amplifier);
-            this.refreshDirtyAttributes();
+            if (this.entity instanceof ServerPlayer player) {
+                FallenGemsAffixes.LOGGER.warn("Removed nothing, sync client");
+                player.connection.send(new ClientlikeUpdatePermanentEffectPacket(effect, amplifier, true));
+            }
             return null;
         }
     }

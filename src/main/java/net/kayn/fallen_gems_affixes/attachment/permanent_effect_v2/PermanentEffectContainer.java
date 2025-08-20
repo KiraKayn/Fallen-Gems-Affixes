@@ -79,7 +79,7 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
                 CompoundTag tag = new CompoundTag();
                 tag.put("Effect", effectTag.get());
                 tag.putIntArray("Levels", data.getValue());
-                listTag.add(effectTag.get());
+                listTag.add(tag);
             }
         }
         CompoundTag tag = new CompoundTag();
@@ -90,7 +90,7 @@ public class PermanentEffectContainer implements INBTSerializable<CompoundTag> {
     @Override
     public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
         this.dataMap.clear();
-        ListTag listTag = nbt.getList("Effects", Tag.TAG_LIST);
+        ListTag listTag = nbt.getList("Effects", Tag.TAG_COMPOUND);
         for (Tag tag : listTag) {
             CompoundTag tag1 = (CompoundTag) tag;
             Optional<Pair<Holder<MobEffect>, Tag>> data = HOLDER_MOB_EFFECT_CODEC.decode(NbtOps.INSTANCE, tag1.get("Effect"))
