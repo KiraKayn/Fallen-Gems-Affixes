@@ -5,6 +5,7 @@ import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -62,10 +63,18 @@ public class SoulboundEventHandler {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
-
         List<ItemStack> soulboundItems = getSoulboundItems(player);
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
+            if (inv.getContainerSize() < 41 || !(player instanceof ServerPlayer)) {
+                for (ItemStack stack01 : soulboundItems) {
+                    if (!inv.add(stack01)) {
+                        player.drop(stack01, false);
+                    }
+                }
+                clearSoulboundItems(player);
+                return;
+            }
             for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
                 ItemStack stack = soulboundItems.get(t);
                 if (i >= 36) {
