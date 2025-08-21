@@ -1,7 +1,6 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import net.kayn.fallen_gems_affixes.util.EquipmentSlotUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -11,18 +10,50 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SoulboundEventHandler {
 
     private static final String TAG_SOULBOUND = "fallen_gems_affixes:soulbound_items";
+    private static final String TAG_EQUIPPED_ITEMS = "fallen_gems_affixes:equipped_items";
     private static final ResourceLocation SOULBOUND_ID = new ResourceLocation("fallen_gems_affixes", "soulbound");
+
+    private static final Map<UUID, List<ItemStack>> tempEquippedItems = new HashMap<>();
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onLivingDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level().isClientSide()) return;
+
+        List<ItemStack> equippedSoulbound = new ArrayList<>();
+
+        // Check armor and offhand slots for soulbound items
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot == EquipmentSlot.MAINHAND) continue; // Skip mainhand
+
+            ItemStack stack = player.getItemBySlot(slot);
+            if (!stack.isEmpty()) {
+                var affixes = AffixHelper.getAffixes(stack);
+                for (var affixHolder : affixes.keySet()) {
+                    if (SOULBOUND_ID.equals(affixHolder.getId())) {
+                        equippedSoulbound.add(stack.copy());
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Store equipped soulbound items temporarily
+        if (!equippedSoulbound.isEmpty()) {
+            tempEquippedItems.put(player.getUUID(), equippedSoulbound);
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onLivingDrops(LivingDropsEvent event) {
@@ -30,6 +61,7 @@ public class SoulboundEventHandler {
         if (player.level().isClientSide()) return;
 
         List<ItemStack> soulboundItems = new ArrayList<>();
+        List<ItemStack> equippedItems = tempEquippedItems.getOrDefault(player.getUUID(), new ArrayList<>());
 
         event.getDrops().removeIf(itemEntity -> {
             ItemStack stack = itemEntity.getItem();
@@ -44,9 +76,11 @@ public class SoulboundEventHandler {
         });
 
         if (!soulboundItems.isEmpty()) {
-            storeSoulboundItems(player, soulboundItems);
+            storeSoulboundItems(player, soulboundItems, equippedItems);
         }
+        tempEquippedItems.remove(player.getUUID());
     }
+
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
@@ -56,6 +90,9 @@ public class SoulboundEventHandler {
             if (originalData.contains(TAG_SOULBOUND)) {
                 newData.put(TAG_SOULBOUND, originalData.get(TAG_SOULBOUND));
             }
+            if (originalData.contains(TAG_EQUIPPED_ITEMS)) {
+                newData.put(TAG_EQUIPPED_ITEMS, originalData.get(TAG_EQUIPPED_ITEMS));
+            }
         }
     }
 
@@ -64,6 +101,8 @@ public class SoulboundEventHandler {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
         List<ItemStack> soulboundItems = getSoulboundItems(player);
+        List<ItemStack> equippedItems = getEquippedItems(player);
+
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
             if (inv.getContainerSize() < 41 || !(player instanceof ServerPlayer)) {
@@ -75,70 +114,77 @@ public class SoulboundEventHandler {
                 clearSoulboundItems(player);
                 return;
             }
-            for (int t = soulboundItems.size() - 1, i = 40; t >= 0; t--) {
+
+            // Reverse iterate through soulbound items
+            for (int t = soulboundItems.size() - 1; t >= 0; t--) {
                 ItemStack stack = soulboundItems.get(t);
-                if (i >= 36) {
-                    boolean added = false;
-                    for (;i >= 36; i--) {
-                        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
-                        if (i == 40 ||  slot == EquipmentSlotUtil.slotFromInventoryIndex(i)) {
-                            if (i == 40) {
-                                if (slot != EquipmentSlot.OFFHAND) {
-                                    for (int k = i; k >= 36; k--) {
-                                        if (slot == EquipmentSlotUtil.slotFromInventoryIndex(k)) {
-                                            safeAddToSlot(inv, player, stack, k);
-                                            added = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                i--;
-                            }
-                            if (!added) {
-                                safeAddToSlot(inv, player, stack, i);
-                                added = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (!added) {
-                        if (!inv.add(stack)) {
-                            player.drop(stack, false);
-                        }
-                        added = true;
+                boolean wasEquipped = false;
+
+                // Check if this item was equipped
+                for (ItemStack equippedItem : equippedItems) {
+                    if (ItemStack.isSameItemSameTags(stack, equippedItem)) {
+                        wasEquipped = true;
+                        break;
                     }
                 }
-                else if (!inv.add(stack)) {
-                    player.drop(stack, false);
+
+                boolean placed = false;
+
+                // If it was equipped try to equip it again
+                if (wasEquipped) {
+                    EquipmentSlot equipmentSlot = LivingEntity.getEquipmentSlotForItem(stack);
+                    if (equipmentSlot != EquipmentSlot.MAINHAND) {
+                        int slotIndex = getInventorySlotForEquipmentSlot(equipmentSlot);
+                        if (slotIndex != -1 && inv.getItem(slotIndex).isEmpty()) {
+                            inv.setItem(slotIndex, stack);
+                            placed = true;
+                        }
+                    }
+                }
+
+                // If not placed in equipment slot, add to inventory
+                if (!placed) {
+                    if (!inv.add(stack)) {
+                        player.drop(stack, false);
+                    }
                 }
             }
+
             clearSoulboundItems(player);
         }
     }
 
-    private static void safeAddToSlot(Inventory inv, Player player, ItemStack stack, int slot) {
-        if (inv.getItem(slot).isEmpty()) {
-            if (!inv.add(slot, stack) && !inv.add(stack)) {
-                player.drop(stack, false);
-            }
-        } else {
-            if (!inv.add(stack)) {
-                player.drop(stack, false);
-            }
-        }
+    private static int getInventorySlotForEquipmentSlot(EquipmentSlot equipmentSlot) {
+        return switch (equipmentSlot) {
+            case HEAD -> 39;      // Helmet
+            case CHEST -> 38;     // Chestplate
+            case LEGS -> 37;      // Leggings
+            case FEET -> 36;      // Boots
+            case OFFHAND -> 40;   // Offhand
+            case MAINHAND -> -1;  // Dont auto place in mainhand
+        };
     }
 
-    private static void storeSoulboundItems(Player player, List<ItemStack> items) {
+    private static void storeSoulboundItems(Player player, List<ItemStack> items, List<ItemStack> equippedItems) {
         CompoundTag compound = player.getPersistentData();
-        ListTag listTag = new ListTag();
 
+        // Store soulbound items
+        ListTag itemListTag = new ListTag();
         for (ItemStack stack : items) {
             CompoundTag itemTag = new CompoundTag();
             stack.save(itemTag);
-            listTag.add(itemTag);
+            itemListTag.add(itemTag);
         }
+        compound.put(TAG_SOULBOUND, itemListTag);
 
-        compound.put(TAG_SOULBOUND, listTag);
+        // Store equipped items
+        ListTag equippedListTag = new ListTag();
+        for (ItemStack stack : equippedItems) {
+            CompoundTag itemTag = new CompoundTag();
+            stack.save(itemTag);
+            equippedListTag.add(itemTag);
+        }
+        compound.put(TAG_EQUIPPED_ITEMS, equippedListTag);
     }
 
     private static List<ItemStack> getSoulboundItems(Player player) {
@@ -159,7 +205,26 @@ public class SoulboundEventHandler {
         return items;
     }
 
+    private static List<ItemStack> getEquippedItems(Player player) {
+        List<ItemStack> items = new ArrayList<>();
+        CompoundTag compound = player.getPersistentData();
+
+        if (compound.contains(TAG_EQUIPPED_ITEMS)) {
+            ListTag listTag = compound.getList(TAG_EQUIPPED_ITEMS, 10);
+            for (int i = 0; i < listTag.size(); i++) {
+                CompoundTag itemTag = listTag.getCompound(i);
+                ItemStack stack = ItemStack.of(itemTag);
+                if (!stack.isEmpty()) {
+                    items.add(stack);
+                }
+            }
+        }
+
+        return items;
+    }
+
     private static void clearSoulboundItems(Player player) {
         player.getPersistentData().remove(TAG_SOULBOUND);
+        player.getPersistentData().remove(TAG_EQUIPPED_ITEMS);
     }
 }
