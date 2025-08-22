@@ -9,19 +9,36 @@
   "gem": "fallen_gems_affixes:compat/hemolith_shard",
   "bonuses": [
     {
-      "type": "fallen_gems_affixes:permanent_effect",
+      "type": "apotheosis:mob_effect",
       "gem_class": {
         "key": "leggings",
         "types": [
           "leggings"
         ]
       },
-      "effect": "traveloptics:assassin",
+      "mob_effect": "traveloptics:assassin",
+      "target": "hurt_self",
       "values": {
-        "rare": 0,
-        "epic": 1,
-        "mythic": 2,
-        "ancient": 3
+        "rare": {
+          "duration": 70,
+          "amplifier": 0,
+          "cooldown": 500
+        },
+        "epic": {
+          "duration": 140,
+          "amplifier": 1,
+          "cooldown": 500
+        },
+        "mythic": {
+          "duration": 210,
+          "amplifier": 2,
+          "cooldown": 500
+        },
+        "ancient": {
+          "duration": 280,
+          "amplifier": 3,
+          "cooldown": 500
+        }
       }
     }
   ]
