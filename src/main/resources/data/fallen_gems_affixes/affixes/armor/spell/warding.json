@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:spell_cast",
+  "spell": "irons_spellbooks:shield",
+  "trigger": "hurt",
+  "target": "TARGET",
+  "values": {
+    "rare": {
+      "level": {
+        "min": 1,
+        "max": 4
+      },
+      "cooldown": 1200
+    },
+    "epic": {
+      "level": {
+        "min": 2,
+        "max": 6
+      },
+      "cooldown": 900
+    },
+    "mythic": {
+      "level": {
+        "min": 4,
+        "max": 8
+      },
+      "cooldown": 600
+    },
+    "ancient": {
+      "level": {
+        "min": 6,
+        "max": 10
+      },
+      "cooldown": 300
+    }
+  },
+  "types": [
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots"
+  ]
+}

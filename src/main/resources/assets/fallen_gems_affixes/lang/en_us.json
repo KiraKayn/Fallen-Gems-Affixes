@@ -329,5 +329,65 @@
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/overclocked.suffix": "of Technomancy",
 
   "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/drenched": "Drenched",
-  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/drenched.suffix": "of the Sea"
+  "affix.fallen_gems_affixes:apotheotic_additions_compat/attribute/drenched.suffix": "of the Sea",
+
+  "affix.fallen_gems_affixes:armor/spell/fangward": "Fangward",
+  "affix.fallen_gems_affixes:armor/spell/fangward.suffix": "of the Sentinel",
+
+  "affix.fallen_gems_affixes:armor/spell/frostborn": "Frostborn",
+  "affix.fallen_gems_affixes:armor/spell/frostborn.suffix": "of the Glacier",
+
+  "affix.fallen_gems_affixes:armor/spell/crimsonthorn": "Crimsonthorn",
+  "affix.fallen_gems_affixes:armor/spell/crimsonthorn.suffix": "of Piercing Pain",
+
+  "affix.fallen_gems_affixes:armor/spell/vitality": "Vitality",
+  "affix.fallen_gems_affixes:armor/spell/vitality.suffix": "of Renewal",
+
+  "affix.fallen_gems_affixes:armor/spell/warding": "Warding",
+  "affix.fallen_gems_affixes:armor/spell/warding.suffix": "of the Aegis",
+
+  "affix.fallen_gems_affixes:armor/spell/pyroclastic": "Pyroclastic",
+  "affix.fallen_gems_affixes:armor/spell/pyroclastic.suffix": "of the Inferno",
+
+  "affix.fallen_gems_affixes:heavy_weapon/spell/ravener": "Ravener",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/ravener.suffix": "of the Maw",
+
+  "affix.fallen_gems_affixes:heavy_weapon/spell/detonant": "Detonant",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/detonant.suffix": "of Chain Ruin",
+
+  "affix.fallen_gems_affixes:heavy_weapon/spell/blazebound": "Blazebound",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/blazebound.suffix": "of the Phoenix",
+
+  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar": "Glaciar",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar.suffix": "of Blazing Tempest",
+
+  "affix.fallen_gems_affixes:staffs/spell/bastion": "Bastion",
+  "affix.fallen_gems_affixes:staffs/spell/bastion.suffix": "of Endurance",
+
+  "affix.fallen_gems_affixes:staffs/spell/radiant": "Radiant",
+  "affix.fallen_gems_affixes:staffs/spell/radiant.suffix": "of Divine Judgement",
+
+  "affix.fallen_gems_affixes:staffs/spell/stormlash": "Stormlash",
+  "affix.fallen_gems_affixes:staffs/spell/stormlash.suffix": "of Thundering Wrath",
+
+  "affix.fallen_gems_affixes:staffs/spell/hemospike": "Hemospike",
+  "affix.fallen_gems_affixes:staffs/spell/hemospike.suffix": "of the Scarlet Fang",
+
+  "affix.fallen_gems_affixes:sword/spell/seraphel": "Seraphel",
+  "affix.fallen_gems_affixes:sword/spell/seraphel.suffix": "of Sacred Judgment",
+
+  "affix.fallen_gems_affixes:sword/spell/pyroclaw": "Pyroclaw",
+  "affix.fallen_gems_affixes:sword/spell/pyroclaw.suffix": "of Blazing Fury",
+
+  "affix.fallen_gems_affixes:sword/spell/bloody_slash": "Blood Slashing",
+  "affix.fallen_gems_affixes:sword/spell/bloody_slash.suffix": "of the Crimson Tide",
+
+  "affix.fallen_gems_affixes:ranged_weapons/spell/arcane_arrow": "Arcane Arrow",
+  "affix.fallen_gems_affixes:ranged_weapons/spell/arcane_arrow.suffix": "of Mystical Force",
+
+  "affix.fallen_gems_affixes:ranged_weapons/spell/venomshot": "Venomshot",
+  "affix.fallen_gems_affixes:ranged_weapons/spell/venomshot.suffix": "of Corrosion",
+
+  "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike": "Volleystrike",
+  "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike.suffix": "of Piercing Rain"
 }

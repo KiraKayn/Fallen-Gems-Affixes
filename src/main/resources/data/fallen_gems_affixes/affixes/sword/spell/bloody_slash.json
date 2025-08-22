@@ -1,0 +1,47 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:spell_cast",
+  "spell": "irons_spellbooks:blood_slash",
+  "trigger": "melee_hit",
+  "target": "TARGET",
+  "values": {
+    "rare": {
+      "level": {
+        "min": 1,
+        "max": 3
+      },
+      "cooldown": 400
+    },
+    "epic": {
+      "level": {
+        "min": 1,
+        "max": 4
+      },
+      "cooldown": 300
+    },
+    "mythic": {
+      "level": {
+        "min": 2,
+        "max": 5
+      },
+      "cooldown": 200
+    },
+    "ancient": {
+      "level": {
+        "min": 3,
+        "max": 5
+      },
+      "cooldown": 100
+    }
+  },
+  "types": [
+    "sword",
+    "trident",
+    "heavy_weapon"
+  ]
+}
