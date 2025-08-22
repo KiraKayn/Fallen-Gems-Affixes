@@ -4,7 +4,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,6 +23,7 @@ public class SoulboundEventHandler {
     private static final String TAG_EQUIPPED_ITEMS = "fallen_gems_affixes:equipped_items";
     private static final ResourceLocation SOULBOUND_ID = new ResourceLocation("fallen_gems_affixes", "soulbound");
 
+    // Temporary storage for equipped items (only exists during death process)
     private static final Map<UUID, List<ItemStack>> tempEquippedItems = new HashMap<>();
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -50,9 +50,7 @@ public class SoulboundEventHandler {
         }
 
         // Store equipped soulbound items temporarily
-        if (!equippedSoulbound.isEmpty()) {
-            tempEquippedItems.put(player.getUUID(), equippedSoulbound);
-        }
+        tempEquippedItems.put(player.getUUID(), equippedSoulbound);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -78,6 +76,8 @@ public class SoulboundEventHandler {
         if (!soulboundItems.isEmpty()) {
             storeSoulboundItems(player, soulboundItems, equippedItems);
         }
+
+        // Clean up temporary storage
         tempEquippedItems.remove(player.getUUID());
     }
 
@@ -100,20 +100,12 @@ public class SoulboundEventHandler {
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         if (player.level().isClientSide()) return;
+
         List<ItemStack> soulboundItems = getSoulboundItems(player);
         List<ItemStack> equippedItems = getEquippedItems(player);
 
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
-            if (inv.getContainerSize() < 41 || !(player instanceof ServerPlayer)) {
-                for (ItemStack stack01 : soulboundItems) {
-                    if (!inv.add(stack01)) {
-                        player.drop(stack01, false);
-                    }
-                }
-                clearSoulboundItems(player);
-                return;
-            }
 
             // Reverse iterate through soulbound items
             for (int t = soulboundItems.size() - 1; t >= 0; t--) {
@@ -130,7 +122,7 @@ public class SoulboundEventHandler {
 
                 boolean placed = false;
 
-                // If it was equipped try to equip it again
+                // If it was equipped, try to equip it again
                 if (wasEquipped) {
                     EquipmentSlot equipmentSlot = LivingEntity.getEquipmentSlotForItem(stack);
                     if (equipmentSlot != EquipmentSlot.MAINHAND) {
@@ -142,7 +134,7 @@ public class SoulboundEventHandler {
                     }
                 }
 
-                // If not placed in equipment slot, add to inventory
+                // If not placed in equipment slot, add to general inventory
                 if (!placed) {
                     if (!inv.add(stack)) {
                         player.drop(stack, false);
@@ -156,12 +148,12 @@ public class SoulboundEventHandler {
 
     private static int getInventorySlotForEquipmentSlot(EquipmentSlot equipmentSlot) {
         return switch (equipmentSlot) {
-            case HEAD -> 39;      // Helmet
-            case CHEST -> 38;     // Chestplate
-            case LEGS -> 37;      // Leggings
-            case FEET -> 36;      // Boots
-            case OFFHAND -> 40;   // Offhand
-            case MAINHAND -> -1;  // Dont auto place in mainhand
+            case HEAD -> 39;      // Helmet slot
+            case CHEST -> 38;     // Chestplate slot
+            case LEGS -> 37;      // Leggings slot
+            case FEET -> 36;      // Boots slot
+            case OFFHAND -> 40;   // Offhand slot
+            case MAINHAND -> -1;  // Don't auto-place in mainhand
         };
     }
 
