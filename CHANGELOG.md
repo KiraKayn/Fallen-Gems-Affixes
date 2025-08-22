@@ -1,6 +1,7 @@
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod
 - Added Spell Cast affix, that allows you to cast ISS spells on these triggers: spell_damage, spell_heal, hurt, melee_hit and projectile_hit
+- Nerfed Hemolith Shard by changing the permanent Assassin effect on it
 
 # 1.2.8
 - Improved on the Soulbound affix by making it so armors stay in their slot, and improved on the code overall
