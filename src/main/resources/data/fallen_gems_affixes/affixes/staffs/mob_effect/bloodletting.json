@@ -1,4 +1,17 @@
 {
+  "type": "fallen_gems_affixes:con_affix_type",
+  "con_type": [
+    {
+      "modid": "irons_apothic",
+      "type": "fallen_gems_affixes:spell_effect",
+      "not_mode": true
+    },
+    {
+      "modid": "irons_apothic",
+      "type": "irons_apothic:spell_effect"
+    }
+  ],
+  "affix": {
 	"type": "fallen_gems_affixes:spell_effect",
 	"definition": {
 		"affix_type": "basic_effect",
@@ -40,7 +53,17 @@
 			"cooldown": 200
 		}
 	},
-	"types": [
-		"fallen_gems_affixes:staffs"
-	]
+	"types": [],
+    "con_cat": [
+      {
+        "modid": "irons_apothic",
+        "category": "fallen_gems_affixes:staffs",
+        "not_mode": true
+      },
+      {
+        "modid": "irons_apothic",
+        "category": "irons_apothic:staff"
+      }
+    ]
+  }
 }

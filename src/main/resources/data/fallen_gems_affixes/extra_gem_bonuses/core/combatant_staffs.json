@@ -9,22 +9,34 @@
   "gem": "apotheosis:core/combatant",
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "staffs",
-        "types": [
-          "fallen_gems_affixes:staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:max_mana",
-      "operation": "add_value",
-      "values": {
-        "cracked": 50,
-        "chipped": 75,
-        "flawed": 100,
-        "normal": 125,
-        "flawless": 150,
-        "perfect": 175
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:staffs",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:staff"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "staffs",
+          "types": []
+        },
+        "attribute": "irons_spellbooks:max_mana",
+        "operation": "add_value",
+        "values": {
+          "cracked": 50,
+          "chipped": 75,
+          "flawed": 100,
+          "normal": 125,
+          "flawless": 150,
+          "perfect": 175
+        }
       }
     }
   ]

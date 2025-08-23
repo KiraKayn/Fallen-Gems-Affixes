@@ -5,10 +5,11 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
-    "event_hook.LivingEntityMixin",
+    "accessor.DynamicRegistryAccessor",
     "accessor.GemClassAccessor",
     "accessor.LivingEntityAccessor",
-    "accessor.ServerPlayerAccessor"
+    "accessor.ServerPlayerAccessor",
+    "event_hook.LivingEntityMixin"
   ],
   "client": [
   ],

@@ -227,6 +227,7 @@ dependencies {
     runtimeOnly "curse.maven:to-tweaks-irons-spells-1046916:6342780"
     runtimeOnly "curse.maven:cataclysm-spellbooks-1099461:6427259"
     runtimeOnly "curse.maven:alshanexs-familiars-1171602:6539981"
+    runtimeOnly "curse.maven:apotheosis-x-irons-spellbooks-compat-1244863:6884505"
 //    runtimeOnly "curse.maven:ice-and-fire-spellbooks-977855:5844739"
 //    runtimeOnly "curse.maven:iceandfire-ce-1040076:6758480"
 //    runtimeOnly "curse.maven:ice-and-fire-dragons-264231:5633453"

@@ -6,6 +6,7 @@ import dev.shadowsoffire.apotheosis.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.socket.gem.Gem;
 import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.socket.gem.Purity;
+import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
+import org.apache.logging.log4j.util.TriConsumer;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -26,8 +28,23 @@ import java.util.function.BiConsumer;
 
 public class SpellEventHandler {
     public static final BiConsumer<LivingEntity, LivingEntity> triggerCurio;
+    public static final TriConsumer<ItemStack, LivingEntity, LivingEntity> triggerAffixes;
 
     static {
+        if (!ModList.get().isLoaded("irons_apothic")) {
+            triggerAffixes = (stack, caster, target) -> {
+                AffixHelper.streamAffixes(stack).forEach(inst -> {
+                    if (inst.affix().get() instanceof SpellEffectAffix affix) {
+                        switch(affix.target) {
+                            case SPELL_DAMAGE_SELF, SPELL_HEAL_SELF -> {affix.applyEffect(caster, inst.rarity().get(), inst.level());}
+                            case SPELL_DAMAGE_TARGET, SPELL_HEAL_TARGET -> {affix.applyEffect(target, inst.rarity().get(), inst.level());}
+                        }
+                    }
+                });
+            };
+        } else {
+            triggerAffixes = (stack, caster, target) -> {};
+        }
         if (ModList.get().isLoaded("curios")) {
             triggerCurio = (caster, target) -> {
                 ICuriosItemHandler handler = CuriosApi.getCuriosInventory(caster).orElse(null);
@@ -78,14 +95,7 @@ public class SpellEventHandler {
     }
 
     public static void applyAllEffects(ItemStack stack, LivingEntity caster, LivingEntity target) {
-        AffixHelper.streamAffixes(stack).forEach(inst -> {
-            if (inst.affix().get() instanceof SpellEffectAffix affix) {
-                switch(affix.target) {
-                    case SPELL_DAMAGE_SELF, SPELL_HEAL_SELF -> {affix.applyEffect(caster, inst.rarity().get(), inst.level());}
-                    case SPELL_DAMAGE_TARGET, SPELL_HEAL_TARGET -> {affix.applyEffect(target, inst.rarity().get(), inst.level());}
-                }
-            }
-        });
+        triggerAffixes.accept(stack, caster, target);
         checkGemBonus(stack, (gem, bonus) -> {
             switch(bonus.target) {
                 case SPELL_DAMAGE_SELF, SPELL_HEAL_SELF -> {bonus.applyEffect(gem, caster);}
@@ -94,7 +104,7 @@ public class SpellEventHandler {
         });
     }
 
-    public static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
+    public static void checkGemBonus(ItemStack itemStack, BiConsumer<GemInstance, SpellEffectBonus> processor) {
         if (itemStack.isEmpty()) return;
         LootCategory cat = LootCategory.forItem(itemStack);
         for (GemInstance g : SocketHelper.getGems(itemStack)) {
@@ -106,10 +116,5 @@ public class SpellEventHandler {
                     .map(b -> (SpellEffectBonus) b)
                     .ifPresent(bonus -> processor.accept(g, bonus));
         }
-    }
-
-    @FunctionalInterface
-    public interface BonusProcessor {
-        void accept(GemInstance gem, SpellEffectBonus bonus);
     }
 }

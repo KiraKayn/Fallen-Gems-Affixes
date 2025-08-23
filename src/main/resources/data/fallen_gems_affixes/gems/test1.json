@@ -8,35 +8,47 @@
   "min_purity": "flawed",
   "bonuses": [
     {
-      "type": "fallen_gems_affixes:spell_effect",
-      "gem_class": {
-        "key": "spellbook",
-        "types": [
-          "fallen_gems_affixes:spellbook"
-        ]
-      },
-      "mob_effect": "irons_spellbooks:evasion",
-      "target": "spell_damage_self",
-      "values": {
-        "flawed": {
-          "duration": 140,
-          "amplifier": 0,
-          "cooldown": 500
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:spellbook",
+          "not_mode": true
         },
-        "normal": {
-          "duration": 200,
-          "amplifier": 1,
-          "cooldown": 500
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:spellbook"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:spell_effect",
+        "gem_class": {
+          "key": "spellbook",
+          "types": []
         },
-        "flawless": {
-          "duration": 260,
-          "amplifier": 2,
-          "cooldown": 500
-        },
-        "perfect": {
-          "duration": 320,
-          "amplifier": 3,
-          "cooldown": 500
+        "mob_effect": "irons_spellbooks:evasion",
+        "target": "spell_damage_self",
+        "values": {
+          "flawed": {
+            "duration": 140,
+            "amplifier": 0,
+            "cooldown": 500
+          },
+          "normal": {
+            "duration": 200,
+            "amplifier": 1,
+            "cooldown": 500
+          },
+          "flawless": {
+            "duration": 260,
+            "amplifier": 2,
+            "cooldown": 500
+          },
+          "perfect": {
+            "duration": 320,
+            "amplifier": 3,
+            "cooldown": 500
+          }
         }
       }
     }

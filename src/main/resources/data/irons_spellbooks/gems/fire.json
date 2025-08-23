@@ -13,6 +13,15 @@
         {
           "modid": "apothiccurios",
           "category": "curios:spellbook"
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:staffs",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:staff"
         }
       ],
       "bonus": {
@@ -23,8 +32,7 @@
             "apotheosis:helmet",
             "apotheosis:chestplate",
             "apotheosis:leggings",
-            "apotheosis:boots",
-            "fallen_gems_affixes:staffs"
+            "apotheosis:boots"
           ]
         },
         "attribute": "irons_spellbooks:fire_spell_power",

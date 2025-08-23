@@ -9,20 +9,32 @@
   "gem": "apotheosis:the_nether/inferno",
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "staffs",
-        "types": [
-          "fallen_gems_affixes:staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:fire_spell_power",
-      "operation": "add_multiplied_total",
-      "values": {
-        "flawed": 0.015,
-        "normal": 0.20,
-        "flawless": 0.25,
-        "perfect": 0.3
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:staffs",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:staff"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "staffs",
+          "types": []
+        },
+        "attribute": "irons_spellbooks:fire_spell_power",
+        "operation": "add_multiplied_total",
+        "values": {
+          "flawed": 0.015,
+          "normal": 0.20,
+          "flawless": 0.25,
+          "perfect": 0.3
+        }
       }
     }
   ]

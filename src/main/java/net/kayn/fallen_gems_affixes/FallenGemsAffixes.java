@@ -17,9 +17,9 @@ import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.LootCategories;
 import net.kayn.fallen_gems_affixes.network.ClientlikeClearPermanentEffectPacket;
 import net.kayn.fallen_gems_affixes.network.ClientlikeUpdatePermanentEffectPacket;
+import net.kayn.fallen_gems_affixes.util.CodecUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
-import net.kayn.fallen_gems_affixes.util.GemBonusUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -68,7 +68,9 @@ public class FallenGemsAffixes {
         new MaxHealthDamageHandler();
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
-            modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
+            if (!ModList.get().isLoaded("irons_apothic")) {
+                modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
+            }
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
         }
@@ -92,7 +94,8 @@ public class FallenGemsAffixes {
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "boss_slayer"), BossSlayerBonus.CODEC);
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
+            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "con_cat_bonus"), CodecUtil.CONDITIONAL_CAT_CODEC);
+            AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "con_affix_type"), CodecUtil.CONDITIONAL_AFFIX_TYPE_CODEC);
             if (ModList.get().isLoaded("irons_spellbooks")) {
                 GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);

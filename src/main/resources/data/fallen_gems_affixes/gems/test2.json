@@ -8,18 +8,30 @@
   "min_purity": "normal",
   "bonuses": [
     {
-      "type": "fallen_gems_affixes:permanent_effect",
-      "gem_class": {
-        "key": "spellbook",
-        "types": [
-          "fallen_gems_affixes:spellbook"
-        ]
-      },
-      "effect": "minecraft:regeneration",
-      "values": {
-        "normal": 0,
-        "flawless": 1,
-        "perfect": 2
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:spellbook",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:spellbook"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:permanent_effect",
+        "gem_class": {
+          "key": "spellbook",
+          "types": []
+        },
+        "effect": "minecraft:regeneration",
+        "values": {
+          "normal": 0,
+          "flawless": 1,
+          "perfect": 2
+        }
       }
     }
   ]

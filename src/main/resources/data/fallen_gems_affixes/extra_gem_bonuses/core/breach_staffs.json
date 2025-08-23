@@ -9,22 +9,34 @@
   "gem": "apotheosis:core/breach",
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "staffs",
-        "types": [
-          "fallen_gems_affixes:staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:cast_time_reduction",
-      "operation": "add_multiplied_total",
-      "values": {
-        "cracked": 0.03,
-        "chipped": 0.06,
-        "flawed": 0.09,
-        "normal": 0.12,
-        "flawless": 0.15,
-        "perfect": 0.2
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:staffs",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:staff"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "staffs",
+          "types": []
+        },
+        "attribute": "irons_spellbooks:cast_time_reduction",
+        "operation": "add_multiplied_total",
+        "values": {
+          "cracked": 0.03,
+          "chipped": 0.06,
+          "flawed": 0.09,
+          "normal": 0.12,
+          "flawless": 0.15,
+          "perfect": 0.2
+        }
       }
     }
   ]

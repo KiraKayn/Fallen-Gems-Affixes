@@ -9,19 +9,31 @@
   "gem": "apotheosis:the_end/mageslayer",
   "bonuses": [
     {
-      "type": "apotheosis:attribute",
-      "gem_class": {
-        "key": "staffs",
-        "types": [
-          "fallen_gems_affixes:staffs"
-        ]
-      },
-      "attribute": "irons_spellbooks:ender_spell_power",
-      "operation": "add_multiplied_total",
-      "values": {
-        "normal": 0.15,
-        "flawless": 0.30,
-        "perfect": 0.45
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "irons_apothic",
+          "category": "fallen_gems_affixes:staffs",
+          "not_mode": true
+        },
+        {
+          "modid": "irons_apothic",
+          "category": "irons_apothic:staff"
+        }
+      ],
+      "bonus": {
+        "type": "apotheosis:attribute",
+        "gem_class": {
+          "key": "staffs",
+          "types": []
+        },
+        "attribute": "irons_spellbooks:ender_spell_power",
+        "operation": "add_multiplied_total",
+        "values": {
+          "normal": 0.15,
+          "flawless": 0.30,
+          "perfect": 0.45
+        }
       }
     }
   ]
