@@ -4,6 +4,7 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -106,6 +107,17 @@ public class SoulboundEventHandler {
 
         if (!soulboundItems.isEmpty()) {
             Inventory inv = player.getInventory();
+
+            // don't delete this, inv.getItem(slotIndex) could be an exception and crash.
+            if (inv.getContainerSize() < 41 || !(player instanceof ServerPlayer)) {
+                for (ItemStack stack01 : soulboundItems) {
+                    if (!inv.add(stack01)) {
+                        player.drop(stack01, false);
+                    }
+                }
+                clearSoulboundItems(player);
+                return;
+            }
 
             // Reverse iterate through soulbound items
             for (int t = soulboundItems.size() - 1; t >= 0; t--) {
