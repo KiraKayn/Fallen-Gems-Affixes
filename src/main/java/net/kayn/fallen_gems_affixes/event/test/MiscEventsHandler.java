@@ -24,8 +24,8 @@ public class MiscEventsHandler {
      */
     @SubscribeEvent
     public static void onDataAttachment(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            event.addCapability(ID, new AugmentCapability());
+        if (event.getObject() instanceof Player player) {
+            event.addCapability(ID, new AugmentCapability(player));
         }
     }
     /**
