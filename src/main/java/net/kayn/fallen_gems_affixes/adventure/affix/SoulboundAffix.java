@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.adventure.affix;
+/*package net.kayn.fallen_gems_affixes.adventure.affix;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -48,4 +48,4 @@ public class SoulboundAffix extends Affix {
     public Codec<? extends Affix> getCodec() {
         return CODEC;
     }
-}
+}*/

@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
+import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
+import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -39,14 +40,8 @@ public class SoulboundEventHandler {
             if (slot == EquipmentSlot.MAINHAND) continue; // Skip mainhand
 
             ItemStack stack = player.getItemBySlot(slot);
-            if (!stack.isEmpty()) {
-                var affixes = AffixHelper.getAffixes(stack);
-                for (var affixHolder : affixes.keySet()) {
-                    if (SOULBOUND_ID.equals(affixHolder.getId())) {
-                        equippedSoulbound.add(stack.copy());
-                        break;
-                    }
-                }
+            if (!stack.isEmpty() && hasSoulboundAugment(stack, player)) {
+                equippedSoulbound.add(stack.copy());
             }
         }
 
@@ -64,12 +59,9 @@ public class SoulboundEventHandler {
 
         event.getDrops().removeIf(itemEntity -> {
             ItemStack stack = itemEntity.getItem();
-            var affixes = AffixHelper.getAffixes(stack);
-            for (var affixHolder : affixes.keySet()) {
-                if (SOULBOUND_ID.equals(affixHolder.getId())) {
-                    soulboundItems.add(stack.copy());
-                    return true;
-                }
+            if (hasSoulboundAugment(stack, player)) {
+                soulboundItems.add(stack.copy());
+                return true;
             }
             return false;
         });
@@ -80,6 +72,17 @@ public class SoulboundEventHandler {
 
         // Clean up temporary storage
         tempEquippedItems.remove(player.getUUID());
+    }
+
+    /**
+     * Check if an ItemStack has a SoulboundAugment
+     */
+    private static boolean hasSoulboundAugment(ItemStack stack, Player ignoredPlayer) {
+        var capabilityOpt = stack.getCapability(AugmentCapability.CAPABILITY).resolve();
+        if (capabilityOpt.isEmpty()) return false;
+
+        IAugmentAccessor accessor = capabilityOpt.get();
+        return accessor.getHandler().hasAugment(SOULBOUND_ID);
     }
 
     @SubscribeEvent
