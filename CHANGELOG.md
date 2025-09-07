@@ -1,3 +1,7 @@
+# 1.3.0
+- Add back the deleted fix for the crash caused by FakePlayer and non-vanilla sized inventory - rtxyd
+- Removed the CastResult check from SpellCastUtil
+
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod
 - Added Spell Cast affix, that allows you to cast ISS spells on these triggers: spell_damage, spell_heal, hurt, melee_hit and projectile_hit
