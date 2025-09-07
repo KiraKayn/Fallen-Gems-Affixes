@@ -3,7 +3,6 @@ package net.kayn.fallen_gems_affixes.util;
 import io.redspace.ironsspellbooks.api.entity.IMagicEntity;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
-import io.redspace.ironsspellbooks.api.spells.CastResult;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
@@ -62,11 +61,6 @@ public class SpellCastUtil {
     }
 
     private static void castSpellForPlayer(AbstractSpell spell, int spellLevel, ServerPlayer serverPlayer, MagicData magicData) {
-
-        CastResult castResult = spell.canBeCastedBy(spellLevel, CastSource.COMMAND, magicData, serverPlayer);
-        if (castResult.message != null) {
-            Messages.sendToPlayer(new ClientboundSetActionBarTextPacket(castResult.message), serverPlayer);
-        }
 
         if (magicData.isCasting()) {
             FallenGemsAffixes.LOGGER.warn("Attempted to trigger affix-cast while player was already casting");
