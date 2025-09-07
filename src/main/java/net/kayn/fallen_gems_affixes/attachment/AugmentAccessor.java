@@ -5,13 +5,22 @@ import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentHandler;
 
 public class AugmentAccessor implements IAugmentAccessor {
+
+    private final IAugmentContainer container;
+    private final IAugmentHandler handler;
+
+    public AugmentAccessor() {
+        this.container = new AugmentContainer();
+        this.handler = new AugmentHandler(this.container);
+    }
+
     @Override
     public IAugmentHandler getHandler() {
-        return new IAugmentHandler() {};
+        return this.handler;
     }
 
     @Override
     public IAugmentContainer getContainer() {
-        return new IAugmentContainer() {};
+        return this.container;
     }
 }
