@@ -42,6 +42,7 @@ public class FallenGemsAffixes {
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
+
         AALootCategories.init();
         new MaxHealthDamageHandler();
 

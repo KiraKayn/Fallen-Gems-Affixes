@@ -2,109 +2,70 @@ package net.kayn.fallen_gems_affixes.augment;
 
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class SoulboundAugment implements IAugment, INBTSerializable<CompoundTag> {
     private static final ResourceLocation SOULBOUND_ID = new ResourceLocation("fallen_gems_affixes", "soulbound");
 
-    private final List<UUID> boundPlayers;
-
-    private UUID originalOwner;
-
-    private boolean allowMultipleBindings;
+    private EquipmentSlot equipmentSlot;
+    private int slotIndex;
+    private ItemStack storedItemStack;
 
     public SoulboundAugment() {
-        this.boundPlayers = new ArrayList<>();
-        this.originalOwner = null;
-        this.allowMultipleBindings = false;
+        this.equipmentSlot = null;
+        this.slotIndex = -1;
+        this.storedItemStack = ItemStack.EMPTY;
     }
 
     @Override
     public ResourceLocation getId() {
         return SOULBOUND_ID;
     }
-    public void bindToPlayer(UUID playerUUID) {
-        if (playerUUID == null) return;
 
-        if (originalOwner == null) {
-            originalOwner = playerUUID;
-            boundPlayers.add(playerUUID);
-            return;
-        }
 
-        if (!allowMultipleBindings) {
-            return;
-        }
-
-        if (!boundPlayers.contains(playerUUID)) {
-            boundPlayers.add(playerUUID);
-        }
-
+    //Store the equipment slot and item data
+    public void storeItemData(EquipmentSlot slot, int index, ItemStack stack) {
+        this.equipmentSlot = slot;
+        this.slotIndex = index;
+        this.storedItemStack = stack.copy();
     }
 
-    public boolean unbindPlayer(UUID playerUUID) {
-        if (playerUUID == null) return false;
 
-        if (originalOwner != null && originalOwner.equals(playerUUID) && boundPlayers.size() > 1) {
-            return false;
-        }
+    //Get the stored equipment slot
 
-        boolean removed = boundPlayers.remove(playerUUID);
-        if (removed && originalOwner != null && originalOwner.equals(playerUUID) && !boundPlayers.isEmpty()) {
-            originalOwner = boundPlayers.get(0);
-        }
-
-        if (boundPlayers.isEmpty()) {
-            originalOwner = null;
-        }
-
-        return removed;
+    public EquipmentSlot getEquipmentSlot() {
+        return equipmentSlot;
     }
 
-    public boolean isBoundToPlayer(UUID playerUUID) {
-        return playerUUID != null && boundPlayers.contains(playerUUID);
+
+    //Get the stored slot index
+    public int getSlotIndex() {
+        return slotIndex;
     }
 
-    public boolean isBound() {
-        return !boundPlayers.isEmpty();
+
+    //Get the stored item stack
+
+    public ItemStack getStoredItemStack() {
+        return storedItemStack.copy();
     }
 
-    public List<UUID> getBoundPlayers() {
-        return new ArrayList<>(boundPlayers);
+
+    //Check if this augment has stored item data
+    public boolean hasStoredData() {
+        return equipmentSlot != null && !storedItemStack.isEmpty();
     }
 
-    public UUID getOriginalOwner() {
-        return originalOwner;
-    }
 
-    public void setAllowMultipleBindings(boolean allow) {
-        this.allowMultipleBindings = allow;
+    //Clear stored data
 
-        if (!allow && boundPlayers.size() > 1 && originalOwner != null) {
-            boundPlayers.clear();
-            boundPlayers.add(originalOwner);
-        }
-    }
-
-    public boolean isMultipleBindingsAllowed() {
-        return allowMultipleBindings;
-    }
-
-    public int getBoundPlayerCount() {
-        return boundPlayers.size();
-    }
-
-    public void clearBindings() {
-        boundPlayers.clear();
-        originalOwner = null;
+    public void clearStoredData() {
+        this.equipmentSlot = null;
+        this.slotIndex = -1;
+        this.storedItemStack = ItemStack.EMPTY;
     }
 
     @Override
@@ -112,61 +73,51 @@ public class SoulboundAugment implements IAugment, INBTSerializable<CompoundTag>
         CompoundTag tag = new CompoundTag();
 
         tag.putString("id", getId().toString());
-        tag.putBoolean("allowMultipleBindings", allowMultipleBindings);
 
-        if (originalOwner != null) {
-            tag.putUUID("originalOwner", originalOwner);
+        if (equipmentSlot != null) {
+            tag.putString("equipmentSlot", equipmentSlot.getName());
         }
 
-        ListTag playersList = new ListTag();
-        for (UUID playerUUID : boundPlayers) {
-            playersList.add(StringTag.valueOf(playerUUID.toString()));
+        tag.putInt("slotIndex", slotIndex);
+
+        if (!storedItemStack.isEmpty()) {
+            CompoundTag itemTag = new CompoundTag();
+            storedItemStack.save(itemTag);
+            tag.put("storedItemStack", itemTag);
         }
-        tag.put("boundPlayers", playersList);
 
         return tag;
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        boundPlayers.clear();
-        originalOwner = null;
+        equipmentSlot = null;
+        slotIndex = -1;
+        storedItemStack = ItemStack.EMPTY;
 
-        allowMultipleBindings = tag.getBoolean("allowMultipleBindings");
-
-        if (tag.hasUUID("originalOwner")) {
-            originalOwner = tag.getUUID("originalOwner");
+        // Read equipment slot
+        if (tag.contains("equipmentSlot")) {
+            String slotName = tag.getString("equipmentSlot");
+            try {
+                equipmentSlot = EquipmentSlot.byName(slotName);
+            } catch (Exception e) {
+                // If slot name is invalid leave as null
+            }
         }
 
-        if (tag.contains("boundPlayers", Tag.TAG_LIST)) {
-            ListTag playersList = tag.getList("boundPlayers", Tag.TAG_STRING);
-            for (int i = 0; i < playersList.size(); i++) {
-                try {
-                    String uuidString = playersList.getString(i);
-                    UUID playerUUID = UUID.fromString(uuidString);
-                    boundPlayers.add(playerUUID);
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Failed to parse UUID in SoulboundAugment: " + e.getMessage());
-                }
-            }
+        // Read slot index
+        slotIndex = tag.getInt("slotIndex");
+
+        // Read stored item stack
+        if (tag.contains("storedItemStack")) {
+            CompoundTag itemTag = tag.getCompound("storedItemStack");
+            storedItemStack = ItemStack.of(itemTag);
         }
     }
 
     @Override
     public String toString() {
-        return "SoulboundAugment{id=" + getId() + "}";
+        return "SoulboundAugment{" + "id=" + getId() + ", slot=" + (equipmentSlot != null ? equipmentSlot.getName() : "none") + ", index=" + slotIndex + ", hasItem=" + !storedItemStack.isEmpty() + "}";
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        SoulboundAugment other = (SoulboundAugment) obj;
-        return getId().equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
-    }
 }
