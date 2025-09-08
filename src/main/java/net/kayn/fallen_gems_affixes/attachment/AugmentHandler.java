@@ -21,7 +21,7 @@ public class AugmentHandler implements IAugmentHandler {
         IAugment augment = AugmentRegistry.get(id);
         if (augment == null) return false;
 
-        container.addAugment(augment);
+        container.addAugment(augment, new AugmentInstance(augment));
         return true;
     }
 

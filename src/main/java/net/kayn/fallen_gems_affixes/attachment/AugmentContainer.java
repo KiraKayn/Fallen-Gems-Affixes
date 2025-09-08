@@ -10,34 +10,41 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.*;
 
 public class AugmentContainer implements IAugmentContainer {
-    private final List<IAugment> augments = new ArrayList<>();
+    private final Map<IAugment, AugmentInstance> augments = new HashMap<>();
 
     @Override
-    public void addAugment(IAugment augment) {
-        if (!augments.contains(augment)) {
-            augments.add(augment);
+    public void addAugment(IAugment augment, AugmentInstance instance) {
+        if (!augments.containsKey(augment)) {
+            augments.put(augment, instance);
         }
     }
 
     @Override
     public void removeAugment(ResourceLocation id) {
-        augments.removeIf(a -> a.getId().equals(id));
+        IAugment augment = AugmentRegistry.get(id);
+        if (augment != null) {
+            augments.remove(augment);
+        }
     }
 
     @Override
     public boolean hasAugment(ResourceLocation id) {
-        return augments.stream().anyMatch(a -> a.getId().equals(id));
+        IAugment augment = AugmentRegistry.get(id);
+        if (augment != null) {
+            return augments.containsKey(augment);
+        }
+        return false;
     }
 
     @Override
-    public List<IAugment> getAugments() {
-        return Collections.unmodifiableList(augments);
+    public Map<IAugment, AugmentInstance> getAugments() {
+        return Collections.unmodifiableMap(augments);
     }
 
     @Override
     public CompoundTag serializeNBT() {
         ListTag listTag = new ListTag();
-        for (IAugment augment : augments) {
+        for (IAugment augment : augments.keySet()) {
             CompoundTag tag = new CompoundTag();
             tag.putString("id", augment.getId().toString());
             listTag.add(tag);
@@ -56,7 +63,7 @@ public class AugmentContainer implements IAugmentContainer {
             ResourceLocation id = new ResourceLocation(augmentTag.getString("id"));
             IAugment augment = AugmentRegistry.get(id);
             if (augment != null) {
-                augments.add(augment);
+                augments.put(augment, new AugmentInstance(augment));
             }
         }
     }
