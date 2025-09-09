@@ -8,15 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface IAugmentContainer {
-    void addAugment(IAugment augment, AugmentInstance instance);
+    void addAugment(AugmentInstance instance);
 
-    void removeAugment(ResourceLocation id);
+    boolean removeAugment(IAugment augment);
 
-    boolean hasAugment(ResourceLocation id);
+    boolean hasAugment(IAugment augment);
 
     Map<IAugment, AugmentInstance> getAugments();
-
-    CompoundTag serializeNBT();
-
-    void deserializeNBT(CompoundTag nbt);
 }

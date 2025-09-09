@@ -1,39 +1,32 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
+import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.*;
 
-public class AugmentContainer implements IAugmentContainer {
+public class AugmentContainer implements IAugmentContainer, INBTSerializable<CompoundTag> {
     private final Map<IAugment, AugmentInstance> augments = new HashMap<>();
 
     @Override
-    public void addAugment(IAugment augment, AugmentInstance instance) {
-        if (!augments.containsKey(augment)) {
-            augments.put(augment, instance);
-        }
+    public void addAugment(AugmentInstance instance) {
+        augments.put(instance.getAugment(), instance);
     }
 
     @Override
-    public void removeAugment(ResourceLocation id) {
-        IAugment augment = AugmentRegistry.get(id);
-        if (augment != null) {
-            augments.remove(augment);
-        }
+    public boolean removeAugment(IAugment augment) {
+        return augments.remove(augment) != null;
     }
 
     @Override
-    public boolean hasAugment(ResourceLocation id) {
-        IAugment augment = AugmentRegistry.get(id);
-        if (augment != null) {
-            return augments.containsKey(augment);
-        }
-        return false;
+    public boolean hasAugment(IAugment augment) {
+        return augments.containsKey(augment);
     }
 
     @Override

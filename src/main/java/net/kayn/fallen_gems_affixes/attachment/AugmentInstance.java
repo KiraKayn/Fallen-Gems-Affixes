@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
+import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.nbt.CompoundTag;
@@ -25,9 +26,10 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
         return augment;
     }
 
-    public void setAugment(IAugment augment) {
-        this.augment = augment;
-    }
+    // We can't set augment at will, they should be bound to instance.
+//    public void setAugment(IAugment augment) {
+//        this.augment = augment;
+//    }
 
     @Override
     public CompoundTag serializeNBT() {
