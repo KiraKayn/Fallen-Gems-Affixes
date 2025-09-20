@@ -1,20 +1,18 @@
 package net.kayn.fallen_gems_affixes.types.augment;
 
+import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAugmentContainer {
-    void addAugment(IAugment augment);
+    void addAugment(AugmentInstance instance);
 
-    void removeAugment(ResourceLocation id);
+    boolean removeAugment(IAugment augment);
 
-    boolean hasAugment(ResourceLocation id);
+    boolean hasAugment(IAugment augment);
 
-    List<IAugment> getAugments();
-
-    CompoundTag serializeNBT();
-
-    void deserializeNBT(CompoundTag nbt);
+    Map<IAugment, AugmentInstance> getAugments();
 }

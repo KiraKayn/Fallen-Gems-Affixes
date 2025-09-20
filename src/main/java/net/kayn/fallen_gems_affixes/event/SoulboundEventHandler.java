@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.event;
 
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.minecraft.nbt.CompoundTag;
@@ -82,7 +83,7 @@ public class SoulboundEventHandler {
         if (capabilityOpt.isEmpty()) return false;
 
         IAugmentAccessor accessor = capabilityOpt.get();
-        return accessor.getHandler().hasAugment(SOULBOUND_ID);
+        return accessor.getHandler().hasAugment(Fallen.Augments.SOUL_BOUND);
     }
 
     @SubscribeEvent

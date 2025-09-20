@@ -1,11 +1,14 @@
 package net.kayn.fallen_gems_affixes.types.augment;
 
+import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.minecraft.resources.ResourceLocation;
 
 public interface IAugmentHandler {
-    boolean addAugment(ResourceLocation id);
-    boolean removeAugment(ResourceLocation id);
-    boolean hasAugment(ResourceLocation id);
+    void addAugment(AugmentInstance instance);
+
+    boolean removeAugment(IAugment augment);
+
+    boolean hasAugment(IAugment augment);
 
     IAugmentContainer getContainer();
 }

@@ -3,7 +3,6 @@ package net.kayn.fallen_gems_affixes.attachment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentHandler;
-import net.minecraft.resources.ResourceLocation;
 
 public class AugmentHandler implements IAugmentHandler {
 
@@ -15,27 +14,18 @@ public class AugmentHandler implements IAugmentHandler {
     }
 
     @Override
-    public boolean addAugment(ResourceLocation id) {
-        if (container.hasAugment(id)) return false;
-
-        IAugment augment = AugmentRegistry.get(id);
-        if (augment == null) return false;
-
-        container.addAugment(augment);
-        return true;
+    public void addAugment(AugmentInstance instance) {
+        container.addAugment(instance);
     }
 
     @Override
-    public boolean removeAugment(ResourceLocation id) {
-        if (!container.hasAugment(id)) return false;
-
-        container.removeAugment(id);
-        return true;
+    public boolean removeAugment(IAugment augment) {
+        return container.removeAugment(augment);
     }
 
     @Override
-    public boolean hasAugment(ResourceLocation id) {
-        return container.hasAugment(id);
+    public boolean hasAugment(IAugment augment) {
+        return container.hasAugment(augment);
     }
 
     @Override
