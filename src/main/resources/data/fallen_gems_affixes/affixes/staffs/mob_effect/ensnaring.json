@@ -1,4 +1,10 @@
 {
+	"conditions": [
+		{
+			"type": "forge:mod_loaded",
+			"modid": "irons_spellbooks"
+		}
+	],
 	"type": "fallen_gems_affixes:spell_effect",
 	"mob_effect": "minecraft:slowness",
 	"target": "SPELL_DAMAGE_TARGET",
