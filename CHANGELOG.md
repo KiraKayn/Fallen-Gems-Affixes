@@ -2,6 +2,9 @@
 - Add back the deleted fix for the crash caused by FakePlayer and non-vanilla sized inventory - Rtxyd
 - Removed the unnecessary CastResult check from SpellCastUtil - thanks Muon
 - Added Augment system, works similarly to Sockets and Gems. Current augments: Soulbound (converted it from an affix) and Extra Gem Power, which boosts the power of a gem
+- Fixed log spam if Iron's Spellbooks is not installed - https://github.com/KiraKayn/Fallen-Gems-Affixes/issues/7
+- Fixed the Eldritch Spell Gem not showing up in chests
+
 
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod
