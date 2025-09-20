@@ -35,11 +35,11 @@ public class Fallen {
         // The following are nodes inside root node, so without namespace.
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
-        public static void bootstrap() {};
+        public static void bootstrap() {}
     }
 
     public static class Augments {
         public static final IAugment SOUL_BOUND = AugmentRegistry.register(new SoulboundAugment());
-        public static void bootstrap() {};
+        public static void bootstrap() {}
     }
 }

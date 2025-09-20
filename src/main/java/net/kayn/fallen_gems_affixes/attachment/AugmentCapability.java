@@ -66,4 +66,8 @@ public class AugmentCapability implements ICapabilitySerializable<CompoundTag> {
             String test = tag1.getString("Test");
         }
     }
+
+    public LivingEntity getEntity() {
+        return entity;
+    }
 }

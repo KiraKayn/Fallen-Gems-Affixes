@@ -4,14 +4,9 @@ import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentHandler;
 
-public class AugmentHandler implements IAugmentHandler {
-
-    private final IAugmentContainer container;
+public record AugmentHandler(IAugmentContainer container) implements IAugmentHandler {
 
     // Constructor needs a container to manage augments
-    public AugmentHandler(IAugmentContainer container) {
-        this.container = container;
-    }
 
     @Override
     public void addAugment(AugmentInstance instance) {
@@ -26,10 +21,5 @@ public class AugmentHandler implements IAugmentHandler {
     @Override
     public boolean hasAugment(IAugment augment) {
         return container.hasAugment(augment);
-    }
-
-    @Override
-    public IAugmentContainer getContainer() {
-        return container;
     }
 }
