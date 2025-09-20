@@ -24,12 +24,16 @@ public class AugmentCapability implements ICapabilitySerializable<CompoundTag> {
     public static final Capability<IAugmentAccessor> CAPABILITY =
             CapabilityManager.get(new CapabilityToken<>(){});
 
-    // test
     private final IAugmentAccessor accessor;
 
     public AugmentCapability(LivingEntity entity) {
         this.entity = entity;
         this.accessor = new AugmentAccessor(entity);
+    }
+
+    public AugmentCapability() {
+        this.entity = null;
+        this.accessor = new AugmentAccessor(null);
     }
 
     @Override
@@ -55,7 +59,6 @@ public class AugmentCapability implements ICapabilitySerializable<CompoundTag> {
         ListTag listTag = nbt.getList("Augments", Tag.TAG_COMPOUND);
         Optional<IAugmentAccessor> instOpt = getCapability(CAPABILITY).resolve();
         if (instOpt.isPresent()) {
-            // we can create every augment by reading nbt here.
             IAugmentAccessor accessor = instOpt.get();
             IAugmentHandler handler = accessor.getHandler();
             IAugmentContainer container = accessor.getContainer();
