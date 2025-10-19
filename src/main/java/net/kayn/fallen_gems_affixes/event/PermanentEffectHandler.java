@@ -91,6 +91,7 @@ public class PermanentEffectHandler implements IPermanentEffectHandler {
         if (event.phase != TickEvent.Phase.END) return;
         Player player = event.player;
         var cached = tickEventProtectedMapWrapper.get(player.getUUID());
+        if (cached == null) return;
         try {
             for (ItemStack equipment : player.getAllSlots()) {
                 for (EquipmentSlot slot : LootCategory.forItem(equipment).getSlots()) {

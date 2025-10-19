@@ -12,11 +12,19 @@ import net.minecraftforge.common.util.INBTSerializable;
 import java.util.*;
 
 public class AugmentContainer implements IAugmentContainer, INBTSerializable<CompoundTag> {
-    private final Map<IAugment, AugmentInstance> augments = new HashMap<>();
+    private final Map<IAugment, List<AugmentInstance>> augments = new HashMap<>();
 
     @Override
     public void addAugment(AugmentInstance instance) {
-        augments.put(instance.getAugment(), instance);
+        List<AugmentInstance> list = augments.get(instance.getAugment());
+        if (list != null) {
+            list.add(instance);
+        }
+        else {
+            list = new ArrayList<>();
+            list.add(instance);
+            augments.put(instance.getAugment(), list);
+        }
     }
 
     @Override
@@ -25,39 +33,68 @@ public class AugmentContainer implements IAugmentContainer, INBTSerializable<Com
     }
 
     @Override
+    public boolean removeAugment(AugmentInstance instance) {
+        IAugment augment = instance.getAugment();
+        List<AugmentInstance> list = augments.get(augment);
+        if (list != null) {
+            boolean result = list.remove(instance);
+            if (list.isEmpty()) {
+                removeAugment(augment);
+            }
+            return result;
+        }
+        return false;
+    }
+
+    @Override
     public boolean hasAugment(IAugment augment) {
         return augments.containsKey(augment);
     }
 
     @Override
-    public Map<IAugment, AugmentInstance> getAugments() {
+    public Map<IAugment, List<AugmentInstance>> getAugments() {
         return Collections.unmodifiableMap(augments);
     }
 
     @Override
     public CompoundTag serializeNBT() {
-        ListTag listTag = new ListTag();
-        for (IAugment augment : augments.keySet()) {
-            CompoundTag tag = new CompoundTag();
-            tag.putString("id", augment.getId().toString());
-            listTag.add(tag);
-        }
         CompoundTag result = new CompoundTag();
-        result.put("Augments", listTag);
+        CompoundTag augmentsTag = new CompoundTag();
+
+        for (Map.Entry<IAugment, List<AugmentInstance>> entry : augments.entrySet()) {
+            IAugment augment = entry.getKey();
+            List<AugmentInstance> instances = entry.getValue();
+
+            ListTag instList = new ListTag();
+            for (AugmentInstance inst : instances) {
+                instList.add(inst.serializeNBT());
+            }
+            augmentsTag.put(augment.getId().toString(), instList);
+        }
+
+        result.put("Augments", augmentsTag);
         return result;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
+        CompoundTag augmentsTag = nbt.getCompound("Augments");
         augments.clear();
-        ListTag list = nbt.getList("Augments", Tag.TAG_COMPOUND);
-        for (Tag t : list) {
-            CompoundTag augmentTag = (CompoundTag) t;
-            ResourceLocation id = new ResourceLocation(augmentTag.getString("id"));
+
+        for (String key : augmentsTag.getAllKeys()) {
+            ResourceLocation id = new ResourceLocation(key);
             IAugment augment = AugmentRegistry.get(id);
-            if (augment != null) {
-                augments.put(augment, new AugmentInstance(augment));
+            if (augment == null) continue;
+
+            ListTag list = augmentsTag.getList(key, Tag.TAG_COMPOUND);
+            List<AugmentInstance> instances = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                CompoundTag instTag = list.getCompound(i);
+                AugmentInstance inst = new AugmentInstance();
+                inst.deserializeNBT(instTag);
+                instances.add(inst);
             }
+            augments.put(augment, instances);
         }
     }
 }

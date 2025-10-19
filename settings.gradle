@@ -13,7 +13,7 @@ pluginManagement {
                 }
                 case "org.spongepowered.mixin": {
                     useModule("org.spongepowered:mixingradle:${requested.version}")
-                    break;
+                    break
                 }
             }
         }

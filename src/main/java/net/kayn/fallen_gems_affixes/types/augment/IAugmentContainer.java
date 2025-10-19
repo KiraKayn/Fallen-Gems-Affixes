@@ -12,7 +12,9 @@ public interface IAugmentContainer {
 
     boolean removeAugment(IAugment augment);
 
+    boolean removeAugment(AugmentInstance instance);
+
     boolean hasAugment(IAugment augment);
 
-    Map<IAugment, AugmentInstance> getAugments();
+    Map<IAugment, List<AugmentInstance>> getAugments();
 }

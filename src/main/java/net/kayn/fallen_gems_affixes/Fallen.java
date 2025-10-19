@@ -35,6 +35,7 @@ public class Fallen {
         // The following are nodes inside root node, so without namespace.
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
+        public static final String UNIQUE_ID = "uuid";
         public static void bootstrap() {}
     }
 

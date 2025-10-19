@@ -1,6 +1,8 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
@@ -16,6 +18,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
@@ -52,20 +57,35 @@ public class AugmentRecipe implements IAugmentRecipe {
         if (ingredientAugments.isEmpty()) {
             return result;
         }
+
         // Operating item's nbt data.
         CompoundTag tag = result.getOrCreateTag();
-        ListTag augments = null;
-        if (!tag.contains(AUGMENT_DATA)) {
-            CompoundTag augmentData = new CompoundTag();
-            augments = new ListTag();
-            augments.addAll(ingredientAugments);
-            augmentData.put(AUGMENTS, augments);
-            tag.put(AUGMENT_DATA, augmentData);
+        CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+        ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+
+        // Create a set for overlapping types.
+        Set<String> existingTypes = new HashSet<>();
+        for (Tag t : augments) {
+            if (t instanceof CompoundTag c && c.contains(TYPE)) {
+                existingTypes.add(c.getString(TYPE));
+            }
         }
-        if (augments == null) {
-            augments = tag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
-            augments.addAll(ingredientAugments);
+
+        for (Tag t : ingredientAugments) {
+            if (t instanceof CompoundTag c && c.contains(TYPE)) {
+                String type = c.getString(TYPE);
+                ResourceLocation loc = ResourceLocation.tryParse(type);
+                IAugment augment = AugmentRegistry.get(loc);
+                if (!existingTypes.contains(type) || !augment.isUnique()) {
+                    augments.add(c.copy());
+                    existingTypes.add(type);
+                }
+            }
         }
+
+        // Finalize tag.
+        augmentData.put(AUGMENTS, augments);
+        tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
         return result;
     }
 
@@ -82,12 +102,12 @@ public class AugmentRecipe implements IAugmentRecipe {
             augment1.putString(TYPE, Fallen.Augments.SOUL_BOUND.getId().toString());
             augments.add(augment1);
             augmentData.put(AUGMENTS, augments);
-            tag.put(AUGMENT_DATA, augmentData);
+            tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
             return augments;
         }
 
-        if (stack.hasTag() && stack.getTag().contains(AUGMENT_DATA)) {
-            return stack.getTagElement(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
+        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+            return stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
         }
         else {
             return new ListTag();
@@ -106,7 +126,21 @@ public class AugmentRecipe implements IAugmentRecipe {
 
     @Override
     public boolean isBaseIngredient(ItemStack pStack) {
-        return base.test(pStack);
+        if (pStack == null) {
+            return false;
+        } else if (base.isEmpty()) {
+            return pStack.isEmpty();
+        } else {
+            return true;
+//            for(ItemStack itemstack : base.getItems()) {
+//                if (itemstack.is(pStack.getItem())) {
+//                    return true;
+//                }
+//            }
+//
+//            return false;
+        }
+//        return base.test(pStack);
     }
 
     @Override

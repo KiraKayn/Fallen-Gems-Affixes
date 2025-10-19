@@ -2,9 +2,11 @@ package net.kayn.fallen_gems_affixes.event;
 
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
+import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,6 +21,9 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
+
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENTS;
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.TYPE;
 
 public class SoulboundEventHandler {
 
@@ -79,11 +84,17 @@ public class SoulboundEventHandler {
      * Check if an ItemStack has a SoulboundAugment
      */
     private static boolean hasSoulboundAugment(ItemStack stack, Player ignoredPlayer) {
-        var capabilityOpt = stack.getCapability(AugmentCapability.CAPABILITY).resolve();
-        if (capabilityOpt.isEmpty()) return false;
-
-        IAugmentAccessor accessor = capabilityOpt.get();
-        return accessor.getHandler().hasAugment(Fallen.Augments.SOUL_BOUND);
+        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+            CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+            ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+            for (int i = 0; i < listTag.size(); i++) {
+                CompoundTag tag = listTag.getCompound(i);
+                if (tag.getString(TYPE).equals(SoulboundAugment.augmentId().toString())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @SubscribeEvent

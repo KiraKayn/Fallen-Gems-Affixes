@@ -14,6 +14,11 @@ public record AugmentHandler(IAugmentContainer container) implements IAugmentHan
     }
 
     @Override
+    public boolean removeAugment(AugmentInstance instance) {
+        return container.removeAugment(instance);
+    }
+
+    @Override
     public boolean removeAugment(IAugment augment) {
         return container.removeAugment(augment);
     }
