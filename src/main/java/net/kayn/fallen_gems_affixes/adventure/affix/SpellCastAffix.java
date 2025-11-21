@@ -10,6 +10,7 @@ import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.util.SpellCastUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -104,6 +105,13 @@ public class SpellCastAffix extends Affix {
         try {
             SpellCastUtil.castSpell(caster, this.spell, spellLevel, target);
             if (!hasActiveRecast) startCooldown(this.getId().toString(), caster, cooldownTicks);
+        } catch (Exception e) {
+            StackTraceElement top = e.getStackTrace()[0];
+            if (top.getMethodName().startsWith("irons_Restrictions")) {
+                FallenGemsAffixes.LOGGER.warn("Spell cast failed due to: irons_Restrictions");
+            } else {
+                FallenGemsAffixes.LOGGER.warn("Spell {} cast failed due to: {}", this.spell, e);
+            }
         } finally {
             Objects.requireNonNull(caster.level().getServer()).execute(() -> setTriggering(caster, false));
         }
