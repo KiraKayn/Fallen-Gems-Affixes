@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "fallen_gems_affixes:bullet_damage",
+  "attribute": "scguns:additional_bullet_damage",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {
