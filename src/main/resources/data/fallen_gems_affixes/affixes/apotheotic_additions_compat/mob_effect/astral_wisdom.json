@@ -42,6 +42,6 @@
     }
   },
   "types": [
-    "celestial_melee", "celestial_ranged"
+    "celestial_melee"
   ]
 }
