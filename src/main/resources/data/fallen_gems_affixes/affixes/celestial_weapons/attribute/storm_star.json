@@ -45,7 +45,7 @@
     }
   },
   "types": [
-    "celestial_weapons"
+    "celestial_ranged"
   ],
   "school": "irons_spellbooks:lightning"
 }

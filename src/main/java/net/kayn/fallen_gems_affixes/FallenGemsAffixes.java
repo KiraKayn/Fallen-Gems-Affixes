@@ -54,7 +54,8 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
         }
         if (ModList.get().isLoaded("celestisynth")) {
-            CelestialLootCategory.CELESTIAL_WEAPONS.toString();
+            CelestialLootCategory.CELESTIAL_MELEE.toString();
+            CelestialLootCategory.CELESTIAL_RANGED.toString();
             MinecraftForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);

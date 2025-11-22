@@ -34,7 +34,7 @@
     }
   },
   "types": [
-    "celestial_weapons"
+    "celestial_melee"
   ],
   "school": "irons_spellbooks:eldritch"
 }

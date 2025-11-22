@@ -43,6 +43,6 @@
     }
   },
   "types": [
-    "celestial_weapons"
+    "celestial_melee", "celestial_ranged"
   ]
 }

@@ -13,7 +13,8 @@
       "gem_class": {
         "key": "celestial_weapons",
         "types": [
-          "celestial_weapons"
+          "celestial_melee",
+          "celestial_ranged"
         ]
       },
       "attribute": "attributeslib:crit_damage",
