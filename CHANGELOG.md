@@ -2,6 +2,10 @@
 - Fixed the Celestial Weapons category by separating Ranged and Melee Weapons
 - Completely reimplemented the Max Health Damage attribute, so it's sort of balanced now and works as intended
 - Deleted the Attributes made for Scguns and Switched the attribute affixes to the mod's attributes
+- Fixed the Eldritch Spell Gem not showing up in chests
+- Fixed log spam if Iron's Spellbooks is not installed - #7
+- Removed the unnecessary CastResult check from SpellCastUtil - thanks Muon
+- Add back the deleted fix for the crash caused by FakePlayer and non-vanilla sized inventory - Rtxyd
 
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod
