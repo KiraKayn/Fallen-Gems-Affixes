@@ -152,7 +152,8 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:lendercataclysm-551586:6769185")
 
-    implementation fg.deobf("maven.modrinth:scorched-guns-2:${scorched_guns_version}")
+    implementation fg.deobf("curse.maven:scorched-guns-802940:7201155")
+
 
     runtimeOnly fg.deobf("curse.maven:apotheotic-additions-924640:6393313")
     runtimeOnly fg.deobf("curse.maven:esoteric-reforging-forge-1150370:5989440")
@@ -180,7 +181,7 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
     runtimeOnly fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:${project.player_anim_version}")
-    runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${geckolib_version}")
+    runtimeOnly fg.deobf("curse.maven:geckolib-388172:7025129")
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")

@@ -1,7 +1,6 @@
 package net.kayn.fallen_gems_affixes;
 
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -15,7 +14,6 @@ import java.util.*;
 public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     private static final String SOCKET_HELPER_MIXIN = "net.kayn.fallen_gems_affixes.mixin.SocketHelperMixin";
-    private static final String GUN_MIXIN = "net.kayn.fallen_gems_affixes.mixin.GunModifierHelperMixin";
     private static final String PE_CLIENT_LIVING_ENTITY_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.LivingEntityMixin";
     private static final String PE_CLIENT_ABSTRACT_CONTAINER_MENU_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.AbstractContainerMenuMixin";
     private static final String PE_CLIENT_PLAYER_MIXIN = "net.kayn.fallen_gems_affixes.mixin.permanent_effect.client.PlayerMixin";
@@ -68,14 +66,8 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
             case PE_CLIENT_MINECRAFT_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_INVENTORY_MIXIN -> enablePermanentEffectDefaultMixin;
             case PE_LIVING_ENTITY_MIXIN -> enablePermanentEffectDefaultMixin;
-            case GUN_MIXIN -> isModLoaded();
             default -> true;
         };
-    }
-
-    private static boolean isModLoaded() {
-        return LoadingModList.get().getMods().stream()
-                .anyMatch(modInfo -> "scguns".equals(modInfo.getModId()));
     }
 
     @Override public String getRefMapperConfig() { return null; }
