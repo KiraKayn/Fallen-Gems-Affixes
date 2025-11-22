@@ -1,3 +1,8 @@
+# 1.3.0
+- Fixed the Celestial Weapons category by separating Ranged and Melee Weapons
+- Completely reimplemented the Max Health Damage attribute, so it's sort of balanced now and works as intended
+- Deleted the Attributes made for Scguns and Switched the attribute affixes to the mod's attributes
+
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod
 - Added Spell Cast affix, that allows you to cast ISS spells on these triggers: spell_damage, spell_heal, hurt, melee_hit and projectile_hit
