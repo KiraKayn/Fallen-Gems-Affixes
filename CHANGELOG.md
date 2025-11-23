@@ -1,3 +1,6 @@
+# 1.3.1
+- Made the Celestisynth Attribute Patch optional, so it will no longer crash the game without Iron's Spellbooks
+
 # 1.3.0
 - Fixed the Celestial Weapons category by separating Ranged and Melee Weapons
 - Completely reimplemented the Max Health Damage attribute, so it's sort of balanced now and works as intended
