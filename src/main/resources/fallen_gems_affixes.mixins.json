@@ -7,6 +7,7 @@
   "mixins": [
     "GemMixin",
     "SocketHelperMixin",
+    "StepFunctionMixin",
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin"
   ],

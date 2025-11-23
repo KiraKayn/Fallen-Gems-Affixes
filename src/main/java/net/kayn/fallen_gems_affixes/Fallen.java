@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.attachment.AugmentRecipeSerializer;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.resources.ResourceLocation;
@@ -36,11 +37,13 @@ public class Fallen {
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
         public static final String UNIQUE_ID = "uuid";
+        public static final String INNER_DATA = "inner_data";
         public static void bootstrap() {}
     }
 
     public static class Augments {
         public static final IAugment SOUL_BOUND = AugmentRegistry.register(new SoulboundAugment());
+        public static final IAugment GEM_POWER = AugmentRegistry.register(new GemPowerAugment());
         public static void bootstrap() {}
     }
 }
