@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "fallen_gems_affixes:reload_speed",
+  "attribute": "scguns:reload_speed",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {

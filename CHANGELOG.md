@@ -1,10 +1,14 @@
-# 1.3.0
-- Add back the deleted fix for the crash caused by FakePlayer and non-vanilla sized inventory - Rtxyd
-- Removed the unnecessary CastResult check from SpellCastUtil - thanks Muon
-- Added Augment system, works similarly to Sockets and Gems. Current augments: Soulbound (converted it from an affix) and Extra Gem Power, which boosts the power of a gem
-- Fixed log spam if Iron's Spellbooks is not installed - https://github.com/KiraKayn/Fallen-Gems-Affixes/issues/7
-- Fixed the Eldritch Spell Gem not showing up in chests
+# 1.3.1
+- Made the Celestisynth Attribute Patch optional, so it will no longer crash the game without Iron's Spellbooks
 
+# 1.3.0
+- Fixed the Celestial Weapons category by separating Ranged and Melee Weapons
+- Completely reimplemented the Max Health Damage attribute, so it's sort of balanced now and works as intended
+- Deleted the Attributes made for Scguns and Switched the attribute affixes to the mod's attributes
+- Fixed the Eldritch Spell Gem not showing up in chests
+- Fixed log spam if Iron's Spellbooks is not installed - #7
+- Removed the unnecessary CastResult check from SpellCastUtil - thanks Muon
+- Add back the deleted fix for the crash caused by FakePlayer and non-vanilla sized inventory - Rtxyd
 
 # 1.2.9
 - Completely fixed the Soulbound Affix, items never get deleted, only equips item if it was in the equipment slot OR in offhand slot and only if it's equippable, also works with Corpse mod

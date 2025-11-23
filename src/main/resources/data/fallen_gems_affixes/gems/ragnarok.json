@@ -9,7 +9,11 @@
       "con_cat": [
         {
           "modid": "celestisynth",
-          "category": "celestial_weapons"
+          "category": "celestial_melee"
+        },
+        {
+          "modid": "celestisynth",
+          "category": "celestial_ranged"
         }
       ],
       "bonus": {

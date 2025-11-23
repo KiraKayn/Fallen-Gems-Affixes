@@ -1,21 +1,39 @@
 package net.kayn.fallen_gems_affixes.loot;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import org.thecelestialworkshop.celestisynth.api.item.CSWeapon;
+
+import java.util.Set;
 
 public class CelestialLootCategory {
 
-    public static final LootCategory CELESTIAL_WEAPONS = LootCategory.register(
-            LootCategory.SWORD,
-            "celestial_weapons",
-            CelestialLootCategory::isCelestialWeapon,
+    static final Set<LootCategory> RANGED_SET = Set.of(LootCategory.BOW, LootCategory.CROSSBOW, LootCategory.TRIDENT);
+
+    public static final LootCategory CELESTIAL_MELEE = LootCategory.register(
+            LootCategory.BOW,
+            "celestial_melee",
+            CelestialLootCategory::isCelestialMelee,
             new EquipmentSlot[]{EquipmentSlot.MAINHAND}
     );
 
-    private static boolean isCelestialWeapon(ItemStack stack) {
-        return stack.is(ItemTags.create(new ResourceLocation("fallen_gems_affixes", "celestial_weapons")));
+    public static final LootCategory CELESTIAL_RANGED = LootCategory.register(
+            LootCategory.BOW,
+            "celestial_ranged",
+            CelestialLootCategory::isCelestialRanged,
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND}
+    );
+
+    private static boolean isCelestialMelee(ItemStack stack) {
+        return stack.getItem() instanceof CSWeapon && !isRanged(stack);
+    }
+
+    private static boolean isCelestialRanged(ItemStack stack) {
+        return stack.getItem() instanceof CSWeapon && isRanged(stack);
+    }
+
+    private static boolean isRanged(ItemStack stack) {
+        return RANGED_SET.stream().anyMatch(c -> c.isValid(stack));
     }
 }

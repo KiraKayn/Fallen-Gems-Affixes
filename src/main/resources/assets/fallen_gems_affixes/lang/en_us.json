@@ -1,11 +1,4 @@
 {
-  "attribute.fallen_gems_affixes.kick_reduction": "Kick Reduction",
-  "attribute.fallen_gems_affixes.projectile_speed": "Projectile Speed",
-  "attribute.fallen_gems_affixes.fire_rate": "Fire Rate",
-  "attribute.fallen_gems_affixes.additional_ammo": "Additional Ammo",
-  "attribute.fallen_gems_affixes.spread_reduction": "Spread Reduction",
-  "attribute.fallen_gems_affixes.reload_speed": "Reload Speed Increase",
-  "attribute.fallen_gems_affixes.bullet_damage": "Bullet Damage",
   "attribute.fallen_gems_affixes.max_health_damage": "Max Health Damage",
   "affix.fallen_gems_affixes.infinity": "∞",
   "bonus.fallen_gems_affixes:permanent_effect": "Gain %s",
@@ -30,17 +23,8 @@
   "affix.fallen_gems_affixes:soulbound": "Bounded",
   "affix.fallen_gems_affixes:soulbound.suffix": "of the Soul",
 
-  "affix.fallen_gems_affixes:gun/attribute/kick_reduction": "Stable",
-  "affix.fallen_gems_affixes:gun/attribute/kick_reduction.suffix": "of Steadiness",
-
   "affix.fallen_gems_affixes:gun/attribute/projectile_speed": "Accelerated",
   "affix.fallen_gems_affixes:gun/attribute/projectile_speed.suffix": "of Velocity",
-
-  "affix.fallen_gems_affixes:gun/attribute/fire_rate": "Rapid",
-  "affix.fallen_gems_affixes:gun/attribute/fire_rate.suffix": "of Quick Firing",
-
-  "affix.fallen_gems_affixes:gun/attribute/capacity": "Expanded",
-  "affix.fallen_gems_affixes:gun/attribute/capacity.suffix": "of Abundance",
 
   "affix.fallen_gems_affixes:gun/attribute/spread_reduction": "Precise",
   "affix.fallen_gems_affixes:gun/attribute/spread_reduction.suffix": "of Accuracy",

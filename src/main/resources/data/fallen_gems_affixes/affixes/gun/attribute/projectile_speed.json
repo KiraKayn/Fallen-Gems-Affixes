@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "fallen_gems_affixes:projectile_speed",
+  "attribute": "scguns:projectile_speed",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {

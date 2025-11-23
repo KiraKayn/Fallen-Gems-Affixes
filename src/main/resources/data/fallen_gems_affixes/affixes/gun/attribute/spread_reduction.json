@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "fallen_gems_affixes:spread_reduction",
+  "attribute": "scguns:spread_multiplier",
   "operation": "ADDITION",
   "values": {
     "common": {
