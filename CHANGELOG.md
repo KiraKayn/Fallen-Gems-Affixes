@@ -1,5 +1,7 @@
 # 1.3.1
 - Made the Celestisynth Attribute Patch optional, so it will no longer crash the game without Iron's Spellbooks
+- Fixed Samurai and Warlord gems not being socketable into the Celestial Weapon category - Rtxyd
+- Added new Gem Bonus called Boss Resistance for the Ragnarok gem, which reduces damage from bosses
 
 # 1.3.0
 - Fixed the Celestial Weapons category by separating Ranged and Melee Weapons
