@@ -5,9 +5,9 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
+    "AttributeBonusMixin",
     "GemMixin",
     "SocketHelperMixin",
-    "StepFunctionMixin",
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin"
   ],
