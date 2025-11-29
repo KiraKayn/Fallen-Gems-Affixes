@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
 import com.google.common.base.Preconditions;
+import com.ibm.icu.text.DecimalFormat;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
@@ -40,8 +41,9 @@ public class BossSlayerBonus extends GemBonus {
     @Override
     public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
         double percent = values.get(rarity).get(0) * 100;
-        return Component.translatable("bonus.fallen_gems_affixes.boss_slayer.desc", String.format("%.0f", percent))
-                .withStyle(ChatFormatting.YELLOW);
+
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Component.translatable("bonus.fallen_gems_affixes.boss_slayer.desc", df.format(percent)).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override

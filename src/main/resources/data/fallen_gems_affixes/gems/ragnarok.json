@@ -52,12 +52,12 @@
       },
       "entity_tag": "fallen_gems_affixes:boss_slayer",
       "values": {
-        "common": 0.015,
-        "uncommon": 0.03,
-        "rare": 0.045,
-        "epic": 0.06,
-        "mythic": 0.075,
-        "ancient": 0.09
+        "common": 0.03,
+        "uncommon": 0.05,
+        "rare": 0.07,
+        "epic": 0.10,
+        "mythic": 0.12,
+        "ancient": 0.15
       }
     }
   ]
