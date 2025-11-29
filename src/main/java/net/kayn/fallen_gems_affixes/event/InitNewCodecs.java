@@ -22,6 +22,7 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "boss_slayer"), BossSlayerBonus.CODEC);
+            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "boss_resistance"), BossResistanceBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
 
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "soulbound"), SoulboundAffix.CODEC);
