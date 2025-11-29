@@ -1,22 +1,16 @@
 package net.kayn.fallen_gems_affixes.augment;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.kayn.fallen_gems_affixes.client.tooltip.AugmentTooltipComponent;
+import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 public class SoulboundAugment implements IAugment {
     private static final ResourceLocation SOULBOUND_ID = new ResourceLocation("fallen_gems_affixes", "soulbound");
@@ -46,7 +40,7 @@ public class SoulboundAugment implements IAugment {
         PoseStack pose = gui.pose();
         pose.pushPose();
         pose.scale(0.5F, 0.5F, 1);
-        gui.renderFakeItem(new ItemStack(Items.NETHER_STAR),2 * x + 1, 2 * y + 1);
+        gui.renderFakeItem(new ItemStack(ModItems.SOULBOUND_AUGMENT_ITEM.get()), 2 * x + 1, 2 * y + 1);
         pose.popPose();
     }
 
