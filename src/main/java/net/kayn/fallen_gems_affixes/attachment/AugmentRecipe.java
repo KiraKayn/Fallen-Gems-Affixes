@@ -13,16 +13,17 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENTS;
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.TYPE;
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -93,7 +94,7 @@ public class AugmentRecipe implements IAugmentRecipe {
      * Get the augment data in the ingredient.
      */
     private ListTag getAugmentData(ItemStack stack) {
-        // Testing with nether star, adding a soulbound augment.
+        // Testing with augment of soulbound, adding a soulbound augment.
         if (stack.is(ModItems.SOULBOUND_AUGMENT_ITEM.get())) {
             CompoundTag tag = stack.getOrCreateTag();
             CompoundTag augmentData = new CompoundTag();
