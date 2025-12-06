@@ -1,0 +1,12 @@
+{
+  "type": "fallen_gems_affixes:add_augment",
+  "augment": "fallen_gems_affixes:soulbound",
+  "item": "fallen_gems_affixes:augment_of_soulbound",
+  "categories": [
+    "sword",
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots"
+  ]
+}

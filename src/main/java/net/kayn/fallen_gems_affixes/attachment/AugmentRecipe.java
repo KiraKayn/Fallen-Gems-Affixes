@@ -1,8 +1,8 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -13,8 +13,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
@@ -29,42 +27,45 @@ import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 @MethodsReturnNonnullByDefault
 public class AugmentRecipe implements IAugmentRecipe {
     final ResourceLocation id;
-    final Ingredient base;
-    final Ingredient addition;
+    final ResourceLocation augmentId;
+    final ItemStack augmentItem;
+    final Set<LootCategory> validCategories;
 
-    public AugmentRecipe(ResourceLocation id, Ingredient base, Ingredient addition) {
+    public AugmentRecipe(ResourceLocation id, ResourceLocation augmentId, ItemStack augmentItem, Set<LootCategory> validCategories) {
         this.id = id;
-        this.base = base;
-        this.addition = addition;
+        this.augmentId = augmentId;
+        this.augmentItem = augmentItem;
+        this.validCategories = validCategories;
     }
 
     @Override
     public boolean matches(Container inv, Level level) {
-        return isBaseIngredient(inv.getItem(1)) && isAdditionIngredient(inv.getItem(2));
+        ItemStack base = inv.getItem(1);
+        ItemStack addition = inv.getItem(2);
+
+        if (base.isEmpty() || addition.isEmpty()) return false;
+
+        if (!ItemStack.isSameItem(addition, augmentItem)) return false;
+
+        if (!validCategories.isEmpty()) {
+            LootCategory category = LootCategory.forItem(base);
+            return validCategories.contains(category);
+        }
+
+        return true;
     }
 
     @Override
     public ItemStack assemble(Container inv, RegistryAccess access) {
         ItemStack result = inv.getItem(1).copy();
-        ItemStack addition = inv.getItem(2).copy();
-        return addAugmentData(result, addition);
+        return addAugmentData(result);
     }
 
-    /**
-     * Add the augment data to the result item.
-     */
-    private ItemStack addAugmentData(ItemStack result, ItemStack addition) {
-        ListTag ingredientAugments = getAugmentData(addition);
-        if (ingredientAugments.isEmpty()) {
-            return result;
-        }
-
-        // Operating item's nbt data.
+    private ItemStack addAugmentData(ItemStack result) {
         CompoundTag tag = result.getOrCreateTag();
         CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
         ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
 
-        // Create a set for overlapping types.
         Set<String> existingTypes = new HashSet<>();
         for (Tag t : augments) {
             if (t instanceof CompoundTag c && c.contains(TYPE)) {
@@ -72,47 +73,18 @@ public class AugmentRecipe implements IAugmentRecipe {
             }
         }
 
-        for (Tag t : ingredientAugments) {
-            if (t instanceof CompoundTag c && c.contains(TYPE)) {
-                String type = c.getString(TYPE);
-                ResourceLocation loc = ResourceLocation.tryParse(type);
-                IAugment augment = AugmentRegistry.get(loc);
-                if (!existingTypes.contains(type) || !augment.isUnique()) {
-                    augments.add(c.copy());
-                    existingTypes.add(type);
-                }
-            }
+        IAugment augment = AugmentRegistry.get(augmentId);
+        String typeString = augmentId.toString();
+
+        if (!existingTypes.contains(typeString) || (augment != null && !augment.isUnique())) {
+            CompoundTag augmentTag = new CompoundTag();
+            augmentTag.putString(TYPE, typeString);
+            augments.add(augmentTag);
         }
 
-        // Finalize tag.
         augmentData.put(AUGMENTS, augments);
         tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
         return result;
-    }
-
-    /**
-     * Get the augment data in the ingredient.
-     */
-    private ListTag getAugmentData(ItemStack stack) {
-        // Testing with augment of soulbound, adding a soulbound augment.
-        if (stack.is(ModItems.SOULBOUND_AUGMENT_ITEM.get())) {
-            CompoundTag tag = stack.getOrCreateTag();
-            CompoundTag augmentData = new CompoundTag();
-            ListTag augments = new ListTag();
-            CompoundTag augment1 = new CompoundTag();
-            augment1.putString(TYPE, Fallen.Augments.SOUL_BOUND.getId().toString());
-            augments.add(augment1);
-            augmentData.put(AUGMENTS, augments);
-            tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-            return augments;
-        }
-
-        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            return stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
-        }
-        else {
-            return new ListTag();
-        }
     }
 
     @Override
@@ -122,36 +94,29 @@ public class AugmentRecipe implements IAugmentRecipe {
 
     @Override
     public boolean isTemplateIngredient(ItemStack pStack) {
-        return false;
+        return pStack.isEmpty();
     }
 
     @Override
     public boolean isBaseIngredient(ItemStack pStack) {
-        if (pStack == null) {
-            return false;
-        } else if (base.isEmpty()) {
-            return pStack.isEmpty();
-        } else {
-            return true;
-//            for(ItemStack itemstack : base.getItems()) {
-//                if (itemstack.is(pStack.getItem())) {
-//                    return true;
-//                }
-//            }
-//
-//            return false;
+        if (pStack.isEmpty()) return false;
+
+        if (!validCategories.isEmpty()) {
+            LootCategory category = LootCategory.forItem(pStack);
+            return validCategories.contains(category);
         }
-//        return base.test(pStack);
+
+        return true;
     }
 
     @Override
     public boolean isAdditionIngredient(ItemStack pStack) {
-        return addition.test(pStack);
+        return ItemStack.isSameItem(pStack, augmentItem);
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess access) {
-        return base.getItems().length > 0 ? base.getItems()[0].copy() : ItemStack.EMPTY;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -162,5 +127,13 @@ public class AugmentRecipe implements IAugmentRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
         return Fallen.RecipeSerializers.ADD_AUGMENT.get();
+    }
+
+    public ResourceLocation getAugmentId() {
+        return augmentId;
+    }
+
+    public Set<LootCategory> getValidCategories() {
+        return validCategories;
     }
 }
