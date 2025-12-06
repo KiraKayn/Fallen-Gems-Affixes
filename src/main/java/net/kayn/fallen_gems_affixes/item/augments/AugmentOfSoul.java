@@ -10,15 +10,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DeathsDefianceItem extends Item {
+public class AugmentOfSoul extends Item {
 
-    public DeathsDefianceItem(Properties properties) {
+    public AugmentOfSoul(Properties properties) {
         super(properties);
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(Component.translatable("item.fallen_gems_affixes.deaths_defiance.tooltip"));
+        tooltip.add(Component.translatable("item.fallen_gems_affixes.augment_of_soul.tooltip"));
     }
 }

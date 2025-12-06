@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -12,17 +13,16 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENTS;
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.TYPE;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -94,7 +94,7 @@ public class AugmentRecipe implements IAugmentRecipe {
      */
     private ListTag getAugmentData(ItemStack stack) {
         // Testing with nether star, adding a soulbound augment.
-        if (stack.is(Items.NETHER_STAR)) {
+        if (stack.is(ModItems.SOULBOUND_AUGMENT_ITEM.get())) {
             CompoundTag tag = stack.getOrCreateTag();
             CompoundTag augmentData = new CompoundTag();
             ListTag augments = new ListTag();
