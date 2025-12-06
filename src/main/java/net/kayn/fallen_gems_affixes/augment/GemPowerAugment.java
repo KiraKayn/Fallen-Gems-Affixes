@@ -22,6 +22,10 @@ public class GemPowerAugment implements IAugment {
         return GEM_POWER_ID;
     }
 
+    public static ResourceLocation augmentId() {
+        return GEM_POWER_ID;
+    }
+
     @Override
     public IAugmentInnerData parse(CompoundTag augmentData) {
         return IAugment.super.parse(augmentData);
@@ -34,7 +38,7 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public boolean needsInstance() {
-        return true;
+        return false;
     }
 
     @Override
@@ -59,12 +63,12 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
-        IAugmentInnerData augmentInnerData = new AugmentInnerData();
+        IAugmentInnerData augmentInnerData = new GemPowerData();
         augmentInnerData.deserializeNBT(tag);
         return augmentInnerData;
     }
 
-    public static class AugmentInnerData implements IAugmentInnerData {
+    public static class GemPowerData implements IAugmentInnerData {
         private float power;
 
         public float getPower() {

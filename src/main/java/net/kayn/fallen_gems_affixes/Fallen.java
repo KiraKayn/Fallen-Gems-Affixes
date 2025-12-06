@@ -43,7 +43,9 @@ public class Fallen {
 
     public static class Augments {
         public static final IAugment SOUL_BOUND = AugmentRegistry.register(new SoulboundAugment());
+        public static final String SOUL_BOUND_STRING = SoulboundAugment.augmentId().toString();
         public static final IAugment GEM_POWER = AugmentRegistry.register(new GemPowerAugment());
+        public static final String GEM_POWER_STRING = GemPowerAugment.augmentId().toString();
         public static void bootstrap() {}
     }
 }

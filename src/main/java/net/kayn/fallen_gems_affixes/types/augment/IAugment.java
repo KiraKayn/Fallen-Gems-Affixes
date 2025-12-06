@@ -1,18 +1,14 @@
 package net.kayn.fallen_gems_affixes.types.augment;
 
-import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 public interface IAugment {
     ResourceLocation AUGMENT_ICON = new ResourceLocation("fallen_gems_affixes", "textures/gui/augment_socket.png");

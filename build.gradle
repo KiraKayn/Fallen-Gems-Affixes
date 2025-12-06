@@ -7,6 +7,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
     id "net.darkhax.curseforgegradle" version "1.0.7"
     id "com.modrinth.minotaur" version "2.+"
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 base {
@@ -37,6 +38,7 @@ minecraft {
 
         client = {
             jvmArgs '-Xms2G', '-Xmx4G'
+//            jvmArgs '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005'
         }
         server = {
             args "--nogui"
@@ -125,6 +127,7 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
         jarJar.ranged(it, "[${mixin_extras_version},)")
     }
+    runtimeOnly files("${fallen_dev_helper_path}")
 
     // Required Dependencies
     implementation fg.deobf("dev.shadowsoffire:Placebo:${mc_version}-${placebo_version}")
@@ -266,6 +269,27 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 
+
+tasks.named('shadowJar') {
+    archiveClassifier.set('shadow')
+    mergeServiceFiles()
+//    if (!file("${fallen_dev_helper_path}").exists()) {
+//        throw new FileNotFoundException('fallen_dev_helper is not found');
+//    }
+    dependencies {
+        include(dependency(files("${fallen_dev_helper_path}")))
+    }
+    dependsOn 'jar'
+}
+
+//tasks.named('jarJar') {
+//    mustRunAfter 'shadowJar'
+//    from(zipTree(tasks.shadowJar.outputs.files.singleFile))
+//    archiveClassifier.set('')
+//}
+
+tasks.build.dependsOn('shadowJar', 'jarJar')
+
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
@@ -279,8 +303,9 @@ tasks.named('jar', Jar).configure {
                 "MixinConfigs"            : project.mixin.toBoolean() ? "${modid}.mixins.json" : ""
         ])
     }
-
+//    archiveClassifier.set('slim')
     finalizedBy 'reobfJar'
+//    finalizedBy 'reobfJar', 'shadowJar', 'jarJar'
 }
 
 tasks.register('generateUpdateJson') {
@@ -322,6 +347,7 @@ tasks.withType(GenerateModuleMetadata) {
 tasks.jarJar.configure {
     archiveClassifier = ""
     dependsOn('reobfJar')
+    finalizedBy('reobfJarJar')
 }
 
 reobf {

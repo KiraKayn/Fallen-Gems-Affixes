@@ -11,7 +11,7 @@ public class StaffLootCategory {
             LootCategory.SWORD,
             "staffs",
             StaffLootCategory::isStaffItem,
-            new EquipmentSlot[]{EquipmentSlot.MAINHAND}
+            new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND}
     );
 
     private static boolean isStaffItem(ItemStack stack) {

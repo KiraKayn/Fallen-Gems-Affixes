@@ -1,9 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
-import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

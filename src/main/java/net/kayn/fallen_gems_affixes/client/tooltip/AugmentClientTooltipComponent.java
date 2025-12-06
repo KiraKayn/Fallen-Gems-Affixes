@@ -1,17 +1,13 @@
 package net.kayn.fallen_gems_affixes.client.tooltip;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
