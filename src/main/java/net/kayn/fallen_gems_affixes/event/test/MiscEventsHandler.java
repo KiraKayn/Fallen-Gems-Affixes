@@ -11,6 +11,7 @@ import net.kayn.fallen_gems_affixes.types.augment.IAugmentHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +24,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,7 +40,6 @@ public class MiscEventsHandler {
             event.addCapability(AUGMENT_CAP_ID, new AugmentCapability(player));
         }
     }
-
     /**
      * This event is fired on both client and server
      */
@@ -79,39 +78,37 @@ public class MiscEventsHandler {
     }
 
     public static void addOrRemoveAugment(ItemStack stack, IAugmentHandler handler, boolean isRemove) {
-        if (!stack.isEmpty() && stack.hasTag()) {
-            assert stack.getTag() != null;
-            if (stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-                ListTag listTag = Objects.requireNonNull(stack.getTagElement(AUGMENT_DATA)).getList(AUGMENTS, Tag.TAG_COMPOUND);
-                for (int i = 0; i < listTag.size(); i++) {
-                    CompoundTag tag = listTag.getCompound(i);
-                    String type = tag.getString(TYPE);
-                    ResourceLocation loc = ResourceLocation.tryParse(type);
-                    IAugment augment = (IAugment) AugmentRegistry.get(loc);
-                    if (augment != null) {
-                        if (!isRemove) {
-                            AugmentInstance instance = augment.createInstanceFromStack(stack);
-                            if (instance == null) {
-                                return;
-                            }
-                            instance.enable();
-                            if (instance.isFunctional()) {
-                                UUID uuid = instance.generateUniqueUUID();
-                                handler.addAugment(instance);
-                                AugmentInstance.store(instance.getUuid(), instance);
-                                tag.putUUID(UNIQUE_ID, uuid);
-                            }
-                        } else {
-                            if (tag.contains(UNIQUE_ID)) {
-                                UUID uuid = tag.getUUID(UNIQUE_ID);
-                                AugmentInstance instance1 = AugmentInstance.get(uuid);
-                                if (instance1 != null) {
-                                    handler.removeAugment(instance1);
-                                }
-                                AugmentInstance.delete(uuid);
-                            }
-                            tag.remove(UNIQUE_ID);
+        if (!stack.isEmpty() && stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+            ListTag listTag = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
+            for (int i = 0; i < listTag.size(); i++) {
+                CompoundTag tag = listTag.getCompound(i);
+                String type = tag.getString(TYPE);
+                ResourceLocation loc = ResourceLocation.tryParse(type);
+                IAugment augment = AugmentRegistry.get(loc);
+                if (augment != null) {
+                    if (!isRemove) {
+                        AugmentInstance instance = augment.createInstanceFromStack(stack);
+                        if (instance == null) {
+                            return;
                         }
+                        instance.enable();
+                        if (instance.isFunctional()) {
+                            UUID uuid = instance.generateUniqueUUID();
+                            handler.addAugment(instance);
+                            AugmentInstance.store(instance.getUuid(), instance);
+                            tag.putUUID(UNIQUE_ID, uuid);
+                        }
+                    }
+                    else {
+                        if (tag.contains(UNIQUE_ID)) {
+                            UUID uuid = tag.getUUID(UNIQUE_ID);
+                            AugmentInstance instance1 = AugmentInstance.get(uuid);
+                            if (instance1 != null) {
+                                handler.removeAugment(instance1);
+                            }
+                            AugmentInstance.delete(uuid);
+                        }
+                        tag.remove(UNIQUE_ID);
                     }
                 }
             }
@@ -124,14 +121,12 @@ public class MiscEventsHandler {
     @SubscribeEvent
     public static void onTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if (stack.hasTag()) {
-            assert stack.getTag() != null;
-            if (stack.getTag().contains(AUGMENT_DATA)) {
-                CompoundTag tag = stack.getTag();
-                ListTag listTag = tag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
-                for (Tag tag1 : listTag) {
-                    ((CompoundTag) tag1).getString(TYPE);
-                    net.kayn.fallen_gems_affixes.augment.SoulboundAugment.getAugmentId().toString();
+        if (stack.hasTag() && stack.getTag().contains(AUGMENT_DATA)) {
+            CompoundTag tag = stack.getTag();
+            ListTag listTag = tag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
+            for (Tag tag1 : listTag) {
+                if (((CompoundTag) tag1).getString(TYPE).equals(Fallen.Augments.SOUL_BOUND.getId().toString())) {
+                    event.getToolTip().add(Component.literal("fallen_gems_affixes:test"));
                 }
             }
         }
