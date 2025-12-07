@@ -2,7 +2,6 @@ package net.kayn.fallen_gems_affixes.client.tooltip;
 
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
 

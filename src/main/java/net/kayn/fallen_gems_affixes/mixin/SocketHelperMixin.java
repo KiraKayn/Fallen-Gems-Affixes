@@ -5,6 +5,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketedGems;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
+import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -20,6 +21,11 @@ import static dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper.getSock
 
 @Mixin(value = SocketHelper.class, remap = false)
 public class SocketHelperMixin {
+    @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")})
+    private static void suspendItemStack(ItemStack stack, CallbackInfoReturnable<SocketedGems> cir) {
+        GemBonusModifier.currentSuspendedItemStack.set(stack);
+    }
+
     @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")}, cancellable = true)
     private static void getGemsImplTweak(ItemStack stack, CallbackInfoReturnable<SocketedGems> cir) {
         int size = getSockets(stack);

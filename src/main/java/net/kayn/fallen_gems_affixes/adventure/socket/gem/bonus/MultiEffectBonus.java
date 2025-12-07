@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 import java.util.*;
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.PotionAffix.Target;
