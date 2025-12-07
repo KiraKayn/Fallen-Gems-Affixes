@@ -4,6 +4,7 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
@@ -121,6 +122,7 @@ public class MiscEventsHandler {
     @SubscribeEvent
     public static void onTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
+        GemBonusModifier.currentSuspendedItemStack.set(stack);
         if (stack.hasTag() && stack.getTag().contains(AUGMENT_DATA)) {
             CompoundTag tag = stack.getTag();
             ListTag listTag = tag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
