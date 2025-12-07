@@ -4,6 +4,7 @@ import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
+import net.kayn.fallen_gems_affixes.commands.AugmentCommands;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
@@ -16,6 +17,7 @@ import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -53,6 +55,7 @@ public class FallenGemsAffixes {
         ModItems.ITEMS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
@@ -76,6 +79,10 @@ public class FallenGemsAffixes {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+    }
+
+    private void registerCommands(RegisterCommandsEvent event) {
+        AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
     }
 
     public static ResourceLocation id(@NotNull String path) {
