@@ -39,7 +39,7 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public boolean needsInstance() {
-        return true;
+        return false;
     }
 
     @Override
