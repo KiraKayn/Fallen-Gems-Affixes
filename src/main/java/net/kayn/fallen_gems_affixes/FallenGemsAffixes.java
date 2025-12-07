@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
+import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
@@ -44,6 +45,7 @@ public class FallenGemsAffixes {
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
         Fallen.bootstrap(modEventBus);
+        GemBonusModifier.bootstrap();
 
         AALootCategories.init();
         new MaxHealthDamageHandler();

@@ -122,7 +122,6 @@ public class GemBonusModifier {
      */
     private static float getGemPower(ItemStack stack) {
         float value = 1F;
-        // stack here could be air, but this only happens on client
         // it is certain the stack is not empty, and we want .
         CompoundTag itemTag = stack.getTag();
         if (itemTag != null && itemTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
@@ -161,7 +160,7 @@ public class GemBonusModifier {
         if (shouldNotModify()) return value;
         ItemStack stack = currentSuspendedItemStack.get();
         float multiplied = (float) getGemPower(stack);
-        return value;
+        return value * multiplied;
     }
 
     /**
@@ -173,7 +172,7 @@ public class GemBonusModifier {
         if (shouldNotModify()) return value;
         ItemStack stack = currentSuspendedItemStack.get();
         double multiplied = (double) getGemPower(stack);
-        return value;
+        return value * multiplied;
     }
 
     /**
@@ -185,7 +184,7 @@ public class GemBonusModifier {
         if (shouldNotModify()) return value;
         ItemStack stack = currentSuspendedItemStack.get();
         long multiplied = (long) getGemPower(stack);
-        return value;
+        return value * multiplied;
     }
 
     /**
@@ -197,7 +196,7 @@ public class GemBonusModifier {
         if (shouldNotModify()) return value;
         ItemStack stack = currentSuspendedItemStack.get();
         short multiplied = (short) getGemPower(stack);
-        return value;
+        return (short) (value * multiplied);
     }
 
     /**
@@ -209,6 +208,6 @@ public class GemBonusModifier {
         if (shouldNotModify()) return value;
         ItemStack stack = currentSuspendedItemStack.get();
         byte multiplied = (byte) getGemPower(stack);
-        return value;
+        return (byte) (value * multiplied);
     }
 }

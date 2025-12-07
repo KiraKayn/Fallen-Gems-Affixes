@@ -17,6 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class GemPowerAugment implements IAugment {
     private static final ResourceLocation GEM_POWER_ID = new ResourceLocation("fallen_gems_affixes", "gem_power");
+
+    public static ResourceLocation augmentId() {
+        return GEM_POWER_ID;
+    }
+
     @Override
     public ResourceLocation getId() {
         return GEM_POWER_ID;
@@ -59,12 +64,12 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
-        IAugmentInnerData augmentInnerData = new AugmentInnerData();
+        IAugmentInnerData augmentInnerData = new GemPowerData();
         augmentInnerData.deserializeNBT(tag);
         return augmentInnerData;
     }
 
-    public static class AugmentInnerData implements IAugmentInnerData {
+    public static class GemPowerData implements IAugmentInnerData {
         private float power;
 
         public float getPower() {
