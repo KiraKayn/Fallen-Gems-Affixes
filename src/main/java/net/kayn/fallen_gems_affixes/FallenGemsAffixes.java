@@ -14,6 +14,7 @@ import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
+import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,6 +49,8 @@ public class FallenGemsAffixes {
 
         Fallen.bootstrap(modEventBus);
         GemBonusModifier.bootstrap();
+
+        ModCreativeTabs.register(modEventBus);
 
         AALootCategories.init();
         new MaxHealthDamageHandler();

@@ -1,7 +1,7 @@
 package net.kayn.fallen_gems_affixes.registry;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.item.augments.AugmentOfSoul;
+import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
@@ -12,9 +12,6 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, FallenGemsAffixes.MOD_ID);
 
-    public static final RegistryObject<Item> SOULBOUND_AUGMENT_ITEM = ITEMS.register("augment_of_soul",
-            () -> new AugmentOfSoul(new Item.Properties()
-                    .stacksTo(16)
-                    .rarity(Rarity.RARE)
-            ));
+    public static final RegistryObject<Item> AUGMENT_ITEM = ITEMS.register("augment",
+            () -> new AugmentItem(new Item.Properties().stacksTo(16).rarity(Rarity.RARE)));
 }

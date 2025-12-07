@@ -376,5 +376,6 @@
   "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike.suffix": "of Piercing Rain",
 
   "item.fallen_gems_affixes.augment_of_soul.tooltip": "\u00A77- When applied, prevents items from being lost on death.",
-  "item.fallen_gems_affixes.augment_of_soul": "\u00A75Augment of Soul"
+  "item.fallen_gems_affixes.augment_of_soul": "\u00A75Augment of Soul",
+  "itemGroup.fallen_gems_affixes.augments": "Augments"
 }
