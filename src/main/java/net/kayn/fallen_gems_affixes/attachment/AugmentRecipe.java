@@ -2,8 +2,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.types.augment.IAugment;
+import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
@@ -17,7 +16,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,114 +24,86 @@ import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AugmentRecipe implements IAugmentRecipe {
-    final ResourceLocation id;
-    final ResourceLocation augmentId;
-    final ItemStack augmentItem;
-    final Set<LootCategory> validCategories;
 
-    public AugmentRecipe(ResourceLocation id, ResourceLocation augmentId, ItemStack augmentItem, Set<LootCategory> validCategories) {
-        this.id = id;
+    private final ResourceLocation augmentId;
+    private final ItemStack addition;
+    private final Set<LootCategory> validCategories;
+
+    public AugmentRecipe(ResourceLocation augmentId, ItemStack addition, Set<LootCategory> validCategories) {
         this.augmentId = augmentId;
-        this.augmentItem = augmentItem;
+        this.addition = addition;
         this.validCategories = validCategories;
     }
+
+    public ItemStack getAddition() { return addition; }
+    public Set<LootCategory> getValidCategories() { return validCategories; }
+    public ResourceLocation getAugmentId() { return augmentId; }
 
     @Override
     public boolean matches(Container inv, Level level) {
         ItemStack base = inv.getItem(1);
-        ItemStack addition = inv.getItem(2);
-
-        if (base.isEmpty() || addition.isEmpty()) return false;
-
-        if (!ItemStack.isSameItem(addition, augmentItem)) return false;
-
-        if (!validCategories.isEmpty()) {
-            LootCategory category = LootCategory.forItem(base);
-            return validCategories.contains(category);
-        }
-
-        return true;
+        ItemStack add = inv.getItem(2);
+        return isBaseIngredient(base) && isAdditionIngredient(add);
     }
 
     @Override
     public ItemStack assemble(Container inv, RegistryAccess access) {
-        ItemStack result = inv.getItem(1).copy();
-        return addAugmentData(result);
+        return addAugmentData(inv.getItem(1).copy(), inv.getItem(2));
     }
 
-    private ItemStack addAugmentData(ItemStack result) {
-        CompoundTag tag = result.getOrCreateTag();
-        CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+    private ItemStack addAugmentData(ItemStack result, ItemStack addition) {
+        if (addition.isEmpty()) return result;
 
-        Set<String> existingTypes = new HashSet<>();
-        for (Tag t : augments) {
+        CompoundTag resultTag = result.getOrCreateTag();
+        CompoundTag resultAugmentData = resultTag.getCompound(AUGMENT_DATA);
+
+        CompoundTag additionTag = addition.getTag();
+        ListTag additionAugments = (additionTag != null && additionTag.contains(AUGMENT_DATA))
+                ? additionTag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND)
+                : new ListTag();
+
+        ListTag resultAugments = resultAugmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+        Set<String> existing = new HashSet<>();
+
+        for (Tag t : resultAugments) {
+            if (t instanceof CompoundTag c && c.contains(TYPE)) existing.add(c.getString(TYPE));
+        }
+        for (Tag t : additionAugments) {
             if (t instanceof CompoundTag c && c.contains(TYPE)) {
-                existingTypes.add(c.getString(TYPE));
+                if (!existing.contains(c.getString(TYPE))) resultAugments.add(c.copy());
             }
         }
 
-        IAugment augment = AugmentRegistry.get(augmentId);
-        String typeString = augmentId.toString();
-
-        if (!existingTypes.contains(typeString) || (augment != null && !augment.isUnique())) {
-            CompoundTag augmentTag = new CompoundTag();
-            augmentTag.putString(TYPE, typeString);
-            augments.add(augmentTag);
-        }
-
-        augmentData.put(AUGMENTS, augments);
-        tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
+        resultAugmentData.put(AUGMENTS, resultAugments);
+        resultTag.put(AUGMENT_DATA, resultAugmentData);
         return result;
     }
 
     @Override
-    public boolean canCraftInDimensions(int w, int h) {
-        return true;
-    }
+    public RecipeSerializer<?> getSerializer() { return Fallen.RecipeSerializers.ADD_AUGMENT.get(); }
 
     @Override
-    public boolean isTemplateIngredient(ItemStack pStack) {
-        return pStack.isEmpty();
-    }
+    public boolean isTemplateIngredient(ItemStack stack) { return stack.isEmpty(); }
 
     @Override
-    public boolean isBaseIngredient(ItemStack pStack) {
-        if (pStack.isEmpty()) return false;
-
+    public boolean isBaseIngredient(ItemStack stack) {
+        if (stack.isEmpty()) return false;
         if (!validCategories.isEmpty()) {
-            LootCategory category = LootCategory.forItem(pStack);
+            LootCategory category = LootCategory.forItem(stack);
             return validCategories.contains(category);
         }
-
         return true;
     }
 
     @Override
-    public boolean isAdditionIngredient(ItemStack pStack) {
-        return ItemStack.isSameItem(pStack, augmentItem);
+    public boolean isAdditionIngredient(ItemStack stack) {
+        return stack.getItem() instanceof AugmentItem &&
+                AugmentItem.getAugmentId(stack).equals(augmentId.toString());
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
-        return ItemStack.EMPTY;
-    }
+    public ItemStack getResultItem(RegistryAccess access) { return ItemStack.EMPTY; }
 
     @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return Fallen.RecipeSerializers.ADD_AUGMENT.get();
-    }
-
-    public ResourceLocation getAugmentId() {
-        return augmentId;
-    }
-
-    public Set<LootCategory> getValidCategories() {
-        return validCategories;
-    }
+    public ResourceLocation getId() { return augmentId; }
 }

@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
@@ -18,59 +17,51 @@ import java.util.Set;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AugmentRecipeSerializer implements RecipeSerializer<AugmentRecipe> {
+
     @Override
-    public @NotNull AugmentRecipe fromJson(ResourceLocation id, JsonObject json) {
-        // Read augment ID
-        ResourceLocation augmentId = new ResourceLocation(json.get("augment").getAsString());
+    public AugmentRecipe fromJson(ResourceLocation id, JsonObject json) {
+        ResourceLocation augmentId = new ResourceLocation(json.get("id").getAsString());
 
-        // Read augment item
-        ResourceLocation itemId = new ResourceLocation(json.get("item").getAsString());
-        ItemStack augmentItem = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(itemId)));
+        JsonObject addition = json.getAsJsonObject("addition");
+        ResourceLocation itemId = new ResourceLocation(addition.get("item").getAsString());
+        ItemStack augmentStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(itemId)));
 
-        // Read categories
         Set<LootCategory> categories = new HashSet<>();
         if (json.has("categories")) {
-            json.getAsJsonArray("categories").forEach(element -> {
-                String categoryName = element.getAsString();
-                LootCategory category = LootCategory.BY_ID.get(categoryName);
-                if (category == null) {
-                    category = LootCategory.BY_ID.get("apotheosis:" + categoryName);
-                }
-                if (category != null) {
-                    categories.add(category);
-                }
+            json.getAsJsonArray("categories").forEach(el -> {
+                String name = el.getAsString();
+                LootCategory cat = LootCategory.BY_ID.getOrDefault(name, LootCategory.BY_ID.get("apotheosis:" + name));
+                if (cat != null) categories.add(cat);
             });
         }
 
-        return new AugmentRecipe(id, augmentId, augmentItem, categories);
+        return new AugmentRecipe(augmentId, augmentStack, categories);
     }
 
     @Override
     public AugmentRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
         ResourceLocation augmentId = buf.readResourceLocation();
-        ItemStack augmentItem = buf.readItem();
+        ItemStack stack = buf.readItem();
 
-        int categoryCount = buf.readVarInt();
+        int count = buf.readVarInt();
         Set<LootCategory> categories = new HashSet<>();
-        for (int i = 0; i < categoryCount; i++) {
-            String categoryId = buf.readUtf();
-            LootCategory category = LootCategory.BY_ID.get(categoryId);
-            if (category != null) {
-                categories.add(category);
-            }
+        for (int i = 0; i < count; i++) {
+            String cat = buf.readUtf();
+            LootCategory c = LootCategory.BY_ID.get(cat);
+            if (c != null) categories.add(c);
         }
 
-        return new AugmentRecipe(id, augmentId, augmentItem, categories);
+        return new AugmentRecipe(augmentId, stack, categories);
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf buf, AugmentRecipe recipe) {
         buf.writeResourceLocation(recipe.getAugmentId());
-        buf.writeItem(recipe.augmentItem);
+        buf.writeItem(recipe.getAddition());
 
         buf.writeVarInt(recipe.getValidCategories().size());
-        for (LootCategory category : recipe.getValidCategories()) {
-            buf.writeUtf(category.toString());
+        for (LootCategory cat : recipe.getValidCategories()) {
+            buf.writeUtf(cat.toString());
         }
     }
 }

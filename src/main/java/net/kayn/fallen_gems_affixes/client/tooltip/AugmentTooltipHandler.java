@@ -2,10 +2,7 @@ package net.kayn.fallen_gems_affixes.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +31,7 @@ public class AugmentTooltipHandler {
             for (int i = 0; i < listTag.size(); i++) {
                 CompoundTag tag = listTag.getCompound(i);
                 ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
-                IAugment augment = AugmentRegistry.get(typeId);
+                IAugment augment = (IAugment) AugmentRegistry.get(typeId);
                 if (augment != null) {
                     IAugmentInnerData innerData = augment.deserializeInnerData(tag.getCompound(INNER_DATA));
                     event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(augment, innerData)));

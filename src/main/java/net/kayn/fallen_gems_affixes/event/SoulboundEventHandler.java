@@ -1,9 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
-import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -84,13 +82,16 @@ public class SoulboundEventHandler {
      * Check if an ItemStack has a SoulboundAugment
      */
     private static boolean hasSoulboundAugment(ItemStack stack, Player ignoredPlayer) {
-        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < listTag.size(); i++) {
-                CompoundTag tag = listTag.getCompound(i);
-                if (tag.getString(TYPE).equals(SoulboundAugment.augmentId().toString())) {
-                    return true;
+        if (stack.hasTag()) {
+            assert stack.getTag() != null;
+            if (stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+                CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+                ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+                for (int i = 0; i < listTag.size(); i++) {
+                    CompoundTag tag = listTag.getCompound(i);
+                    if (tag.getString(TYPE).equals(SoulboundAugment.getAugmentId().toString())) {
+                        return true;
+                    }
                 }
             }
         }
@@ -104,10 +105,10 @@ public class SoulboundEventHandler {
             CompoundTag newData = event.getEntity().getPersistentData();
 
             if (originalData.contains(TAG_SOULBOUND)) {
-                newData.put(TAG_SOULBOUND, originalData.get(TAG_SOULBOUND));
+                newData.put(TAG_SOULBOUND, Objects.requireNonNull(originalData.get(TAG_SOULBOUND)));
             }
             if (originalData.contains(TAG_EQUIPPED_ITEMS)) {
-                newData.put(TAG_EQUIPPED_ITEMS, originalData.get(TAG_EQUIPPED_ITEMS));
+                newData.put(TAG_EQUIPPED_ITEMS, Objects.requireNonNull(originalData.get(TAG_EQUIPPED_ITEMS)));
             }
         }
     }

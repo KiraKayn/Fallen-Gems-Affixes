@@ -1,7 +1,12 @@
 {
   "type": "fallen_gems_affixes:add_augment",
-  "augment": "fallen_gems_affixes:soulbound",
-  "item": "fallen_gems_affixes:augment_of_soulbound",
+  "id": "fallen_gems_affixes:soulbound",
+  "addition": {
+    "item": "fallen_gems_affixes:augment_item",
+    "nbt": {
+      "fallen_gems_affixes:augment_id": "fallen_gems_affixes:soulbound"
+    }
+  },
   "categories": [
     "sword",
     "helmet",
