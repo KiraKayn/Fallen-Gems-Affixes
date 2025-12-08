@@ -50,7 +50,7 @@ public class FallenGemsAffixes {
         Fallen.bootstrap(modEventBus);
         GemBonusModifier.bootstrap();
 
-        ModCreativeTabs.register(modEventBus);
+        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
         AALootCategories.init();
         new MaxHealthDamageHandler();
