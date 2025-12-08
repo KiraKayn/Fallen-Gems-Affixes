@@ -21,35 +21,26 @@ public class ClientSetup {
     private static final Logger LOGGER = LogManager.getLogger("ClientSetup");
 
     @SubscribeEvent
-    public static void registerAugmentModels(ModelEvent.RegisterAdditional event) {
+    public static void addAugmentModels(ModelEvent.RegisterAdditional e) {
         Set<ResourceLocation> locs = Minecraft.getInstance().getResourceManager()
-                .listResources("models", loc -> FallenGemsAffixes.MOD_ID.equals(loc.getNamespace())
-                        && loc.getPath().contains("items/augments/")
-                        && loc.getPath().endsWith(".json"))
+                .listResources("models", loc ->
+                        FallenGemsAffixes.MOD_ID.equals(loc.getNamespace())
+                                && loc.getPath().contains("/augments/")
+                                && loc.getPath().endsWith(".json"))
                 .keySet();
-
         for (ResourceLocation s : locs) {
             String path = s.getPath().substring("models/".length(), s.getPath().length() - ".json".length());
-
-            ResourceLocation rl = new ResourceLocation(s.getNamespace(), path);
-            ModelResourceLocation mrl = new ModelResourceLocation(rl, "inventory");
-            event.register(mrl);
-            LOGGER.debug("Registered augment model: {}", mrl);
+            e.register(new ResourceLocation(FallenGemsAffixes.MOD_ID, path));
         }
     }
 
     @SubscribeEvent
     public static void replaceAugmentModels(ModelEvent.ModifyBakingResult event) {
-        event.getModels().forEach((resourceLocation, bakedModel) -> {
-            if (resourceLocation.getNamespace().equals(FallenGemsAffixes.MOD_ID)
-                    && resourceLocation.getPath().startsWith("items/augments/")
-                    && resourceLocation instanceof ModelResourceLocation mrl
-                    && mrl.getVariant().equals("inventory")) {
-
-                BakedModel wrappedModel = new AugmentModel(bakedModel);
-                event.getModels().put(resourceLocation, wrappedModel);
-                LOGGER.debug("Wrapped augment model with AugmentModel: {}", resourceLocation);
-            }
-        });
+        ModelResourceLocation key = new ModelResourceLocation(FallenGemsAffixes.id("augment"), "inventory");
+        BakedModel oldModel = event.getModels().get(key);
+        if (oldModel != null) {
+            event.getModels().put(key, new AugmentModel(oldModel));
+        }
+        LOGGER.debug("Wrapped augment model with AugmentModel");
     }
 }

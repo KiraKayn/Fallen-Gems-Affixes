@@ -48,23 +48,8 @@ public class AugmentModel implements BakedModel {
 
     private BakedModel resolve(ItemStack stack, BakedModel original) {
         AugmentItem.AugmentData data = AugmentItem.getAugmentData(stack);
-
         if (data != null) {
-            ResourceLocation location = new ResourceLocation(FallenGemsAffixes.MOD_ID,
-                    "items/augments/" + data.getAugmentId().getPath());
-            ModelResourceLocation modelId = new ModelResourceLocation(location, "inventory");
-
-            try {
-                BakedModel model = Minecraft.getInstance().getModelManager().getModel(modelId);
-
-                if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
-                    return original;
-                }
-
-                return model;
-            } catch (Exception e) {
-                LOGGER.warn("Failed to load augment model {}: {}", modelId, e.getMessage());
-            }
+            return Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(FallenGemsAffixes.MOD_ID, "item/augments/" + data.getAugmentId().getPath()));
         }
         return original;
     }
