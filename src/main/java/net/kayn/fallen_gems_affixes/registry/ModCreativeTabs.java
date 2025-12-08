@@ -19,7 +19,6 @@ public class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.fallen_gems_affixes.fallen_gems_affixes"))
                     .icon(() -> new ItemStack(net.minecraft.world.item.Items.DIAMOND))
                     .displayItems((parameters, output) -> {
-                        // EMPTY for now
                     })
                     .build());
 
