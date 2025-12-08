@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation; // Import added
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -17,12 +18,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class AugmentModel implements BakedModel {
+
+    private static final Logger LOGGER = LogManager.getLogger("AugmentModel");
 
     private final BakedModel original;
     private final ItemOverrides overrides;
@@ -31,18 +36,35 @@ public class AugmentModel implements BakedModel {
         this.original = original;
         this.overrides = new ItemOverrides() {
             @Override
-            public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-                BakedModel specific = AugmentModel.this.resolve(stack, original);
-                return specific == original ? specific : specific.getOverrides().resolve(specific, stack, world, entity, seed);
+            public BakedModel resolve(@NotNull BakedModel original, @NotNull ItemStack stack,
+                                      @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
+
+                BakedModel resolved = AugmentModel.this.resolve(stack, original);
+
+                return resolved == original ? resolved : resolved.getOverrides().resolve(resolved, stack, world, entity, seed);
             }
         };
     }
 
     private BakedModel resolve(ItemStack stack, BakedModel original) {
         AugmentItem.AugmentData data = AugmentItem.getAugmentData(stack);
+
         if (data != null) {
-            ResourceLocation modelId = new ResourceLocation(FallenGemsAffixes.MOD_ID, "items/augments/" + data.getAugmentId().getPath());
-            return Minecraft.getInstance().getModelManager().getModel(modelId);
+            ResourceLocation location = new ResourceLocation(FallenGemsAffixes.MOD_ID,
+                    "items/augments/" + data.getAugmentId().getPath());
+            ModelResourceLocation modelId = new ModelResourceLocation(location, "inventory");
+
+            try {
+                BakedModel model = Minecraft.getInstance().getModelManager().getModel(modelId);
+
+                if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
+                    return original;
+                }
+
+                return model;
+            } catch (Exception e) {
+                LOGGER.warn("Failed to load augment model {}: {}", modelId, e.getMessage());
+            }
         }
         return original;
     }
@@ -53,13 +75,16 @@ public class AugmentModel implements BakedModel {
     }
 
     @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
+                                             @NotNull RandomSource rand, @NotNull ModelData extraData,
+                                             @Nullable RenderType renderType) {
         return original.getQuads(state, side, rand, extraData, renderType);
     }
 
     @Override
     @Deprecated
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
+    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
+                                             @NotNull RandomSource rand) {
         return original.getQuads(state, side, rand, ModelData.EMPTY, null);
     }
 
