@@ -24,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
@@ -35,22 +36,44 @@ public class AugmentCommands {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("fallen_gems_affixes").requires(c -> c.hasPermission(2));
-        builder.then(Commands.argument("player", EntityArgument.player())
+        builder.then(Commands.literal("augment")
+                .then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.argument("Augment", ResourceLocationArgument.id()).suggests(SUGGEST_APPLICABLE_AUGMENT)
                         .then(Commands.argument("ExtraData", FloatArgumentType.floatArg(1f))
                                 .executes(c -> addAugmentToMainHandItem(c, FloatArgumentType.getFloat(c, "ExtraData"))))
-                        .executes(c -> addAugmentToMainHandItem(c, 1f)))
-        );
+                        .executes(c -> addAugmentToMainHandItem(c, 1f)))));
+        builder.then(Commands.literal("clearAugment")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes(AugmentCommands::clearAugments)));
         dispatcher.register(builder);
     }
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_APPLICABLE_AUGMENT = (ctx, builder) -> {
         Entity entity = ctx.getSource().getEntity();
-        if (entity instanceof LivingEntity) {
+        if (entity instanceof ServerPlayer) {
             Stream<String> suggestions = AugmentRegistry.BY_ID.keySet().stream().map(ResourceLocation::toString);
             return SharedSuggestionProvider.suggest(suggestions, builder);
         }
         return SharedSuggestionProvider.suggest(Collections.emptyList(), builder);
     };
+
+    private static int clearAugments(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+        ItemStack stack = player.getMainHandItem();
+        if (stack.isEmpty()) {
+            ctx.getSource().sendFailure(Component.literal("Player has no item in mainhand."));
+            return 0;
+        } else if (stack.hasTag() && stack.getTag().contains(AUGMENT_DATA)) {
+            CompoundTag augmentData = stack.getTagElement(AUGMENT_DATA);
+            ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+            augments.clear();
+        }
+
+        ctx.getSource().sendSuccess(
+                () -> Component.literal("Cleared mainhand augments for" + player.getName().getString()),
+                false
+        );
+        return 1;
+    }
 
     private static int addAugmentToMainHandItem(CommandContext<CommandSourceStack> ctx, float extraData) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
