@@ -38,8 +38,8 @@ public class AugmentCommands {
         builder.then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.argument("Augment", ResourceLocationArgument.id()).suggests(SUGGEST_APPLICABLE_AUGMENT)
                         .then(Commands.argument("ExtraData", FloatArgumentType.floatArg(1f))
-                                .executes(AugmentCommands::addAugmentToMainHandItem))
-                        .executes(c -> AugmentCommands.addAugmentToMainHandItem(c, FloatArgumentType.getFloat(c, "ExtraData"))))
+                                .executes(c -> addAugmentToMainHandItem(c, FloatArgumentType.getFloat(c, "ExtraData"))))
+                        .executes(c -> addAugmentToMainHandItem(c, 1f)))
         );
         dispatcher.register(builder);
     }
@@ -52,7 +52,7 @@ public class AugmentCommands {
         return SharedSuggestionProvider.suggest(Collections.emptyList(), builder);
     };
 
-    private static int addAugmentToMainHandItem(CommandContext<CommandSourceStack> ctx, Object... extraData) throws CommandSyntaxException {
+    private static int addAugmentToMainHandItem(CommandContext<CommandSourceStack> ctx, float extraData) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
         ResourceLocation augID = ctx.getArgument("Augment", ResourceLocation.class);
         IAugment augment;
@@ -93,10 +93,8 @@ public class AugmentCommands {
             CompoundTag augTag = new CompoundTag();
             CompoundTag innerData = new CompoundTag();
             augTag.putString(TYPE, augID.toString());
-            if (augment == Fallen.Augments.GEM_POWER && extraData.length == 1) {
-                if (extraData[0] instanceof Number num) {
-                    innerData.putFloat("power", num.floatValue());
-                }
+            if (augment == Fallen.Augments.GEM_POWER) {
+                innerData.putFloat("power", extraData);
             }
             augTag.put(INNER_DATA, innerData);
             augments.add(augTag);
