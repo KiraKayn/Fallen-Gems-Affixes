@@ -18,6 +18,8 @@ public class Fallen {
 
     public static void bootstrap(IEventBus bus) {
         RecipeSerializers.bootstrap(bus);
+        Augments.bootstrap();
+        AugmentMisc.bootstrap();
     }
     public static class RecipeSerializers {
         public static final RegistryObject<AugmentRecipeSerializer> ADD_AUGMENT =
@@ -25,8 +27,6 @@ public class Fallen {
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
-            Augments.bootstrap();
-            AugmentMisc.bootstrap();
         }
     }
     public static class AugmentMisc {
@@ -38,12 +38,15 @@ public class Fallen {
         public static final String TYPE = "type";
         public static final String UNIQUE_ID = "uuid";
         public static final String INNER_DATA = "inner_data";
+        public static final String CATEGORIES = "categories";
         public static void bootstrap() {}
     }
 
     public static class Augments {
         public static final IAugment SOUL_BOUND = AugmentRegistry.register(new SoulboundAugment());
+        public static final String SOUL_BOUND_STRING = SoulboundAugment.augmentId().toString();
         public static final IAugment GEM_POWER = AugmentRegistry.register(new GemPowerAugment());
+        public static final String GEM_POWER_STRING = GemPowerAugment.augmentId().toString();
         public static void bootstrap() {}
     }
 }
