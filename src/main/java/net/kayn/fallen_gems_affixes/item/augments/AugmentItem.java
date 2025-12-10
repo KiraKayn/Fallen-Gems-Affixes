@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.types.augment.IAugment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -75,10 +78,25 @@ public class AugmentItem extends Item {
         if (data != null) {
             Set<LootCategory> categories = data.getCategories();
             if (!categories.isEmpty()) {
-                tooltip.add(Component.translatable("tooltip.fallen_gems_affixes.augment.categories"));
+                tooltip.add(Component.literal(""));
+                tooltip.add(Component.translatable("tooltip.fallen_gems_affixes.augment.categories")
+                        .withStyle(ChatFormatting.GREEN));
                 for (LootCategory category : categories) {
-                    tooltip.add(Component.literal("  • " + category.toString()).withStyle(style -> style.withColor(0xAABBCC)));
+                    tooltip.add(Component.literal("  • " + Component.translatable(category.getDescIdPlural()).getString())
+                            .withStyle(ChatFormatting.GREEN));
                 }
+                tooltip.add(Component.literal(""));
+            }
+        }
+
+        ResourceLocation id = getAugmentId(stack);
+        if (id != null) {
+            IAugment augment = AugmentRegistry.get(id);
+            if (augment != null) {
+                augment.appendItemTooltip(stack, level, tooltip, flag);
+
+                tooltip.add(Component.literal(""));
+                tooltip.add(Component.literal("Fabled").withStyle(ChatFormatting.DARK_RED));
             }
         }
     }
@@ -87,8 +105,9 @@ public class AugmentItem extends Item {
     public Component getName(ItemStack stack) {
         ResourceLocation augmentId = getAugmentId(stack);
         if (augmentId != null) {
-            String translationKey = "item.fallen_gems_affixes.augment." + augmentId.getPath();
-            return Component.translatable(translationKey);
+            return Component
+                    .translatable("item.fallen_gems_affixes.augment." + augmentId.getPath())
+                    .withStyle(ChatFormatting.DARK_RED);
         }
         return super.getName(stack);
     }

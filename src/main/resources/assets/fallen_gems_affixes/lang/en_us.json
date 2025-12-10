@@ -375,8 +375,10 @@
   "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike": "Volleystrike",
   "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike.suffix": "of Piercing Rain",
 
-  "item.fallen_gems_affixes.augment_of_soul.tooltip": "\u00A77- When applied, prevents items from being lost on death.",
-  "item.fallen_gems_affixes.augment_of_soul": "\u00A75Augment of Soul",
+  "itemGroup.fallen_gems_affixes.fallen_gems_affixes": "Fallen Gems Affixes",
 
-  "itemGroup.fallen_gems_affixes.fallen_gems_affixes": "Fallen Gems Affixes"
+  "item.fallen_gems_affixes.augment.soulbound": "Augment of Soul",
+  "tooltip.fallen_gems_affixes.augment.categories": "Fits in:",
+  "fallen_gems_affixes.augment.soulbound.type": "Soulbound:",
+  "fallen_gems_affixes.augment.soulbound.desc": "When applied, prevents items from being lost on death."
 }

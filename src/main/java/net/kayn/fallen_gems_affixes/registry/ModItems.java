@@ -13,5 +13,5 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, FallenGemsAffixes.MOD_ID);
 
     public static final RegistryObject<Item> AUGMENT_ITEM = ITEMS.register("augment",
-            () -> new AugmentItem(new Item.Properties().stacksTo(16).rarity(Rarity.RARE)));
+            () -> new AugmentItem(new Item.Properties().stacksTo(16).rarity(Rarity.EPIC)));
 }
