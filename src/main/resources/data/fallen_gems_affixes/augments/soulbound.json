@@ -1,6 +1,5 @@
 {
   "augment": "fallen_gems_affixes:soulbound",
-  "texture": "fallen_gems_affixes:item/augments/soulbound.png",
   "categories": [
     "sword",
     "helmet",
