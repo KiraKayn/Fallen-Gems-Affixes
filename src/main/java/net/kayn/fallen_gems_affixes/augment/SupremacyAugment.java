@@ -3,6 +3,8 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
+import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.DurabilityBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
@@ -28,7 +30,8 @@ import java.util.Map;
 
 public class SupremacyAugment implements IAugment {
     private static final ResourceLocation SUPREMACY_ID = new ResourceLocation(FallenGemsAffixes.MOD_ID, "supremacy");
-    private static final float MAX_AFFIX_LEVEL = 2.0f;
+    public static final float STANDARD_MAX_LEVEL = 1.0f;
+    public static final float MAX_AFFIX_LEVEL = 2.0f;
 
     public static ResourceLocation augmentId() {
         return SUPREMACY_ID;
@@ -103,12 +106,16 @@ public class SupremacyAugment implements IAugment {
         Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
         Map<DynamicHolder<? extends Affix>, AffixInstance> newAffixes = new HashMap<>();
         affixes.forEach((affix, affixIns) -> {
-            newAffixes.put(affix, new AffixInstance(
-                    affixIns.affix(),
-                    affixIns.stack(),
-                    affixIns.rarity(),
-                    Mth.clamp(affixIns.level() * power, 0, MAX_AFFIX_LEVEL)
-            ));
+            if (!(affix.get() instanceof DurableAffix)) {
+                newAffixes.put(affix, new AffixInstance(
+                        affixIns.affix(),
+                        affixIns.stack(),
+                        affixIns.rarity(),
+                        Mth.clamp(Math.max(affixIns.level(), power), 0, MAX_AFFIX_LEVEL)
+                ));
+            } else {
+                newAffixes.put(affix, affixIns);
+            }
         });
         AffixHelper.setAffixes(stack, newAffixes);
     }

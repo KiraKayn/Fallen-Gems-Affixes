@@ -5,6 +5,7 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
+    "AffixHelperMixin",
     "GemMixin",
     "SocketHelperMixin",
     "permanent_effect.InventoryMixin",
