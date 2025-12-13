@@ -18,7 +18,7 @@ import java.util.List;
 public interface IAugment {
     ResourceLocation AUGMENT_ICON = new ResourceLocation("fallen_gems_affixes", "textures/gui/augment_socket.png");
 
-    Component TEXT = Component.literal("Empty Augment");
+    Component TEXT = Component.literal("Empty Augment Slot");
 
 //    static Component getTooltip(CompoundTag tag) {
 //        return Component.translatable(tag.getString(Fallen.AugmentMisc.TYPE));

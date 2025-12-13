@@ -19,10 +19,6 @@
   "affix.fallen_gems_affixes.trigger.hurt": "When attacked, cast %s",
   "affix.fallen_gems_affixes.trigger.hurt.self": "When attacked, self-cast %s",
 
-  "affix.fallen_gems_affixes.soulbound.desc": "This item stays with you after death",
-  "affix.fallen_gems_affixes:soulbound": "Bounded",
-  "affix.fallen_gems_affixes:soulbound.suffix": "of the Soul",
-
   "affix.fallen_gems_affixes:gun/attribute/projectile_speed": "Accelerated",
   "affix.fallen_gems_affixes:gun/attribute/projectile_speed.suffix": "of Velocity",
 

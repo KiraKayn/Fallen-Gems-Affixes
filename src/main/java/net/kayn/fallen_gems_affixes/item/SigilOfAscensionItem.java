@@ -21,9 +21,4 @@ public class SigilOfAscensionItem extends Item {
         tooltip.add(Component.translatable("item.fallen_gems_affixes.sigil_of_ascension.desc")
                 .withStyle(ChatFormatting.GRAY));
     }
-
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        return true;
-    }
 }
