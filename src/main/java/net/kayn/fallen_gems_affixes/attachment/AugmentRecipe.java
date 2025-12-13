@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
@@ -60,19 +61,16 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         return addAugmentData(result, augmentItem);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private boolean categoryMatches(ItemStack augmentItem, LootCategory cat) {
-        if (augmentItem.hasTag()) {
-            assert augmentItem.getTag() != null;
-            if (augmentItem.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-                CompoundTag augmentData = augmentItem.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
-                assert augmentData != null;
-                ListTag categories = augmentData.getList(CATEGORIES, Tag.TAG_STRING);
-                if (categories.isEmpty()) return true;
-                for (Tag catName : categories) {
-                    String category = catName.getAsString();
-                    LootCategory cat1 = LootCategory.byId(category);
-                    if (cat.equals(cat1)) return true;
-                }
+        if (augmentItem.hasTag() && augmentItem.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+            CompoundTag augmentData = augmentItem.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
+            ListTag categories = augmentData.getList(CATEGORIES, Tag.TAG_STRING);
+            if (categories.isEmpty()) return true;
+            for (Tag catName : categories) {
+                String category = catName.getAsString();
+                LootCategory cat1 = LootCategory.byId(category);
+                if (cat.equals(cat1)) return true;
             }
         }
         return false;
@@ -110,6 +108,9 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
                 if (!existingTypes.contains(type) || !augment.isUnique()) {
                     augments.add(c.copy());
                     existingTypes.add(type);
+                    if (augment instanceof SupremacyAugment) {
+                        SupremacyAugment.apply(result);
+                    }
                 }
             }
         }

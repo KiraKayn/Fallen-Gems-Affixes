@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
@@ -36,8 +37,9 @@ public class AugmentSlotHelper {
         return current < max;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static int getAugmentCount(ItemStack stack) {
-        if (!stack.hasTag() || !Objects.requireNonNull(stack.getTag()).contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+        if (!stack.hasTag() || !stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
             return 0;
         }
         CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
@@ -50,6 +52,6 @@ public class AugmentSlotHelper {
     }
 
     public static int getEmptySlots(ItemStack stack) {
-        return getAugmentSlots(stack) - getAugmentCount(stack);
+        return Mth.clamp(getAugmentSlots(stack) - getAugmentCount(stack), 0, MAX_AUGMENT_SLOTS);
     }
 }

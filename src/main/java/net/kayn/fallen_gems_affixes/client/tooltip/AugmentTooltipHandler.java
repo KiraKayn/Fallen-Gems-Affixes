@@ -22,6 +22,7 @@ import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 public class AugmentTooltipHandler {
 
     @SubscribeEvent
+    @SuppressWarnings("ConstantConditions")
     public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
         ItemStack stack = event.getItemStack();
         if (stack.isEmpty()) return;
@@ -30,12 +31,9 @@ public class AugmentTooltipHandler {
         if (augmentSlots <= 0) return;
 
         ListTag listTag = new ListTag();
-        if (stack.hasTag()) {
-            assert stack.getTag() != null;
-            if (stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
                 CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
                 listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-            }
         }
 
         int filled = listTag.size();
