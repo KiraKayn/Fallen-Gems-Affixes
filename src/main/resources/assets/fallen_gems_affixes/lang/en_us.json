@@ -382,7 +382,7 @@
   "item.fallen_gems_affixes.sigil_of_ascension": "Sigil of Ascension",
   "item.fallen_gems_affixes.sigil_of_ascension.desc": "Converts a Socket slot into an Augment slot",
 
-  "item.fallen_gems_affixes.augment.gem_power": "Augment of Power",
+  "item.fallen_gems_affixes.augment.gem_power": "Augment of Empowerment",
   "fallen_gems_affixes.augment.gem_power.type": "Extra Gem Power:",
   "fallen_gems_affixes.augment.gem_power.desc": "When applied, increases socketed gem power by %sx",
 
