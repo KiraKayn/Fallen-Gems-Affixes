@@ -69,17 +69,32 @@ public class GemPowerAugment implements IAugment {
         pose.popPose();
     }
 
+    @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-        MutableComponent comp = Component.translatable("fallen_gems_affixes.augment.gem_power.desc")
-                .withStyle(net.minecraft.ChatFormatting.YELLOW);
-        return comp;
+        if (innerData instanceof GemPowerData data) {
+            return Component.translatable(
+                    "fallen_gems_affixes.augment.gem_power.desc",
+                    data.getPower()
+            ).withStyle(ChatFormatting.YELLOW);
+        }
+
+        return Component.translatable("fallen_gems_affixes.augment.gem_power.desc")
+                .withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
-        IAugmentInnerData augmentInnerData = new GemPowerData();
-        augmentInnerData.deserializeNBT(tag);
-        return augmentInnerData;
+        GemPowerData data = new GemPowerData();
+        data.deserializeNBT(tag);
+
+        if (data.power == 0.0f) {
+            AugmentItem.AugmentData jsonData = AugmentItem.getAugmentData(GEM_POWER_ID);
+            if (jsonData != null) {
+                data.power = jsonData.getPower();
+            }
+        }
+
+        return data;
     }
 
     @Override
