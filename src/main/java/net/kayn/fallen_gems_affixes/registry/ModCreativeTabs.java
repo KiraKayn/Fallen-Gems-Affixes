@@ -17,8 +17,9 @@ public class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> AUGMENTS_TAB = CREATIVE_MODE_TABS.register("augments",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.fallen_gems_affixes.fallen_gems_affixes"))
-                    .icon(() -> new ItemStack(net.minecraft.world.item.Items.DIAMOND))
+                    .icon(() -> new ItemStack(ModItems.SIGIL_OF_ASCENSION.get()))
                     .displayItems((parameters, output) -> {
+                        output.accept(ModItems.SIGIL_OF_ASCENSION.get());
                     })
                     .build());
 

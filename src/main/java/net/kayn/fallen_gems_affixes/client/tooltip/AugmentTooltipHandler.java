@@ -2,10 +2,8 @@ package net.kayn.fallen_gems_affixes.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
@@ -25,22 +23,39 @@ public class AugmentTooltipHandler {
 
     @SubscribeEvent
     public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
-        if (event.getItemStack().isEmpty()) return;
         ItemStack stack = event.getItemStack();
-        // Only add to items that have augment tag
-        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < listTag.size(); i++) {
-                CompoundTag tag = listTag.getCompound(i);
-                ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
-                IAugment augment = AugmentRegistry.get(typeId);
-                if (augment != null) {
-                    IAugmentInnerData innerData = augment.deserializeInnerData(tag.getCompound(INNER_DATA));
-                    event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(augment, innerData)));
-                } else {
-                    event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(null, null)));
-                }
+        if (stack.isEmpty()) return;
+
+        int augmentSlots = AugmentSlotHelper.getAugmentSlots(stack);
+        if (augmentSlots <= 0) return;
+
+        ListTag listTag = new ListTag();
+        if (stack.hasTag()) {
+            assert stack.getTag() != null;
+            if (stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+                CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+                listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+            }
+        }
+
+        int filled = listTag.size();
+        int empty = Math.max(0, augmentSlots - filled);
+
+        for (int i = 0; i < empty; i++) {
+            event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(null, null)));
+        }
+
+        for (int i = 0; i < filled; i++) {
+            CompoundTag tag = listTag.getCompound(i);
+
+            ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
+            IAugment augment = AugmentRegistry.get(typeId);
+
+            if (augment != null) {
+                IAugmentInnerData inner = augment.deserializeInnerData(tag.getCompound(INNER_DATA));
+                event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(augment, inner)));
+            } else {
+                event.getTooltipElements().add(Either.right(new AugmentTooltipComponent(null, null)));
             }
         }
     }

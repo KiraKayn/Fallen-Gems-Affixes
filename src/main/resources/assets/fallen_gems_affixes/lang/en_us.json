@@ -380,5 +380,8 @@
   "item.fallen_gems_affixes.augment.soulbound": "Augment of Soul",
   "tooltip.fallen_gems_affixes.augment.categories": "Fits in:",
   "fallen_gems_affixes.augment.soulbound.type": "Soulbound:",
-  "fallen_gems_affixes.augment.soulbound.desc": "When applied, prevents items from being lost on death."
+  "fallen_gems_affixes.augment.soulbound.desc": "When applied, prevents items from being lost on death.",
+
+  "item.fallen_gems_affixes.sigil_of_ascension": "Sigil of Ascension",
+  "item.fallen_gems_affixes.sigil_of_ascension.desc": "Converts a Socket slot into an Augment slot"
 }

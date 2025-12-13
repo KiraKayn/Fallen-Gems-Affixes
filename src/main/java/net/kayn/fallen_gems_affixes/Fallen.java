@@ -1,16 +1,20 @@
 package net.kayn.fallen_gems_affixes;
 
+import com.google.gson.JsonObject;
 import net.kayn.fallen_gems_affixes.attachment.AugmentRecipeSerializer;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
+import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 public class Fallen {
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
@@ -21,19 +25,36 @@ public class Fallen {
         Augments.bootstrap();
         AugmentMisc.bootstrap();
     }
+
     public static class RecipeSerializers {
         public static final RegistryObject<AugmentRecipeSerializer> ADD_AUGMENT =
                 SERIALIZERS.register("add_augment", AugmentRecipeSerializer::new);
+
+        public static final RegistryObject<RecipeSerializer<SocketConversionRecipe>> SOCKET_CONVERSION =
+                SERIALIZERS.register("socket_conversion", () -> new RecipeSerializer<>() {
+                    @Override
+                    public @NotNull SocketConversionRecipe fromJson(ResourceLocation id, JsonObject json) {
+                        return new SocketConversionRecipe();
+                    }
+
+                    @Override
+                    public SocketConversionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+                        return new SocketConversionRecipe();
+                    }
+
+                    @Override
+                    public void toNetwork(FriendlyByteBuf buf, SocketConversionRecipe recipe) {
+                    }
+                });
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
         }
     }
+
     public static class AugmentMisc {
         public static final ResourceLocation AUGMENT_CAP_ID = new ResourceLocation(FallenGemsAffixes.MOD_ID, "augment_cap");
-        // This is the root node.
         public static final String AUGMENT_DATA = "fallen_gems_affixes:augment_data";
-        // The following are nodes inside root node, so without namespace.
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
         public static final String UNIQUE_ID = "uuid";

@@ -1,12 +1,6 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
-import dev.shadowsoffire.apotheosis.adventure.Adventure;
-import dev.shadowsoffire.apotheosis.adventure.event.ItemSocketingEvent;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
-import dev.shadowsoffire.apotheosis.adventure.socket.SocketedGems;
-import dev.shadowsoffire.apotheosis.adventure.socket.SocketingRecipe;
-import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
@@ -16,7 +10,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -27,13 +20,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
@@ -42,6 +32,7 @@ import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 @MethodsReturnNonnullByDefault
 public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRecipe {
     private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:add_augment");
+
     public AugmentRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.AUGMENT_ITEM.get()), ItemStack.EMPTY);
     }
@@ -49,9 +40,15 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
     @Override
     public boolean matches(Container inv, Level level) {
         ItemStack base = inv.getItem(1).copy();
-        LootCategory cat = LootCategory.forItem(base);
         ItemStack augmentItem = inv.getItem(2).copy();
-        return categoryMatches(augmentItem, cat);
+
+        LootCategory cat = LootCategory.forItem(base);
+
+        if (!categoryMatches(augmentItem, cat)) {
+            return false;
+        }
+
+        return AugmentSlotHelper.hasAvailableSlots(base);
     }
 
     @Override
@@ -64,20 +61,28 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
     }
 
     private boolean categoryMatches(ItemStack augmentItem, LootCategory cat) {
-        if (augmentItem.hasTag() && augmentItem.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = augmentItem.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag categories = augmentData.getList(CATEGORIES, Tag.TAG_STRING);
-            if (categories.isEmpty()) return true;
-            for (Tag catName : categories) {
-                String category = catName.getAsString();
-                LootCategory cat1 = LootCategory.byId(category);
-                if (cat.equals(cat1)) return true;
+        if (augmentItem.hasTag()) {
+            assert augmentItem.getTag() != null;
+            if (augmentItem.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+                CompoundTag augmentData = augmentItem.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
+                assert augmentData != null;
+                ListTag categories = augmentData.getList(CATEGORIES, Tag.TAG_STRING);
+                if (categories.isEmpty()) return true;
+                for (Tag catName : categories) {
+                    String category = catName.getAsString();
+                    LootCategory cat1 = LootCategory.byId(category);
+                    if (cat.equals(cat1)) return true;
+                }
             }
         }
         return false;
     }
 
     private ItemStack addAugmentData(ItemStack result, ItemStack augmentItem) {
+        if (!AugmentSlotHelper.hasAvailableSlots(result)) {
+            return result;
+        }
+
         // Get the AugmentData from AugmentItem
         ListTag ingredientAugments = getAugmentData(augmentItem);
         if (ingredientAugments.isEmpty()) {

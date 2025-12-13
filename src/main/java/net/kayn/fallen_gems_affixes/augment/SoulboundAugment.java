@@ -60,15 +60,8 @@ public class SoulboundAugment implements IAugment {
 
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-
-        MutableComponent comp = Component.translatable("fallen_gems_affixes.augment.soulbound.type")
-                .withStyle(ChatFormatting.GOLD);
-        comp.append(Component.literal("\n"));
-        comp.append(
-                Component.translatable("fallen_gems_affixes.augment.soulbound.desc")
-                        .withStyle(ChatFormatting.YELLOW)
-        );
-
+        MutableComponent comp = Component.translatable("fallen_gems_affixes.augment.soulbound.desc")
+                .withStyle(net.minecraft.ChatFormatting.YELLOW);
         return comp;
     }
 
