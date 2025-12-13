@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -35,6 +37,41 @@ public class AugmentItem extends Item {
         ItemStack stack = new ItemStack(net.kayn.fallen_gems_affixes.registry.ModItems.AUGMENT_ITEM.get());
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString(AUGMENT_ID_TAG, augmentId.toString());
+
+        /*
+         * Add AUGMENT_DATA structure so augments that rely on inner data (like gem_power)
+         * have their default inner data available when the augment item is created from JSON.
+         *
+         * Structure matches what GemBonusModifier expects:
+         *  itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND)
+         *  each entry has:
+         *      TYPE -> augment id string
+         *      INNER_DATA -> compound tag containing augment-specific data (e.g. "power")
+         */
+        AugmentData data = AUGMENT_DATA.get(augmentId);
+        if (data != null) {
+            try {
+                CompoundTag augmentDataCompound = new CompoundTag();
+                ListTag list = new ListTag();
+
+                CompoundTag entry = new CompoundTag();
+                entry.putString(Fallen.AugmentMisc.TYPE, augmentId.toString());
+
+                CompoundTag inner = new CompoundTag();
+                // For gem_power we store the "power" float. For other augments, this can be extended.
+                // We always put the inner data here from AugmentData so GemBonusModifier can pick it up.
+                inner.putFloat("power", data.getPower());
+
+                entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
+                list.add(entry);
+
+                augmentDataCompound.put(Fallen.AugmentMisc.AUGMENTS, list);
+                tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentDataCompound);
+            } catch (Exception e) {
+                FallenGemsAffixes.LOGGER.error("Error writing augment default inner data for {}", augmentId, e);
+            }
+        }
+
         return stack;
     }
 
@@ -144,7 +181,16 @@ public class AugmentItem extends Item {
                         });
                     }
 
-                    AUGMENT_DATA.put(augmentId, new AugmentData(augmentId, texture, categories));
+                    float power = 1.0f;
+                    if (json.has("power")) {
+                        try {
+                            power = json.get("power").getAsFloat();
+                        } catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn("Invalid power value for augment {}: {}", id, json.get("power").toString());
+                        }
+                    }
+
+                    AUGMENT_DATA.put(augmentId, new AugmentData(augmentId, texture, categories, power));
                 } catch (Exception e) {
                     FallenGemsAffixes.LOGGER.error("Error loading augment data: {}", entry.getKey(), e);
                 }
@@ -158,11 +204,13 @@ public class AugmentItem extends Item {
         private final ResourceLocation augmentId;
         private final ResourceLocation texture;
         private final Set<LootCategory> categories;
+        private final float power;
 
-        public AugmentData(ResourceLocation augmentId, ResourceLocation texture, Set<LootCategory> categories) {
+        public AugmentData(ResourceLocation augmentId, ResourceLocation texture, Set<LootCategory> categories, float power) {
             this.augmentId = augmentId;
             this.texture = texture;
             this.categories = categories;
+            this.power = power;
         }
 
         public ResourceLocation getAugmentId() {
@@ -175,6 +223,10 @@ public class AugmentItem extends Item {
 
         public Set<LootCategory> getCategories() {
             return categories;
+        }
+
+        public float getPower() {
+            return power;
         }
 
         public boolean canApplyTo(LootCategory category) {

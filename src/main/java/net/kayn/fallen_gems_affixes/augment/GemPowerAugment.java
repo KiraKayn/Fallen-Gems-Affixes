@@ -3,8 +3,10 @@ package net.kayn.fallen_gems_affixes.augment;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -12,8 +14,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 
 public class GemPowerAugment implements IAugment {
     private static final ResourceLocation GEM_POWER_ID = new ResourceLocation("fallen_gems_affixes", "gem_power");
@@ -50,16 +55,24 @@ public class GemPowerAugment implements IAugment {
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
+
+        var data = AugmentItem.getAugmentData(GEM_POWER_ID);
+        if (data == null) return;
+
+        ItemStack stack = AugmentItem.createAugment(GEM_POWER_ID);
+
         PoseStack pose = gui.pose();
         pose.pushPose();
+        pose.translate(x, y, 0);
         pose.scale(0.5F, 0.5F, 1);
-        gui.renderFakeItem(new ItemStack(Items.DIAMOND),2 * x + 1, 2 * y + 1);
+        gui.renderFakeItem(stack, 0, 0);
         pose.popPose();
     }
 
-    @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-        return innerData.combineText();
+        MutableComponent comp = Component.translatable("fallen_gems_affixes.augment.gem_power.desc")
+                .withStyle(net.minecraft.ChatFormatting.YELLOW);
+        return comp;
     }
 
     @Override
@@ -67,6 +80,32 @@ public class GemPowerAugment implements IAugment {
         IAugmentInnerData augmentInnerData = new GemPowerData();
         augmentInnerData.deserializeNBT(tag);
         return augmentInnerData;
+    }
+
+    @Override
+    public void appendItemTooltip(ItemStack stack, @Nullable Level level, java.util.List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("fallen_gems_affixes.augment.gem_power.type")
+                .withStyle(ChatFormatting.GOLD));
+
+        float power = 1.0f;
+        AugmentItem.AugmentData data = null;
+
+        ResourceLocation id = AugmentItem.getAugmentId(stack);
+        if (id != null) {
+            data = AugmentItem.getAugmentData(id);
+        }
+        if (data == null) {
+            data = AugmentItem.getAugmentData(GEM_POWER_ID);
+        }
+
+        if (data != null) {
+            power = data.getPower();
+        }
+
+        tooltip.add(Component.literal("• ")
+                .withStyle(ChatFormatting.YELLOW)
+                .append(Component.translatable("fallen_gems_affixes.augment.gem_power.desc", power)
+                        .withStyle(ChatFormatting.YELLOW)));
     }
 
     public static class GemPowerData implements IAugmentInnerData {
@@ -107,5 +146,10 @@ public class GemPowerAugment implements IAugment {
         public void deserializeNBT(CompoundTag tag) {
             power = tag.getFloat("power");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "GemPowerAugment{" + "id=" + augmentId() + "}";
     }
 }
