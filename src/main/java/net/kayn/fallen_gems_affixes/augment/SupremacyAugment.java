@@ -3,8 +3,8 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
+import dev.shadowsoffire.apotheosis.adventure.affix.AttributeAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
-import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.DurabilityBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
@@ -15,6 +15,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +27,9 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SupremacyAugment implements IAugment {
@@ -89,35 +93,72 @@ public class SupremacyAugment implements IAugment {
     }
 
     @Override
-    public void appendItemTooltip(ItemStack stack, @Nullable Level level, java.util.List<net.minecraft.network.chat.Component> tooltip, TooltipFlag flag) {
+    public void appendItemTooltip(ItemStack stack, @Nullable Level level, java.util.List<Component> tooltip, TooltipFlag flag) {
         float power = getAugmentPower(stack);
 
-        tooltip.add(net.minecraft.network.chat.Component.translatable("fallen_gems_affixes.augment.supremacy.type")
+        tooltip.add(Component.translatable("fallen_gems_affixes.augment.supremacy.type")
                 .withStyle(ChatFormatting.GOLD));
-        tooltip.add(net.minecraft.network.chat.Component.literal("• ")
+        tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
-                .append(net.minecraft.network.chat.Component.translatable("fallen_gems_affixes.augment.supremacy.desc", power)
+                .append(Component.translatable("fallen_gems_affixes.augment.supremacy.desc", power)
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
+    /**
+     * Applies the Supremacy augment to the item's affixes, and stores a list of the affix description strings that
+     * were actually boosted by Supremacy in NBT. That list is later used to star only the boosted affix tooltip lines.
+     */
     public static void apply(ItemStack stack) {
         float power = getAugmentPower(stack);
 
         Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
+        if (affixes == null || affixes.isEmpty()) return;
+
         Map<DynamicHolder<? extends Affix>, AffixInstance> newAffixes = new HashMap<>();
-        affixes.forEach((affix, affixIns) -> {
-            if (!(affix.get() instanceof DurableAffix)) {
-                newAffixes.put(affix, new AffixInstance(
+        CompoundTag root = stack.getOrCreateTag();
+        root.putBoolean("fallen_gems_affixes:fabled", true);
+
+        List<String> boostedDescriptions = new ArrayList<>();
+
+        for (var entry : affixes.entrySet()) {
+            var holder = entry.getKey();
+            var affixIns = entry.getValue();
+            Affix affix = holder.get();
+
+            if (!(affix instanceof DurableAffix)) {
+                float oldLevel = affixIns.level();
+                float newLevel = Mth.clamp(Math.max(oldLevel, power), 0, MAX_AFFIX_LEVEL);
+
+                if (oldLevel <= STANDARD_MAX_LEVEL && newLevel > STANDARD_MAX_LEVEL) {
+                    // For AttributeAffix, use getAugmentingText instead of getDescription
+                    Component desc;
+                    if (affix instanceof AttributeAffix) {
+                        desc = affix.getAugmentingText(stack, affixIns.rarity().get(), newLevel);
+                    } else {
+                        desc = affixIns.getDescription();
+                    }
+
+                    if (desc != null && !desc.getString().trim().isEmpty()) {
+                        boostedDescriptions.add(desc.getString().trim());
+                    }
+                }
+
+                newAffixes.put(holder, new AffixInstance(
                         affixIns.affix(),
                         affixIns.stack(),
                         affixIns.rarity(),
-                        Mth.clamp(Math.max(affixIns.level(), power), 0, MAX_AFFIX_LEVEL)
+                        newLevel
                 ));
             } else {
-                newAffixes.put(affix, affixIns);
+                newAffixes.put(holder, affixIns);
             }
-        });
+        }
+
         AffixHelper.setAffixes(stack, newAffixes);
+
+        ListTag list = new ListTag();
+        for (String s : boostedDescriptions) list.add(StringTag.valueOf(s));
+        root.put("fallen_gems_affixes:supremacy_boosted", list);
     }
 
     private static float getAugmentPower(ItemStack stack) {
