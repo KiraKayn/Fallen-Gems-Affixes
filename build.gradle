@@ -273,20 +273,23 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('shadowJar') {
     archiveClassifier.set('shadow')
     mergeServiceFiles()
-//    if (!file("${fallen_dev_helper_path}").exists()) {
-//        throw new FileNotFoundException('fallen_dev_helper is not found');
-//    }
+    if (!file("${fallen_dev_helper_path}").exists()) {
+        throw new FileNotFoundException('fallen_dev_helper is not found');
+    }
     dependencies {
         include(dependency(files("${fallen_dev_helper_path}")))
     }
     dependsOn 'jar'
 }
 
-//tasks.named('jarJar') {
-//    mustRunAfter 'shadowJar'
-//    from(zipTree(tasks.shadowJar.outputs.files.singleFile))
-//    archiveClassifier.set('')
-//}
+tasks.named('jarJar') {
+    mustRunAfter 'shadowJar'
+    from(zipTree(tasks.shadowJar.outputs.files.singleFile))
+    doLast {
+        delete files(tasks.shadowJar.outputs.files.singleFile)
+    }
+    archiveClassifier.set('')
+}
 
 tasks.build.dependsOn('shadowJar', 'jarJar')
 
@@ -304,8 +307,8 @@ tasks.named('jar', Jar).configure {
         ])
     }
 //    archiveClassifier.set('slim')
-    finalizedBy 'reobfJar'
-//    finalizedBy 'reobfJar', 'shadowJar', 'jarJar'
+//    finalizedBy 'reobfJar'
+    finalizedBy 'reobfJar', 'shadowJar', 'jarJar'
 }
 
 tasks.register('generateUpdateJson') {
