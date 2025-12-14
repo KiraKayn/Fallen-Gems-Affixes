@@ -283,11 +283,13 @@ tasks.named('shadowJar') {
 }
 
 tasks.named('jarJar') {
-    mustRunAfter 'shadowJar'
     from(zipTree(tasks.shadowJar.outputs.files.singleFile))
     doLast {
         delete files(tasks.shadowJar.outputs.files.singleFile)
     }
+    mustRunAfter 'shadowJar'
+    dependsOn('reobfJar')
+    finalizedBy('reobfJarJar')
     archiveClassifier.set('')
 }
 
@@ -345,12 +347,6 @@ java {
 
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
-}
-
-tasks.jarJar.configure {
-    archiveClassifier = ""
-    dependsOn('reobfJar')
-    finalizedBy('reobfJarJar')
 }
 
 reobf {
