@@ -3,7 +3,6 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.adventure.affix.AttributeAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
@@ -15,8 +14,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -27,9 +24,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SupremacyAugment implements IAugment {
@@ -103,11 +98,6 @@ public class SupremacyAugment implements IAugment {
                 .append(Component.translatable("fallen_gems_affixes.augment.supremacy.desc", power)
                         .withStyle(ChatFormatting.YELLOW)));
     }
-
-    /**
-     * Applies the Supremacy augment to the item's affixes, and stores a list of the affix description strings that
-     * were actually boosted by Supremacy in NBT. That list is later used to star only the boosted affix tooltip lines.
-     */
     public static void apply(ItemStack stack) {
         float power = getAugmentPower(stack);
 
@@ -118,8 +108,6 @@ public class SupremacyAugment implements IAugment {
         CompoundTag root = stack.getOrCreateTag();
         root.putBoolean("fallen_gems_affixes:fabled", true);
 
-        List<String> boostedDescriptions = new ArrayList<>();
-
         for (var entry : affixes.entrySet()) {
             var holder = entry.getKey();
             var affixIns = entry.getValue();
@@ -128,20 +116,6 @@ public class SupremacyAugment implements IAugment {
             if (!(affix instanceof DurableAffix)) {
                 float oldLevel = affixIns.level();
                 float newLevel = Mth.clamp(Math.max(oldLevel, power), 0, MAX_AFFIX_LEVEL);
-
-                if (oldLevel <= STANDARD_MAX_LEVEL && newLevel > STANDARD_MAX_LEVEL) {
-                    // For AttributeAffix, use getAugmentingText instead of getDescription
-                    Component desc;
-                    if (affix instanceof AttributeAffix) {
-                        desc = affix.getAugmentingText(stack, affixIns.rarity().get(), newLevel);
-                    } else {
-                        desc = affixIns.getDescription();
-                    }
-
-                    if (desc != null && !desc.getString().trim().isEmpty()) {
-                        boostedDescriptions.add(desc.getString().trim());
-                    }
-                }
 
                 newAffixes.put(holder, new AffixInstance(
                         affixIns.affix(),
@@ -155,10 +129,6 @@ public class SupremacyAugment implements IAugment {
         }
 
         AffixHelper.setAffixes(stack, newAffixes);
-
-        ListTag list = new ListTag();
-        for (String s : boostedDescriptions) list.add(StringTag.valueOf(s));
-        root.put("fallen_gems_affixes:supremacy_boosted", list);
     }
 
     private static float getAugmentPower(ItemStack stack) {

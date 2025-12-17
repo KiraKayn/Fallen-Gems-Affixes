@@ -1,3 +1,4 @@
+
 package net.kayn.fallen_gems_affixes.client;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
