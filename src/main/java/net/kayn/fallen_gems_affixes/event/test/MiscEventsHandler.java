@@ -116,21 +116,5 @@ public class MiscEventsHandler {
         }
     }
 
-    /**
-     * Rendering custom tooltip by augments
-     */
-    @SubscribeEvent
-    public static void onTooltipEvent(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        GemBonusModifier.currentSuspendedItemStack.set(stack);
-        if (stack.hasTag() && stack.getTag().contains(AUGMENT_DATA)) {
-            CompoundTag tag = stack.getTag();
-            ListTag listTag = tag.getCompound(AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND);
-            for (Tag tag1 : listTag) {
-                if (((CompoundTag) tag1).getString(TYPE).equals(Fallen.Augments.SOUL_BOUND.getId().toString())) {
-                    event.getToolTip().add(Component.literal("fallen_gems_affixes:test"));
-                }
-            }
-        }
-    }
+
 }

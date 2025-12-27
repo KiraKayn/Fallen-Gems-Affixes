@@ -16,6 +16,7 @@ import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
+import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -39,6 +40,12 @@ public class FallenGemsAffixes {
 
         LOGGER.info("Loading Fallen Gems & Affixes");
 
+        try {
+            isLibAvailable();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         context.registerConfig(Type.COMMON, ModConfig.SPEC);
 
         modEventBus.addListener(this::commonSetup);
@@ -48,7 +55,7 @@ public class FallenGemsAffixes {
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
         Fallen.bootstrap(modEventBus);
-        GemBonusModifier.bootstrap();
+        GemBonusModifier.bootstrap(MinecraftForge.EVENT_BUS);
 
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -81,8 +88,19 @@ public class FallenGemsAffixes {
         }
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void isLibAvailable() throws ClassNotFoundException {
+        try {
+            Class.forName("net.rtxyd.fallen_lib.service.FallenBootstrap");
+            // the next line is a comment for debug.
+            // throw new ClassNotFoundException();
+        } catch (ClassNotFoundException e) {
+            final String libId = "fallen_lib";
+            final String version = "1.0.2";
+            throw new ClassNotFoundException(MiscUtil.missingModMessage(MOD_ID, libId, version));
+        }
     }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {}
 
     private void registerCommands(RegisterCommandsEvent event) {
         AugmentCommands.register(event.getDispatcher(), event.getBuildContext());

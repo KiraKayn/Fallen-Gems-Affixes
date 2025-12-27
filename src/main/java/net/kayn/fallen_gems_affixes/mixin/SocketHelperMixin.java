@@ -23,7 +23,7 @@ import static dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper.getSock
 public class SocketHelperMixin {
     @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")})
     private static void suspendItemStack(ItemStack stack, CallbackInfoReturnable<SocketedGems> cir) {
-        GemBonusModifier.currentSuspendedItemStack.set(stack);
+        GemBonusModifier.suspendItemStack(stack);
     }
 
     @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")}, cancellable = true)

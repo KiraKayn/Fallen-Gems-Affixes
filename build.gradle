@@ -127,7 +127,7 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
         jarJar.ranged(it, "[${mixin_extras_version},)")
     }
-    runtimeOnly files("${fallen_dev_helper_path}")
+//    implementation files("${fallen_dev_helper_path}")
 
     // Required Dependencies
     implementation fg.deobf("dev.shadowsoffire:Placebo:${mc_version}-${placebo_version}")
@@ -188,6 +188,8 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
+    // fallen_lib-dev_version (not normal version)
+    implementation fg.deobf("curse.maven:fallen-lib-1404737:7385863")
 
 }
 
@@ -270,30 +272,11 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 
-tasks.named('shadowJar') {
-    archiveClassifier.set('shadow')
-    mergeServiceFiles()
-    if (!file("${fallen_dev_helper_path}").exists()) {
-        throw new FileNotFoundException('fallen_dev_helper is not found');
-    }
-    dependencies {
-        include(dependency(files("${fallen_dev_helper_path}")))
-    }
-    dependsOn 'jar'
-}
-
 tasks.named('jarJar') {
-    from(zipTree(tasks.shadowJar.outputs.files.singleFile))
-    doLast {
-        delete files(tasks.shadowJar.outputs.files.singleFile)
-    }
-    mustRunAfter 'shadowJar'
     dependsOn('reobfJar')
     finalizedBy('reobfJarJar')
     archiveClassifier.set('')
 }
-
-tasks.build.dependsOn('shadowJar', 'jarJar')
 
 tasks.named('jar', Jar).configure {
     manifest {
@@ -308,9 +291,7 @@ tasks.named('jar', Jar).configure {
                 "MixinConfigs"            : project.mixin.toBoolean() ? "${modid}.mixins.json" : ""
         ])
     }
-//    archiveClassifier.set('slim')
-//    finalizedBy 'reobfJar'
-    finalizedBy 'reobfJar', 'shadowJar', 'jarJar'
+    finalizedBy 'reobfJar', 'jarJar'
 }
 
 tasks.register('generateUpdateJson') {
@@ -348,12 +329,6 @@ java {
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
 }
-
-reobf {
-    jarJar {}
-}
-
-jar.finalizedBy('reobfJarJar')
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
