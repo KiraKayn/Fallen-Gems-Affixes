@@ -189,7 +189,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
     // fallen_lib-dev_version (not normal version)
-    implementation fg.deobf("curse.maven:fallen-lib-1404737:7385863")
+    implementation fg.deobf("curse.maven:fallen-lib-1404737:7388253")
 
 }
 

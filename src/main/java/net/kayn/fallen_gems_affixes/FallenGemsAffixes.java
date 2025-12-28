@@ -95,7 +95,7 @@ public class FallenGemsAffixes {
             // throw new ClassNotFoundException();
         } catch (ClassNotFoundException e) {
             final String libId = "fallen_lib";
-            final String version = "1.0.2";
+            final String version = "1.1.2";
             throw new ClassNotFoundException(MiscUtil.missingModMessage(MOD_ID, libId, version));
         }
     }
