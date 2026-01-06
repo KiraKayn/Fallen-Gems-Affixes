@@ -163,7 +163,7 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:to-tweaks-irons-spells-1046916:6322784")
     runtimeOnly fg.deobf("curse.maven:cataclysm-spellbooks-1099461:6769871")
-    runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:6250904")
+    runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:7413465")
     runtimeOnly fg.deobf("curse.maven:ice-and-fire-spellbooks-977855:5844739")
 
     runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:5633453")
