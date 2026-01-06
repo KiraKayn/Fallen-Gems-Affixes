@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -45,6 +46,7 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
     protected final SchoolType school;
 
     public static final Map<Item, Set<SchoolType>> recordedIronsItems = new HashMap<>();
+    private static boolean curiosLoaded = false;
 
     @SubscribeEvent
     public static void loadingIronsItemsFromConfig(ModConfigEvent event) {
@@ -64,6 +66,9 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
                 recordedIronsItems.put(item, schoolTypes);
             }
         });
+        if (ModList.get().isLoaded("curios")) {
+            curiosLoaded = true;
+        }
     }
 
     public AdaptiveSpellPowerAffix(Attribute attr, AttributeModifier.Operation op, Map<LootRarity, StepFunction> values, Set<LootCategory> types, ResourceLocation schoolId) {
@@ -92,7 +97,7 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
         Set<Attribute> foundAttributes = new HashSet<>();
 
         // Curios compatibility
-        if (item instanceof ICurioItem curio) {
+        if (curiosLoaded && item instanceof ICurioItem curio) {
             Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
             for (String slotId : slots) {
                 SlotContext context = new SlotContext(slotId, null, -1, false, true);
