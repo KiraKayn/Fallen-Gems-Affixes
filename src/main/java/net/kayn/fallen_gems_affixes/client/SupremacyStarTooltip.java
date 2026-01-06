@@ -59,7 +59,6 @@ public class SupremacyStarTooltip {
             AffixHelper.streamAffixes(stack)
                     .sorted(Comparator.comparingInt(a -> a.affix().get().getType().ordinal()))
                     .forEach(inst -> {
-                        inst.getDescription();
                         Component desc = inst.getDescription();
                         if (desc.getContents() != ComponentContents.EMPTY) {
                             if (inst.level() > SupremacyAugment.STANDARD_MAX_LEVEL) {
