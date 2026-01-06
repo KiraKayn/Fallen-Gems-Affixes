@@ -8,6 +8,7 @@
     "AffixHelperMixin",
     "GemMixin",
     "SocketHelperMixin",
+    "AttributeAffixAccessor",
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin"
   ],
