@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 public class FallenGemsAffixes {
     public static final String MOD_ID = "fallen_gems_affixes";
     public static final Logger LOGGER = LogManager.getLogger();
+    public static boolean curiosLoaded = false;
 
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
@@ -66,7 +67,9 @@ public class FallenGemsAffixes {
 
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
-
+        if (ModList.get().isLoaded("curios")) {
+            curiosLoaded = true;
+        }
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
             modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
@@ -90,7 +93,7 @@ public class FallenGemsAffixes {
 
     private void isLibAvailable() throws ClassNotFoundException {
         try {
-            Class.forName("net.rtxyd.fallen_lib.service.FallenBootstrap");
+            Class.forName("net.rtxyd.fallen.lib.service.FallenBootstrap");
             // the next line is a comment for debug.
             // throw new ClassNotFoundException();
         } catch (ClassNotFoundException e) {

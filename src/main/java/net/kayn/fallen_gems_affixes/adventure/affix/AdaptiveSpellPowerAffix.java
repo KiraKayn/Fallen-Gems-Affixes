@@ -91,8 +91,8 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(stack);
         Set<Attribute> foundAttributes = new HashSet<>();
 
-        // Curios compatibility
-        if (item instanceof ICurioItem curio) {
+        // Curios compatibility, add a flag to avoid problem
+        if (FallenGemsAffixes.curiosLoaded && item instanceof ICurioItem curio) {
             Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(item);
             for (String slotId : slots) {
                 SlotContext context = new SlotContext(slotId, null, -1, false, true);
