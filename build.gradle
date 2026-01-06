@@ -141,9 +141,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:corpse-316582:6624394")
 
     // Main Integrations (still optional)
-    implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
-    compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
-    runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
+    implementation fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
+    compileOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}:api")
+    runtimeOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
 
     implementation fg.deobf("curse.maven:celestisynth-872712:6900952")
 
