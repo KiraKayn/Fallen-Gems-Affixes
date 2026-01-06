@@ -105,6 +105,7 @@ repositories {
     maven { url 'https://maven.shedaniel.me/' }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven { url 'https://maven.kosmx.dev/' }
+    maven { url "https://rtxyd.github.io/maven-repo" }
     maven { url 'https://jitpack.io' }
     maven {
         name = "Iron's Maven - Release"
@@ -127,7 +128,6 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
         jarJar.ranged(it, "[${mixin_extras_version},)")
     }
-//    implementation files("${fallen_dev_helper_path}")
 
     // Required Dependencies
     implementation fg.deobf("dev.shadowsoffire:Placebo:${mc_version}-${placebo_version}")
@@ -189,8 +189,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
     // fallen_lib-dev_version (not normal version)
-    implementation fg.deobf("curse.maven:fallen-lib-1404737:7388253")
-
+    implementation fg.deobf("io.github.rtxyd:fallen-lib:${fallen_lib_version}:dev")
 }
 
 mixin {
