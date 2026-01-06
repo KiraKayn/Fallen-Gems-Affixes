@@ -1,3 +1,6 @@
+# 1.3.2HF
+- Fixed a crash caused by LivingEntityMixin
+
 # 1.3.2
 - Fixed the Spell Cast Affix being incompatible with the newest Iron's Spellbooks version
 

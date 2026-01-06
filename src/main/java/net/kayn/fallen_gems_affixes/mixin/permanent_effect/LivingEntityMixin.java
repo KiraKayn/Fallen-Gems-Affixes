@@ -36,9 +36,6 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    /**
-     * When an effect is to be removed, mob effect with lose its attribute modifiers when this method returns.
-     */
     @Inject(method = "onEffectRemoved", at = @At("HEAD"), cancellable = true)
     private void onEffectRemovedPrefix(MobEffectInstance effect, CallbackInfo ci) {
         if ((Object) this instanceof Player player) {
