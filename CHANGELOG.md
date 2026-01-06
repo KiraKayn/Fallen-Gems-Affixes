@@ -1,3 +1,6 @@
+# 1.3.2
+- Fixed the Spell Cast Affix being incompatible with the newest Iron's Spellbooks version
+
 # 1.3.1
 - Made the Celestisynth Attribute Patch optional, so it will no longer crash the game without Iron's Spellbooks
 - Fixed Samurai and Warlord gems not being socketable into the Celestial Weapon category - Rtxyd
