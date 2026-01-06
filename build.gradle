@@ -106,7 +106,6 @@ repositories {
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven { url 'https://maven.kosmx.dev/' }
     maven { url "https://rtxyd.github.io/maven-repo" }
-    maven { url 'https://jitpack.io' }
     maven {
         name = "Iron's Maven - Release"
         url = "https://code.redspace.io/releases"
@@ -116,6 +115,7 @@ repositories {
         name = "Iron's Maven - Snapshots"
         url = "https://code.redspace.io/snapshots"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -144,9 +144,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:corpse-316582:6624394")
 
     // Main Integrations (still optional)
-    implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
-    compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
-    runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
+    implementation fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
+    compileOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}:api")
+    runtimeOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
 
     implementation fg.deobf("curse.maven:celestisynth-872712:6900952")
 
