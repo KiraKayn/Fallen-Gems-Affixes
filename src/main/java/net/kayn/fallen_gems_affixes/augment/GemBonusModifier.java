@@ -5,18 +5,20 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.event.test.MiscEventsHandler;
 import net.kayn.fallen_gems_affixes.mixin.SocketHelperMixin;
-import net.kayn.fallen_gems_affixes.util.ReflectionFactoryModifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.rtxyd.fallen.lib.api.annotation.FallenInserter;
+import net.rtxyd.fallen.lib.type.util.patch.IInserterContext;
+import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
+import net.rtxyd.fallen.lib.util.patch.InserterType;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
@@ -25,32 +27,57 @@ import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
  * This class should manage the logic on both client and server, must be thread-safe
  */
 public class GemBonusModifier {
-    private static final Path BLACKLIST_PATH = Path.of("./fallen/fallen_ref_blacklist.txt");
-    private static final Path MAINS_PATH = Path.of("./fallen/fallen_ref_mains.txt");
-    private static final Path TARGETS_PATH = Path.of("./fallen/fallen_ref_targets.txt");
+    private static ObjectModifierFactory FACTORY;
     private static final ThreadLocal<Boolean> isKeyValid = ThreadLocal.withInitial(() -> false);
     public static final ThreadLocal<ItemStack> currentSuspendedItemStack = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
 
-    static {
-        ReflectionFactoryModifier.fieldNameFilter.add("cost");
-        ReflectionFactoryModifier.fieldNameFilter.add("cool");
-        try {
-            String[] blacklist = Files.readString(BLACKLIST_PATH).trim().split("\n");
-            for (String string : blacklist) {
-                try {
-                    if (string.isEmpty()) continue;
-                    Class<?> cls = Class.forName(string);
-                    ReflectionFactoryModifier.blackList.add(cls);
-                } catch (Exception e) {
-                    FallenGemsAffixes.LOGGER.error("class not found: {}", string);
-                }
+    /**
+     * FallenInserter, where the real point to function GemPowerAugment
+     * @param ctx Context which contains method receiver (maybe this) and return.
+     * @param args Parameters of the target method.
+     * @return Original object or a new object.
+     */
+    @FallenInserter(type = InserterType.STANDARD)
+    public static Object modifier(IInserterContext<Object, Object> ctx, Object... args) {
+        if (args.length > 0 && args[0] instanceof LootRarity) {
+            Object ret = ctx.ret();
+            if (ret != null) {
+                return modifyLPre(ctx.ret());
             }
-        } catch (Exception e) {
-            FallenGemsAffixes.LOGGER.error("fallen files reading failed");
         }
+        return ctx.ret();
     }
 
-    public static void bootstrap() {};
+    /**
+     * Hook {@link FallenGemsAffixes}, then register necessary events.
+     * @param eventBus
+     */
+    public static void bootstrap(IEventBus eventBus) {
+        if (FACTORY == null) {
+            FACTORY = new ObjectModifierFactory(s -> {
+                String name = s.toLowerCase();
+                if (name.startsWith("cool") || name.endsWith("cool")) return true;
+                return name.startsWith("cost") || name.endsWith("cost");
+            });
+        }
+        eventBus.addListener(EventPriority.HIGHEST, GemBonusModifier::onTooltipEvent);
+    };
+
+    /**
+     * Suspend current ItemStack on client
+     */
+    public static void onTooltipEvent(ItemTooltipEvent event) {
+        suspendItemStack(event.getItemStack());
+    }
+
+    /**
+     * Suspend the given ItemStack on current thread (client/server).
+     * This is the only way to reach the item's data we want to read.
+     * @param stack the ItemStack need to be stored for following logic
+     */
+    public static void suspendItemStack(ItemStack stack) {
+        currentSuspendedItemStack.set(stack);
+    }
 
     /**
      * The main logic for key check, it accepts the Object from a LootCategory-driven GemBonus,
@@ -59,6 +86,7 @@ public class GemBonusModifier {
      * which defines an inner class for data serialization, and the ? must be this class
      * @param obj the key when we use method get/getOrDefault from the map
      */
+    @Deprecated
     public static void keyCheck(Object obj) {
         isKeyValid.set(obj instanceof LootRarity);
     }
@@ -68,7 +96,7 @@ public class GemBonusModifier {
      * @return whether the whole logic run.
      */
     public static boolean shouldNotModify() {
-        return !isKeyValid.get() && currentSuspendedItemStack.get() == ItemStack.EMPTY;
+        return currentSuspendedItemStack.get() == ItemStack.EMPTY;
     }
 
     /**
@@ -79,9 +107,13 @@ public class GemBonusModifier {
      * @return whether the class is valid
      */
     public static boolean clazzCheck(Class<?> clazz) {
+        if (Number.class.isAssignableFrom(clazz)) {
+            return true;
+        }
         Class<?> host = clazz.getNestHost();
-//        return GemBonus.class.isAssignableFrom(host) && !ReflectionFactoryModifier.blackList.contains(clazz);
-        return GemBonus.class.isAssignableFrom(host);
+        return GemBonus.class.isAssignableFrom(host) && !FACTORY.isInBlackList(clazz);
+        // when we debug, the blacklist could be ignored.
+        // return GemBonus.class.isAssignableFrom(host);
     }
 
     /**
@@ -90,7 +122,7 @@ public class GemBonusModifier {
      * @return new object having the same class with obj
      */
     public static Object modifyL(Object obj, float multiplied) {
-        return ReflectionFactoryModifier.copyAndModifyNumbers(obj, multiplied);
+        return FACTORY.copyAndModifyNumbers(obj, multiplied);
     }
 
     /**
@@ -106,8 +138,10 @@ public class GemBonusModifier {
         if (obj instanceof StepFunction sf) {
             multiplied = getGemPower(stack);
             return new StepFunction(sf.min() * multiplied, sf.steps(), sf.step() * multiplied);
-        }
-        else if (clazzCheck(obj.getClass())) {
+        } else if (obj instanceof Number) {
+            multiplied = getGemPower(stack);
+            return ObjectModifierFactory.modifyNumber((Number) obj, multiplied);
+        } else if (clazzCheck(obj.getClass())) {
             multiplied = getGemPower(stack);
             return modifyL(obj, multiplied);
         }
@@ -117,7 +151,7 @@ public class GemBonusModifier {
     /**
      * Get GemPower by reading tags on the suspended item
      * @param stack the item which was suspended by our hooks,
-     *              see {@link SocketHelperMixin} {@link MiscEventsHandler#onTooltipEvent(ItemTooltipEvent)}
+     *              see {@link SocketHelperMixin} {@link GemBonusModifier#onTooltipEvent(ItemTooltipEvent)}
      * @return
      */
     private static float getGemPower(ItemStack stack) {
@@ -137,77 +171,5 @@ public class GemBonusModifier {
             }
         }
         return value;
-    }
-
-    /**
-     * For unusual Map which's value is int
-     * @param value int
-     * @return int
-     */
-    public static int modifyI(int value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        int multiplied = (int) getGemPower(stack);
-        return value * multiplied;
-    }
-
-    /**
-     * For unusual Map which's value is float
-     * @param value float
-     * @return float
-     */
-    public static float modifyF(float value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        float multiplied = (float) getGemPower(stack);
-        return value * multiplied;
-    }
-
-    /**
-     * For unusual Map which's value is double
-     * @param value double
-     * @return double
-     */
-    public static double modifyD(double value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        double multiplied = (double) getGemPower(stack);
-        return value * multiplied;
-    }
-
-    /**
-     * For unusual Map which's value is long
-     * @param value long
-     * @return long
-     */
-    public static long modifyJ(long value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        long multiplied = (long) getGemPower(stack);
-        return value * multiplied;
-    }
-
-    /**
-     * For unusual Map which's value is short
-     * @param value short
-     * @return short
-     */
-    public static short modifyS(short value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        short multiplied = (short) getGemPower(stack);
-        return (short) (value * multiplied);
-    }
-
-    /**
-     * For unusual Map which's value is byte
-     * @param value byte
-     * @return byte
-     */
-    public static byte modifyB(byte value) {
-        if (shouldNotModify()) return value;
-        ItemStack stack = currentSuspendedItemStack.get();
-        byte multiplied = (byte) getGemPower(stack);
-        return (byte) (value * multiplied);
     }
 }

@@ -105,7 +105,7 @@ repositories {
     maven { url 'https://maven.shedaniel.me/' }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven { url 'https://maven.kosmx.dev/' }
-    maven { url 'https://jitpack.io' }
+    maven { url "https://rtxyd.github.io/maven-repo" }
     maven {
         name = "Iron's Maven - Release"
         url = "https://code.redspace.io/releases"
@@ -115,6 +115,7 @@ repositories {
         name = "Iron's Maven - Snapshots"
         url = "https://code.redspace.io/snapshots"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -127,7 +128,6 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
         jarJar.ranged(it, "[${mixin_extras_version},)")
     }
-    runtimeOnly files("${fallen_dev_helper_path}")
 
     // Required Dependencies
     implementation fg.deobf("dev.shadowsoffire:Placebo:${mc_version}-${placebo_version}")
@@ -144,9 +144,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:corpse-316582:6624394")
 
     // Main Integrations (still optional)
-    implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
-    compileOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api")
-    runtimeOnly fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
+    implementation fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
+    compileOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}:api")
+    runtimeOnly fg.deobf("io.redspace:irons_spellbooks:${irons_spells_version}")
 
     implementation fg.deobf("curse.maven:celestisynth-872712:6900952")
 
@@ -163,7 +163,7 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:to-tweaks-irons-spells-1046916:6322784")
     runtimeOnly fg.deobf("curse.maven:cataclysm-spellbooks-1099461:6769871")
-    runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:6250904")
+    runtimeOnly fg.deobf("curse.maven:alshanexs-familiars-1171602:7413465")
     runtimeOnly fg.deobf("curse.maven:ice-and-fire-spellbooks-977855:5844739")
 
     runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:5633453")
@@ -188,7 +188,8 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:${caelus_version}")
     runtimeOnly fg.deobf("curse.maven:framework-549225:5692398")
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
-
+    // fallen_lib-dev_version (not normal version)
+    implementation fg.deobf("io.github.rtxyd:fallen-lib:${fallen_lib_version}:dev")
 }
 
 mixin {
@@ -270,30 +271,11 @@ tasks.named('processResources', ProcessResources).configure {
 }
 
 
-tasks.named('shadowJar') {
-    archiveClassifier.set('shadow')
-    mergeServiceFiles()
-    if (!file("${fallen_dev_helper_path}").exists()) {
-        throw new FileNotFoundException('fallen_dev_helper is not found');
-    }
-    dependencies {
-        include(dependency(files("${fallen_dev_helper_path}")))
-    }
-    dependsOn 'jar'
-}
-
 tasks.named('jarJar') {
-    from(zipTree(tasks.shadowJar.outputs.files.singleFile))
-    doLast {
-        delete files(tasks.shadowJar.outputs.files.singleFile)
-    }
-    mustRunAfter 'shadowJar'
     dependsOn('reobfJar')
     finalizedBy('reobfJarJar')
     archiveClassifier.set('')
 }
-
-tasks.build.dependsOn('shadowJar', 'jarJar')
 
 tasks.named('jar', Jar).configure {
     manifest {
@@ -308,9 +290,7 @@ tasks.named('jar', Jar).configure {
                 "MixinConfigs"            : project.mixin.toBoolean() ? "${modid}.mixins.json" : ""
         ])
     }
-//    archiveClassifier.set('slim')
-//    finalizedBy 'reobfJar'
-    finalizedBy 'reobfJar', 'shadowJar', 'jarJar'
+    finalizedBy 'reobfJar', 'jarJar'
 }
 
 tasks.register('generateUpdateJson') {
@@ -348,12 +328,6 @@ java {
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
 }
-
-reobf {
-    jarJar {}
-}
-
-jar.finalizedBy('reobfJarJar')
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")

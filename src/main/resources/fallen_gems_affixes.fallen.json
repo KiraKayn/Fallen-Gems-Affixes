@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "min_version": "1.2.0",
+  "package": "net.kayn.fallen_gems_affixes.fallen.patch",
+  "fallen_patches": [
+    "GemPowerPatch"
+  ]
+}
