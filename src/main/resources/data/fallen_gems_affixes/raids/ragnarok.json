@@ -1,0 +1,29 @@
+{
+  "raid_id": "ragnarok",
+  "cooldown_per_player": 12000,
+  "setup_time": 200,
+  "chance_per_player": 0.002,
+  "spawn_distance": 10,
+  "max_distance": 150,
+  "waves": [
+    {
+      "bosses": {
+        "apotheosis:the_nether/blaze": 10
+      },
+      "wave_cooldown": 200
+    },
+    {
+      "bosses": {
+        "apotheosis:the_nether/wither_skeleton": 15
+      },
+      "wave_cooldown": 250
+    },
+    {
+      "bosses": {
+        "apotheosis:the_nether/piglin_brute": 20
+      },
+      "wave_cooldown": 300
+    }
+  ],
+  "leader": "apotheosis:the_nether/zoglin"
+}

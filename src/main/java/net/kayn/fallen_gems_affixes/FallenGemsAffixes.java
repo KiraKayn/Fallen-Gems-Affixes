@@ -14,12 +14,14 @@ import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
+import net.kayn.fallen_gems_affixes.raid.RaidCommands;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -36,29 +38,24 @@ public class FallenGemsAffixes {
 
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
-
         LOGGER.info("Loading Fallen Gems & Affixes");
-
         context.registerConfig(Type.COMMON, ModConfig.SPEC);
-
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
 
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
+        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
 
         Fallen.bootstrap(modEventBus);
         GemBonusModifier.bootstrap();
-
-        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-
         AALootCategories.init();
+
         new MaxHealthDamageHandler();
 
-        ModItems.ITEMS.register(modEventBus);
-
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
-        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+        MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
@@ -84,8 +81,10 @@ public class FallenGemsAffixes {
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
-    private void registerCommands(RegisterCommandsEvent event) {
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
         AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
+        RaidCommands.register(event.getDispatcher());
     }
 
     public static ResourceLocation id(@NotNull String path) {
