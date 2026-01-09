@@ -14,12 +14,15 @@ import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
+import net.kayn.fallen_gems_affixes.raid.RaidCommands;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
+import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -33,32 +36,44 @@ import org.jetbrains.annotations.NotNull;
 public class FallenGemsAffixes {
     public static final String MOD_ID = "fallen_gems_affixes";
     public static final Logger LOGGER = LogManager.getLogger();
+    public static boolean curiosLoaded = false;
 
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
-
         LOGGER.info("Loading Fallen Gems & Affixes");
 
-        context.registerConfig(Type.COMMON, ModConfig.SPEC);
+        // Ensure required library is available
+        try {
+            isLibAvailable();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
+        // Config & setup listeners
+        context.registerConfig(Type.COMMON, ModConfig.SPEC);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(InitNewCodecs::init);
 
+        // Registries
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
-
-        Fallen.bootstrap(modEventBus);
-        GemBonusModifier.bootstrap();
-
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-
-        AALootCategories.init();
-        new MaxHealthDamageHandler();
-
         ModItems.ITEMS.register(modEventBus);
 
+        // Bootstraps
+        Fallen.bootstrap(modEventBus);
+        GemBonusModifier.bootstrap(MinecraftForge.EVENT_BUS);
+        AALootCategories.init();
+
+        // Attributes / handlers
+        new MaxHealthDamageHandler();
+
+        // Event bus
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+
+        // Mod integrations
+        curiosLoaded = ModList.get().isLoaded("curios");
 
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
@@ -66,6 +81,7 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
             MinecraftForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
         }
+
         if (ModList.get().isLoaded("celestisynth")) {
             CelestialLootCategory.CELESTIAL_MELEE.toString();
             CelestialLootCategory.CELESTIAL_RANGED.toString();
@@ -81,11 +97,24 @@ public class FallenGemsAffixes {
         }
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private void isLibAvailable() throws ClassNotFoundException {
+        try {
+            Class.forName("net.rtxyd.fallen.lib.service.FallenBootstrap");
+        } catch (ClassNotFoundException e) {
+            final String libId = "fallen_lib";
+            final String version = "1.1.2";
+            throw new ClassNotFoundException(MiscUtil.missingModMessage(MOD_ID, libId, version));
+        }
     }
 
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        // Any common setup logic
+    }
+
+    @SubscribeEvent
     private void registerCommands(RegisterCommandsEvent event) {
         AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
+        RaidCommands.register(event.getDispatcher());
     }
 
     public static ResourceLocation id(@NotNull String path) {
