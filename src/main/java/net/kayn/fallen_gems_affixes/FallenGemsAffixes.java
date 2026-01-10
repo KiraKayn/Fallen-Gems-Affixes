@@ -107,7 +107,7 @@ public class FallenGemsAffixes {
         }
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    public void commonSetup(final FMLCommonSetupEvent event) {
         // Any common setup logic
     }
 
