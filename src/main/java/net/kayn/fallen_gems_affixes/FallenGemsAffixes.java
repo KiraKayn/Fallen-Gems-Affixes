@@ -102,7 +102,7 @@ public class FallenGemsAffixes {
             Class.forName("net.rtxyd.fallen.lib.service.FallenBootstrap");
         } catch (ClassNotFoundException e) {
             final String libId = "fallen_lib";
-            final String version = "1.1.2";
+            final String version = "1.2.0-hotfix";
             throw new ClassNotFoundException(MiscUtil.missingModMessage(MOD_ID, libId, version));
         }
     }
@@ -112,7 +112,7 @@ public class FallenGemsAffixes {
     }
 
     @SubscribeEvent
-    private void registerCommands(RegisterCommandsEvent event) {
+    public void registerCommands(RegisterCommandsEvent event) {
         AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
         RaidCommands.register(event.getDispatcher());
     }
