@@ -391,16 +391,5 @@
 
   "item.fallen_gems_affixes.augment.supremacy": "Augment of Supremacy",
   "fallen_gems_affixes.augment.supremacy.desc": "When applied, makes the item Fabled, which increases affix power by %sx",
-  "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:",
-
-  "raid.started": "A raid has begun!",
-  "raid.failed.player_dead": "You have failed the raid.",
-  "raid.complete": "You successfully completed the raid!",
-  "raid.already_active": "You already have a raid active.",
-  "raid.already_on_cooldown": "You are still on raid cooldown.",
-  "raid.command.started": "%s Raid started.",
-  "raid.command.not_found": "%s Raid not found.",
-
-  "raid.wave.title": "%s - Wave %s (%s remaining)",
-  "raid.final_boss": "%s - Final Boss"
+  "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:"
 }
