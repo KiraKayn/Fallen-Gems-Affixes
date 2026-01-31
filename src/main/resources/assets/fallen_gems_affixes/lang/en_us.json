@@ -391,5 +391,8 @@
 
   "item.fallen_gems_affixes.augment.supremacy": "Augment of Supremacy",
   "fallen_gems_affixes.augment.supremacy.desc": "When applied, makes the item Fabled, which increases affix power by %sx",
-  "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:"
+  "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:",
+
+  "item.fallen_gems_affixes.sigil_of_transmutation": "Sigil of Transmutation",
+  "item.fallen_gems_affixes.sigil_of_transmutation.desc": "Transfers affixes, sockets and gems between gear"
 }

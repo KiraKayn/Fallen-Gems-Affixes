@@ -7,6 +7,7 @@ import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
+import net.kayn.fallen_gems_affixes.recipe.TransmutationRecipe;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -48,6 +49,23 @@ public class Fallen {
                     }
                 });
 
+        public static final RegistryObject<RecipeSerializer<TransmutationRecipe>> TRANSMUTATION =
+                SERIALIZERS.register("transmutation", () -> new RecipeSerializer<>() {
+                    @Override
+                    public @NotNull TransmutationRecipe fromJson(ResourceLocation id, JsonObject json) {
+                        return new TransmutationRecipe();
+                    }
+
+                    @Override
+                    public TransmutationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+                        return new TransmutationRecipe();
+                    }
+
+                    @Override
+                    public void toNetwork(FriendlyByteBuf buf, TransmutationRecipe recipe) {
+                    }
+                });
+
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
         }
@@ -55,9 +73,7 @@ public class Fallen {
 
     public static class AugmentMisc {
         public static final ResourceLocation AUGMENT_CAP_ID = new ResourceLocation(FallenGemsAffixes.MOD_ID, "augment_cap");
-        // This is the root node.
         public static final String AUGMENT_DATA = "fallen_gems_affixes:augment_data";
-        // The following are nodes inside root node, so without namespace.
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
         public static final String UNIQUE_ID = "uuid";

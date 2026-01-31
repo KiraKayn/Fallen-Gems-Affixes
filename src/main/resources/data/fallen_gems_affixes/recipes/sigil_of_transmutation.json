@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MUM",
+    "ESW",
+    "MRM"
+  ],
+  "key": {
+    "W": {
+      "item": "apotheosis:sigil_of_withdrawal"
+    },
+    "R": {
+      "item": "apotheosis:sigil_of_rebirth"
+    },
+    "E": {
+      "item": "apotheosis:sigil_of_enhancement"
+    },
+    "M": {
+      "item": "apotheosis:mythic_material"
+    },
+    "U": {
+      "item": "apotheosis:sigil_of_unnaming"
+    },
+    "S": {
+      "item": "apotheosis:gem_fused_slate"
+    }
+  },
+  "result": {
+    "item": "fallen_gems_affixes:sigil_of_transmutation",
+    "count": 1
+  }
+}

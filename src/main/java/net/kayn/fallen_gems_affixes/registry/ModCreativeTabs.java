@@ -20,6 +20,7 @@ public class ModCreativeTabs {
                     .icon(() -> new ItemStack(ModItems.SIGIL_OF_ASCENSION.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.SIGIL_OF_ASCENSION.get());
+                        output.accept(ModItems.SIGIL_OF_TRANSMUTATION.get());
                     })
                     .build());
 
