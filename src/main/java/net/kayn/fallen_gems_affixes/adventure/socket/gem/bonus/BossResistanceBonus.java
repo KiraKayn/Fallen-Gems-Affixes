@@ -19,21 +19,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
-public class BossSlayerBonus extends GemBonus {
+public class BossResistanceBonus extends GemBonus {
 
-    public static final Codec<BossSlayerBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            gemClass(),
-            ResourceLocation.CODEC.fieldOf("entity_tag").forGetter(b -> b.entityTag.location()),
-            VALUES_CODEC.fieldOf("values").forGetter(b -> b.values)
-    ).apply(inst, (gemClass, tagId, values) ->
-            new BossSlayerBonus(gemClass, TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), tagId), values)
-    ));
+    public static final Codec<BossResistanceBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(gemClass(), ResourceLocation.CODEC.fieldOf("entity_tag").forGetter(b -> b.entityTag.location()), VALUES_CODEC.fieldOf("values").forGetter(b -> b.values)).apply(inst, (gemClass, tagId, values) -> new BossResistanceBonus(gemClass, TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), tagId), values)));
 
     public final TagKey<EntityType<?>> entityTag;
     public final Map<LootRarity, StepFunction> values;
 
-    public BossSlayerBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "boss_slayer"), gemClass);
+    public BossResistanceBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
+        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "boss_resistance"), gemClass);
         this.entityTag = tag;
         this.values = values;
     }
@@ -43,7 +37,7 @@ public class BossSlayerBonus extends GemBonus {
         double percent = values.get(rarity).get(0) * 100;
 
         DecimalFormat df = new DecimalFormat("#.##");
-        return Component.translatable("bonus.fallen_gems_affixes.boss_slayer.desc", df.format(percent)).withStyle(ChatFormatting.YELLOW);
+        return Component.translatable("bonus.fallen_gems_affixes.boss_resistance.desc", df.format(percent)).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
@@ -52,9 +46,9 @@ public class BossSlayerBonus extends GemBonus {
     }
 
     @Override
-    public BossSlayerBonus validate() {
-        Preconditions.checkNotNull(this.entityTag, "BossSlayerBonus missing entity tag");
-        Preconditions.checkNotNull(this.values, "BossSlayerBonus missing values");
+    public GemBonus validate() {
+        Preconditions.checkNotNull(this.entityTag, "BossResistanceBonus missing entity tag");
+        Preconditions.checkNotNull(this.values, "BossResistanceBonus missing values");
         return this;
     }
 

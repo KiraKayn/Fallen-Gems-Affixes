@@ -38,6 +38,27 @@
           "ancient": 0.9
         }
       }
+    },
+    {
+      "type": "fallen_gems_affixes:boss_resistance",
+      "gem_class": {
+        "key": "armor",
+        "types": [
+          "helmet",
+          "chestplate",
+          "leggings",
+          "boots"
+        ]
+      },
+      "entity_tag": "fallen_gems_affixes:boss_slayer",
+      "values": {
+        "common": 0.03,
+        "uncommon": 0.05,
+        "rare": 0.07,
+        "epic": 0.10,
+        "mythic": 0.12,
+        "ancient": 0.15
+      }
     }
   ]
 }
