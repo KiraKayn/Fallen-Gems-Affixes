@@ -26,7 +26,6 @@ public class SeveranceRecipe extends ApothSmithingRecipe implements ReactiveSmit
     private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:severance");
 
     public SeveranceRecipe() {
-        // Mirror WithdrawalRecipe constructor: template is EMPTY, addition is the sigil.
         super(ID, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_SEVERANCE.get()), ItemStack.EMPTY);
     }
 
@@ -38,7 +37,6 @@ public class SeveranceRecipe extends ApothSmithingRecipe implements ReactiveSmit
         if (base.isEmpty()) return false;
         if (sigil.getItem() != ModItems.SIGIL_OF_SEVERANCE.get()) return false;
 
-        // Only match when there are augments to remove
         return AugmentSlotHelper.getAugmentCount(base) > 0;
     }
 
@@ -47,28 +45,18 @@ public class SeveranceRecipe extends ApothSmithingRecipe implements ReactiveSmit
         ItemStack out = inv.getItem(BASE).copy();
         if (out.isEmpty()) return ItemStack.EMPTY;
 
-        // Preserve augment slots count, but clear the augments list
         int slots = AugmentSlotHelper.getAugmentSlots(out);
-        // Remove the whole augment root and then restore slots (keeps things tidy)
         out.getOrCreateTag().remove(Fallen.AugmentMisc.AUGMENT_DATA);
         AugmentSlotHelper.setAugmentSlots(out, slots);
 
         return out;
     }
-
-    /**
-     * Called when the recipe is crafted. We use this to drop/give the removed augments to the player,
-     * similar to how WithdrawalRecipe gives back gems.
-     */
     @Override
     public void onCraft(Container inv, Player player, ItemStack output) {
         ItemStack base = inv.getItem(BASE);
         if (base.hasTag() && base.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
             CompoundTag augmentRoot = base.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
             ListTag augments = augmentRoot.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-            // Attempt to give each entry to player; if it's not a proper ItemStack structure this will be NO-OP.
-            // You can adapt this to construct augment items if your augment entries are stored differently.
             for (int i = 0; i < augments.size(); i++) {
                 try {
                     ItemStack stack = ItemStack.of(augments.getCompound(i));
@@ -80,9 +68,6 @@ public class SeveranceRecipe extends ApothSmithingRecipe implements ReactiveSmit
                 } catch (Exception ignored) {}
             }
         }
-
-        // Clear augment instances on the server-side registry if you store live instances elsewhere:
-        // (You can iterate the augment list and call AugmentInstance.delete(uuid) if needed.)
     }
 
     @Override
@@ -105,7 +90,6 @@ public class SeveranceRecipe extends ApothSmithingRecipe implements ReactiveSmit
         return width * height >= 2;
     }
 
-    // Serializer class (keeps the same pattern as your other serializers)
     public static class Serializer implements RecipeSerializer<SeveranceRecipe> {
 
         public static final Serializer INSTANCE = new Serializer();
