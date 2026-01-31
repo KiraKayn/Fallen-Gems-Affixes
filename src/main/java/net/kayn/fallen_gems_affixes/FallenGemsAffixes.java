@@ -14,7 +14,6 @@ import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
-import net.kayn.fallen_gems_affixes.raid.RaidCommands;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.util.MiscUtil;
@@ -114,7 +113,6 @@ public class FallenGemsAffixes {
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
-        RaidCommands.register(event.getDispatcher());
     }
 
     public static ResourceLocation id(@NotNull String path) {
