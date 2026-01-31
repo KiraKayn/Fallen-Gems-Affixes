@@ -394,5 +394,8 @@
   "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:",
 
   "item.fallen_gems_affixes.sigil_of_transmutation": "Sigil of Transmutation",
-  "item.fallen_gems_affixes.sigil_of_transmutation.desc": "Transfers affixes, sockets and gems between gear"
+  "item.fallen_gems_affixes.sigil_of_transmutation.desc": "Transfers affixes, sockets and gems between gear",
+
+  "item.fallen_gems_affixes.sigil_of_severance": "Sigil of Severance",
+  "item.fallen_gems_affixes.sigil_of_severance.tooltip": "Removes all socketed augments from an item"
 }

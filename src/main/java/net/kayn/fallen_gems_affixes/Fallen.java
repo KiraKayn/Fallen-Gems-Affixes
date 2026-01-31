@@ -6,6 +6,7 @@ import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
+import net.kayn.fallen_gems_affixes.recipe.SeveranceRecipe;
 import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
 import net.kayn.fallen_gems_affixes.recipe.TransmutationRecipe;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
@@ -64,6 +65,22 @@ public class Fallen {
                     @Override
                     public void toNetwork(FriendlyByteBuf buf, TransmutationRecipe recipe) {
                     }
+                });
+
+        public static final RegistryObject<RecipeSerializer<SeveranceRecipe>> SEVERANCE =
+                SERIALIZERS.register("severance", () -> new RecipeSerializer<>() {
+                    @Override
+                    public @NotNull SeveranceRecipe fromJson(ResourceLocation id, JsonObject json) {
+                        return new SeveranceRecipe();
+                    }
+
+                    @Override
+                    public SeveranceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+                        return new SeveranceRecipe();
+                    }
+
+                    @Override
+                    public void toNetwork(FriendlyByteBuf buf, SeveranceRecipe recipe) {}
                 });
 
         private static void bootstrap(IEventBus bus) {

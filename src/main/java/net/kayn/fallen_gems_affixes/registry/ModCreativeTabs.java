@@ -21,6 +21,7 @@ public class ModCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.SIGIL_OF_ASCENSION.get());
                         output.accept(ModItems.SIGIL_OF_TRANSMUTATION.get());
+                        output.accept(ModItems.SIGIL_OF_SEVERANCE.get());
                     })
                     .build());
 
