@@ -40,8 +40,8 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
 
     @Override
     public boolean matches(Container inv, Level level) {
-        ItemStack base = inv.getItem(1).copy();
-        ItemStack augmentItem = inv.getItem(2).copy();
+        ItemStack base = inv.getItem(1);
+        ItemStack augmentItem = inv.getItem(2);
 
         LootCategory cat = LootCategory.forItem(base);
 
@@ -49,7 +49,19 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
             return false;
         }
 
-        return AugmentSlotHelper.hasAvailableSlots(base);
+        if (!AugmentSlotHelper.hasAvailableSlots(base)) {
+            return false;
+        }
+        ListTag ingredientAugments = getAugmentData(augmentItem);
+        for (Tag t : ingredientAugments) {
+            if (t instanceof CompoundTag c && c.contains(TYPE)) {
+                if (hasAugmentType(base, c.getString(TYPE))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -76,6 +88,21 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         return false;
     }
 
+    private static boolean hasAugmentType(ItemStack stack, String type) {
+        if (!stack.hasTag()) return false;
+
+        CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
+        if (augmentData == null) return false;
+
+        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
+        for (Tag t : augments) {
+            if (t instanceof CompoundTag c && type.equals(c.getString(Fallen.AugmentMisc.TYPE))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private ItemStack addAugmentData(ItemStack result, ItemStack augmentItem) {
         if (!AugmentSlotHelper.hasAvailableSlots(result)) {
             return result;
@@ -92,7 +119,7 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
         ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
 
-        // Create a set for overlapping types.
+        // Create a set for already-present augment types.
         Set<String> existingTypes = new HashSet<>();
         for (Tag t : augments) {
             if (t instanceof CompoundTag c && c.contains(TYPE)) {
@@ -105,12 +132,16 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
                 String type = c.getString(TYPE);
                 ResourceLocation loc = ResourceLocation.tryParse(type);
                 IAugment augment = AugmentRegistry.get(loc);
-                if (!existingTypes.contains(type) || !augment.isUnique()) {
-                    augments.add(c.copy());
-                    existingTypes.add(type);
-                    if (augment instanceof SupremacyAugment) {
-                        SupremacyAugment.apply(result);
-                    }
+
+                if (existingTypes.contains(type)) {
+                    continue;
+                }
+
+                augments.add(c.copy());
+                existingTypes.add(type);
+
+                if (augment instanceof SupremacyAugment) {
+                    SupremacyAugment.apply(result);
                 }
             }
         }
