@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class SocketBonusAffix extends Affix {
-
     public static final Codec<SocketBonusAffix> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
                     LootRarity.mapCodec(SocketData.CODEC).fieldOf("values").forGetter(a -> a.values),
@@ -42,10 +41,14 @@ public class SocketBonusAffix extends Affix {
         if (data == null) return Component.empty();
 
         int bonus = data.level().getInt(level);
-        if (bonus > 1) {
-            return Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc_multiple", bonus);
+
+        if (bonus >= 1) {
+            return Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc_multiple",
+                    bonus);
         }
-        return Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc", bonus);
+
+        return Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc",
+                bonus);
     }
 
     @Override
@@ -57,7 +60,8 @@ public class SocketBonusAffix extends Affix {
         int minBonus = data.level().getInt(0);
         int maxBonus = data.level().getInt(1);
 
-        MutableComponent comp = Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc", currentBonus);
+        MutableComponent comp = Component.translatable("affix.fallen_gems_affixes.socket_bonus.desc",
+                currentBonus);
 
         // Add min/max bounds if they differ
         if (minBonus != maxBonus) {

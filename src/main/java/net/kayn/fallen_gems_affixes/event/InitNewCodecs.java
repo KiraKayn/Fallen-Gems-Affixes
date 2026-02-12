@@ -25,6 +25,8 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "boss_resistance"), BossResistanceBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
 
+            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "socket_bonus"), SocketBonusAffix.CODEC);
+
 //            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "soulbound"), SoulboundAffix.CODEC);
 
             if (ModList.get().isLoaded("irons_spellbooks")) {
@@ -32,7 +34,6 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_cast"), SpellCastAffix.CODEC);
-                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "socket_bonus"), SocketBonusAffix.CODEC);
 
             }
             ExtraGemBonusRegistry.INSTANCE.registerToBus();
