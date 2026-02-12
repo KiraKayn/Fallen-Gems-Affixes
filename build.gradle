@@ -141,6 +141,7 @@ dependencies {
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6608233")
 
+
     runtimeOnly fg.deobf("curse.maven:corpse-316582:6624394")
 
     // Main Integrations (still optional)
@@ -157,9 +158,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:scorched-guns-802940:7201155")
 
-
     runtimeOnly fg.deobf("curse.maven:apotheotic-additions-924640:6393313")
     runtimeOnly fg.deobf("curse.maven:esoteric-reforging-forge-1150370:5989440")
+    runtimeOnly fg.deobf("curse.maven:ancient-reforging-985468:5527109")
 
     implementation fg.deobf("curse.maven:to-tweaks-irons-spells-1046916:7424522")
     runtimeOnly fg.deobf("curse.maven:cataclysm-spellbooks-1099461:6769871")
