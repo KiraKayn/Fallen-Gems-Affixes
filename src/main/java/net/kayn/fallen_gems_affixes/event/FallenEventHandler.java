@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
+import dev.shadowsoffire.apotheosis.adventure.event.GetItemSocketsEvent;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
@@ -10,6 +11,7 @@ import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
+import net.kayn.fallen_gems_affixes.adventure.affix.SocketBonusAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
@@ -19,8 +21,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-public class SpellEventHandler {
+public class FallenEventHandler {
 
     private static LivingEntity getSpellTarget(Optional<SpellCastAffix.TargetType> targetType, LivingEntity caster, LivingEntity contextTarget) {
         return targetType.filter(type -> type == SpellCastAffix.TargetType.SELF).map(type -> caster).orElse(contextTarget);
@@ -109,6 +112,23 @@ public class SpellEventHandler {
                     .filter(b -> b instanceof SpellEffectBonus)
                     .map(b -> (SpellEffectBonus) b)
                     .ifPresent(bonus -> processor.accept(g.gemStack(), bonus, rarity));
+        }
+    }
+
+    @SubscribeEvent
+    public void hookAddSocketsAffix(GetItemSocketsEvent event) {
+        ItemStack stack = event.getStack();
+
+        int affixBonus = StreamSupport.stream(AffixHelper.streamAffixes(stack).spliterator(), false)
+                .filter(inst -> inst.affix().get() instanceof SocketBonusAffix)
+                .mapToInt(inst -> {
+                    SocketBonusAffix affix = (SocketBonusAffix) inst.affix().get();
+                    return affix.getBonusSockets(inst.rarity().get(), inst.level());
+                })
+                .sum();
+
+        if (affixBonus > 0) {
+            event.setSockets(event.getSockets() + affixBonus);
         }
     }
 
