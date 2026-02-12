@@ -10,7 +10,8 @@
     "SocketHelperMixin",
     "AttributeAffixAccessor",
     "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin"
+    "permanent_effect.LivingEntityMixin",
+    "LootControllerMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",

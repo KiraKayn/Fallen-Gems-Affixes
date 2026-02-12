@@ -398,5 +398,11 @@
 
   "item.fallen_gems_affixes.sigil_of_severance": "Sigil of Severance",
   "item.fallen_gems_affixes.sigil_of_severance.tooltip": "Removes all socketed augments from an item",
-  "text.fallen_gems_affixes.star_prefix": "★ %s"
+  "text.fallen_gems_affixes.star_prefix": "★ %s",
+
+  "affix.fallen_gems_affixes.socket_bonus.desc": "This item has %s additional socket.",
+  "affix.fallen_gems_affixes.socket_bonus.desc_multiple": "This item has %s additional sockets.",
+  "affix.fallen_gems_affixes:socket_bonus": "Socketed",
+  "affix.fallen_gems_affixes:socket_bonus.suffix": "of Many Gems"
+
 }

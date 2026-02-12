@@ -1,0 +1,31 @@
+{
+  "type": "fallen_gems_affixes:socket_bonus",
+  "values": {
+    "mythic": {
+      "sockets": {
+        "min": 1,
+        "steps": 1,
+        "step": 0
+      }
+    },
+    "ancient": {
+      "sockets": {
+        "min": 1,
+        "steps": 1,
+        "step": 1
+      }
+    }
+  },
+  "types": [
+    "bow",
+    "staffs",
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots",
+    "sword",
+    "heavy_weapon",
+    "celestial_melee",
+    "celestial_ranged"
+  ]
+}
