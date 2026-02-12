@@ -397,5 +397,6 @@
   "item.fallen_gems_affixes.sigil_of_transmutation.desc": "Transfers affixes, sockets and gems between gear",
 
   "item.fallen_gems_affixes.sigil_of_severance": "Sigil of Severance",
-  "item.fallen_gems_affixes.sigil_of_severance.tooltip": "Removes all socketed augments from an item"
+  "item.fallen_gems_affixes.sigil_of_severance.tooltip": "Removes all socketed augments from an item",
+  "text.fallen_gems_affixes.star_prefix": "★ %s"
 }
