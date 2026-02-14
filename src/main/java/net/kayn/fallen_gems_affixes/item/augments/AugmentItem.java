@@ -118,10 +118,22 @@ public class AugmentItem extends Item {
                 tooltip.add(Component.literal(""));
                 tooltip.add(Component.translatable("tooltip.fallen_gems_affixes.augment.categories")
                         .withStyle(ChatFormatting.GREEN));
-                for (LootCategory category : categories) {
-                    tooltip.add(Component.literal("  • " + Component.translatable(category.getDescIdPlural()).getString())
+
+                List<LootCategory> categoryList = new ArrayList<>(categories);
+
+                for (int i = 0; i < categoryList.size(); i += 3) {
+                    int endIndex = Math.min(i + 3, categoryList.size());
+                    List<String> lineCategories = new ArrayList<>();
+
+                    for (int j = i; j < endIndex; j++) {
+                        lineCategories.add(Component.translatable(categoryList.get(j).getDescIdPlural()).getString());
+                    }
+
+                    String categoriesLine = String.join(", ", lineCategories);
+                    tooltip.add(Component.literal("  • " + categoriesLine)
                             .withStyle(ChatFormatting.GREEN));
                 }
+
                 tooltip.add(Component.literal(""));
             }
         }
