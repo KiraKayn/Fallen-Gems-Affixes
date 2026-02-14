@@ -52,15 +52,13 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
         ItemStack out = inv.getItem(1).copy();
         if (out.isEmpty()) return ItemStack.EMPTY;
 
-        // Check if item has Supremacy augment before removing
         boolean hadSupremacy = hasSupremacy(out);
 
         int slots = AugmentSlotHelper.getAugmentSlots(out);
         out.getOrCreateTag().remove(Fallen.AugmentMisc.AUGMENT_DATA);
-        out.getOrCreateTag().remove("fallen_gems_affixes:fabled"); // Remove fabled tag
+        out.getOrCreateTag().remove("fallen_gems_affixes:fabled");
         AugmentSlotHelper.setAugmentSlots(out, slots);
 
-        // If item had Supremacy, restore original affix levels
         if (hadSupremacy) {
             restoreAffixLevels(out);
         }
@@ -93,10 +91,8 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
             var affixIns = entry.getValue();
             var affix = holder.get();
 
-            // Restore levels that were boosted by Supremacy
             if (!(affix instanceof DurableAffix)) {
                 float currentLevel = affixIns.level();
-                // If level is above standard max, clamp it back down
                 if (currentLevel > SupremacyAugment.STANDARD_MAX_LEVEL) {
                     float restoredLevel = Mth.clamp(currentLevel, 0, SupremacyAugment.STANDARD_MAX_LEVEL);
 
