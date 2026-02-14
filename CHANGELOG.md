@@ -1,3 +1,45 @@
+# 2.0.0 - Augments Update
+
+## Augments - New Endgame System
+- Augments are a new tier of power above gems. They're applied to **Crest Slots** (converted gem sockets).
+
+**Available Augments:**
+- **Soulbound** - Keep items on death
+- **Gem Power** - Multiply gem effects by 1.35x
+- **Supremacy** - Upgrades item to Fabled, increasing affix power by 1.5x. A star (⭐) indicates which affixes have been boosted
+
+**How to Use:**
+1. Craft augments in a crafting table using endgame materials
+2. Convert gem sockets to Crest Slots using Sigil of Ascension in smithing table
+3. Apply augments to Crest Slots via smithing table
+
+**Configuration:**
+- Augments are configurable via JSON at `data/fallen_gems_affixes/augments/`
+- Customize which item types can use each augment
+- Adjust power multipliers per augment
+
+## New Items
+
+**Crafting Materials:**
+- Reinforced Gem Slate - Upgraded Gem-Fused Slate, core material for augment recipes
+
+**Sigils:**
+- Sigil of Ascension - Converts one gem socket to Crest Slot (smithing table)
+- Sigil of Severance - Removes all augments from item, returns them to inventory (smithing table)
+- Sigil of Transmutation - Transfers affixes, gems, sockets, and augments to another item of same category
+  - Left: Sigil | Middle: Target Item | Right: Source Item
+
+## New Affix
+- **Socket Bonus** - Adds extra gem sockets to Mythic+ gear
+  - Location: `data/fallen_gems_affixes/affixes/socket_bonus.json`
+  - Available on all item categories
+
+## Other Changes
+- Added creative tab containing all mod items
+
+## Requirements
+- **New Dependency Required:** This version adds a new library dependency. Ensure you install the required library before launching.
+
 # 1.3.2HF
 - Fixed a crash caused by LivingEntityMixin
 
