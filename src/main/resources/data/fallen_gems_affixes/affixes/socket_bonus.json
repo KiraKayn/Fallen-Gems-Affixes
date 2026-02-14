@@ -26,6 +26,11 @@
     "sword",
     "heavy_weapon",
     "celestial_melee",
-    "celestial_ranged"
+    "celestial_ranged",
+    "pickaxe",
+    "shovel",
+    "trident",
+    "crossbow",
+    "shield"
   ]
 }
