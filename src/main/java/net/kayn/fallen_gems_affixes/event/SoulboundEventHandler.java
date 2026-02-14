@@ -1,9 +1,8 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
-import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
+import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -81,9 +80,15 @@ public class SoulboundEventHandler {
     }
 
     /**
-     * Check if an ItemStack has a SoulboundAugment
+     * Check if an ItemStack has a SoulboundAugment applied to it.
+     * NOTE: This specifically excludes AugmentItem instances themselves!
      */
     private static boolean hasSoulboundAugment(ItemStack stack, Player ignoredPlayer) {
+        // IMPORTANT: Augment items themselves should NOT be protected!
+        if (stack.getItem() instanceof AugmentItem) {
+            return false;
+        }
+
         if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
             CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
             ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
