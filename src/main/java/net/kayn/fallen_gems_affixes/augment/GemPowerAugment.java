@@ -44,12 +44,30 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public boolean needsInstance() {
-        return false;
+        return true;
     }
 
     @Override
     public AugmentInstance createInstanceFromStack(ItemStack stack) {
-        return IAugment.super.createInstanceFromStack(stack);
+        float power = 1.0f;
+        AugmentItem.AugmentData data = null;
+
+        ResourceLocation id = AugmentItem.getAugmentId(stack);
+        if (id != null) {
+            data = AugmentItem.getAugmentData(id);
+        }
+        if (data == null) {
+            data = AugmentItem.getAugmentData(GEM_POWER_ID);
+        }
+
+        if (data != null) {
+            power = data.getPower();
+        }
+
+        GemPowerData innerData = new GemPowerData();
+        innerData.power = power;
+
+        return new AugmentInstance(this, innerData);
     }
 
     @Override
@@ -124,7 +142,7 @@ public class GemPowerAugment implements IAugment {
     }
 
     public static class GemPowerData implements IAugmentInnerData {
-        private float power;
+        float power;
 
         public float getPower() {
             return power;
