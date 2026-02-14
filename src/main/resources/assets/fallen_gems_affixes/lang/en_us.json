@@ -403,6 +403,7 @@
   "affix.fallen_gems_affixes.socket_bonus.desc": "This item has %s additional socket.",
   "affix.fallen_gems_affixes.socket_bonus.desc_multiple": "This item has %s additional sockets.",
   "affix.fallen_gems_affixes:socket_bonus": "Socketed",
-  "affix.fallen_gems_affixes:socket_bonus.suffix": "of Many Gems"
+  "affix.fallen_gems_affixes:socket_bonus.suffix": "of Many Gems",
 
+  "item.fallen_gems_affixes.reinforced_gem_slate": "Reinforced Gem Slate"
 }

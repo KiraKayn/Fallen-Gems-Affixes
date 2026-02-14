@@ -22,6 +22,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.SIGIL_OF_ASCENSION.get());
                         output.accept(ModItems.SIGIL_OF_TRANSMUTATION.get());
                         output.accept(ModItems.SIGIL_OF_SEVERANCE.get());
+                        output.accept(ModItems.REINFORCED_GEM_SLATE.get());
                     })
                     .build());
 
