@@ -105,13 +105,6 @@ public class GemPowerAugment implements IAugment {
         GemPowerData data = new GemPowerData();
         data.deserializeNBT(tag);
 
-        if (data.power == 0.0f) {
-            AugmentItem.AugmentData jsonData = AugmentItem.getAugmentData(GEM_POWER_ID);
-            if (jsonData != null) {
-                data.power = jsonData.getPower();
-            }
-        }
-
         return data;
     }
 

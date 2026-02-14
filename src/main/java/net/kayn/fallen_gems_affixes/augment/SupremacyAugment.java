@@ -86,13 +86,6 @@ public class SupremacyAugment implements IAugment {
         SupremacyData data = new SupremacyData();
         data.deserializeNBT(tag);
 
-        if (data.power == 0.0f) {
-            AugmentItem.AugmentData jsonData = AugmentItem.getAugmentData(SUPREMACY_ID);
-            if (jsonData != null) {
-                data.power = jsonData.getPower();
-            }
-        }
-
         return data;
     }
 
