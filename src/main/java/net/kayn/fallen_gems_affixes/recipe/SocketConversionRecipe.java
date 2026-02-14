@@ -5,6 +5,7 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -23,19 +24,21 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_ASCENSION.get()), ItemStack.EMPTY);
     }
 
+    private int getBaseSocketCount(ItemStack stack) {
+        CompoundTag afxData = stack.getTagElement("affix_data");
+        return afxData != null ? afxData.getInt("sockets") : 0;
+    }
+
     @Override
     public boolean matches(Container inv, Level level) {
         ItemStack base = inv.getItem(1);
         ItemStack sigil = inv.getItem(2);
 
-        // Must be the sigil item
         if (!sigil.is(ModItems.SIGIL_OF_ASCENSION.get())) return false;
 
-        // Must have at least 1 gem socket to convert
-        int gemSockets = SocketHelper.getSockets(base);
-        if (gemSockets <= 0) return false;
+        int baseGemSockets = getBaseSocketCount(base);
+        if (baseGemSockets <= 0) return false;
 
-        // Check if all sockets are filled with gems
         int filledSockets = 0;
         for (var gem : SocketHelper.getGems(base).gems()) {
             if (gem.isValid()) {
@@ -43,11 +46,9 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
             }
         }
 
-        // Must have at least 1 empty socket (no gems added)
-        int emptySockets = gemSockets - filledSockets;
+        int emptySockets = baseGemSockets - filledSockets;
         if (emptySockets <= 0) return false;
 
-        // Must not be at max augment slots already
         return AugmentSlotHelper.canAddMoreSlots(base);
     }
 
@@ -57,11 +58,13 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
         ItemStack result = base.copy();
         result.setCount(1);
 
-        // Remove 1 gem socket
-        int currentGemSockets = SocketHelper.getSockets(result);
-        SocketHelper.setSockets(result, currentGemSockets - 1);
+        int currentBaseGemSockets = getBaseSocketCount(result);
 
-        // Add 1 augment slot using helper
+        CompoundTag tag = result.getOrCreateTag();
+        CompoundTag afxData = tag.getCompound("affix_data");
+        afxData.putInt("sockets", currentBaseGemSockets - 1);
+        tag.put("affix_data", afxData);
+
         AugmentSlotHelper.addAugmentSlots(result, 1);
 
         return result;
