@@ -2,11 +2,21 @@
   "augment": "fallen_gems_affixes:gem_power",
   "texture": "fallen_gems_affixes:item/augments/gem_power.png",
   "categories": [
-    "sword",
+    "bow",
+    "staffs",
     "helmet",
     "chestplate",
     "leggings",
-    "boots"
+    "boots",
+    "sword",
+    "heavy_weapon",
+    "celestial_melee",
+    "celestial_ranged",
+    "pickaxe",
+    "shovel",
+    "trident",
+    "crossbow",
+    "shield"
   ],
   "power": 1.35
 }
