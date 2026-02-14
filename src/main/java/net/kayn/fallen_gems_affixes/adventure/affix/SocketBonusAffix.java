@@ -25,7 +25,7 @@ public class SocketBonusAffix extends Affix {
     protected final Set<LootCategory> types;
 
     public SocketBonusAffix(Map<LootRarity, SocketData> values, Set<LootCategory> types) {
-        super(AffixType.POTION);
+        super(AffixType.ABILITY);
         this.values = values;
         this.types = types;
     }
@@ -83,7 +83,7 @@ public class SocketBonusAffix extends Affix {
         if (cat == null || cat.isNone()) {
             return false;
         }
-        return this.types.isEmpty() || this.types.contains(cat);
+        return (this.types.isEmpty() || this.types.contains(cat)) && this.values.containsKey(rarity);
     }
 
     public record SocketData(StepFunction level) {

@@ -116,11 +116,15 @@ public class FallenEventHandler {
     }
 
     @SubscribeEvent
-    public void hookAddSocketsAffix(GetItemSocketsEvent event) {
+    public static void hookAddSocketsAffix(GetItemSocketsEvent event) {
         ItemStack stack = event.getStack();
 
+        if (!AffixHelper.hasAffixes(stack)) {
+            return;
+        }
+
         int affixBonus = StreamSupport.stream(AffixHelper.streamAffixes(stack).spliterator(), false)
-                .filter(inst -> inst.affix().get() instanceof SocketBonusAffix)
+                .filter(inst -> inst.affix().isBound() && inst.affix().get() instanceof SocketBonusAffix)
                 .mapToInt(inst -> {
                     SocketBonusAffix affix = (SocketBonusAffix) inst.affix().get();
                     return affix.getBonusSockets(inst.rarity().get(), inst.level());
