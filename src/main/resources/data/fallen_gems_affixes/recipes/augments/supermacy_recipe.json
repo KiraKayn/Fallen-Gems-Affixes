@@ -1,0 +1,20 @@
+{
+  "type": "fallen_gems_affixes:augment_crafting",
+  "pattern": [
+    "RMR",
+    "MNM",
+    "RMR"
+  ],
+  "key": {
+    "R": {
+      "item": "fallen_gems_affixes:reinforced_gem_slate"
+    },
+    "M": {
+      "item": "apotheosis:mythic_material"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "augment": "fallen_gems_affixes:supremacy"
+}

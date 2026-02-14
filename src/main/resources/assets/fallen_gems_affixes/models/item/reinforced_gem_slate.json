@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fallen_gems_affixes:items/reinforced_gem_slate"
+  }
+}

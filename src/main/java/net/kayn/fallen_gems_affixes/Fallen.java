@@ -6,6 +6,7 @@ import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
 import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
+import net.kayn.fallen_gems_affixes.recipe.AugmentCraftingRecipe;
 import net.kayn.fallen_gems_affixes.recipe.SeveranceRecipe;
 import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
 import net.kayn.fallen_gems_affixes.recipe.TransmutationRecipe;
@@ -32,6 +33,9 @@ public class Fallen {
     public static class RecipeSerializers {
         public static final RegistryObject<AugmentRecipeSerializer> ADD_AUGMENT =
                 SERIALIZERS.register("add_augment", AugmentRecipeSerializer::new);
+
+        public static final RegistryObject<RecipeSerializer<AugmentCraftingRecipe>> AUGMENT_CRAFTING =
+                SERIALIZERS.register("augment_crafting", AugmentCraftingRecipe.Serializer::new);
 
         public static final RegistryObject<RecipeSerializer<SocketConversionRecipe>> SOCKET_CONVERSION =
                 SERIALIZERS.register("socket_conversion", () -> new RecipeSerializer<>() {

@@ -1,0 +1,29 @@
+{
+  "type": "fallen_gems_affixes:augment_crafting",
+  "pattern": [
+    "MTM",
+    "GRG",
+    "ENE"
+  ],
+  "key": {
+    "R": {
+      "item": "fallen_gems_affixes:reinforced_gem_slate"
+    },
+    "M": {
+      "item": "apotheosis:mythic_material"
+    },
+    "T": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "G": {
+      "item": "apotheosis:gem_dust"
+    },
+    "E": {
+      "item": "apotheosis:epic_material"
+    }
+  },
+  "augment": "fallen_gems_affixes:soulbound"
+}

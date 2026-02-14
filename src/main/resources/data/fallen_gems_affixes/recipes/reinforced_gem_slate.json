@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NGN",
+    "GDG",
+    "NGN"
+  ],
+  "key": {
+    "G": {
+      "item": "apotheosis:gem_fused_slate"
+    },
+    "N": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "D": {
+      "item": "apotheosis:gem_dust"
+    }
+  },
+  "result": {
+    "item": "fallen_gems_affixes:reinforced_gem_slate",
+    "count": 1
+  }
+}
