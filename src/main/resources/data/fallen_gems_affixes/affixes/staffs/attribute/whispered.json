@@ -41,8 +41,7 @@
     }
   },
   "types": [
-    "staffs",
-    "curios:spellbook"
+    "staffs"
   ],
   "school": "irons_spellbooks:eldritch"
 }
