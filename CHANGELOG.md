@@ -1,3 +1,6 @@
+# 2.0.0HF
+- Fixed startup crash if Iron's Spellbooks is not installed
+
 # 2.0.0 - Augments Update
 
 ## Augments - New Endgame System

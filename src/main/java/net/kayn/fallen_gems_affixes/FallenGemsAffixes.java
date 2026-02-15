@@ -7,10 +7,7 @@ import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.commands.AugmentCommands;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
-import net.kayn.fallen_gems_affixes.event.CelestisynthAttributeHandler;
-import net.kayn.fallen_gems_affixes.event.FallenEventHandler;
-import net.kayn.fallen_gems_affixes.event.InitNewCodecs;
-import net.kayn.fallen_gems_affixes.event.SoulboundEventHandler;
+import net.kayn.fallen_gems_affixes.event.*;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
 import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
@@ -78,6 +75,7 @@ public class FallenGemsAffixes {
         if (ModList.get().isLoaded("irons_spellbooks")) {
             StaffLootCategory.STAFF.toString();
             modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
+            MinecraftForge.EVENT_BUS.register(SpellEventHandler.class);
         }
 
         if (ModList.get().isLoaded("celestisynth")) {
