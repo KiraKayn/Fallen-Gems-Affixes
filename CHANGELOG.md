@@ -1,3 +1,6 @@
+# 2.0.1HF
+- Fixed JEI only showing the Soulbound augment (again)
+
 # 2.0.1
 - Fixed items being combinable in a smithing table if they both have a crest slot
 - Fixed JEI only showing the Soulbound augment
