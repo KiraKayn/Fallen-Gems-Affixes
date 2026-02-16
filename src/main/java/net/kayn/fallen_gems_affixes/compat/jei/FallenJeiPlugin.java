@@ -7,9 +7,11 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.recipe.TransmutationRecipe;
+import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -60,6 +62,14 @@ public class FallenJeiPlugin implements IModPlugin {
     }
 
     @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(
+                ModItems.AUGMENT_ITEM.get(),
+                new AugmentSubtypes()
+        );
+    }
+
+    @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration reg) {
         reg.addRecipeCatalyst(new ItemStack(Blocks.SMITHING_TABLE), FallenSmithingCategory.RECIPE_TYPE);
     }
@@ -72,6 +82,7 @@ public class FallenJeiPlugin implements IModPlugin {
                 return ForgeRegistries.ITEMS.getKey(stack.getItem()).toString();
             }
             return augmentId.toString();
+
         }
     }
 }
