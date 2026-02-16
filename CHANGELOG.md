@@ -1,3 +1,9 @@
+# 2.0.1
+- Fixed items being combinable in a smithing table if they both have a crest slot
+- Fixed JEI only showing the Soulbound augment
+- Added JEI tab for Transmutation recipe
+- Added config for Max Number of Augment slots (default: 1)
+
 # 2.0.0HF
 - Fixed startup crash if Iron's Spellbooks is not installed
 
