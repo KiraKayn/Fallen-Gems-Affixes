@@ -405,5 +405,6 @@
   "affix.fallen_gems_affixes:socket_bonus": "Socketed",
   "affix.fallen_gems_affixes:socket_bonus.suffix": "of Many Gems",
 
-  "item.fallen_gems_affixes.reinforced_gem_slate": "Reinforced Gem Slate"
+  "item.fallen_gems_affixes.reinforced_gem_slate": "Reinforced Gem Slate",
+  "jei.fallen_gems_affixes.transmutation": "Transmutation"
 }
