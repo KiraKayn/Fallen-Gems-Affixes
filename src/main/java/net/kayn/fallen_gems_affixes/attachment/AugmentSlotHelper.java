@@ -1,18 +1,15 @@
 package net.kayn.fallen_gems_affixes.attachment;
 
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Objects;
-
-
 public class AugmentSlotHelper {
 
     public static final String AUGMENT_SLOTS = "augment_slots";
-    public static final int MAX_AUGMENT_SLOTS = 2;
 
     public static int getAugmentSlots(ItemStack stack) {
         if (!stack.hasTag()) {
@@ -23,7 +20,9 @@ public class AugmentSlotHelper {
     }
 
     public static void setAugmentSlots(ItemStack stack, int slots) {
-        stack.getOrCreateTagElement(Fallen.AugmentMisc.AUGMENT_DATA).putInt(AUGMENT_SLOTS, Math.min(slots, MAX_AUGMENT_SLOTS));
+        int max = ModConfig.MAX_AUGMENT_SLOTS.get();
+        stack.getOrCreateTagElement(Fallen.AugmentMisc.AUGMENT_DATA)
+                .putInt(AUGMENT_SLOTS, Math.min(slots, max));
     }
 
     public static void addAugmentSlots(ItemStack stack, int amount) {
@@ -48,10 +47,11 @@ public class AugmentSlotHelper {
     }
 
     public static boolean canAddMoreSlots(ItemStack stack) {
-        return getAugmentSlots(stack) < MAX_AUGMENT_SLOTS;
+        return getAugmentSlots(stack) < ModConfig.MAX_AUGMENT_SLOTS.get();
     }
 
     public static int getEmptySlots(ItemStack stack) {
-        return Mth.clamp(getAugmentSlots(stack) - getAugmentCount(stack), 0, MAX_AUGMENT_SLOTS);
+        int max = ModConfig.MAX_AUGMENT_SLOTS.get();
+        return Mth.clamp(getAugmentSlots(stack) - getAugmentCount(stack), 0, max);
     }
 }

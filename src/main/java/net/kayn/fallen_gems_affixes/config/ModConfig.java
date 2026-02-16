@@ -16,6 +16,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_CELESTISYNTH_ATTRIBUTES;
     public static final ForgeConfigSpec.BooleanValue ENABLE_SPELL_POWER_PATCH;
     public static final ForgeConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
+    public static final ForgeConfigSpec.IntValue MAX_AUGMENT_SLOTS;
 
     static {
         BUILDER.push("Mod Config");
@@ -50,6 +51,11 @@ public class ModConfig {
         ENABLE_SPELL_POWER_PATCH = BUILDER
                 .comment("If true, enables Celestisynth weapons patch to increase weapon damage when held, scaled by the respective Spell Power on the item")
                 .define("enableCelestisynthSpellPowerPatch", true);
+
+        MAX_AUGMENT_SLOTS = BUILDER
+                .comment("Maximum number of Augment Slots an item can have")
+                .defineInRange("maxAugmentSlots", 1, 0, 4);
+
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
