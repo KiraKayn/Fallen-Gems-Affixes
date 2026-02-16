@@ -43,6 +43,10 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         ItemStack base = inv.getItem(1);
         ItemStack augmentItem = inv.getItem(2);
 
+        if (!augmentItem.is(ModItems.AUGMENT_ITEM.get())) {
+            return false;
+        }
+
         LootCategory cat = LootCategory.forItem(base);
 
         if (!categoryMatches(augmentItem, cat)) {
