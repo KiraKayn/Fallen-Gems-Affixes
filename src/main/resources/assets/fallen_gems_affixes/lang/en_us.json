@@ -414,5 +414,24 @@
 
   "affix.fallen_gems_affixes.autocast":         "Autocast: %s",
   "affix.fallen_gems_affixes.autocast.trigger": " When casting: %s",
-  "affix.fallen_gems_affixes.autocast.any_spell": "Any spell"
+  "affix.fallen_gems_affixes.autocast.any_spell": "Any spell",
+
+  "affix.fallen_gems_affixes:staffs/autocast/sunbeam": "Radiant",
+  "affix.fallen_gems_affixes:staffs/autocast/sunbeam.suffix": "of the Sunbeam",
+  "affix.fallen_gems_affixes:staffs/autocast/shadow_slash": "Umbral",
+  "affix.fallen_gems_affixes:staffs/autocast/shadow_slash.suffix": "of Shadow",
+  "affix.fallen_gems_affixes:staffs/autocast/stomp": "Earthshaking",
+  "affix.fallen_gems_affixes:staffs/autocast/stomp.suffix": "of the Stomp",
+  "affix.fallen_gems_affixes:staffs/autocast/sonic_boom": "Resounding",
+  "affix.fallen_gems_affixes:staffs/autocast/sonic_boom.suffix": "of the Sonic Boom",
+  "affix.fallen_gems_affixes:staffs/autocast/arrow_volley": "Volley",
+  "affix.fallen_gems_affixes:staffs/autocast/arrow_volley.suffix": "of the Arrow Volley",
+  "affix.fallen_gems_affixes:staffs/autocast/volt_strike": "Crackling",
+  "affix.fallen_gems_affixes:staffs/autocast/volt_strike.suffix": "of the Volt Strike",
+  "affix.fallen_gems_affixes:staffs/autocast/ice_spikes": "Glacial",
+  "affix.fallen_gems_affixes:staffs/autocast/ice_spikes.suffix": "of Ice Spikes",
+  "affix.fallen_gems_affixes:staffs/autocast/acupuncture": "Piercing",
+  "affix.fallen_gems_affixes:staffs/autocast/acupuncture.suffix": "of Acupuncture",
+  "affix.fallen_gems_affixes:staffs/autocast/burning_dash": "Blazing",
+  "affix.fallen_gems_affixes:staffs/autocast/burning_dash.suffix": "of the Burning Dash"
 }
