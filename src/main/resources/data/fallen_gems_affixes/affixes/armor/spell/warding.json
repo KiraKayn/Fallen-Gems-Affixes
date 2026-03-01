@@ -40,9 +40,7 @@
     }
   },
   "types": [
-    "helmet",
     "chestplate",
     "leggings",
-    "boots"
   ]
 }
