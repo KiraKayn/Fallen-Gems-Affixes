@@ -380,17 +380,17 @@
 
   "item.fallen_gems_affixes.augment.soulbound": "Augment of Soul",
   "fallen_gems_affixes.augment.soulbound.type": "Soulbound:",
-  "fallen_gems_affixes.augment.soulbound.desc": "When applied, prevents items from being lost on death.",
+  "fallen_gems_affixes.augment.soulbound.desc": "Prevents items from being lost on death.",
 
   "item.fallen_gems_affixes.sigil_of_ascension": "Sigil of Ascension",
   "item.fallen_gems_affixes.sigil_of_ascension.desc": "Converts a Socket slot into an Augment slot",
 
   "item.fallen_gems_affixes.augment.gem_power": "Augment of Empowerment",
   "fallen_gems_affixes.augment.gem_power.type": "Extra Gem Power:",
-  "fallen_gems_affixes.augment.gem_power.desc": "When applied, increases socketed gem power by %sx",
+  "fallen_gems_affixes.augment.gem_power.desc": "Increases socketed gem power by %sx",
 
   "item.fallen_gems_affixes.augment.supremacy": "Augment of Supremacy",
-  "fallen_gems_affixes.augment.supremacy.desc": "When applied, makes the item Fabled, which increases affix power by %sx",
+  "fallen_gems_affixes.augment.supremacy.desc": "Makes the item Fabled, which increases affix power by %sx",
   "fallen_gems_affixes.augment.supremacy.type": "Extra Affix Power:",
 
   "item.fallen_gems_affixes.sigil_of_transmutation": "Sigil of Transmutation",
@@ -410,5 +410,9 @@
 
   "affix.fallen_gems_affixes.double_strike.desc": "On hit, deal %s%% of the damage again",
   "affix.fallen_gems_affixes:sword/double_strike": "Vorpal",
-  "affix.fallen_gems_affixes:sword/double_strike.suffix": "of Echoes"
+  "affix.fallen_gems_affixes:sword/double_strike.suffix": "of Echoes",
+
+  "affix.fallen_gems_affixes.autocast":         "Autocast: %s",
+  "affix.fallen_gems_affixes.autocast.trigger": " When casting: %s",
+  "affix.fallen_gems_affixes.autocast.any_spell": "Any spell"
 }

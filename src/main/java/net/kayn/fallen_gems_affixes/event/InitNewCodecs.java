@@ -32,6 +32,7 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_cast"), SpellCastAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "autocast"), AutocastAffix.CODEC);
 
             }
             ExtraGemBonusRegistry.INSTANCE.registerToBus();

@@ -10,6 +10,7 @@ import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
+import net.kayn.fallen_gems_affixes.adventure.affix.AutocastAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
@@ -37,6 +38,8 @@ public class SpellEventHandler {
 
         if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
 
+        String castSpellId = source.spell().getSpellId();
+
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof SpellEffectAffix affix) {
@@ -49,6 +52,12 @@ public class SpellEventHandler {
                         affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, target);
                     affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
+                } else if (inst.affix().get() instanceof AutocastAffix affix) {
+                    LivingEntity actualTarget = affix.target
+                            .filter(t -> t == SpellCastAffix.TargetType.SELF)
+                            .map(t -> (LivingEntity) caster)
+                            .orElse(target);
+                    affix.onSpellCast(caster, castSpellId, actualTarget, inst.rarity().get());
                 }
             });
 
@@ -71,6 +80,8 @@ public class SpellEventHandler {
 
         LivingEntity healTarget = event.getTargetEntity();
 
+        String castSpellId = null;
+
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof SpellEffectAffix affix) {
@@ -83,6 +94,13 @@ public class SpellEventHandler {
                         affix.trigger == SpellCastAffix.TriggerType.SPELL_HEAL) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, healTarget);
                     affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
+                } else if (inst.affix().get() instanceof AutocastAffix affix) {
+
+                    LivingEntity actualTarget = affix.target
+                            .filter(t -> t == SpellCastAffix.TargetType.SELF)
+                            .map(t -> (LivingEntity) caster)
+                            .orElse(healTarget);
+                    affix.onSpellCast(caster, castSpellId, actualTarget, inst.rarity().get());
                 }
             });
 

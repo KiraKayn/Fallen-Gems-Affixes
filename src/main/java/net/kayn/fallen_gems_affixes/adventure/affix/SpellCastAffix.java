@@ -35,7 +35,7 @@ public class SpellCastAffix extends Affix {
         return TRIGGERING_CASTERS.get().contains(caster.getUUID());
     }
 
-    private static void setTriggering(LivingEntity caster, boolean value) {
+    public static void setTriggering(LivingEntity caster, boolean value) {
         if (value) TRIGGERING_CASTERS.get().add(caster.getUUID());
         else TRIGGERING_CASTERS.get().remove(caster.getUUID());
     }
