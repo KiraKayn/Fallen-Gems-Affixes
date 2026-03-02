@@ -17,6 +17,8 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_SPELL_POWER_PATCH;
     public static final ForgeConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
     public static final ForgeConfigSpec.IntValue MAX_AUGMENT_SLOTS;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_BOSS_SPAWNER_CONVERSION;
+    public static final ForgeConfigSpec.DoubleValue BOSS_SPAWNER_CHANCE;
 
     static {
         BUILDER.push("Mod Config");
@@ -56,6 +58,13 @@ public class ModConfig {
                 .comment("Maximum number of Augment Slots an item can have")
                 .defineInRange("maxAugmentSlots", 1, 0, 4);
 
+        ENABLE_BOSS_SPAWNER_CONVERSION = BUILDER
+                .comment("If true, natural spawners have a chance to convert into Apotheosis boss spawners on first discovery.")
+                .define("enableBossSpawnerConversion", true);
+
+        BOSS_SPAWNER_CHANCE = BUILDER
+                .comment("Chance for a natural spawner to become a boss spawner (0.0 = never, 1.0 = always)")
+                .defineInRange("bossSpawnerChance", 0.15, 0.0, 1.0);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
