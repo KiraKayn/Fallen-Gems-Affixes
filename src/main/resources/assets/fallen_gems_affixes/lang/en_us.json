@@ -158,6 +158,10 @@
   "bonus.fallen_gems_affixes.boss_resistance": "Boss Resistance",
   "bonus.fallen_gems_affixes.boss_resistance.desc": "%s%% Damage Reduction against Bosses",
 
+  "bonus.fallen_gems_affixes.dragon_slayer.desc": "+%s%% Damage to Dragons",
+
+  "bonus.fallen_gems_affixes.dragon_resistance.desc": "%s%% Damage Reduction against Dragons",
+
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom": "Enlightened",
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom.suffix": "of Insight",
 

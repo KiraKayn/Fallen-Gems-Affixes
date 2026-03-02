@@ -1,0 +1,70 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "iceandfire"
+    }
+  ],
+  "weight": 5,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "common",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_melee"
+        },
+        {
+          "modid": "celestisynth",
+          "category": "celestial_ranged"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:dragon_slayer",
+        "gem_class": {
+          "key": "melee_ranged",
+          "types": [
+            "sword",
+            "bow",
+            "crossbow",
+            "heavy_weapon",
+            "trident"
+          ]
+        },
+        "entity_tag": "fallen_gems_affixes:dragon_slayer",
+        "values": {
+          "common": 0.15,
+          "uncommon": 0.30,
+          "rare": 0.45,
+          "epic": 0.60,
+          "mythic": 0.75,
+          "ancient": 0.9
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:dragon_resistance",
+      "gem_class": {
+        "key": "armor",
+        "types": [
+          "helmet",
+          "chestplate",
+          "leggings",
+          "boots"
+        ]
+      },
+      "entity_tag": "fallen_gems_affixes:dragon_slayer",
+      "values": {
+        "common": 0.03,
+        "uncommon": 0.05,
+        "rare": 0.07,
+        "epic": 0.10,
+        "mythic": 0.12,
+        "ancient": 0.15
+      }
+    }
+  ]
+}
