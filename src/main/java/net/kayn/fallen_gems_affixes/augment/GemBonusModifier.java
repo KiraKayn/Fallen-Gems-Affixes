@@ -115,24 +115,25 @@ public class GemBonusModifier {
 
         CompoundTag augmentData = itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
         ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+        float currentGemPower = 1F;
 
         for (int i = 0; i < listTag.size(); i++) {
             CompoundTag tag = listTag.getCompound(i);
             ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
 
-            if (GenesisAugment.augmentId().equals(typeId)) {
-                // Genesis present — always return its gemPower, no further checks needed
-                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
-                return genesisGemPower != null ? genesisGemPower : 1F;
-            }
-
             if (GemPowerAugment.augmentId().equals(typeId)) {
                 GemPowerAugment.GemPowerData data = (GemPowerAugment.GemPowerData)
                         Fallen.Augments.GEM_POWER.deserializeInnerData(tag.getCompound(INNER_DATA));
-                return data.getPower();
+                currentGemPower = data.getPower();
             }
+            else if (GenesisAugment.augmentId().equals(typeId)) {
+                // Genesis present — always return its gemPower, no further checks needed
+                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
+                currentGemPower = genesisGemPower != null ? genesisGemPower * currentGemPower : currentGemPower;
+            }
+
         }
 
-        return 1F;
+        return currentGemPower;
     }
 }
