@@ -1,0 +1,24 @@
+{
+  "augment": "fallen_gems_affixes:genesis",
+  "texture": "fallen_gems_affixes:item/augments/genesis.png",
+  "categories": [
+    "bow",
+    "staffs",
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots",
+    "sword",
+    "heavy_weapon",
+    "celestial_melee",
+    "celestial_ranged",
+    "pickaxe",
+    "shovel",
+    "trident",
+    "crossbow",
+    "shield"
+  ],
+  "default_power":      0.5,
+  "affix_power_boost":  0.05,
+  "gem_power_boost":    0.05
+}

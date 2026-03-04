@@ -4,8 +4,6 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.mixin.SocketHelperMixin;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,24 +17,20 @@ import net.rtxyd.fallen.lib.type.util.patch.IInserterContext;
 import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
 import net.rtxyd.fallen.lib.util.patch.InserterType;
 
-import java.util.Map;
-
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
 /**
- * This class should manage the logic on both client and server, must be thread-safe
+ * This class should manage the logic on both client and server, must be thread-safe.
+ *
+ * <p>Genesis priority: if the item carries a Genesis augment, its {@code gemPower} value
+ * is used exclusively. No hasGems guard — Genesis always controls gem scaling once applied.
+ * Only if Genesis is absent does it fall through to the GemPower augment.
  */
 public class GemBonusModifier {
     private static ObjectModifierFactory FACTORY;
     private static final ThreadLocal<Boolean> isKeyValid = ThreadLocal.withInitial(() -> false);
     public static final ThreadLocal<ItemStack> currentSuspendedItemStack = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
 
-    /**
-     * FallenInserter, where the real point to function GemPowerAugment
-     * @param ctx Context which contains method receiver (maybe this) and return.
-     * @param args Parameters of the target method.
-     * @return Original object or a new object.
-     */
     @FallenInserter(type = InserterType.STANDARD)
     public static Object modifier(IInserterContext<Object, Object> ctx, Object... args) {
         if (args.length > 0 && args[0] instanceof LootRarity) {
@@ -48,10 +42,6 @@ public class GemBonusModifier {
         return ctx.ret();
     }
 
-    /**
-     * Hook {@link FallenGemsAffixes}, then register necessary events.
-     * @param eventBus
-     */
     public static void bootstrap(IEventBus eventBus) {
         if (FACTORY == null) {
             FACTORY = new ObjectModifierFactory(s -> {
@@ -61,80 +51,41 @@ public class GemBonusModifier {
             });
         }
         eventBus.addListener(EventPriority.HIGHEST, GemBonusModifier::onTooltipEvent);
-    };
+    }
 
-    /**
-     * Suspend current ItemStack on client
-     */
     public static void onTooltipEvent(ItemTooltipEvent event) {
         suspendItemStack(event.getItemStack());
     }
 
-    /**
-     * Suspend the given ItemStack on current thread (client/server).
-     * This is the only way to reach the item's data we want to read.
-     * @param stack the ItemStack need to be stored for following logic
-     */
     public static void suspendItemStack(ItemStack stack) {
         currentSuspendedItemStack.set(stack);
     }
 
-    /**
-     * The main logic for key check, it accepts the Object from a LootCategory-driven GemBonus,
-     * which has a {@link Map} structure , must be {@literal Map<LootCategory, ?>}, ? could be primitive type,
-     * <br>
-     * which defines an inner class for data serialization, and the ? must be this class
-     * @param obj the key when we use method get/getOrDefault from the map
-     */
     @Deprecated
     public static void keyCheck(Object obj) {
         isKeyValid.set(obj instanceof LootRarity);
     }
 
-    /**
-     * Must check if the class is what we want, if not, should not do anything.
-     * @return whether the whole logic run.
-     */
     public static boolean shouldNotModify() {
         return currentSuspendedItemStack.get() == ItemStack.EMPTY;
     }
 
-    /**
-     * Check if its inner class, and check if the nest host is GemBonus,
-     * this check will stricten the structure of this GemBonus,
-     * only works when the data class is inner class of the class extending GemBonus
-     * @param clazz the object class we accepted
-     * @return whether the class is valid
-     */
     public static boolean clazzCheck(Class<?> clazz) {
         if (Number.class.isAssignableFrom(clazz)) {
             return true;
         }
         Class<?> host = clazz.getNestHost();
         return GemBonus.class.isAssignableFrom(host) && !FACTORY.isInBlackList(clazz);
-        // when we debug, the blacklist could be ignored.
-        // return GemBonus.class.isAssignableFrom(host);
     }
 
-    /**
-     * Modify the value by creating a new instance
-     * @param obj the value we get from the map
-     * @return new object having the same class with obj
-     */
     public static Object modifyL(Object obj, float multiplied) {
         return FACTORY.copyAndModifyNumbers(obj, multiplied);
     }
 
-    /**
-     *
-     * @param obj the key we caught
-     * @return the value we output
-     */
     public static Object modifyLPre(Object obj) {
         if (shouldNotModify()) return obj;
         ItemStack stack = currentSuspendedItemStack.get();
         float multiplied;
-        // StepFunction
         if (obj instanceof StepFunction sf) {
             multiplied = getGemPower(stack);
             return new StepFunction(sf.min() * multiplied, sf.steps(), sf.step() * multiplied);
@@ -149,27 +100,39 @@ public class GemBonusModifier {
     }
 
     /**
-     * Get GemPower by reading tags on the suspended item
-     * @param stack the item which was suspended by our hooks,
-     *              see {@link SocketHelperMixin} {@link GemBonusModifier#onTooltipEvent(ItemTooltipEvent)}
-     * @return
+     * Returns the gem-power multiplier for {@code stack}.
+     *
+     * <p>Priority:
+     * <ol>
+     *   <li><b>Genesis</b> — if present, its {@code gemPower} is returned unconditionally.</li>
+     *   <li><b>GemPower augment</b> — classic single-value power.</li>
+     *   <li><b>Default</b> — 1.0 (no change).</li>
+     * </ol>
      */
     private static float getGemPower(ItemStack stack) {
-        float value = 1F;
-        // it is certain the stack is not empty, and we want .
         CompoundTag itemTag = stack.getTag();
-        if (itemTag != null && itemTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < listTag.size(); i++) {
-                CompoundTag tag = listTag.getCompound(i);
-                ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
-                if (GemPowerAugment.augmentId().equals(typeId)) {
-                    GemPowerAugment.GemPowerData data = (GemPowerAugment.GemPowerData) Fallen.Augments.GEM_POWER.deserializeInnerData(tag.getCompound(INNER_DATA));
-                    return data.getPower();
-                }
+        if (itemTag == null || !itemTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return 1F;
+
+        CompoundTag augmentData = itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+        ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
+
+        for (int i = 0; i < listTag.size(); i++) {
+            CompoundTag tag = listTag.getCompound(i);
+            ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
+
+            if (GenesisAugment.augmentId().equals(typeId)) {
+                // Genesis present — always return its gemPower, no further checks needed
+                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
+                return genesisGemPower != null ? genesisGemPower : 1F;
+            }
+
+            if (GemPowerAugment.augmentId().equals(typeId)) {
+                GemPowerAugment.GemPowerData data = (GemPowerAugment.GemPowerData)
+                        Fallen.Augments.GEM_POWER.deserializeInnerData(tag.getCompound(INNER_DATA));
+                return data.getPower();
             }
         }
-        return value;
+
+        return 1F;
     }
 }

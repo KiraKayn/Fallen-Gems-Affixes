@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.augment.GenesisAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
@@ -23,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -107,23 +107,26 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         return false;
     }
 
+    /**
+     * Copies augment entries from the augment consumable onto the result item.
+     *
+     * <p>Augment-specific post-processing (Supremacy, Genesis) is applied AFTER all NBT
+     * writes are complete so that those methods see the fully-committed state.
+     */
     private ItemStack addAugmentData(ItemStack result, ItemStack augmentItem) {
         if (!AugmentSlotHelper.hasAvailableSlots(result)) {
             return result;
         }
 
-        // Get the AugmentData from AugmentItem
         ListTag ingredientAugments = getAugmentData(augmentItem);
         if (ingredientAugments.isEmpty()) {
             return result;
         }
 
-        // Operating item's nbt data.
         CompoundTag tag = result.getOrCreateTag();
         CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
         ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
 
-        // Create a set for already-present augment types.
         Set<String> existingTypes = new HashSet<>();
         for (Tag t : augments) {
             if (t instanceof CompoundTag c && c.contains(TYPE)) {
@@ -131,28 +134,34 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
             }
         }
 
+        // Track which special augments were newly added so we can call their apply() below
+        boolean addedSupremacy = false;
+        boolean addedGenesis   = false;
+
         for (Tag t : ingredientAugments) {
-            if (t instanceof CompoundTag c && c.contains(TYPE)) {
-                String type = c.getString(TYPE);
-                ResourceLocation loc = ResourceLocation.tryParse(type);
-                IAugment augment = AugmentRegistry.get(loc);
+            if (!(t instanceof CompoundTag c) || !c.contains(TYPE)) continue;
 
-                if (existingTypes.contains(type)) {
-                    continue;
-                }
+            String type = c.getString(TYPE);
+            if (existingTypes.contains(type)) continue;
 
-                augments.add(c.copy());
-                existingTypes.add(type);
+            ResourceLocation loc = ResourceLocation.tryParse(type);
+            IAugment augment = AugmentRegistry.get(loc);
 
-                if (augment instanceof SupremacyAugment) {
-                    SupremacyAugment.apply(result);
-                }
-            }
+            augments.add(c.copy());
+            existingTypes.add(type);
+
+            if (augment instanceof SupremacyAugment) addedSupremacy = true;
+            if (augment instanceof GenesisAugment)   addedGenesis   = true;
         }
 
-        // Finalize tag.
+        // Commit NBT BEFORE calling apply methods so they see the full augment list
         augmentData.put(AUGMENTS, augments);
         tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
+
+        // Post-process: each apply() reads and writes the result's own NBT
+        if (addedSupremacy) SupremacyAugment.apply(result);
+        if (addedGenesis)   GenesisAugment.apply(result, augmentItem);
+
         return result;
     }
 

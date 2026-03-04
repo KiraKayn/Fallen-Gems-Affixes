@@ -39,14 +39,12 @@ public class AugmentItem extends Item {
         tag.putString(AUGMENT_ID_TAG, augmentId.toString());
 
         /*
-         * Add AUGMENT_DATA structure so augments that rely on inner data (like gem_power)
-         * have their default inner data available when the augment item is created from JSON.
+         * Write all config values into the AUGMENT_DATA inner_data block so that the
+         * augment item always carries its own configuration.
          *
-         * Structure matches what GemBonusModifier expects:
-         *  itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA).getList(AUGMENTS, Tag.TAG_COMPOUND)
-         *  each entry has:
-         *      TYPE -> augment id string
-         *      INNER_DATA -> compound tag containing augment-specific data (e.g. "power")
+         * For Genesis, this block later gets overwritten with dynamic state by
+         * GenesisAugment.apply(). For GemPower/Supremacy the "power" key is the only
+         * field that actually matters, but the extras do no harm.
          */
         AugmentData data = AUGMENT_DATA.get(augmentId);
         if (data != null) {
@@ -58,9 +56,12 @@ public class AugmentItem extends Item {
                 entry.putString(Fallen.AugmentMisc.TYPE, augmentId.toString());
 
                 CompoundTag inner = new CompoundTag();
-                // For gem_power we store the "power" float. For other augments, this can be extended.
-                // We always put the inner data here from AugmentData so GemBonusModifier can pick it up.
+                // Legacy / GemPower / Supremacy field
                 inner.putFloat("power", data.getPower());
+                // Genesis config fields (harmless no-ops for other augment types)
+                inner.putFloat("defaultPower",    data.getDefaultPower());
+                inner.putFloat("affixPowerBoost", data.getAffixPowerBoost());
+                inner.putFloat("gemPowerBoost",   data.getGemPowerBoost());
 
                 entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
                 list.add(entry);
@@ -161,6 +162,7 @@ public class AugmentItem extends Item {
         return super.getName(stack);
     }
 
+
     public static class Loader extends SimpleJsonResourceReloadListener {
 
         public Loader() {
@@ -168,7 +170,8 @@ public class AugmentItem extends Item {
         }
 
         @Override
-        protected void apply(Map<ResourceLocation, JsonElement> objects, ResourceManager resourceManager, ProfilerFiller profiler) {
+        protected void apply(Map<ResourceLocation, JsonElement> objects,
+                             ResourceManager resourceManager, ProfilerFiller profiler) {
             AUGMENT_DATA.clear();
 
             for (Map.Entry<ResourceLocation, JsonElement> entry : objects.entrySet()) {
@@ -177,7 +180,7 @@ public class AugmentItem extends Item {
                     JsonObject json = entry.getValue().getAsJsonObject();
 
                     ResourceLocation augmentId = new ResourceLocation(json.get("augment").getAsString());
-                    ResourceLocation texture = new ResourceLocation(json.get("texture").getAsString());
+                    ResourceLocation texture   = new ResourceLocation(json.get("texture").getAsString());
 
                     Set<LootCategory> categories = new HashSet<>();
                     if (json.has("categories")) {
@@ -193,16 +196,47 @@ public class AugmentItem extends Item {
                         });
                     }
 
+                    // Legacy single-power field (GemPower / Supremacy)
                     float power = 1.0f;
                     if (json.has("power")) {
-                        try {
-                            power = json.get("power").getAsFloat();
-                        } catch (Exception ex) {
-                            FallenGemsAffixes.LOGGER.warn("Invalid power value for augment {}: {}", id, json.get("power").toString());
+                        try { power = json.get("power").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid power value for augment {}: {}", id, json.get("power"));
                         }
                     }
 
-                    AUGMENT_DATA.put(augmentId, new AugmentData(augmentId, texture, categories, power));
+                    // Genesis three-field config
+                    float defaultPower    = 0.5f;
+                    float affixPowerBoost = 0.1f;
+                    float gemPowerBoost   = 0.1f;
+
+                    if (json.has("default_power")) {
+                        try { defaultPower = json.get("default_power").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid default_power for augment {}", id);
+                        }
+                    }
+                    if (json.has("affix_power_boost")) {
+                        try { affixPowerBoost = json.get("affix_power_boost").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid affix_power_boost for augment {}", id);
+                        }
+                    }
+                    if (json.has("gem_power_boost")) {
+                        try { gemPowerBoost = json.get("gem_power_boost").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid gem_power_boost for augment {}", id);
+                        }
+                    }
+
+                    AUGMENT_DATA.put(augmentId, new AugmentData(
+                            augmentId, texture, categories,
+                            power, defaultPower, affixPowerBoost, gemPowerBoost));
+
                 } catch (Exception e) {
                     FallenGemsAffixes.LOGGER.error("Error loading augment data: {}", entry.getKey(), e);
                 }
@@ -212,34 +246,44 @@ public class AugmentItem extends Item {
         }
     }
 
+
     public static class AugmentData {
         private final ResourceLocation augmentId;
         private final ResourceLocation texture;
         private final Set<LootCategory> categories;
+
+        /** Used by GemPower and Supremacy augments. */
         private final float power;
 
-        public AugmentData(ResourceLocation augmentId, ResourceLocation texture, Set<LootCategory> categories, float power) {
-            this.augmentId = augmentId;
-            this.texture = texture;
-            this.categories = categories;
-            this.power = power;
+        /** Genesis-specific config. Safe to call on non-Genesis augments — they just won't use it. */
+        private final float defaultPower;
+        private final float affixPowerBoost;
+        private final float gemPowerBoost;
+
+        public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
+                           Set<LootCategory> categories, float power) {
+            this(augmentId, texture, categories, power, 0.5f, 0.1f, 0.1f);
         }
 
-        public ResourceLocation getAugmentId() {
-            return augmentId;
+        public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
+                           Set<LootCategory> categories, float power,
+                           float defaultPower, float affixPowerBoost, float gemPowerBoost) {
+            this.augmentId       = augmentId;
+            this.texture         = texture;
+            this.categories      = categories;
+            this.power           = power;
+            this.defaultPower    = defaultPower;
+            this.affixPowerBoost = affixPowerBoost;
+            this.gemPowerBoost   = gemPowerBoost;
         }
 
-        public ResourceLocation getTexture() {
-            return texture;
-        }
-
-        public Set<LootCategory> getCategories() {
-            return categories;
-        }
-
-        public float getPower() {
-            return power;
-        }
+        public ResourceLocation  getAugmentId()      { return augmentId; }
+        public ResourceLocation  getTexture()         { return texture; }
+        public Set<LootCategory> getCategories()      { return categories; }
+        public float             getPower()           { return power; }
+        public float             getDefaultPower()    { return defaultPower; }
+        public float             getAffixPowerBoost() { return affixPowerBoost; }
+        public float             getGemPowerBoost()   { return gemPowerBoost; }
 
         public boolean canApplyTo(LootCategory category) {
             return categories.isEmpty() || categories.contains(category);
