@@ -24,7 +24,7 @@
         "rare": 0.10,
         "epic": 0.125,
         "mythic": 0.15,
-        "ancient": 0.9
+        "ancient": 0.20
       },
       "fire_penalty": {
         "common": 0.10,
