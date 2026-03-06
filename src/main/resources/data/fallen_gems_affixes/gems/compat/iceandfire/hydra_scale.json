@@ -1,0 +1,39 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "iceandfire"
+    }
+  ],
+  "weight": 0,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "common",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:hydra",
+      "gem_class": {
+        "key": "chestplate",
+        "types": [
+          "chestplate"
+        ]
+      },
+      "reduction": {
+        "common": 0.05,
+        "uncommon": 0.075,
+        "rare": 0.10,
+        "epic": 0.125,
+        "mythic": 0.15,
+        "ancient": 0.9
+      },
+      "fire_penalty": {
+        "common": 0.10,
+        "uncommon": 0.20,
+        "rare": 0.30,
+        "epic": 0.40,
+        "mythic": 0.50,
+        "ancient": 0.60
+      }
+    }
+  ]
+}

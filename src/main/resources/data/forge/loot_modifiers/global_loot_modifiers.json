@@ -8,7 +8,8 @@
     "fallen_gems_affixes:void_guardian_modifier",
     "fallen_gems_affixes:withered_sentinel_modifier",
     "fallen_gems_affixes:howling_storm_modifier",
-    "fallen_gems_affixes:socket_gem_modifier"
+    "fallen_gems_affixes:socket_gem_modifier",
+    "fallen_gems_affixes:hydra_scale_modifier"
   ],
   "replace": false
 }

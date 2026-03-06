@@ -162,6 +162,8 @@
 
   "bonus.fallen_gems_affixes.dragon_resistance.desc": "%s%% Damage Reduction against Dragons",
 
+  "bonus.fallen_gems_affixes.hydra.desc": "Gain %s%% Damage Reduction, Fire deals %s%% more Damage",
+
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom": "Enlightened",
   "affix.fallen_gems_affixes:celestial_weapons/mob_effect/astral_wisdom.suffix": "of Insight",
 

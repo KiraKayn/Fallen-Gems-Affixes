@@ -1,0 +1,44 @@
+{
+  "type": "fallen_gems_affixes:gem_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "iceandfire:entities/hydra"
+    },
+    {
+      "condition": "minecraft:killed_by_player"
+    }
+  ],
+  "gems": [
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:common",
+      "drop_chance": 0.50
+    },
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:uncommon",
+      "drop_chance": 0.40
+    },
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:rare",
+      "drop_chance": 0.30
+    },
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:epic",
+      "drop_chance": 0.20
+    },
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:mythic",
+      "drop_chance": 0.10
+    },
+    {
+      "gem": "fallen_gems_affixes:compat/iceandfire/hydra_scale",
+      "rarity": "apotheosis:ancient",
+      "drop_chance": 0.05
+    }
+  ]
+}
