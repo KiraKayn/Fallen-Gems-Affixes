@@ -1,7 +1,10 @@
 {
-  "augment": "fallen_gems_affixes:soulbound",
-  "texture": "fallen_gems_affixes:item/augments/soulbound.png",
-  "categories": [
+  "type": "fallen_gems_affixes:soulbound",
+  "values": {
+    "mythic": {},
+    "ancient": {}
+  },
+  "types": [
     "bow",
     "staffs",
     "helmet",

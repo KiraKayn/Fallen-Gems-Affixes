@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.augment;
+/*package net.kayn.fallen_gems_affixes.augment;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
@@ -86,4 +86,4 @@ public class SoulboundAugment implements IAugment {
     public String toString() {
         return "SoulboundAugment{" + "id=" + augmentId() + "}";
     }
-}
+}*/

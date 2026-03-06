@@ -1,11 +1,8 @@
 package net.kayn.fallen_gems_affixes.event;
 
-import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.augment.SoulboundAugment;
-import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,9 +17,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
-
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENTS;
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.TYPE;
 
 public class SoulboundEventHandler {
 
@@ -45,7 +39,7 @@ public class SoulboundEventHandler {
             if (slot == EquipmentSlot.MAINHAND) continue; // Skip mainhand
 
             ItemStack stack = player.getItemBySlot(slot);
-            if (!stack.isEmpty() && hasSoulboundAugment(stack, player)) {
+            if (!stack.isEmpty() && hasSoulboundAffix(stack)) {
                 equippedSoulbound.add(stack.copy());
             }
         }
@@ -64,7 +58,7 @@ public class SoulboundEventHandler {
 
         event.getDrops().removeIf(itemEntity -> {
             ItemStack stack = itemEntity.getItem();
-            if (hasSoulboundAugment(stack, player)) {
+            if (hasSoulboundAffix(stack)) {
                 soulboundItems.add(stack.copy());
                 return true;
             }
@@ -80,23 +74,14 @@ public class SoulboundEventHandler {
     }
 
     /**
-     * Check if an ItemStack has a SoulboundAugment applied to it.
-     * NOTE: This specifically excludes AugmentItem instances themselves!
+     * Check if an ItemStack has the Soulbound affix applied to it.
      */
-    private static boolean hasSoulboundAugment(ItemStack stack, Player ignoredPlayer) {
-        // IMPORTANT: Augment items themselves should NOT be protected!
-        if (stack.getItem() instanceof AugmentItem) {
-            return false;
-        }
-
-        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < listTag.size(); i++) {
-                CompoundTag tag = listTag.getCompound(i);
-                if (tag.getString(TYPE).equals(SoulboundAugment.augmentId().toString())) {
-                    return true;
-                }
+    private static boolean hasSoulboundAffix(ItemStack stack) {
+        var affixes = AffixHelper.getAffixes(stack);
+        // Check if any affix has the soulbound ID
+        for (var affixHolder : affixes.keySet()) {
+            if (SOULBOUND_ID.equals(affixHolder.getId())) {
+                return true;
             }
         }
         return false;

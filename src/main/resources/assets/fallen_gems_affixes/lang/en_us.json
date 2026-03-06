@@ -378,13 +378,13 @@
   "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike": "Volleystrike",
   "affix.fallen_gems_affixes:ranged_weapons/spell/volleystrike.suffix": "of Piercing Rain",
 
+  "affix.fallen_gems_affixes:soulbound": "Bounded",
+  "affix.fallen_gems_affixes:soulbound.suffix": "of the Life",
+  "affix.fallen_gems_affixes.soulbound.desc": "This item stays with you after death",
+
   "itemGroup.fallen_gems_affixes.fallen_gems_affixes": "Fallen Gems Affixes",
 
   "tooltip.fallen_gems_affixes.augment.categories": "Fits in:",
-
-  "item.fallen_gems_affixes.augment.soulbound": "Augment of Soul",
-  "fallen_gems_affixes.augment.soulbound.type": "Soulbound:",
-  "fallen_gems_affixes.augment.soulbound.desc": "Prevents items from being lost on death.",
 
   "item.fallen_gems_affixes.sigil_of_ascension": "Sigil of Ascension",
   "item.fallen_gems_affixes.sigil_of_ascension.desc": "Converts a Socket slot into an Augment slot",
