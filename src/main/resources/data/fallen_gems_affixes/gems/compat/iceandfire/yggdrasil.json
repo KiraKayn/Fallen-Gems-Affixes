@@ -20,6 +20,10 @@
         {
           "modid": "celestisynth",
           "category": "celestial_ranged"
+        },
+        {
+          "modid": "irons_spellbooks",
+          "category": "staffs"
         }
       ],
       "bonus": {

@@ -21,7 +21,7 @@
         }
       ],
       "bonus": {
-        "type": "fallen_gems_affixes:boss_slayer",
+        "type": "fallen_gems_affixes:wet_damage",
         "gem_class": {
           "key": "melee_ranged",
           "types": [
@@ -32,19 +32,18 @@
             "trident"
           ]
         },
-        "entity_tag": "fallen_gems_affixes:boss_slayer",
         "values": {
-          "common": 0.15,
-          "uncommon": 0.30,
-          "rare": 0.45,
-          "epic": 0.60,
-          "mythic": 0.75,
-          "ancient": 0.9
+          "common": 0.10,
+          "uncommon": 0.15,
+          "rare": 0.20,
+          "epic": 0.25,
+          "mythic": 0.30,
+          "ancient": 0.40
         }
       }
     },
     {
-      "type": "fallen_gems_affixes:boss_resistance",
+      "type": "fallen_gems_affixes:wet_resistance",
       "gem_class": {
         "key": "armor",
         "types": [
@@ -54,7 +53,6 @@
           "boots"
         ]
       },
-      "entity_tag": "fallen_gems_affixes:boss_slayer",
       "values": {
         "common": 0.03,
         "uncommon": 0.05,

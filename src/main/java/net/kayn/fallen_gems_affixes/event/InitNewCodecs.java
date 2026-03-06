@@ -23,6 +23,8 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "dragon_resistance"), DragonResistanceBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "dragon_slayer"), DragonSlayerBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "hydra"), HydraBonus.CODEC);
+            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "wet_damage"), WetDamageBonus.CODEC);
+            GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "wet_resistance"), WetResistanceBonus.CODEC);
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
 
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "socket_bonus"), SocketBonusAffix.CODEC);
