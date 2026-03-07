@@ -452,5 +452,20 @@
   "fallen_gems_affixes.augment.genesis.desc.gem_boost":   "Gem power per boss kill:   +%sx",
 
   "fallen_gems_affixes.augment.genesis.socket_desc": "Bosses Slain: %1$s  |  Affix: %2$sx  |  Gems: %3$sx",
-  "fallen_gems_affixes.augment.genesis.combine": "Genesis [%1$s bosses | Affix %2$sx | Gem %3$sx]"
+  "fallen_gems_affixes.augment.genesis.combine": "Genesis [%1$s bosses | Affix %2$sx | Gem %3$sx]",
+
+  "affix.fallen_gems_affixes.mana_cost.desc": "Spells casted with this weapon cost %s%% less mana",
+
+  "affix.fallen_gems_affixes.mana_return.desc": "%s%% chance to return %s%% of a spell's mana cost on cast",
+
+  "affix.fallen_gems_affixes.mana_damage.desc": "Spells deal up to %s%% more damage based on your current mana",
+
+  "affix.fallen_gems_affixes:mana_cost": "Economical",
+  "affix.fallen_gems_affixes:mana_cost.suffix": "of Frugal Casting",
+
+  "affix.fallen_gems_affixes:mana_return": "Reclaiming",
+  "affix.fallen_gems_affixes:mana_return.suffix": "of Mana Recovery",
+
+  "affix.fallen_gems_affixes:mana_damage": "Volatile",
+  "affix.fallen_gems_affixes:mana_damage.suffix": "of Mana Surge"
 }

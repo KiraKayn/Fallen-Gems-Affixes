@@ -43,8 +43,6 @@ public class FallenEventHandler {
             event.setSockets(event.getSockets() + affixBonus);
         }
     }
-
-    // --- double strike (DELAYED) ---
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onDoubleStrike(LivingHurtEvent event) {
         if (event.getEntity().level().isClientSide()) return;
@@ -54,13 +52,11 @@ public class FallenEventHandler {
 
         LivingEntity target = event.getEntity();
 
-        // avoid recursion when a queued/delayed hit is being applied
         if (DOUBLE_STRIKE_GUARD.contains(target.getUUID())) return;
 
         float originalDamage = event.getAmount();
         float totalBonusDamage = 0f;
 
-        // IMPORTANT: only check the attacker's main hand (weapon) for the affix
         ItemStack weapon = attacker.getMainHandItem();
         if (weapon != null && !weapon.isEmpty() && AffixHelper.hasAffixes(weapon)) {
             var list = AffixHelper.streamAffixes(weapon).toList();
@@ -76,20 +72,16 @@ public class FallenEventHandler {
 
         if (totalBonusDamage <= 0f) return;
 
-        // Prevent scheduling the same attacker->target more than once per game tick
         long tick = attacker.level() instanceof ServerLevel srv ? srv.getGameTime() : 0L;
         String key = attacker.getUUID().toString() + ":" + target.getUUID().toString() + ":" + tick;
 
         synchronized (SCHEDULED_KEYS) {
             if (SCHEDULED_KEYS.contains(key)) {
-                // already scheduled this tick for the same attacker+target
                 return;
             } else {
                 SCHEDULED_KEYS.add(key);
             }
         }
-
-        // schedule delayed damage instead of applying immediately
         if (target.level() instanceof ServerLevel serverLevel) {
             PendingStrike ps = new PendingStrike(serverLevel, target.getUUID(), event.getSource(), totalBonusDamage, DELAY_TICKS, key);
             synchronized (PENDING_STRIKES) {
@@ -102,10 +94,9 @@ public class FallenEventHandler {
         }
     }
 
-    // Server tick handler that counts down and applies pending strikes
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return; // apply at end of tick
+        if (event.phase != TickEvent.Phase.END) return;
 
         synchronized (PENDING_STRIKES) {
             Iterator<Map.Entry<UUID, List<PendingStrike>>> it = PENDING_STRIKES.entrySet().iterator();
@@ -118,17 +109,14 @@ public class FallenEventHandler {
                     PendingStrike ps = li.next();
                     ps.ticksLeft--;
                     if (ps.ticksLeft <= 0) {
-                        // time to apply
                         li.remove();
 
-                        // remove the scheduled key so future ticks can schedule again
                         synchronized (SCHEDULED_KEYS) {
                             SCHEDULED_KEYS.remove(ps.scheduledKey);
                         }
 
                         var entity = ps.level.getEntity(ps.targetUuid);
                         if (entity instanceof LivingEntity target) {
-                            // guard to avoid recursion when applying the extra damage
                             DOUBLE_STRIKE_GUARD.add(target.getUUID());
                             try {
                                 target.hurt(ps.source, ps.damageAmount);
@@ -146,7 +134,6 @@ public class FallenEventHandler {
         }
     }
 
-    // simple holder for scheduled strikes
     private static final class PendingStrike {
         final ServerLevel level;
         final UUID targetUuid;

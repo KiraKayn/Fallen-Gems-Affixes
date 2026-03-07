@@ -1,0 +1,78 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:mana_return",
+  "chance": {
+    "common": {
+      "min": 0.05,
+      "steps": 2,
+      "step": 0.02
+    },
+    "uncommon": {
+      "min": 0.08,
+      "steps": 3,
+      "step": 0.02
+    },
+    "rare": {
+      "min": 0.10,
+      "steps": 4,
+      "step": 0.02
+    },
+    "epic": {
+      "min": 0.12,
+      "steps": 5,
+      "step": 0.02
+    },
+    "mythic": {
+      "min": 0.15,
+      "steps": 4,
+      "step": 0.03
+    },
+    "ancient": {
+      "min": 0.18,
+      "steps": 5,
+      "step": 0.03
+    }
+  },
+  "return_percent": {
+    "common": {
+      "min": 0.20,
+      "steps": 2,
+      "step": 0.05
+    },
+    "uncommon": {
+      "min": 0.25,
+      "steps": 3,
+      "step": 0.05
+    },
+    "rare": {
+      "min": 0.30,
+      "steps": 4,
+      "step": 0.05
+    },
+    "epic": {
+      "min": 0.35,
+      "steps": 5,
+      "step": 0.05
+    },
+    "mythic": {
+      "min": 0.40,
+      "steps": 4,
+      "step": 0.05
+    },
+    "ancient": {
+      "min": 0.50,
+      "steps": 5,
+      "step": 0.05
+    }
+  },
+  "types": [
+    "staffs",
+    "sword",
+    "heavy_weapon"
+  ]
+}

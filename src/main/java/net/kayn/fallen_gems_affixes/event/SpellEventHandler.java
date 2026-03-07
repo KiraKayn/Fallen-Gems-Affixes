@@ -7,27 +7,33 @@ import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.Gem;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import io.redspace.ironsspellbooks.api.events.ChangeManaEvent;
 import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
+import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
+import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
-import net.kayn.fallen_gems_affixes.adventure.affix.AutocastAffix;
-import net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix;
-import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
+import net.kayn.fallen_gems_affixes.adventure.affix.*;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Optional;
 
 public class SpellEventHandler {
 
-    private static LivingEntity getSpellTarget(Optional<SpellCastAffix.TargetType> targetType, LivingEntity caster, LivingEntity contextTarget) {
-        return targetType.filter(type -> type == SpellCastAffix.TargetType.SELF).map(type -> caster).orElse(contextTarget);
+    private static LivingEntity getSpellTarget(Optional<SpellCastAffix.TargetType> targetType,
+                                               LivingEntity caster, LivingEntity contextTarget) {
+        return targetType.filter(type -> type == SpellCastAffix.TargetType.SELF)
+                .map(type -> caster).orElse(contextTarget);
     }
+
 
     @SubscribeEvent
     public static void onSpellCast(SpellOnCastEvent event) {
@@ -43,7 +49,6 @@ public class SpellEventHandler {
                 if (inst.affix().get() instanceof AutocastAffix affix) {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (isTargetMode) return;
-
                     affix.onSpellCast(caster, castSpellId, caster, inst.rarity().get());
                 }
             });
@@ -71,14 +76,20 @@ public class SpellEventHandler {
                     } else if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_SELF) {
                         affix.applyEffect(caster, inst.rarity().get(), inst.level());
                     }
-                } else if (inst.affix().get() instanceof SpellCastAffix affix && affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
+                } else if (inst.affix().get() instanceof SpellCastAffix affix
+                        && affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, target);
                     affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
                 } else if (inst.affix().get() instanceof AutocastAffix affix) {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (!isTargetMode) return;
-
                     affix.onSpellCast(caster, castSpellId, target, inst.rarity().get());
+                }
+
+                if (inst.affix().get() instanceof ManaDamageAffix affix
+                        && caster instanceof Player player) {
+                    float mult = affix.getDamageMultiplier(player, inst.rarity().get(), inst.level());
+                    event.setAmount(event.getAmount() * mult);
                 }
             });
 
@@ -109,7 +120,8 @@ public class SpellEventHandler {
                     } else if (affix.target == SpellEffectAffix.Target.SPELL_HEAL_SELF) {
                         affix.applyEffect(caster, inst.rarity().get(), inst.level());
                     }
-                } else if (inst.affix().get() instanceof SpellCastAffix affix && affix.trigger == SpellCastAffix.TriggerType.SPELL_HEAL) {
+                } else if (inst.affix().get() instanceof SpellCastAffix affix
+                        && affix.trigger == SpellCastAffix.TriggerType.SPELL_HEAL) {
                     LivingEntity actualTarget = getSpellTarget(affix.target, caster, healTarget);
                     affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
                 }
@@ -125,6 +137,65 @@ public class SpellEventHandler {
         }
     }
 
+    // Mana Event Handlers
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onChangeMana_Cost(ChangeManaEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (event.getNewMana() >= event.getOldMana()) return;
+
+        Player player = event.getEntity();
+        MagicData magicData = event.getMagicData();
+        SpellData castingSpell = magicData.getCastingSpell();
+        if (castingSpell == null || castingSpell.getSpell() == null) return;
+
+        ItemStack mainHand = player.getMainHandItem();
+        if (mainHand.isEmpty()) return;
+
+        float totalReduction = 0f;
+        for (var inst : AffixHelper.getAffixes(mainHand).values()) {
+            if (!inst.isValid()) continue;
+            if (!(inst.affix().get() instanceof ManaCostAffix affix)) continue;
+            totalReduction += affix.getReductionPercent(inst.rarity().get(), inst.level());
+        }
+        if (totalReduction <= 0f) return;
+
+        totalReduction = Math.min(totalReduction, 0.9f);
+        float manaCost    = event.getOldMana() - event.getNewMana();
+        float reducedCost = manaCost * (1f - totalReduction);
+        event.setNewMana(event.getOldMana() - reducedCost);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onChangeMana_Return(ChangeManaEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (event.getNewMana() >= event.getOldMana()) return;
+
+        Player player = event.getEntity();
+        MagicData magicData = event.getMagicData();
+        SpellData castingSpell = magicData.getCastingSpell();
+        if (castingSpell == null || castingSpell.getSpell() == null) return;
+
+        ItemStack mainHand = player.getMainHandItem();
+        if (mainHand.isEmpty()) return;
+        float actualCost = event.getOldMana() - event.getNewMana();
+        if (actualCost <= 0f) return;
+
+        float totalReturn = 0f;
+        for (var inst : AffixHelper.getAffixes(mainHand).values()) {
+            if (!inst.isValid()) continue;
+            if (!(inst.affix().get() instanceof ManaReturnAffix affix)) continue;
+
+            float chance = affix.getChance(inst.rarity().get(), inst.level());
+            if (player.getRandom().nextFloat() < chance) {
+                totalReturn += actualCost * affix.getReturnPercent(inst.rarity().get(), inst.level());
+            }
+        }
+        if (totalReturn <= 0f) return;
+
+        event.setNewMana(Math.min(event.getNewMana() + totalReturn, event.getOldMana()));
+    }
+
     private static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
         if (itemStack.isEmpty()) return;
         LootCategory cat = LootCategory.forItem(itemStack);
@@ -134,7 +205,10 @@ public class SpellEventHandler {
             if (!rarityHolder.isBound()) continue;
             LootRarity rarity = rarityHolder.get();
             Gem gem = g.gem().get();
-            gem.getBonus(cat, rarity).filter(b -> b instanceof SpellEffectBonus).map(b -> (SpellEffectBonus) b).ifPresent(bonus -> processor.accept(g.gemStack(), bonus, rarity));
+            gem.getBonus(cat, rarity)
+                    .filter(b -> b instanceof SpellEffectBonus)
+                    .map(b -> (SpellEffectBonus) b)
+                    .ifPresent(bonus -> processor.accept(g.gemStack(), bonus, rarity));
         }
     }
 

@@ -1,0 +1,46 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:mana_damage",
+  "values": {
+    "common": {
+      "min": 0.10,
+      "steps": 2,
+      "step": 0.05
+    },
+    "uncommon": {
+      "min": 0.15,
+      "steps": 3,
+      "step": 0.05
+    },
+    "rare": {
+      "min": 0.20,
+      "steps": 4,
+      "step": 0.05
+    },
+    "epic": {
+      "min": 0.25,
+      "steps": 5,
+      "step": 0.05
+    },
+    "mythic": {
+      "min": 0.30,
+      "steps": 4,
+      "step": 0.05
+    },
+    "ancient": {
+      "min": 0.40,
+      "steps": 5,
+      "step": 0.05
+    }
+  },
+  "types": [
+    "staffs",
+    "sword",
+    "heavy_weapon"
+  ]
+}
