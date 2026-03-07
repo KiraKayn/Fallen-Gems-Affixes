@@ -2,21 +2,6 @@
   "augment": "fallen_gems_affixes:supremacy",
   "texture": "fallen_gems_affixes:textures/item/augments/supremacy.png",
   "categories": [
-    "bow",
-    "staffs",
-    "helmet",
-    "chestplate",
-    "leggings",
-    "boots",
-    "sword",
-    "heavy_weapon",
-    "celestial_melee",
-    "celestial_ranged",
-    "pickaxe",
-    "shovel",
-    "trident",
-    "crossbow",
-    "shield"
   ],
   "power": 1.5
 }
