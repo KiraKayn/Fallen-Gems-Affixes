@@ -161,7 +161,7 @@
   "bonus.fallen_gems_affixes.dragon_slayer.desc": "+%s%% Damage to Dragons",
   "bonus.fallen_gems_affixes.dragon_resistance.desc": "%s%% Damage Reduction against Dragons",
 
-  "bonus.fallen_gems_affixes.hydra.desc": "Gain %s%% Damage Reduction, Fire deals %s%% more Damage",
+  "bonus.fallen_gems_affixes.hydra.desc": "Gain %s%% Damage Reduction, Fire deals %s%% more Damage to you",
 
   "bonus.fallen_gems_affixes.wet_damage.desc": "+%s%% Damage while wet",
   "bonus.fallen_gems_affixes.wet_resistance.desc": "+%s%% Damage Reduction while wet",
