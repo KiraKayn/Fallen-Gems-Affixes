@@ -1,0 +1,42 @@
+{
+  "type": "fallen_gems_affixes:multi_shot",
+  "values": {
+    "common": {
+      "min": 1,
+      "steps": 1,
+      "step": 0
+    },
+    "uncommon": {
+      "min": 1,
+      "steps": 1,
+      "step": 0
+    },
+    "rare": {
+      "min": 2,
+      "steps": 1,
+      "step": 0
+    },
+    "epic": {
+      "min": 2,
+      "steps": 1,
+      "step": 0
+    },
+    "mythic": {
+      "min": 3,
+      "steps": 1,
+      "step": 0
+    },
+    "ancient": {
+      "min": 4,
+      "steps": 1,
+      "step": 0
+    }
+  },
+  "types": [
+    "bow"
+  ],
+  "bypass_iframes_rarities": [
+    "mythic",
+    "ancient"
+  ]
+}

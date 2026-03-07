@@ -1,0 +1,16 @@
+{
+  "type": "fallen_gems_affixes:chain_shot",
+  "max_range": 32.0,
+  "values": {
+    "common": true,
+    "uncommon": true,
+    "rare": true,
+    "epic": true,
+    "mythic": true,
+    "ancient": true
+  },
+  "types": [
+    "bow",
+    "crossbow"
+  ]
+}

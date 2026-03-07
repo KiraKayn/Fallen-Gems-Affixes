@@ -11,7 +11,8 @@
     "AttributeAffixAccessor",
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin",
-    "LootControllerMixin"
+    "LootControllerMixin",
+    "TrueShotMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",

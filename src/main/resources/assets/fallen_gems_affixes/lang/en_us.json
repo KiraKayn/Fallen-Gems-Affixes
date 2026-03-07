@@ -467,5 +467,34 @@
   "affix.fallen_gems_affixes:mana_return.suffix": "of Mana Recovery",
 
   "affix.fallen_gems_affixes:mana_damage": "Volatile",
-  "affix.fallen_gems_affixes:mana_damage.suffix": "of Mana Surge"
+  "affix.fallen_gems_affixes:mana_damage.suffix": "of Mana Surge",
+
+  "affix.fallen_gems_affixes:ranged_weapons/momentum": "Momentum",
+  "affix.fallen_gems_affixes:ranged_weapons/momentum.suffix": "of Great Distance",
+
+  "affix.fallen_gems_affixes.momentum.desc": "Arrows deal up to %s%% more Damage, scaling with travel distance [Max %s blocks]",
+
+  "affix.fallen_gems_affixes:ranged_weapons/piercing_arrow": "Piercing",
+  "affix.fallen_gems_affixes:ranged_weapons/piercing_arrow.suffix": "of Penetration",
+
+  "affix.fallen_gems_affixes.piercing_arrow.desc": "Arrows pierce through %s additional enemies",
+
+  "affix.fallen_gems_affixes:ranged_weapons/multi_shot": "Barrage",
+  "affix.fallen_gems_affixes:ranged_weapons/multi_shot.suffix": "of Many Arrows",
+
+  "affix.fallen_gems_affixes.multi_shot.desc": "Fires %s additional arrow(s) per shot",
+  "affix.fallen_gems_affixes.multi_shot.desc.bypass": "Fires %s additional arrow(s) that can hit the same target",
+
+  "affix.fallen_gems_affixes:ranged_weapons/chain_shot": "Chain Shot",
+  "affix.fallen_gems_affixes:ranged_weapons/chain_shot.suffix": "of Execution",
+
+  "affix.fallen_gems_affixes.chain_shot.desc": "Killing an enemy with an arrow fires a chain arrow at the nearest enemy within %s blocks",
+
+  "affix.fallen_gems_affixes:true_shot": "True Shot",
+  "affix.fallen_gems_affixes:true_shot.suffix": "of Inevitability",
+  "affix.fallen_gems_affixes.true_shot.desc": "Arrows ignore projectile immunity",
+
+  "affix.fallen_gems_affixes:homing": "Homing",
+  "affix.fallen_gems_affixes:homing.suffix": "of Seeking",
+  "affix.fallen_gems_affixes.homing.desc":"Arrows home toward the nearest enemy with %s%% turn rate"
 }

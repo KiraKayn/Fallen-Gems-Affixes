@@ -69,6 +69,7 @@ public class FallenGemsAffixes {
         // Event bus
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
         MinecraftForge.EVENT_BUS.register(FallenEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(BowEventHandler.class);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
         // Mod integrations
