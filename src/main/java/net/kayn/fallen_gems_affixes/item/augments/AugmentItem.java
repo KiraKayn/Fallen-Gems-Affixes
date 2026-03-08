@@ -38,6 +38,15 @@ public class AugmentItem extends Item {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString(AUGMENT_ID_TAG, augmentId.toString());
 
+        /*
+         * Write all config values into the AUGMENT_DATA inner_data block so that the
+         * augment item always carries its own configuration.
+         *
+         * For Genesis, this block later gets overwritten with dynamic state by
+         * GenesisAugment.apply(). For GemPower/Supremacy the "power" key is the only
+         * field that actually matters, but the extras do no harm.
+         */
+
         AugmentData data = AUGMENT_DATA.get(augmentId);
         if (data != null) {
             try {
