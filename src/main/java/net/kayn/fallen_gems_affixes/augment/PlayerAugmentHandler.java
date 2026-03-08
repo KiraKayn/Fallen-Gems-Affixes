@@ -1,27 +1,21 @@
-package net.kayn.fallen_gems_affixes.event.test;
+package net.kayn.fallen_gems_affixes.augment;
 
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentCapability;
 import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
-import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -30,8 +24,16 @@ import java.util.UUID;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
+/**
+ * When an augment affects the player, it creates a global effect
+ * from the player's perspective.
+ * <p>
+ * For example, if GemPower affects the player rather than the item
+ * it is attached to, the event will trigger the corresponding logic.
+ * As a result, all gems on the client will appear boosted.
+ */
 @Mod.EventBusSubscriber
-public class MiscEventsHandler {
+public class PlayerAugmentHandler {
     /**
      * This event is fired on both client and server
      */
@@ -39,21 +41,6 @@ public class MiscEventsHandler {
     public static void onDataAttachment(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player player) {
             event.addCapability(AUGMENT_CAP_ID, new AugmentCapability(player));
-        }
-    }
-    /**
-     * This event is fired on both client and server
-     */
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        Player player = event.player;
-        // check capability and access fields to see if everything works as intended
-        Optional<IAugmentAccessor> capOpt = player.getCapability(AugmentCapability.CAPABILITY).resolve();
-        if (capOpt.isPresent()) {
-            IAugmentAccessor accessor = capOpt.get();
-            IAugmentHandler handler = accessor.getHandler();
-            IAugmentContainer container = accessor.getContainer();
         }
     }
 
