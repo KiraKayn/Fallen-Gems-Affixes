@@ -12,7 +12,8 @@
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin",
     "LootControllerMixin",
-    "TrueShotMixin"
+    "TrueShotMixin",
+    "CascadeMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",

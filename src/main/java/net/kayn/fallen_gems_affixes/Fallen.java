@@ -2,10 +2,7 @@ package net.kayn.fallen_gems_affixes;
 
 import com.google.gson.JsonObject;
 import net.kayn.fallen_gems_affixes.attachment.AugmentRecipeSerializer;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.augment.GemPowerAugment;
-import net.kayn.fallen_gems_affixes.augment.GenesisAugment;
-import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
+import net.kayn.fallen_gems_affixes.augment.*;
 import net.kayn.fallen_gems_affixes.recipe.AugmentCraftingRecipe;
 import net.kayn.fallen_gems_affixes.recipe.SeveranceRecipe;
 import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
@@ -107,10 +104,12 @@ public class Fallen {
         public static final IAugment GEM_POWER  = AugmentRegistry.register(new GemPowerAugment());
         public static final IAugment SUPREMACY  = AugmentRegistry.register(new SupremacyAugment());
         public static final IAugment GENESIS    = AugmentRegistry.register(new GenesisAugment());
+        public static final IAugment CASCADE = AugmentRegistry.register(new CascadeAugment());
 
         public static final String GEM_POWER_STRING  = GemPowerAugment.augmentId().toString();
         public static final String SUPREMACY_STRING  = SupremacyAugment.augmentId().toString();
         public static final String GENESIS_STRING    = GenesisAugment.augmentId().toString();
+        public static final String CASCADE_STRING = CascadeAugment.augmentId().toString();
 
         public static void bootstrap() {}
     }

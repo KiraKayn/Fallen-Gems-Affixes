@@ -451,8 +451,7 @@
   "fallen_gems_affixes.augment.genesis.desc.affix_boost": "Affix power per boss kill: +%sx",
   "fallen_gems_affixes.augment.genesis.desc.gem_boost":   "Gem power per boss kill:   +%sx",
 
-  "fallen_gems_affixes.augment.genesis.socket_desc": "Bosses Slain: %1$s  |  Affix: %2$sx  |  Gems: %3$sx",
-  "fallen_gems_affixes.augment.genesis.combine": "Genesis [%1$s bosses | Affix %2$sx | Gem %3$sx]",
+  "fallen_gems_affixes.augment.genesis.socket_desc": "Bosses Slain: %1$s  |  Affix: %2$sx  |  Gem: %3$sx",
 
   "affix.fallen_gems_affixes.mana_cost.desc": "Spells casted with this weapon cost %s%% less mana",
 
@@ -496,5 +495,9 @@
 
   "affix.fallen_gems_affixes:homing": "Homing",
   "affix.fallen_gems_affixes:homing.suffix": "of Seeking",
-  "affix.fallen_gems_affixes.homing.desc":"Arrows home toward the nearest enemy with %s%% turn rate"
+  "affix.fallen_gems_affixes.homing.desc":"Arrows home toward the nearest enemy with %s%% turn rate",
+
+  "item.fallen_gems_affixes.augment.cascade": "Augment of Cascade",
+  "fallen_gems_affixes.augment.cascade.desc": "On overcrit, %s%% chance to deal %s%% more damage for that strike.",
+  "fallen_gems_affixes.augment.cascade.type": "Cascade:"
 }
