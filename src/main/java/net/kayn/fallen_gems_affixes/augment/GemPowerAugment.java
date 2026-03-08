@@ -44,10 +44,10 @@ public class GemPowerAugment implements IAugment {
 
     @Override
     public boolean needsInstance() {
-        return true;
+        return false;
     }
 
-    @Override
+/*    @Override
     public AugmentInstance createInstanceFromStack(ItemStack stack) {
         float power = 1.0f;
         AugmentItem.AugmentData data = null;
@@ -68,7 +68,7 @@ public class GemPowerAugment implements IAugment {
         innerData.power = power;
 
         return new AugmentInstance(this, innerData);
-    }
+    }*/
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {

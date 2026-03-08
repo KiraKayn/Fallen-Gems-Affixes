@@ -66,13 +66,13 @@ public class GenesisAugment implements IAugment {
 
     @Override public ResourceLocation getId()   { return GENESIS_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean needsInstance()     { return true; }
+    @Override public boolean needsInstance()     { return false; }
 
     // -------------------------------------------------------------------------
     // Instance creation
     // -------------------------------------------------------------------------
 
-    @Override
+/*    @Override
     public AugmentInstance createInstanceFromStack(ItemStack stack) {
         GenesisData data = new GenesisData();
         CompoundTag tag = stack.getTag();
@@ -88,7 +88,7 @@ public class GenesisAugment implements IAugment {
             }
         }
         return new AugmentInstance(this, data);
-    }
+    }*/
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {

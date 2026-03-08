@@ -51,10 +51,10 @@ public class SupremacyAugment implements IAugment {
 
     @Override
     public boolean needsInstance() {
-        return true;
+        return false;
     }
 
-    @Override
+/*    @Override
     public AugmentInstance createInstanceFromStack(ItemStack stack) {
         float power = getAugmentPower(stack);
 
@@ -62,7 +62,7 @@ public class SupremacyAugment implements IAugment {
         innerData.power = power;
 
         return new AugmentInstance(this, innerData);
-    }
+    }*/
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
