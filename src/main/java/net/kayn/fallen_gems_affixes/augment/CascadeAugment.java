@@ -1,11 +1,13 @@
 package net.kayn.fallen_gems_affixes.augment;
 
+import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -16,9 +18,12 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,32 +40,17 @@ public class CascadeAugment implements IAugment {
     private static final String KEY_CHANCE       = "chance";
     private static final String KEY_DAMAGE_BONUS = "damage_bonus";
 
-    public static ResourceLocation augmentId() {
-        return CASCADE_ID;
-    }
+    public static ResourceLocation augmentId() { return CASCADE_ID; }
 
-    @Override
-    public ResourceLocation getId() {
-        return CASCADE_ID;
-    }
-
-    @Override
-    public boolean isUnique() {
-        return true;
-    }
-
-    @Override
-    public boolean needsInstance() {
-        return false;
-    }
+    @Override public ResourceLocation getId()   { return CASCADE_ID; }
+    @Override public boolean isUnique()          { return true; }
+    @Override public boolean needsInstance()     { return false; }
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
-
         AugmentItem.AugmentData data = AugmentItem.getAugmentData(CASCADE_ID);
         if (data == null) return;
-
         ItemStack stack = AugmentItem.createAugment(CASCADE_ID);
         var pose = gui.pose();
         pose.pushPose();
@@ -79,23 +69,43 @@ public class CascadeAugment implements IAugment {
 
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-        if (innerData instanceof CascadeData data) {
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.cascade.desc",
-                    (int)(data.chance * 100),
-                    (int)(data.damageBonus * 100)
-            ).withStyle(ChatFormatting.YELLOW);
+        if (!(innerData instanceof CascadeData base)) {
+            return Component.translatable("fallen_gems_affixes.augment.cascade.desc",
+                            (int)(DEFAULT_CHANCE * 100), (int)(DEFAULT_DAMAGE_BONUS * 100))
+                    .withStyle(ChatFormatting.YELLOW);
         }
-        return Component.translatable("fallen_gems_affixes.augment.cascade.desc",
-                        (int)(DEFAULT_CHANCE * 100), (int)(DEFAULT_DAMAGE_BONUS * 100))
-                .withStyle(ChatFormatting.YELLOW);
+
+        Player player = getClientPlayer();
+        if (player != null) {
+            CascadeData effective = computeEffective(base, player);
+            boolean scaled = effective.chance != base.chance || effective.damageBonus != base.damageBonus;
+
+            MutableComponent comp = Component.translatable(
+                    "fallen_gems_affixes.augment.cascade.desc",
+                    (int)(effective.chance * 100),
+                    (int)(effective.damageBonus * 100)
+            ).withStyle(ChatFormatting.YELLOW);
+
+            if (scaled) {
+                comp = comp.append(Component.literal(
+                        " (" + (int)(base.chance * 100) + "% / " + (int)(base.damageBonus * 100) + "% base)"
+                ).withStyle(ChatFormatting.DARK_GRAY));
+            }
+            return comp;
+        }
+
+        return Component.translatable(
+                "fallen_gems_affixes.augment.cascade.desc",
+                (int)(base.chance * 100),
+                (int)(base.damageBonus * 100)
+        ).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
     public void appendItemTooltip(ItemStack stack, @Nullable Level level,
                                   List<Component> tooltip, TooltipFlag flag) {
-        float chance       = getChanceFromItem(stack);
-        float damageBonus  = getDamageBonusFromItem(stack);
+        float chance      = getChanceFromItem(stack);
+        float damageBonus = getDamageBonusFromItem(stack);
 
         tooltip.add(Component.translatable("fallen_gems_affixes.augment.cascade.type")
                 .withStyle(ChatFormatting.GOLD));
@@ -106,7 +116,58 @@ public class CascadeAugment implements IAugment {
                         (int)(chance * 100),
                         (int)(damageBonus * 100)
                 ).withStyle(ChatFormatting.YELLOW)));
+        tooltip.add(Component.literal("• ")
+                .withStyle(ChatFormatting.YELLOW)
+                .append(Component.translatable("fallen_gems_affixes.augment.cascade.scaling_hint")
+                        .withStyle(ChatFormatting.YELLOW)));
     }
+
+
+    public static CascadeData computeEffective(CascadeData base, LivingEntity entity) {
+        double critChance = entity.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
+        double critDamage = entity.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
+
+        float excessChance  = (float) Math.max(0.0, critChance - 1.0);
+        float excessDamage  = (float) Math.max(0.0, critDamage - 1.5);
+
+        CascadeData effective = new CascadeData();
+        effective.chance      = base.chance      + excessChance;
+        effective.damageBonus = base.damageBonus + excessDamage;
+        return effective;
+    }
+
+    @Nullable
+    public static CascadeData getCascadeData(LivingEntity entity) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack stack = entity.getItemBySlot(slot);
+            if (stack.isEmpty()) continue;
+            CascadeData base = readFromWeapon(stack);
+            if (base != null) return computeEffective(base, entity);
+        }
+        return null;
+    }
+
+    @Nullable
+    private static CascadeData readFromWeapon(ItemStack stack) {
+        CompoundTag root = stack.getTag();
+        if (root == null) return null;
+        if (!root.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
+
+        CompoundTag augmentData = root.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
+
+        for (int i = 0; i < augments.size(); i++) {
+            CompoundTag augment = augments.getCompound(i);
+            if (!augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.CASCADE_STRING)) continue;
+
+            CompoundTag innerData = augment.getCompound(Fallen.AugmentMisc.INNER_DATA);
+            CascadeData data = new CascadeData();
+            data.deserializeNBT(innerData);
+            return data;
+        }
+        return null;
+    }
+
 
     public static void apply(ItemStack augmentItem, ItemStack weaponStack) {
         float chance      = getChanceFromItem(augmentItem);
@@ -135,37 +196,6 @@ public class CascadeAugment implements IAugment {
         root.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
     }
 
-    @Nullable
-    public static CascadeData getCascadeData(LivingEntity entity) {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            ItemStack stack = entity.getItemBySlot(slot);
-            if (stack.isEmpty()) continue;
-            CascadeData data = readFromWeapon(stack);
-            if (data != null) return data;
-        }
-        return null;
-    }
-
-    @Nullable
-    private static CascadeData readFromWeapon(ItemStack stack) {
-        CompoundTag root = stack.getTag();
-        if (root == null) return null;
-        if (!root.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
-
-        CompoundTag augmentData = root.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag augment = augments.getCompound(i);
-            if (!augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.CASCADE_STRING)) continue;
-
-            CompoundTag innerData = augment.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            CascadeData data = new CascadeData();
-            data.deserializeNBT(innerData);
-            return data;
-        }
-        return null;
-    }
 
     private static float getChanceFromItem(ItemStack stack) {
         CompoundTag tag = stack.getTag();
@@ -178,6 +208,17 @@ public class CascadeAugment implements IAugment {
         if (tag != null && tag.contains(KEY_DAMAGE_BONUS)) return tag.getFloat(KEY_DAMAGE_BONUS);
         return DEFAULT_DAMAGE_BONUS;
     }
+
+    @Nullable
+    private static Player getClientPlayer() {
+        if (FMLEnvironment.dist != Dist.CLIENT) return null;
+        try {
+            return Minecraft.getInstance().player;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     public static class CascadeData implements IAugmentInnerData {
         public float chance      = DEFAULT_CHANCE;
