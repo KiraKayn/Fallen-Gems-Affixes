@@ -1,9 +1,6 @@
 {
   "type": "fallen_gems_affixes:true_shot",
   "values": {
-    "common": true,
-    "uncommon": true,
-    "rare": true,
     "epic": true,
     "mythic": true,
     "ancient": true
