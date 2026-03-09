@@ -18,6 +18,10 @@ public class BossUtil {
                 || isApotheosisBoss(entity);
     }
 
+    public static boolean isExtraBossTag(LivingEntity entity, TagKey<EntityType<?>> extraBossTag) {
+        return entity.getType().is(extraBossTag);
+    }
+
     public static boolean isApotheosisBoss(LivingEntity entity) {
         CompoundTag tag = entity.getPersistentData();
         return tag.getBoolean("apoth.boss");
