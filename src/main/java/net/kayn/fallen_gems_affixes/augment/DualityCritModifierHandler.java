@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.augment;
 
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,6 +21,9 @@ public class DualityCritModifierHandler {
     public void attributeModifier(ItemAttributeModifierEvent e) {
         ItemStack stack = e.getItemStack();
         if (e.getSlotType() != EquipmentSlot.MAINHAND) return;
+// Fix augment item triggering augment effects when holding it
+        if (stack.is(ModItems.AUGMENT_ITEM.get())) return;
+
         if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
             CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
             ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, CompoundTag.TAG_COMPOUND);
