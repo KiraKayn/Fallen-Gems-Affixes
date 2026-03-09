@@ -12,11 +12,14 @@ import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class WetResistanceBonus extends GemBonus {
+public class WetResistanceBonus extends GemBonus implements IDamageOrResistanceBonus {
 
     public static final Codec<WetResistanceBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
@@ -57,5 +60,25 @@ public class WetResistanceBonus extends GemBonus {
     @Override
     public Codec<? extends GemBonus> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public @NotNull BonusType getBonusType() {
+        return BonusType.RESISTANCE;
+    }
+
+    @Override
+    public @NotNull BonusName getBonusName() {
+        return BonusName.WET;
+    }
+
+    @Override
+    public float getValue(BonusType type, LootRarity rarity, float level) {
+        return this.values.get(rarity).get(level);
+    }
+
+    @Override
+    public boolean checkCondition(LivingEntity attacker, LivingEntity target, DamageSource damageSource, BonusType type) {
+        return target.isInWaterOrRain();
     }
 }

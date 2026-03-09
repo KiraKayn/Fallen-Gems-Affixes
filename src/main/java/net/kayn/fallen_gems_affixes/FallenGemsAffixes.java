@@ -71,6 +71,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
         MinecraftForge.EVENT_BUS.register(FallenEventHandler.class);
         MinecraftForge.EVENT_BUS.register(BowEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(new HurtEventHandler());
         MinecraftForge.EVENT_BUS.register(new DualityCritModifierHandler());
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
