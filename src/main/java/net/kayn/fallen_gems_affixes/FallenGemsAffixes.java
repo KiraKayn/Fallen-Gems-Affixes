@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
+import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
 import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.augment.GenesisEventHandler;
 import net.kayn.fallen_gems_affixes.commands.AugmentCommands;
@@ -70,6 +71,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(SoulboundEventHandler.class);
         MinecraftForge.EVENT_BUS.register(FallenEventHandler.class);
         MinecraftForge.EVENT_BUS.register(BowEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(new DualityCritModifierHandler());
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 
         // Mod integrations

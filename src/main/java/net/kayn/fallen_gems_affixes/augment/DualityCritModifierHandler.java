@@ -1,0 +1,43 @@
+package net.kayn.fallen_gems_affixes.augment;
+
+import dev.shadowsoffire.attributeslib.api.ALObjects;
+import net.kayn.fallen_gems_affixes.Fallen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.UUID;
+
+public class DualityCritModifierHandler {
+    private static final String DUALITY_CRIT_BONUS_UUID = "518354e7-2959-48b3-b809-f7d66f844a21";
+    private static final String DUALITY_CRIT_REDUCTION_UUID = "518354e7-2959-48b3-b809-f7d66f844a22";
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void attributeModifier(ItemAttributeModifierEvent e) {
+        ItemStack stack = e.getItemStack();
+        if (e.getSlotType() != EquipmentSlot.MAINHAND) return;
+        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+            CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
+            ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, CompoundTag.TAG_COMPOUND);
+            for (int i = 0; i < augments.size(); i++) {
+                CompoundTag augment = augments.getCompound(i);
+                if (augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.DUALITY_STRING)) {
+                    double value = 0f;
+                    for (var am : e.getModifiers().get(ALObjects.Attributes.CRIT_CHANCE.get())) {
+                        value += am.getAmount();
+                    }
+                    DualityAugment.DualityData data = (DualityAugment.DualityData) Fallen.Augments.DUALITY.deserializeInnerData(augment.getCompound(Fallen.AugmentMisc.INNER_DATA));
+                    float critChanceMultiplier = data.critChanceMultiplier;
+                    float critDamageReduction = data.critDamageReduction;
+
+                    e.addModifier(ALObjects.Attributes.CRIT_DAMAGE.get(), new AttributeModifier(UUID.fromString(DUALITY_CRIT_REDUCTION_UUID), "dualityCritReduction", -critDamageReduction, AttributeModifier.Operation.ADDITION));
+                    e.addModifier(ALObjects.Attributes.CRIT_CHANCE.get(), new AttributeModifier(UUID.fromString(DUALITY_CRIT_BONUS_UUID), "dualityCritBonus", value * Math.max(critChanceMultiplier - 1f, 0f), AttributeModifier.Operation.ADDITION));
+                }
+            }
+        }
+    }
+}

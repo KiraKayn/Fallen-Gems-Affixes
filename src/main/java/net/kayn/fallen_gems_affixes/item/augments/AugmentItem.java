@@ -61,6 +61,11 @@ public class AugmentItem extends Item {
                 inner.putFloat("defaultPower",    data.getDefaultPower());
                 inner.putFloat("affixPowerBoost", data.getAffixPowerBoost());
                 inner.putFloat("gemPowerBoost",   data.getGemPowerBoost());
+                // Duality fields
+                inner.putFloat("critChanceMultiplier", data.getCritChanceMultiplier());
+                inner.putFloat("critDamageReduction", data.getCritDamageReduction());
+                inner.putFloat("physicalRatio", data.getPhysicalRatio());
+                inner.putFloat("magicRatio", data.getMagicRatio());
 
                 entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
                 list.add(entry);
@@ -233,10 +238,45 @@ public class AugmentItem extends Item {
                             FallenGemsAffixes.LOGGER.warn("Invalid gem_power_boost for augment {}", id);
                         }
                     }
+                    // duality fields
+                    float critChanceMultiplier = 2.0f;
+                    float critDamageReduction = 0.3f;
+                    float physicalRatio = 0.5f;
+                    float magicRatio = 0.5f;
+
+                    if (json.has("crit_chance_multiplier")) {
+                        try { critChanceMultiplier = json.get("crit_chance_multiplier").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid crit_chance_multiplier for augment {}", id);
+                        }
+                    }
+                    if (json.has("crit_damage_reduction")) {
+                        try { critDamageReduction = json.get("crit_damage_reduction").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid crit_damage_reduction for augment {}", id);
+                        }
+                    }
+                    if (json.has("physical_ratio")) {
+                        try { physicalRatio = json.get("physical_ratio").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid physical_ratio for augment {}", id);
+                        }
+                    }
+                    if (json.has("magic_ratio")) {
+                        try { magicRatio = json.get("magic_ratio").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn(
+                                    "Invalid magic_ratio for augment {}", id);
+                        }
+                    }
 
                     AUGMENT_DATA.put(augmentId, new AugmentData(
                             augmentId, texture, categories,
-                            power, defaultPower, affixPowerBoost, gemPowerBoost));
+                            power, defaultPower, affixPowerBoost, gemPowerBoost,
+                            critChanceMultiplier, critDamageReduction, physicalRatio, magicRatio));
 
                 } catch (Exception e) {
                     FallenGemsAffixes.LOGGER.error("Error loading augment data: {}", entry.getKey(), e);
@@ -257,14 +297,22 @@ public class AugmentItem extends Item {
         private final float affixPowerBoost;
         private final float gemPowerBoost;
 
+        /**
+         * Duality
+         */
+        private final float critChanceMultiplier;
+        private final float critDamageReduction;
+        private final float physicalRatio;
+        private final float magicRatio;
+
         public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
-                           Set<LootCategory> categories, float power) {
-            this(augmentId, texture, categories, power, 0.5f, 0.1f, 0.1f);
+                           Set<LootCategory> categories, float power, float critChanceMultiplier, float critDamageReduction, float physicalRatio, float magicRatio) {
+            this(augmentId, texture, categories, power, 0.5f, 0.1f, 0.1f, magicRatio, physicalRatio, critDamageReduction, critChanceMultiplier);
         }
 
         public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
                            Set<LootCategory> categories, float power,
-                           float defaultPower, float affixPowerBoost, float gemPowerBoost) {
+                           float defaultPower, float affixPowerBoost, float gemPowerBoost, float critChanceMultiplier, float critDamageReduction, float physicalRatio, float magicRatio) {
             this.augmentId       = augmentId;
             this.texture         = texture;
             this.categories      = categories;
@@ -272,6 +320,10 @@ public class AugmentItem extends Item {
             this.defaultPower    = defaultPower;
             this.affixPowerBoost = affixPowerBoost;
             this.gemPowerBoost   = gemPowerBoost;
+            this.critChanceMultiplier = critChanceMultiplier;
+            this.critDamageReduction = critDamageReduction;
+            this.physicalRatio = physicalRatio;
+            this.magicRatio = magicRatio;
         }
 
         public ResourceLocation  getAugmentId()      { return augmentId; }
@@ -284,6 +336,22 @@ public class AugmentItem extends Item {
 
         public boolean canApplyTo(LootCategory category) {
             return categories.isEmpty() || categories.contains(category);
+        }
+
+        public float getCritChanceMultiplier() {
+            return critChanceMultiplier;
+        }
+
+        public float getCritDamageReduction() {
+            return critDamageReduction;
+        }
+
+        public float getPhysicalRatio() {
+            return physicalRatio;
+        }
+
+        public float getMagicRatio() {
+            return magicRatio;
         }
     }
 }

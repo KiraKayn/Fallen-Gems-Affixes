@@ -6,14 +6,15 @@
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
     "AffixHelperMixin",
-    "GemMixin",
-    "SocketHelperMixin",
     "AttributeAffixAccessor",
-    "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin",
+    "AttributesLibTooltipFix",
+    "CritMixin",
+    "GemMixin",
     "LootControllerMixin",
+    "SocketHelperMixin",
     "TrueShotMixin",
-    "CascadeMixin"
+    "permanent_effect.InventoryMixin",
+    "permanent_effect.LivingEntityMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",
