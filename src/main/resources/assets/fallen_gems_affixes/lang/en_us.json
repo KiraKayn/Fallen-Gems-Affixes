@@ -499,6 +499,7 @@
 
   "item.fallen_gems_affixes.augment.cascade": "Augment of Cascade",
   "fallen_gems_affixes.augment.cascade.desc": "On overcrit, %s%% chance to deal %s%% more damage for that strike.",
+  "fallen_gems_affixes.augment.cascade.scaling_hint": "Scales with Crit Chance and Crit Damage above 100%.",
   "fallen_gems_affixes.augment.cascade.type": "Cascade:",
 
   "item.fallen_gems_affixes.augment.duality": "Augment of Duality",
