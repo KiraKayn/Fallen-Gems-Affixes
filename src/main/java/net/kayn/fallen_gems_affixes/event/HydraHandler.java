@@ -1,3 +1,4 @@
+/*
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
@@ -61,4 +62,4 @@ public class HydraHandler {
             }
         }
     }
-}
+}*/
