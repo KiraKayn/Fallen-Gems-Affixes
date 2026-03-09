@@ -28,7 +28,6 @@
 3. Made it so if the categories field in Augments is empty, it displays all available categories. Genesis, Supremacy and Empowerment augments benefit from this.
 4. Soulbound is no longer an Augment, it was reimplemented as an Affix again, but now it can only occur on Mythic and Ancient Gear
 
-
 # 2.0.1HF
 - Fixed JEI only showing the Soulbound augment (again)
 
