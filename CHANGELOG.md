@@ -1,3 +1,33 @@
+# 2.0.2 — Huge Update
+- Added 11 new affix types. 1 Weapon, 6 Bow and 4 Staff:
+1. Autocast Affix - After casting a spell, autocast another spell instantly with no mana cost. 
+2. Mana Cost Affix - Spells casted with this item cost % less mana 
+3. Mana Return Affix - Spells casted with this item have % chance to return a % of their mana cost 
+4. Mana Damage Affix - Spells casted with this item deal % more damage according to a % of your mana. 
+5. Momentum Affix - An affix for bows that makes the arrow shot deal more damage the further it travels 
+6. Piercing Arrow Affix - Arrows shot now pierce through enemies 
+7. Multi Shot Affix - Every arrow you shoot shoots X more times 
+8. Chain Shot Affix - On arrow kill, a new arrow shoots automatically towards the nearest enemy 
+9. True Shot Affix - Arrows go through arrow immunity. 
+10. Homing Affix - Arrows home onto the closest mob in its trajectory
+11. Double Strike Affix - Your on-hits hit again for a % of the damage
+
+- Added 3 New Augments. Augment of Genesis, Cascade and Duality:
+1. Augment of Genesis: Sets the affixes power to 50%, on boss kill gain 0.05x to Gem Power and 0.05x Affix Power. Each boss is only counted once
+2. Augment of Cascacde: On overcrits (when crit chance is above 100%), have 35% chance to deal 40% more damage. Both values scale with Crit Attributes
+3. Augment of Duality: Crit Chance is set to 2x on the item, -30% Crit Damage and On Crits, deal 50% Magic and 50% Physical Damage
+
+- Ice and Fire Compat. Added new gems based on Ice and Fire creatures
+1. Abyssal Pearl: Weapons: +X% Damage while wet (in contact with water), Armor: +X% Damage Reduction while wet
+2. Hydra Scale: Chestplates: Gain +X% Damage Reduction, but fire deals +X% more Damage to you, While on Fire the damage reduction is disabled, and Fire Resistance disables the Damage Reduction too. Can only be dropped from Hydras. Texture by @Pyrax
+3. Ash of Yggdrasil: Weapons: Deal +X% Damage to Dragons, Armor: +X% Damage Reduction against dragons. Works the same as ragnarok.
+
+- Other Changes:
+1. Added new textures for Sigils and Augments. Credit to @Logar
+2. Added Spawner to Boss Spawner Conversion - Every spawner in the world now has a chance to become a Boss Spawner. By default, it's 15%
+3. Made it so if the categories field in Augments is empty, it displays all available categories. Genesis, Supremacy and Empowerment augments benefit from this.
+4. Soulbound is no longer an Augment, it was reimplemented as an Affix again, but now it can only occur on Mythic and Ancient Gear
+
 # 2.0.1HF
 - Fixed JEI only showing the Soulbound augment (again)
 
