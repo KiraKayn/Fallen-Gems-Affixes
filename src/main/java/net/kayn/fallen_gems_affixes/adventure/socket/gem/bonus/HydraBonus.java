@@ -12,11 +12,16 @@ import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class HydraBonus extends GemBonus {
+public class HydraBonus extends GemBonus implements IDamageOrResistanceBonus {
 
     public static final Codec<HydraBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
@@ -66,5 +71,36 @@ public class HydraBonus extends GemBonus {
     @Override
     public Codec<? extends GemBonus> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public @NotNull BonusType getBonusType() {
+        return BonusType.BOTH;
+    }
+
+    @Override
+    public @NotNull BonusName getBonusName() {
+        return BonusName.HYDRA;
+    }
+
+    @Override
+    public float getValue(BonusType type, LootRarity rarity, float level) {
+        if (type == BonusType.DAMAGE) {
+            return this.firePenalty.get(rarity).get(level);
+        } else if (type == BonusType.RESISTANCE) {
+            return this.reduction.get(rarity).get(level);
+        }
+        return 0f;
+    }
+
+    @Override
+    public boolean checkCondition(LivingEntity attacker, LivingEntity target, DamageSource damageSource, BonusType type) {
+        boolean fireFlag = damageSource.is(DamageTypeTags.IS_FIRE);
+        if (type == BonusType.DAMAGE) {
+            return fireFlag;
+        } else if (type == BonusType.RESISTANCE) {
+            return !fireFlag && !target.hasEffect(MobEffects.FIRE_RESISTANCE);
+        }
+        return false;
     }
 }

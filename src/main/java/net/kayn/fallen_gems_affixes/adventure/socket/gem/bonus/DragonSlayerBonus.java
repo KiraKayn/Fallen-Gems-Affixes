@@ -9,17 +9,21 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.util.BossUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class DragonSlayerBonus extends GemBonus {
+public class DragonSlayerBonus extends GemBonus implements IDamageOrResistanceBonus {
 
     public static final Codec<DragonSlayerBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
@@ -28,6 +32,10 @@ public class DragonSlayerBonus extends GemBonus {
     ).apply(inst, (gemClass, tagId, values) ->
             new DragonSlayerBonus(gemClass, TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), tagId), values)
     ));
+    public static final TagKey<EntityType<?>> DRAGON_TAG = TagKey.create(
+            ForgeRegistries.ENTITY_TYPES.getRegistryKey(),
+            new ResourceLocation("fallen_gems_affixes", "dragon_slayer")
+    );
 
     public final TagKey<EntityType<?>> entityTag;
     public final Map<LootRarity, StepFunction> values;
@@ -65,5 +73,25 @@ public class DragonSlayerBonus extends GemBonus {
     @Override
     public Codec<? extends GemBonus> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public @NotNull BonusType getBonusType() {
+        return BonusType.DAMAGE;
+    }
+
+    @Override
+    public @NotNull BonusName getBonusName() {
+        return BonusName.DRAGON;
+    }
+
+    @Override
+    public float getValue(BonusType type, LootRarity rarity, float level) {
+        return this.values.get(rarity).get(level);
+    }
+
+    @Override
+    public boolean checkCondition(LivingEntity attacker, LivingEntity target, DamageSource damageSource, BonusType type) {
+        return BossUtil.isExtraBossTag(target, DragonSlayerBonus.DRAGON_TAG);
     }
 }

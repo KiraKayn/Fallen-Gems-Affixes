@@ -9,17 +9,21 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.util.BossUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class BossResistanceBonus extends GemBonus {
+public class BossResistanceBonus extends GemBonus implements IDamageOrResistanceBonus {
 
     public static final Codec<BossResistanceBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(gemClass(), ResourceLocation.CODEC.fieldOf("entity_tag").forGetter(b -> b.entityTag.location()), VALUES_CODEC.fieldOf("values").forGetter(b -> b.values)).apply(inst, (gemClass, tagId, values) -> new BossResistanceBonus(gemClass, TagKey.create(ForgeRegistries.ENTITY_TYPES.getRegistryKey(), tagId), values)));
 
@@ -60,5 +64,24 @@ public class BossResistanceBonus extends GemBonus {
     @Override
     public Codec<? extends GemBonus> getCodec() {
         return CODEC;
+    }
+
+    @Override
+    public @NotNull BonusType getBonusType() {
+        return BonusType.RESISTANCE;
+    }
+
+    public @NotNull BonusName getBonusName() {
+        return BonusName.BOSS;
+    }
+
+    @Override
+    public float getValue(BonusType type, LootRarity rarity, float level) {
+        return this.values.get(rarity).get(level);
+    }
+
+    @Override
+    public boolean checkCondition(LivingEntity attacker, LivingEntity target, DamageSource damageSource, BonusType damage) {
+        return BossUtil.isBoss(attacker, BossSlayerBonus.BOSS_TAG);
     }
 }
