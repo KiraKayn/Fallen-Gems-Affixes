@@ -128,7 +128,7 @@ public class CascadeAugment implements IAugment {
         double critDamage = entity.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
 
         float excessChance  = (float) Math.max(0.0, critChance - 1.0);
-        float excessDamage  = (float) Math.max(0.0, critDamage - 1.5);
+        float excessDamage  = (float) Math.max(0.0, critDamage - 2.0);
 
         CascadeData effective = new CascadeData();
         effective.chance      = base.chance      + excessChance;
