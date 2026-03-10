@@ -1,3 +1,7 @@
+# 2.0.3HF
+- Moved client-only Minecraft reference in CascadeAugment to dedicated client class
+- Fixed the HurtEventHandler weapon check - rtxyd
+
 # 2.0.3
 - Fixed Translation for Homing and True Shot Affixes
 - Removed Double Strike because it was too overpowered and messy to implement correctly
