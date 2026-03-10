@@ -23,7 +23,7 @@ public class HurtEventHandler {
         ItemStack weapon = attacker.getMainHandItem();
         DamageSource damageSource = event.getSource();
         Map<IDamageOrResistanceBonus.BonusName, Float> damageBonuses = new HashMap<>();
-        if (!weapon.isEmpty() || weapon.getEquipmentSlot() != EquipmentSlot.MAINHAND) {
+        if (!weapon.isEmpty() && LivingEntity.getEquipmentSlotForItem(weapon) == EquipmentSlot.MAINHAND) {
             LootCategory weaponCat = LootCategory.forItem(weapon);
             SocketHelper.getGems(weapon).forEach(gemInstance -> {
                 if (!gemInstance.isValid()) return;
