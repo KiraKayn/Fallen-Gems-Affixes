@@ -416,10 +416,6 @@
   "item.fallen_gems_affixes.reinforced_gem_slate": "Reinforced Gem Slate",
   "jei.fallen_gems_affixes.transmutation": "Transmutation",
 
-  "affix.fallen_gems_affixes.double_strike.desc": "On hit, deal %s%% of the damage again",
-  "affix.fallen_gems_affixes:sword/double_strike": "Vorpal",
-  "affix.fallen_gems_affixes:sword/double_strike.suffix": "of Echoes",
-
   "affix.fallen_gems_affixes.autocast": "Autocast: %s",
   "affix.fallen_gems_affixes.autocast.trigger": " When casting: %s",
   "affix.fallen_gems_affixes.autocast.any_spell": "Any spell",
