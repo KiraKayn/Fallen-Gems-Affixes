@@ -8,7 +8,6 @@ import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -157,6 +156,11 @@ public class GenesisAugment implements IAugment {
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
                                 "fallen_gems_affixes.augment.genesis.desc.gem_boost", gemBoost)
+                        .withStyle(ChatFormatting.YELLOW)));
+        tooltip.add(Component.literal("• ")
+                .withStyle(ChatFormatting.YELLOW)
+                .append(Component.translatable(
+                                "fallen_gems_affixes.augment.genesis.desc.augmentation_block", gemBoost)
                         .withStyle(ChatFormatting.YELLOW)));
     }
 

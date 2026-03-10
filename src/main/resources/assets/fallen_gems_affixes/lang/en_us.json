@@ -446,6 +446,7 @@
   "fallen_gems_affixes.augment.genesis.desc.default":     "Starting affix & gem power: %sx",
   "fallen_gems_affixes.augment.genesis.desc.affix_boost": "Affix power per boss kill: +%sx",
   "fallen_gems_affixes.augment.genesis.desc.gem_boost":   "Gem power per boss kill:   +%sx",
+  "fallen_gems_affixes.augment.genesis.desc.augmentation_block": "Once socketed, this item can no longer be placed in the augmentation table",
 
   "fallen_gems_affixes.augment.genesis.socket_desc": "Bosses Slain: %1$s  |  Affix: %2$sx  |  Gem: %3$sx",
 
