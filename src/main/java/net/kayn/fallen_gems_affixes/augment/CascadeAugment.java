@@ -16,8 +16,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -96,9 +99,8 @@ public class CascadeAugment implements IAugment {
         }
 
         return Component.translatable(
-                "fallen_gems_affixes.augment.cascade.desc",
-                (int)(base.chance * 100),
-                (int)(base.damageBonus * 100)
+                "fallen_gems_affixes.augment.cascade.desc_not_hold",
+                (int)(DEFAULT_CHANCE * 100), (int)(DEFAULT_DAMAGE_BONUS * 100)
         ).withStyle(ChatFormatting.YELLOW);
     }
 
@@ -124,15 +126,23 @@ public class CascadeAugment implements IAugment {
     }
 
     public static CascadeData computeEffective(CascadeData base, LivingEntity entity) {
+        // Access the suspended ItemStack.
+        // Clientside "currentSuspendedItemStack" stores which item is computed for current tooltip event.
+        // Serverside it stores which item is accessing Gems for SocketHelper.
+        ItemStack stack = GemBonusModifier.currentSuspendedItemStack.get();
+        if (!stack.isEmpty() && entity.getMainHandItem() != stack) return null;
+
         double critChance = entity.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
         double critDamage = entity.getAttributeValue(ALObjects.Attributes.CRIT_DAMAGE.get());
 
-        float excessChance  = (float) Math.max(0.0, critChance - 1.0);
-        float excessDamage  = (float) Math.max(0.0, critDamage - 2.0);
+        float excessChance  = Math.max(0, (float) critChance - 1.0f);
+        float excessDamage  = Math.max(0, (float) critDamage - 2.0f);
 
         CascadeData effective = new CascadeData();
-        effective.chance      = base.chance      + excessChance;
-        effective.damageBonus = base.damageBonus + excessDamage;
+        // Chance should not over 100%
+        effective.chance      = Mth.clamp(1.0f, base.chance, base.chance + excessChance);
+        // Max extra damage 100%
+        effective.damageBonus = base.damageBonus + Math.min(1.0f, excessDamage);
         return effective;
     }
 
