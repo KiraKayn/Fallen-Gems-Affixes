@@ -489,12 +489,12 @@
 
   "affix.fallen_gems_affixes.chain_shot.desc": "Killing an enemy with an arrow fires a chain arrow at the nearest enemy within %s blocks",
 
-  "affix.fallen_gems_affixes:true_shot": "True Shot",
-  "affix.fallen_gems_affixes:true_shot.suffix": "of Inevitability",
+  "affix.fallen_gems_affixes:ranged_weapons/true_shot": "True Shot",
+  "affix.fallen_gems_affixes:ranged_weapons/true_shot.suffix": "of Inevitability",
   "affix.fallen_gems_affixes.true_shot.desc": "Arrows ignore projectile immunity",
 
-  "affix.fallen_gems_affixes:homing": "Homing",
-  "affix.fallen_gems_affixes:homing.suffix": "of Seeking",
+  "affix.fallen_gems_affixes:ranged_weapons/homing": "Homing",
+  "affix.fallen_gems_affixes:ranged_weapons/homing.suffix": "of Seeking",
   "affix.fallen_gems_affixes.homing.desc":"Arrows home toward the nearest enemy with %s%% turn rate",
 
   "item.fallen_gems_affixes.augment.cascade": "Augment of Cascade",
