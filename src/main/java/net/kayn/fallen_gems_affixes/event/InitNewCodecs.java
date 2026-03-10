@@ -28,7 +28,6 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
 
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "socket_bonus"), SocketBonusAffix.CODEC);
-            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "double_strike"), DoubleStrikeAffix.CODEC);
 
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "soulbound"), SoulboundAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "momentum"), MomentumAffix.CODEC);
