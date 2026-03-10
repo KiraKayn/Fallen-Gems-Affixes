@@ -3,11 +3,11 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.client.CascadeAugmentClient;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -18,12 +18,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,15 +74,17 @@ public class CascadeAugment implements IAugment {
                     .withStyle(ChatFormatting.YELLOW);
         }
 
-        Player player = getClientPlayer();
-        if (player != null) {
-            CascadeData effective = computeEffective(base, player);
-            boolean scaled = effective.chance != base.chance || effective.damageBonus != base.damageBonus;
+        // Safe client-only call via DistExecutor — never touches Minecraft class on server
+        CascadeData[] effective = {null};
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
+                effective[0] = CascadeAugmentClient.getEffectiveData(base));
 
+        if (effective[0] != null) {
+            boolean scaled = effective[0].chance != base.chance || effective[0].damageBonus != base.damageBonus;
             MutableComponent comp = Component.translatable(
                     "fallen_gems_affixes.augment.cascade.desc",
-                    (int)(effective.chance * 100),
-                    (int)(effective.damageBonus * 100)
+                    (int)(effective[0].chance * 100),
+                    (int)(effective[0].damageBonus * 100)
             ).withStyle(ChatFormatting.YELLOW);
 
             if (scaled) {
@@ -121,7 +122,6 @@ public class CascadeAugment implements IAugment {
                 .append(Component.translatable("fallen_gems_affixes.augment.cascade.scaling_hint")
                         .withStyle(ChatFormatting.YELLOW)));
     }
-
 
     public static CascadeData computeEffective(CascadeData base, LivingEntity entity) {
         double critChance = entity.getAttributeValue(ALObjects.Attributes.CRIT_CHANCE.get());
@@ -168,7 +168,6 @@ public class CascadeAugment implements IAugment {
         return null;
     }
 
-
     public static void apply(ItemStack augmentItem, ItemStack weaponStack) {
         float chance      = getChanceFromItem(augmentItem);
         float damageBonus = getDamageBonusFromItem(augmentItem);
@@ -196,7 +195,6 @@ public class CascadeAugment implements IAugment {
         root.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
     }
 
-
     private static float getChanceFromItem(ItemStack stack) {
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.contains(KEY_CHANCE)) return tag.getFloat(KEY_CHANCE);
@@ -208,17 +206,6 @@ public class CascadeAugment implements IAugment {
         if (tag != null && tag.contains(KEY_DAMAGE_BONUS)) return tag.getFloat(KEY_DAMAGE_BONUS);
         return DEFAULT_DAMAGE_BONUS;
     }
-
-    @Nullable
-    private static Player getClientPlayer() {
-        if (FMLEnvironment.dist != Dist.CLIENT) return null;
-        try {
-            return Minecraft.getInstance().player;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
     public static class CascadeData implements IAugmentInnerData {
         public float chance      = DEFAULT_CHANCE;
