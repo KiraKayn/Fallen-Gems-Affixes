@@ -1,3 +1,7 @@
+# 2.0.3
+- Fixed Translation for Homing and True Shot Affixes
+- Removed Double Strike because it was too overpowered and messy to implement correctly
+
 # 2.0.2 — Huge Update
 - Added 11 new affix types. 1 Weapon, 6 Bow and 4 Staff:
 1. Autocast Affix - After casting a spell, autocast another spell instantly with no mana cost. 
