@@ -8,6 +8,7 @@
     "AffixHelperMixin",
     "AttributeAffixAccessor",
     "AttributesLibTooltipFix",
+    "AugmentingMenuMixin",
     "CritMixin",
     "GemMixin",
     "LootControllerMixin",
