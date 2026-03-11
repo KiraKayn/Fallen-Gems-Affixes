@@ -1,9 +1,10 @@
 # 2.0.4
-- Moved client-only Minecraft reference in CascadeAugment to dedicated client class
-- Added cap for Crit Chance & Damage on Cascade (100% for both)
+- Moved client-only Minecraft reference in CascadeAugment to dedicated client class to fix the server incompatibility
+- Added cap for Crit Chance & Damage on Cascade (100% for both) - rtxyd
 - Made it so the socketed tooltip of Cascade only shows the scaled values when you are holding the item - rtxyd
 - Fixed the HurtEventHandler weapon check - rtxyd
-- Made it so you can't put items with Genesis Augment in them into the Augmenting Table
+- Made it so you can't put items with Genesis Augment in them into the Augmenting Table - rtxyd
+- Made Duality Augment work on staffs and changed the tooltip from X% Physical to X% Original - rtxyd
 
 # 2.0.3
 - Fixed Translation for Homing and True Shot Affixes
