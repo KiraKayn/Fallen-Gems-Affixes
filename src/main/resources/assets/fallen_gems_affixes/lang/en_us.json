@@ -501,10 +501,10 @@
   "fallen_gems_affixes.augment.cascade.type": "Cascade:",
 
   "item.fallen_gems_affixes.augment.duality": "Augment of Duality",
-  "fallen_gems_affixes.augment.duality.desc": "Crit Chance ×%1$s | −%2$s Crit Damage | On Crit: %3$s Physical / %4$s Magic",
+  "fallen_gems_affixes.augment.duality.desc": "Crit Chance ×%1$s | −%2$s Crit Damage | On Crit: %3$s Original / %4$s Magic",
   "fallen_gems_affixes.augment.duality.type": "Duality:",
-  "fallen_gems_affixes.augment.duality.socket_desc": "Crit Chance ×%1$s | −%2$s Crit Damage | On Crit: %3$s Physical / %4$s Magic",
+  "fallen_gems_affixes.augment.duality.socket_desc": "Crit Chance ×%1$s | −%2$s Crit Damage | On Crit: %3$s Original / %4$s Magic",
   "fallen_gems_affixes.augment.duality.desc.crit_chance": "Crit Chance ×%s",
   "fallen_gems_affixes.augment.duality.desc.crit_damage": "−%s Crit Damage",
-  "fallen_gems_affixes.augment.duality.desc.split": "On Crit: %s Physical / %s Magic"
+  "fallen_gems_affixes.augment.duality.desc.split": "On Crit: %s Original / %s Magic"
 }
