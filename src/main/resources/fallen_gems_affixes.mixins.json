@@ -15,7 +15,8 @@
     "SocketHelperMixin",
     "TrueShotMixin",
     "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin"
+    "permanent_effect.LivingEntityMixin",
+    "AttributeAffixMixin"
   ],
   "client": [
     "permanent_effect.client.AbstractContainerMenuMixin",
