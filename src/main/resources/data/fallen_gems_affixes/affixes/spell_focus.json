@@ -1,0 +1,78 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:spell_focus",
+  "values": {
+    "common": {
+      "min": 0.05,
+      "steps": 2,
+      "step": 0.02
+    },
+    "uncommon": {
+      "min": 0.08,
+      "steps": 3,
+      "step": 0.02
+    },
+    "rare": {
+      "min": 0.10,
+      "steps": 4,
+      "step": 0.02
+    },
+    "epic": {
+      "min": 0.12,
+      "steps": 5,
+      "step": 0.02
+    },
+    "mythic": {
+      "min": 0.15,
+      "steps": 4,
+      "step": 0.03
+    },
+    "ancient": {
+      "min": 0.18,
+      "steps": 5,
+      "step": 0.03
+    }
+  },
+  "max_stacks": {
+    "common": {
+      "min": 3,
+      "steps": 1,
+      "step": 0
+    },
+    "uncommon": {
+      "min": 4,
+      "steps": 1,
+      "step": 0
+    },
+    "rare": {
+      "min": 4,
+      "steps": 1,
+      "step": 0
+    },
+    "epic": {
+      "min": 5,
+      "steps": 1,
+      "step": 0
+    },
+    "mythic": {
+      "min": 5,
+      "steps": 1,
+      "step": 0
+    },
+    "ancient": {
+      "min": 6,
+      "steps": 1,
+      "step": 0
+    }
+  },
+  "types": [
+    "staffs",
+    "sword",
+    "heavy_weapon"
+  ]
+}

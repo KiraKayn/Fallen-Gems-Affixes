@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
+import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
@@ -82,6 +83,7 @@ public class FallenGemsAffixes {
             StaffLootCategory.STAFF.toString();
             modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
             MinecraftForge.EVENT_BUS.register(SpellEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(CooldownResetAffix.class);
         }
 
         if (ModList.get().isLoaded("celestisynth")) {

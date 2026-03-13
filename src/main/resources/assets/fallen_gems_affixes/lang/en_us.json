@@ -506,5 +506,16 @@
   "fallen_gems_affixes.augment.duality.socket_desc": "Crit Chance ×%1$s | −%2$s Crit Damage | On Crit: %3$s Original / %4$s Magic",
   "fallen_gems_affixes.augment.duality.desc.crit_chance": "Crit Chance ×%s",
   "fallen_gems_affixes.augment.duality.desc.crit_damage": "−%s Crit Damage",
-  "fallen_gems_affixes.augment.duality.desc.split": "On Crit: %s Original / %s Magic"
+  "fallen_gems_affixes.augment.duality.desc.split": "On Crit: %s Original / %s Magic",
+
+  "affix.fallen_gems_affixes.spell_focus.desc": "Same spell, same target: +%s%% damage per hit, up to %s stacks",
+  "affix.fallen_gems_affixes.mana_shield.desc": "Take %s%% less damage while above %s%% mana",
+  "affix.fallen_gems_affixes.cooldown_reset.desc": "On spell cast, %s%% chance to instantly reset that spell's cooldown",
+
+  "affix.fallen_gems_affixes:spell_focus": "Focused",
+  "affix.fallen_gems_affixes:spell_focus.suffix": "of Relentless Casting",
+  "affix.fallen_gems_affixes:armor/mana_shield": "Warded",
+  "affix.fallen_gems_affixes:armor/mana_shield.suffix": "of the Mana Ward",
+  "affix.fallen_gems_affixes:staffs/cooldown_reset": "Resetting",
+  "affix.fallen_gems_affixes:staffs/cooldown_reset.suffix": "of Swift Recovery"
 }

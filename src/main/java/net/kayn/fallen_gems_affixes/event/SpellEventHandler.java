@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -46,7 +47,9 @@ public class SpellEventHandler {
 
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
-                if (inst.affix().get() instanceof AutocastAffix affix) {
+                if (inst.affix().get() instanceof CooldownResetAffix affix) {
+                    affix.onSpellCast(caster, castSpellId, inst.rarity().get(), inst.level());
+                } else if (inst.affix().get() instanceof AutocastAffix affix) {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (isTargetMode) return;
                     affix.onSpellCast(caster, castSpellId, caster, inst.rarity().get());
@@ -84,6 +87,11 @@ public class SpellEventHandler {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (!isTargetMode) return;
                     affix.onSpellCast(caster, castSpellId, target, inst.rarity().get());
+                }
+
+                if (inst.affix().get() instanceof SpellFocusAffix affix) {
+                    float mult = affix.onSpellDamage(caster, target, castSpellId, inst.rarity().get(), inst.level());
+                    event.setAmount(event.getAmount() * mult);
                 }
 
                 if (inst.affix().get() instanceof ManaDamageAffix affix
@@ -194,6 +202,11 @@ public class SpellEventHandler {
         if (totalReturn <= 0f) return;
 
         event.setNewMana(Math.min(event.getNewMana() + totalReturn, event.getOldMana()));
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        SpellFocusAffix.clearState(event.getEntity().getUUID());
     }
 
     private static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
