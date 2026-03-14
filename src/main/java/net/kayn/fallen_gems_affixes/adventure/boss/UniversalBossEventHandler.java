@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.adventure.boss;
 
-import dev.shadowsoffire.apotheosis.adventure.AdventureConfig;
 import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
@@ -9,8 +8,6 @@ import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
@@ -69,10 +66,6 @@ public class UniversalBossEventHandler {
         }
 
         mob.setHealth(mob.getMaxHealth());
-
-        if (AdventureConfig.bossGlowOnSpawn) {
-            mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 3600));
-        }
 
         Component name = mob.hasCustomName()
                 ? mob.getCustomName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor()))
