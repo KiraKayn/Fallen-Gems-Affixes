@@ -40,7 +40,6 @@
   },
   "mana_threshold": 0.5,
   "types": [
-    "chestplate",
-    "leggings"
+    "staffs"
   ]
 }

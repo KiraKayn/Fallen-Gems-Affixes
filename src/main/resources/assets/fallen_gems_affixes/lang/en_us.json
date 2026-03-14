@@ -514,8 +514,8 @@
 
   "affix.fallen_gems_affixes:spell_focus": "Focused",
   "affix.fallen_gems_affixes:spell_focus.suffix": "of Relentless Casting",
-  "affix.fallen_gems_affixes:armor/mana_shield": "Warded",
-  "affix.fallen_gems_affixes:armor/mana_shield.suffix": "of the Mana Ward",
+  "affix.fallen_gems_affixes:staffs/mana_shield": "Warded",
+  "affix.fallen_gems_affixes:staffs/mana_shield.suffix": "of the Mana Ward",
   "affix.fallen_gems_affixes:staffs/cooldown_reset": "Resetting",
   "affix.fallen_gems_affixes:staffs/cooldown_reset.suffix": "of Swift Recovery"
 }
