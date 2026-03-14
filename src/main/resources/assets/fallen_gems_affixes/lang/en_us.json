@@ -517,5 +517,11 @@
   "affix.fallen_gems_affixes:staffs/mana_shield": "Warded",
   "affix.fallen_gems_affixes:staffs/mana_shield.suffix": "of the Mana Ward",
   "affix.fallen_gems_affixes:staffs/cooldown_reset": "Resetting",
-  "affix.fallen_gems_affixes:staffs/cooldown_reset.suffix": "of Swift Recovery"
+  "affix.fallen_gems_affixes:staffs/cooldown_reset.suffix": "of Swift Recovery",
+
+  "item.fallen_gems_affixes.affix_scroll": "Affix Scroll",
+  "item.fallen_gems_affixes.affix_scroll.empty": "No affix inscribed.",
+  "item.fallen_gems_affixes.affix_scroll.tooltip": "Apply via anvil to add an affix to equipment.",
+  "item.fallen_gems_affixes.sigil_of_erasure": "Sigil of Erasure",
+  "item.fallen_gems_affixes.sigil_of_erasure.tooltip": "Removes all scroll-applied affixes from an item."
 }

@@ -19,6 +19,9 @@ public class ModConfig {
     public static final ForgeConfigSpec.IntValue MAX_AUGMENT_SLOTS;
     public static final ForgeConfigSpec.BooleanValue ENABLE_BOSS_SPAWNER_CONVERSION;
     public static final ForgeConfigSpec.DoubleValue BOSS_SPAWNER_CHANCE;
+    public static final ForgeConfigSpec.DoubleValue AFFIX_SCROLL_DROP_CHANCE;
+    public static final ForgeConfigSpec.IntValue AFFIX_SCROLL_XP_COST;
+    public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
 
     static {
         BUILDER.push("Mod Config");
@@ -65,6 +68,18 @@ public class ModConfig {
         BOSS_SPAWNER_CHANCE = BUILDER
                 .comment("Chance for a natural spawner to become a boss spawner (0.0 = never, 1.0 = always)")
                 .defineInRange("bossSpawnerChance", 0.15, 0.0, 1.0);
+
+        AFFIX_SCROLL_DROP_CHANCE = BUILDER
+                .comment("Chance for a universal boss to drop an Affix Scroll on death (0.0 = never, 1.0 = always)")
+                .defineInRange("affixScrollDropChance", 0.5, 0.0, 1.0);
+
+        AFFIX_SCROLL_XP_COST = BUILDER
+                .comment("XP level cost to apply an Affix Scroll in the anvil")
+                .defineInRange("affixScrollXpCost", 30, 1, 100);
+
+        MAX_SCROLL_SLOTS = BUILDER
+                .comment("Maximum number of Affix Scrolls that can be applied to a single item")
+                .defineInRange("maxScrollSlots", 2, 0, 10);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")

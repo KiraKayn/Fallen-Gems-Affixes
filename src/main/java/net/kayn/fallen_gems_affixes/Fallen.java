@@ -3,10 +3,7 @@ package net.kayn.fallen_gems_affixes;
 import com.google.gson.JsonObject;
 import net.kayn.fallen_gems_affixes.attachment.AugmentRecipeSerializer;
 import net.kayn.fallen_gems_affixes.augment.*;
-import net.kayn.fallen_gems_affixes.recipe.AugmentCraftingRecipe;
-import net.kayn.fallen_gems_affixes.recipe.SeveranceRecipe;
-import net.kayn.fallen_gems_affixes.recipe.SocketConversionRecipe;
-import net.kayn.fallen_gems_affixes.recipe.TransmutationRecipe;
+import net.kayn.fallen_gems_affixes.recipe.*;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -81,7 +78,25 @@ public class Fallen {
                     }
 
                     @Override
-                    public void toNetwork(FriendlyByteBuf buf, SeveranceRecipe recipe) {}
+                    public void toNetwork(FriendlyByteBuf buf, SeveranceRecipe recipe) {
+                    }
+                });
+
+        public static final RegistryObject<RecipeSerializer<ErasureRecipe>> ERASURE =
+                SERIALIZERS.register("erasure", () -> new RecipeSerializer<>() {
+                    @Override
+                    public @NotNull ErasureRecipe fromJson(ResourceLocation id, JsonObject json) {
+                        return new ErasureRecipe();
+                    }
+
+                    @Override
+                    public ErasureRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+                        return new ErasureRecipe();
+                    }
+
+                    @Override
+                    public void toNetwork(FriendlyByteBuf buf, ErasureRecipe recipe) {
+                    }
                 });
 
         private static void bootstrap(IEventBus bus) {
@@ -97,22 +112,25 @@ public class Fallen {
         public static final String UNIQUE_ID = "uuid";
         public static final String INNER_DATA = "inner_data";
         public static final String CATEGORIES = "categories";
-        public static void bootstrap() {}
+
+        public static void bootstrap() {
+        }
     }
 
     public static class Augments {
-        public static final IAugment GEM_POWER  = AugmentRegistry.register(new GemPowerAugment());
-        public static final IAugment SUPREMACY  = AugmentRegistry.register(new SupremacyAugment());
-        public static final IAugment GENESIS    = AugmentRegistry.register(new GenesisAugment());
+        public static final IAugment GEM_POWER = AugmentRegistry.register(new GemPowerAugment());
+        public static final IAugment SUPREMACY = AugmentRegistry.register(new SupremacyAugment());
+        public static final IAugment GENESIS = AugmentRegistry.register(new GenesisAugment());
         public static final IAugment CASCADE = AugmentRegistry.register(new CascadeAugment());
         public static final IAugment DUALITY = AugmentRegistry.register(new DualityAugment());
 
-        public static final String GEM_POWER_STRING  = GemPowerAugment.augmentId().toString();
-        public static final String SUPREMACY_STRING  = SupremacyAugment.augmentId().toString();
-        public static final String GENESIS_STRING    = GenesisAugment.augmentId().toString();
+        public static final String GEM_POWER_STRING = GemPowerAugment.augmentId().toString();
+        public static final String SUPREMACY_STRING = SupremacyAugment.augmentId().toString();
+        public static final String GENESIS_STRING = GenesisAugment.augmentId().toString();
         public static final String CASCADE_STRING = CascadeAugment.augmentId().toString();
         public static final String DUALITY_STRING = DualityAugment.augmentId().toString();
 
-        public static void bootstrap() {}
+        public static void bootstrap() {
+        }
     }
 }

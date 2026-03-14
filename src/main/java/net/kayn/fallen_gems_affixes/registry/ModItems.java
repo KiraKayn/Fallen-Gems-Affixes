@@ -1,10 +1,7 @@
 package net.kayn.fallen_gems_affixes.registry;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.item.ReinforcedGemSlateItem;
-import net.kayn.fallen_gems_affixes.item.SigilOfAscensionItem;
-import net.kayn.fallen_gems_affixes.item.SigilOfSeveranceItem;
-import net.kayn.fallen_gems_affixes.item.SigilOfTransmutationItem;
+import net.kayn.fallen_gems_affixes.item.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -23,17 +20,19 @@ public class ModItems {
     public static final RegistryObject<Item> SIGIL_OF_ASCENSION = ITEMS.register("sigil_of_ascension",
             () -> new SigilOfAscensionItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
             ));
-
     public static final RegistryObject<Item> SIGIL_OF_TRANSMUTATION = ITEMS.register("sigil_of_transmutation",
             () -> new SigilOfTransmutationItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
             ));
     public static final RegistryObject<Item> SIGIL_OF_SEVERANCE = ITEMS.register("sigil_of_severance",
             () -> new SigilOfSeveranceItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
             ));
+    public static final RegistryObject<Item> AFFIX_SCROLL = ITEMS.register("affix_scroll", () ->
+            new AffixScrollItem(new Item.Properties().stacksTo(1)
+            ));
+    public static final RegistryObject<Item> SIGIL_OF_ERASURE = ITEMS.register("sigil_of_erasure", () ->
+            new SigilOfErasureItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
+            ));
     public static final RegistryObject<Item> REINFORCED_GEM_SLATE = ITEMS.register("reinforced_gem_slate",
-            () -> new ReinforcedGemSlateItem(
-                    new Item.Properties()
-                            .stacksTo(64)
-                            .rarity(Rarity.COMMON)
+            () -> new ReinforcedGemSlateItem(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)
             ));
 }
