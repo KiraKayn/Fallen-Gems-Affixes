@@ -1,0 +1,55 @@
+{
+  "type": "fallen_gems_affixes:universal_boss_loot",
+  "conditions": [],
+  "enchant_book_chance": 0.15,
+  "rarity_drops": {
+    "common": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 1,
+        "max_count": 2
+      }
+    ],
+    "uncommon": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 1,
+        "max_count": 3
+      }
+    ],
+    "rare": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 2,
+        "max_count": 4
+      }
+    ],
+    "epic": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 2,
+        "max_count": 5
+      }
+    ],
+    "mythic": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 3,
+        "max_count": 6
+      }
+    ],
+    "ancient": [
+      {
+        "item": "apotheosis:gem_dust",
+        "chance": 0.25,
+        "min_count": 4,
+        "max_count": 8
+      }
+    ]
+  }
+}

@@ -18,6 +18,10 @@ public class ModLootModifier {
     public static final RegistryObject<Codec<SocketGemModifier>> SOCKET_GEM_MODIFIER =
             LOOT_MODIFIERS.register("socket_gem_modifier", () -> SocketGemModifier.CODEC);
 
+    public static final RegistryObject<Codec<UniversalBossLootModifier>> UNIVERSAL_BOSS_LOOT =
+            LOOT_MODIFIERS.register("universal_boss_loot", UniversalBossLootModifier.CODEC_SUPPLIER::get);
+
+
     public static void register(IEventBus eventBus) {
         LOOT_MODIFIERS.register(eventBus);
     }
