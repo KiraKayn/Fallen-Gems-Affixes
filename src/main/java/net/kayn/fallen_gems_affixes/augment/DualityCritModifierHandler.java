@@ -15,8 +15,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.UUID;
 
 public class DualityCritModifierHandler {
-    private static final String DUALITY_CRIT_BONUS_UUID = "518354e7-2959-48b3-b809-f7d66f844a21";
-    private static final String DUALITY_CRIT_REDUCTION_UUID = "518354e7-2959-48b3-b809-f7d66f844a22";
+    private static final UUID DUALITY_CRIT_BONUS_UUID = UUID.fromString("518354e7-2959-48b3-b809-f7d66f844a21");
+    private static final UUID DUALITY_CRIT_REDUCTION_UUID = UUID.fromString("518354e7-2959-48b3-b809-f7d66f844a22");
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void attributeModifier(ItemAttributeModifierEvent e) {
         ItemStack stack = e.getItemStack();
@@ -38,8 +38,8 @@ public class DualityCritModifierHandler {
                     float critChanceMultiplier = data.critChanceMultiplier;
                     float critDamageReduction = data.critDamageReduction;
 
-                    e.addModifier(ALObjects.Attributes.CRIT_DAMAGE.get(), new AttributeModifier(UUID.fromString(DUALITY_CRIT_REDUCTION_UUID), "dualityCritReduction", -critDamageReduction, AttributeModifier.Operation.ADDITION));
-                    e.addModifier(ALObjects.Attributes.CRIT_CHANCE.get(), new AttributeModifier(UUID.fromString(DUALITY_CRIT_BONUS_UUID), "dualityCritBonus", value * Math.max(critChanceMultiplier - 1f, 0f), AttributeModifier.Operation.ADDITION));
+                    e.addModifier(ALObjects.Attributes.CRIT_DAMAGE.get(), new AttributeModifier(DUALITY_CRIT_REDUCTION_UUID, "dualityCritReduction", -critDamageReduction, AttributeModifier.Operation.ADDITION));
+                    e.addModifier(ALObjects.Attributes.CRIT_CHANCE.get(), new AttributeModifier(DUALITY_CRIT_BONUS_UUID, "dualityCritBonus", value * Math.max(critChanceMultiplier - 1f, 0f), AttributeModifier.Operation.ADDITION));
                 }
             }
         }
