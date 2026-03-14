@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
+import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
@@ -75,6 +76,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(new HurtEventHandler());
         MinecraftForge.EVENT_BUS.register(new DualityCritModifierHandler());
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+        MinecraftForge.EVENT_BUS.register(UniversalBossEventHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");
