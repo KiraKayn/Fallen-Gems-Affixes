@@ -1,0 +1,43 @@
+{
+  "type": "fallen_gems_affixes:afflicted",
+  "damage_per_effect": {
+    "epic": {
+      "min": 0.05,
+      "steps": 5,
+      "step": 0.005
+    },
+    "mythic": {
+      "min": 0.06,
+      "steps": 4,
+      "step": 0.005
+    },
+    "ancient": {
+      "min": 0.07,
+      "steps": 5,
+      "step": 0.005
+    }
+  },
+  "speed_per_effect": {
+    "epic": {
+      "min": 0.025,
+      "steps": 5,
+      "step": 0.002
+    },
+    "mythic": {
+      "min": 0.03,
+      "steps": 4,
+      "step": 0.002
+    },
+    "ancient": {
+      "min": 0.035,
+      "steps": 5,
+      "step": 0.002
+    }
+  },
+  "types": [
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots"
+  ]
+}

@@ -523,5 +523,9 @@
   "item.fallen_gems_affixes.affix_scroll.empty": "No affix inscribed",
   "item.fallen_gems_affixes.affix_scroll.tooltip": "Apply via anvil to add an affix to equipment",
   "item.fallen_gems_affixes.sigil_of_erasure": "Sigil of Erasure",
-  "item.fallen_gems_affixes.sigil_of_erasure.tooltip": "Removes all scroll-applied affixes from an item"
+  "item.fallen_gems_affixes.sigil_of_erasure.tooltip": "Removes all scroll-applied affixes from an item",
+
+  "affix.fallen_gems_affixes.afflicted.desc": "For each negative effect on you, gain +%s%% damage and +%s%% movement speed",
+  "affix.fallen_gems_affixes:armor/afflicted": "Tormented",
+  "affix.fallen_gems_affixes:armor/afflicted.suffix": "of Spite"
 }

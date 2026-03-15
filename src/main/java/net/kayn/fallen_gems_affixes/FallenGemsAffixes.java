@@ -78,6 +78,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(UniversalBossEventHandler.class);
         MinecraftForge.EVENT_BUS.register(AffixScrollAnvilHandler.class);
+        MinecraftForge.EVENT_BUS.register(AfflictedEventHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

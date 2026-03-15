@@ -36,6 +36,7 @@ public class InitNewCodecs {
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "chain_shot"), ChainShotAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "true_shot"), TrueShotAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "homing"), HomingAffix.CODEC);
+            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "afflicted"), AfflictedAffix.CODEC);
 
             if (ModList.get().isLoaded("irons_spellbooks")) {
                 GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
