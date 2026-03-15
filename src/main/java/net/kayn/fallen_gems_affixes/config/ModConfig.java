@@ -75,7 +75,7 @@ public class ModConfig {
 
         AFFIX_SCROLL_XP_COST = BUILDER
                 .comment("XP level cost to apply an Affix Scroll in the anvil")
-                .defineInRange("affixScrollXpCost", 30, 1, 100);
+                .defineInRange("affixScrollXpCost", 15, 1, 100);
 
         MAX_SCROLL_SLOTS = BUILDER
                 .comment("Maximum number of Affix Scrolls that can be applied to a single item")
