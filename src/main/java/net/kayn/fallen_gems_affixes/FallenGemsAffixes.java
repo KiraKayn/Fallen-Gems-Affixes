@@ -8,7 +8,7 @@ import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
 import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.augment.GenesisEventHandler;
-import net.kayn.fallen_gems_affixes.commands.AugmentCommands;
+import net.kayn.fallen_gems_affixes.commands.ModCommands;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.*;
@@ -120,7 +120,7 @@ public class FallenGemsAffixes {
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        AugmentCommands.register(event.getDispatcher(), event.getBuildContext());
+        ModCommands.register(event.getDispatcher(), event.getBuildContext());
     }
 
     public static ResourceLocation id(@NotNull String path) {
