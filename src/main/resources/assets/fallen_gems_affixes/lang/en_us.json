@@ -541,5 +541,18 @@
   "affix.fallen_gems_affixes.spellblade.desc": "Melee hits reduce all active spell cooldowns by %ss",
   "affix.fallen_gems_affixes.mana_leech.desc":"On hit, restore %s%% of your missing mana",
   "affix.fallen_gems_affixes.berserker.desc": "Same target: +%s%% damage per hit, resets on switch or hit taken",
-  "affix.fallen_gems_affixes.feast.desc": "On kill, restore %s%% of your maximum health."
+  "affix.fallen_gems_affixes.feast.desc": "On kill, restore %s%% of your maximum health",
+
+  "affix.fallen_gems_affixes:armor/adaptive": "Adaptive",
+  "affix.fallen_gems_affixes:armor/adaptive.suffix": "of Adaptation",
+  "affix.fallen_gems_affixes:armor/fortify": "Fortified",
+  "affix.fallen_gems_affixes:armor/fortify.suffix": "of the Bulwark",
+
+  "affix.fallen_gems_affixes.adaptive.desc": "When hit, gain +%s%% damage reduction against that damage type [Max: %s%%] [%ss]",
+
+  "affix.fallen_gems_affixes.fortify.desc":  "While standing still, gain +%s%% of your base armor value as bonus armor",
+
+  "affix.fallen_gems_affixes:breaker/prospector": "Prospector's",
+  "affix.fallen_gems_affixes:breaker/prospector.suffix": "of Prospecting",
+  "affix.fallen_gems_affixes.prospector.desc": "Nearby ores within %s blocks glow through walls"
 }

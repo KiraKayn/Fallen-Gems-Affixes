@@ -21,7 +21,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -202,12 +201,6 @@ public class SpellEventHandler {
         if (totalReturn <= 0f) return;
 
         event.setNewMana(Math.min(event.getNewMana() + totalReturn, event.getOldMana()));
-    }
-
-    @SubscribeEvent
-    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        SpellFocusAffix.clearState(event.getEntity().getUUID());
-        BerserkerAffix.clearState(event.getEntity().getUUID());
     }
 
     private static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {

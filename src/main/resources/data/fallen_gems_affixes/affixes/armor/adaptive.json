@@ -1,0 +1,24 @@
+{
+  "type": "fallen_gems_affixes:adaptive",
+  "reduction_per_hit": {
+    "epic": 0.01,
+    "mythic": 0.02,
+    "ancient": 0.03
+  },
+  "max_reduction": {
+    "epic": 0.5,
+    "mythic": 0.10,
+    "ancient": 0.15
+  },
+  "duration_ticks": {
+    "epic": 100,
+    "mythic": 150,
+    "ancient": 200
+  },
+  "types": [
+    "helmet",
+    "chestplate",
+    "leggings",
+    "boots"
+  ]
+}

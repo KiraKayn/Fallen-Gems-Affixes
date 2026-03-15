@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.BerserkerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
+import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
@@ -81,6 +82,8 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(AffixScrollAnvilHandler.class);
         MinecraftForge.EVENT_BUS.register(AfflictedEventHandler.class);
         MinecraftForge.EVENT_BUS.register(BerserkerAffix.class);
+        MinecraftForge.EVENT_BUS.register(FortifyAffix.class);
+        MinecraftForge.EVENT_BUS.register(PlayerLogoutHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

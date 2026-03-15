@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:prospector",
+  "range": 24,
+  "types": [
+    "pickaxe"
+  ]
+}
