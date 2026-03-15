@@ -527,5 +527,19 @@
 
   "affix.fallen_gems_affixes.afflicted.desc": "For each negative effect on you, gain +%s%% damage and +%s%% movement speed",
   "affix.fallen_gems_affixes:armor/afflicted": "Tormented",
-  "affix.fallen_gems_affixes:armor/afflicted.suffix": "of Spite"
+  "affix.fallen_gems_affixes:armor/afflicted.suffix": "of Spite",
+
+  "affix.fallen_gems_affixes:spellblade": "Spellblade",
+  "affix.fallen_gems_affixes:spellblade.suffix": "of the Spellblade",
+  "affix.fallen_gems_affixes:mana_leech": "Leeching",
+  "affix.fallen_gems_affixes:mana_leech.suffix": "of Mana Theft",
+  "affix.fallen_gems_affixes:berserker": "Frenzied",
+  "affix.fallen_gems_affixes:berserker.suffix": "of the Berserker",
+  "affix.fallen_gems_affixes:feast": "Feasting",
+  "affix.fallen_gems_affixes:feast.suffix": "of the Glutton",
+
+  "affix.fallen_gems_affixes.spellblade.desc": "Melee hits reduce all active spell cooldowns by %ss",
+  "affix.fallen_gems_affixes.mana_leech.desc":"On hit, restore %s%% of your missing mana",
+  "affix.fallen_gems_affixes.berserker.desc": "Same target: +%s%% damage per hit, resets on switch or hit taken",
+  "affix.fallen_gems_affixes.feast.desc": "On kill, restore %s%% of your maximum health."
 }

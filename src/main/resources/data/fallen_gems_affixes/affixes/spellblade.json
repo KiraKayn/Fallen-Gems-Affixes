@@ -1,0 +1,24 @@
+{
+  "type": "fallen_gems_affixes:spellblade",
+  "values": {
+    "epic": {
+      "min": 3,
+      "steps": 5,
+      "step": 1
+    },
+    "mythic": {
+      "min": 4,
+      "steps": 4,
+      "step": 1
+    },
+    "ancient": {
+      "min": 5,
+      "steps": 5,
+      "step": 1
+    }
+  },
+  "types": [
+    "sword",
+    "heavy_weapon"
+  ]
+}

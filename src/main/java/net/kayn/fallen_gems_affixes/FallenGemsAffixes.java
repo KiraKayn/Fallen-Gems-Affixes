@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes;
 
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
+import net.kayn.fallen_gems_affixes.adventure.affix.BerserkerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
@@ -79,6 +80,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(UniversalBossEventHandler.class);
         MinecraftForge.EVENT_BUS.register(AffixScrollAnvilHandler.class);
         MinecraftForge.EVENT_BUS.register(AfflictedEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(BerserkerAffix.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

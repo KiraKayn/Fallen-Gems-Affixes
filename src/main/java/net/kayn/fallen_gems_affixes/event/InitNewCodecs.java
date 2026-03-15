@@ -37,6 +37,8 @@ public class InitNewCodecs {
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "true_shot"), TrueShotAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "homing"), HomingAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "afflicted"), AfflictedAffix.CODEC);
+            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "berserker"), BerserkerAffix.CODEC);
+            AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "feast"), FeastAffix.CODEC);
 
             if (ModList.get().isLoaded("irons_spellbooks")) {
                 GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
@@ -50,6 +52,8 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spell_focus"), SpellFocusAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "mana_shield"), ManaShieldAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "cooldown_reset"), CooldownResetAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "mana_leech"), ManaLeechAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spellblade"), SpellbladeAffix.CODEC);
             }
             ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });

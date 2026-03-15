@@ -207,6 +207,7 @@ public class SpellEventHandler {
     @SubscribeEvent
     public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         SpellFocusAffix.clearState(event.getEntity().getUUID());
+        BerserkerAffix.clearState(event.getEntity().getUUID());
     }
 
     private static void checkGemBonus(ItemStack itemStack, BonusProcessor processor) {
