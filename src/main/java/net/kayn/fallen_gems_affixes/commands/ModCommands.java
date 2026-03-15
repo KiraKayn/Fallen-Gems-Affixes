@@ -7,6 +7,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
+import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossConfig;
+import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.phys.Vec3;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
@@ -54,6 +64,8 @@ public class ModCommands {
             SharedSuggestionProvider.suggest(
                     AffixRegistry.INSTANCE.getKeys().stream().map(ResourceLocation::toString), builder);
 
+    public static final SuggestionProvider<CommandSourceStack> SUGGEST_ENTITY = SuggestionProviders.SUMMONABLE_ENTITIES;
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("fallen_gems_affixes")
                 .requires(c -> c.hasPermission(2));
@@ -87,6 +99,21 @@ public class ModCommands {
                                                         ResourceLocationArgument.getId(c, "affix"),
                                                         0.5f)))))));
 
+        // spawn empowered entity
+        builder.then(Commands.literal("spawn")
+                .then(Commands.argument("entity", ResourceLocationArgument.id())
+                        .suggests(SUGGEST_ENTITY)
+                        .then(Commands.argument("rarity", ResourceLocationArgument.id()).suggests(SUGGEST_RARITY)
+                                .then(Commands.argument("pos", Vec3Argument.vec3())
+                                        .executes(c -> spawnEmpowered(c,
+                                                ResourceLocationArgument.getId(c, "entity"),
+                                                ResourceLocationArgument.getId(c, "rarity"),
+                                                Vec3Argument.getVec3(c, "pos"))))
+                                .executes(c -> spawnEmpowered(c,
+                                        ResourceLocationArgument.getId(c, "entity"),
+                                        ResourceLocationArgument.getId(c, "rarity"),
+                                        null)))));
+
         dispatcher.register(builder);
     }
 
@@ -117,6 +144,64 @@ public class ModCommands {
                 "Gave " + player.getName().getString() +
                         " a scroll: " + affixId.getPath() +
                         " (" + rarityId.getPath() + ", level " + String.format("%.2f", level) + ")"), true);
+        return 1;
+    }
+
+    private static int spawnEmpowered(CommandContext<CommandSourceStack> ctx,
+                                      ResourceLocation entityId,
+                                      ResourceLocation rarityId,
+                                      Vec3 pos) throws CommandSyntaxException {
+        DynamicHolder<LootRarity> rarityHolder = RarityRegistry.INSTANCE.holder(rarityId);
+        if (!rarityHolder.isBound()) {
+            ctx.getSource().sendFailure(Component.literal("Unknown rarity: " + rarityId));
+            return -1;
+        }
+
+        EntityType<?> entityType = net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getValue(entityId);
+        if (entityType == null) {
+            ctx.getSource().sendFailure(Component.literal("Unknown entity: " + entityId));
+            return -2;
+        }
+
+        ServerLevel level = ctx.getSource().getLevel();
+        Vec3 spawnPos = pos != null ? pos : ctx.getSource().getPosition();
+
+        var entity = entityType.create(level);
+        if (!(entity instanceof Mob mob)) {
+            ctx.getSource().sendFailure(Component.literal("Entity must be a mob."));
+            return -3;
+        }
+
+        mob.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
+        mob.finalizeSpawn(level, level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.COMMAND, null, null);
+
+        LootRarity rarity = rarityHolder.get();
+        UniversalBossConfig config = UniversalBossLoader.getConfig();
+        if (config != null) {
+            var stats = config.stats().get(rarity);
+            if (stats != null) {
+                int duration = mob instanceof Creeper ? 6000 : Integer.MAX_VALUE;
+                for (var inst : stats.effects()) {
+                    if (mob.getRandom().nextFloat() <= inst.chance()) mob.addEffect(inst.create(mob.getRandom(), duration));
+                }
+                for (var modif : stats.modifiers()) modif.apply(mob.getRandom(), mob);
+                mob.setHealth(mob.getMaxHealth());
+            }
+        }
+
+        mob.getPersistentData().putBoolean("fga.universal_boss", true);
+        mob.getPersistentData().putString("fga.universal_boss.rarity", rarityId.getPath());
+        mob.getPersistentData().putBoolean("apoth.boss", true);
+        mob.getPersistentData().putString("apoth.rarity", rarityId.getPath());
+
+        mob.setCustomName(mob.getName().copy().withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(rarity.getColor())));
+
+        level.addFreshEntity(mob);
+
+        final Vec3 finalPos = spawnPos;
+        ctx.getSource().sendSuccess(() -> Component.literal(
+                "Spawned " + rarityId.getPath() + " " + entityId.getPath() +
+                        " at " + String.format("%.1f %.1f %.1f", finalPos.x, finalPos.y, finalPos.z)), true);
         return 1;
     }
 
