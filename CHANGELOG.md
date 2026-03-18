@@ -2,7 +2,6 @@
 - Fixed a bug in apotheosis 1.20.1 which made it so multiple affixes targeting the same attribute don't apply correctly
 - Removed the unnecessary "Makes the item Fabled" text from Supremacy Augment
 - Removed the categories from Soulbound and Socket Bonus affixes, now they can appear on all categories
-
 - Added Cooldown Reset Affix - X% chance to reset the cooldown of the casted spell
 - Added Mana Shield Affix - While Above 50% mana, reduce incoming damage by X%
 - Added Spell Focus Affix - Consecutive Casts of the same spell on the same target stack +X% damage up to X%, resets on spell switch or target switch
@@ -14,7 +13,6 @@
 - Added Fortify Affix - Your armor value scales up by X% when you are standing still
 - Added Afflicted Affix - For each negative effect on you, gain X% damage and X% movement speed
 - Added Prospector Affix - Nearby ores within X blocks glow through walls
-
 - Implemented a new feature called Universal Bosses, which makes it so any hostile entity spawned can become an Apothic Boss, significantly making enemies stronger
 - These type of enemies can drop 3 things: Affix Scrolls, Gem Dust and Enchant Books (Configurable in a loot modifier)
 - Affix Scroll is a new item that carries a single random affix matching the tier of the enemy that dropped it.
