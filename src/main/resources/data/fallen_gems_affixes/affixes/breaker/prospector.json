@@ -1,6 +1,10 @@
 {
   "type": "fallen_gems_affixes:prospector",
-  "range": 24,
+  "range": {
+    "epic": 8,
+    "mythic": 16,
+    "ancient": 24
+  },
   "types": [
     "pickaxe"
   ]

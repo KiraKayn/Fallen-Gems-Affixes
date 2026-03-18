@@ -102,7 +102,7 @@ public class ProspectorHighlightHandler {
         BufferBuilder buf = tesselator.getBuilder();
         buf.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
 
-        float r = 0.0f, g = 0.8f, b = 0.9f, a = 0.35f;
+        float r = 1.0f, g = 0.85f, b = 0.0f, a = 0.6f;
 
         Matrix4f mat = pose.last().pose();
 
@@ -157,7 +157,7 @@ public class ProspectorHighlightHandler {
             for (var inst : AffixHelper.getAffixes(stack).values()) {
                 if (!inst.isValid()) continue;
                 if (inst.affix().get() instanceof ProspectorAffix affix) {
-                    return affix.getRange();
+                    return affix.getRange(inst.rarity().get());
                 }
             }
         }
