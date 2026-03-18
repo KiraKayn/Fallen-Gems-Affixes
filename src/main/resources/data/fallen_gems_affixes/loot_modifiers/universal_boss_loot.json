@@ -2,6 +2,9 @@
   "type": "fallen_gems_affixes:universal_boss_loot",
   "conditions": [],
   "enchant_book_chance": 0.15,
+  "enchant_blacklist": [
+    "minecraft:mending"
+  ],
   "rarity_drops": {
     "common": [
       {

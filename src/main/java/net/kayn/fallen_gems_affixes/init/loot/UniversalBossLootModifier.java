@@ -27,41 +27,31 @@ import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class UniversalBossLootModifier extends LootModifier {
 
-    public static final Supplier<Codec<UniversalBossLootModifier>> CODEC_SUPPLIER =
-            Suppliers.memoize(UniversalBossLootModifier::makeCodec);
+    public static final Supplier<Codec<UniversalBossLootModifier>> CODEC_SUPPLIER = Suppliers.memoize(UniversalBossLootModifier::makeCodec);
+    public static final Codec<UniversalBossLootModifier> CODEC = CODEC_SUPPLIER.get();
 
     private static Codec<UniversalBossLootModifier> makeCodec() {
-        return RecordCodecBuilder.create(inst -> codecStart(inst).and(
-                inst.group(
-                        Codec.DOUBLE.fieldOf("enchant_book_chance").forGetter(m -> m.enchantBookChance),
-                        Codec.unboundedMap(Codec.STRING, Codec.list(RarityDropEntry.CODEC))
-                                .fieldOf("rarity_drops").forGetter(m -> m.rarityDrops)
-                )).apply(inst, (conditions, chance, drops) ->
-                new UniversalBossLootModifier(conditions, chance, drops)));
+        return RecordCodecBuilder.create(inst -> codecStart(inst).and(inst.group(Codec.DOUBLE.fieldOf("enchant_book_chance").forGetter(m -> m.enchantBookChance), Codec.unboundedMap(Codec.STRING, Codec.list(RarityDropEntry.CODEC)).fieldOf("rarity_drops").forGetter(m -> m.rarityDrops), Codec.list(ResourceLocation.CODEC).optionalFieldOf("enchant_blacklist", Collections.emptyList()).forGetter(m -> new ArrayList<>(m.enchantBlacklist)))).apply(inst, (conditions, chance, drops, blacklist) -> new UniversalBossLootModifier(conditions, chance, drops, new HashSet<>(blacklist))));
     }
 
     private final double enchantBookChance;
     private final Map<String, List<RarityDropEntry>> rarityDrops;
+    private final Set<ResourceLocation> enchantBlacklist;
 
-    public UniversalBossLootModifier(LootItemCondition[] conditions,
-                                     double enchantBookChance,
-                                     Map<String, List<RarityDropEntry>> rarityDrops) {
+    public UniversalBossLootModifier(LootItemCondition[] conditions, double enchantBookChance, Map<String, List<RarityDropEntry>> rarityDrops, Set<ResourceLocation> enchantBlacklist) {
         super(conditions);
         this.enchantBookChance = enchantBookChance;
-        this.rarityDrops       = rarityDrops;
+        this.rarityDrops = rarityDrops;
+        this.enchantBlacklist = enchantBlacklist;
     }
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(
-            ObjectArrayList<ItemStack> loot, LootContext ctx) {
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext ctx) {
 
         Entity entity = ctx.getParamOrNull(LootContextParams.THIS_ENTITY);
         if (!(entity instanceof LivingEntity living)) return loot;
@@ -89,7 +79,7 @@ public class UniversalBossLootModifier extends LootModifier {
 
         attempts.add(() -> {
             if (ctx.getRandom().nextDouble() < enchantBookChance) {
-                ItemStack book = rollEnchantedBook(ctx);
+                ItemStack book = rollEnchantedBook(ctx, enchantBlacklist);
                 if (!book.isEmpty()) loot.add(book);
             }
         });
@@ -100,15 +90,13 @@ public class UniversalBossLootModifier extends LootModifier {
                 if (ctx.getRandom().nextDouble() < entry.chance()) {
                     var itemObj = ForgeRegistries.ITEMS.getValue(entry.item());
                     if (itemObj != null) {
-                        int count = entry.minCount() + ctx.getRandom().nextInt(
-                                Math.max(1, entry.maxCount() - entry.minCount() + 1));
+                        int count = entry.minCount() + ctx.getRandom().nextInt(Math.max(1, entry.maxCount() - entry.minCount() + 1));
                         loot.add(new ItemStack(itemObj, count));
                     }
                 }
             });
         }
 
-        // Shuffle and run until one actually adds a drop
         Collections.shuffle(attempts, new java.util.Random(ctx.getRandom().nextLong()));
         int sizeBefore = loot.size();
         for (Runnable attempt : attempts) {
@@ -143,11 +131,13 @@ public class UniversalBossLootModifier extends LootModifier {
         return candidates.get(rand.nextInt(candidates.size()));
     }
 
-    private static ItemStack rollEnchantedBook(LootContext ctx) {
+    private static ItemStack rollEnchantedBook(LootContext ctx, Set<ResourceLocation> blacklist) {
         List<Enchantment> enchants = new ArrayList<>(ForgeRegistries.ENCHANTMENTS.getValues());
         Collections.shuffle(enchants, new java.util.Random(ctx.getRandom().nextLong()));
         for (Enchantment ench : enchants) {
             if (ench.isCurse()) continue;
+            ResourceLocation enchId = ForgeRegistries.ENCHANTMENTS.getKey(ench);
+            if (enchId != null && blacklist.contains(enchId)) continue;
             int maxLevel = ench.getMaxLevel();
             int level = maxLevel > 1 ? 1 + ctx.getRandom().nextInt(maxLevel) : 1;
             ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
@@ -163,11 +153,6 @@ public class UniversalBossLootModifier extends LootModifier {
     }
 
     public record RarityDropEntry(ResourceLocation item, double chance, int minCount, int maxCount) {
-        public static final Codec<RarityDropEntry> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-                ResourceLocation.CODEC.fieldOf("item").forGetter(RarityDropEntry::item),
-                Codec.DOUBLE.fieldOf("chance").forGetter(RarityDropEntry::chance),
-                Codec.INT.fieldOf("min_count").forGetter(RarityDropEntry::minCount),
-                Codec.INT.fieldOf("max_count").forGetter(RarityDropEntry::maxCount)
-        ).apply(inst, RarityDropEntry::new));
+        public static final Codec<RarityDropEntry> CODEC = RecordCodecBuilder.create(inst -> inst.group(ResourceLocation.CODEC.fieldOf("item").forGetter(RarityDropEntry::item), Codec.DOUBLE.fieldOf("chance").forGetter(RarityDropEntry::chance), Codec.INT.fieldOf("min_count").forGetter(RarityDropEntry::minCount), Codec.INT.fieldOf("max_count").forGetter(RarityDropEntry::maxCount)).apply(inst, RarityDropEntry::new));
     }
 }

@@ -1,12 +1,12 @@
 package net.kayn.fallen_gems_affixes.init.loot;
 
 import com.mojang.serialization.Codec;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 
 public class ModLootModifier {
     public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS =
@@ -19,7 +19,7 @@ public class ModLootModifier {
             LOOT_MODIFIERS.register("socket_gem_modifier", () -> SocketGemModifier.CODEC);
 
     public static final RegistryObject<Codec<UniversalBossLootModifier>> UNIVERSAL_BOSS_LOOT =
-            LOOT_MODIFIERS.register("universal_boss_loot", UniversalBossLootModifier.CODEC_SUPPLIER::get);
+            LOOT_MODIFIERS.register("universal_boss_loot", () -> UniversalBossLootModifier.CODEC);
 
 
     public static void register(IEventBus eventBus) {
