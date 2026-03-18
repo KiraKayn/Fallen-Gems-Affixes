@@ -1,3 +1,6 @@
+# 2.0.5HF
+- Added ore compat to Prospector Affix, made it so it uses blocks from #forge:tags too
+
 # 2.0.5
 - Fixed a bug in apotheosis 1.20.1 which made it so multiple affixes targeting the same attribute don't apply correctly
 - Removed the unnecessary "Makes the item Fabled" text from Supremacy Augment
