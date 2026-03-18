@@ -68,8 +68,8 @@ public class ProspectorHighlightHandler {
                             || state.is(BlockTags.LAPIS_ORES)
                             || state.is(BlockTags.REDSTONE_ORES)
                             || state.is(BlockTags.COPPER_ORES)
-                            || state.is(net.minecraft.tags.BlockTags.create(
-                            new net.minecraft.resources.ResourceLocation("c", "ores")))) {
+                            || state.is(net.minecraft.tags.BlockTags.create(new net.minecraft.resources.ResourceLocation("forge", "ores")))
+                            || state.is(net.minecraft.tags.BlockTags.create(new net.minecraft.resources.ResourceLocation("c", "ores")))) {
                         found.add(mutable.immutable());
                     }
                 }
