@@ -2,7 +2,6 @@ package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import net.kayn.fallen_gems_affixes.adventure.affix.AfflictedAffix;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,17 +20,6 @@ public class AfflictedEventHandler {
     public static void onLivingHurt(LivingHurtEvent event) {
         Entity attacker = event.getSource().getEntity();
         if (!(attacker instanceof LivingEntity living)) return;
-        if (living.level().isClientSide()) return;
-
-        float totalBonus = getTotalDamageBonus(living);
-        if (totalBonus <= 0f) return;
-
-        event.setAmount(event.getAmount() * (1f + totalBonus));
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onSpellDamage(SpellDamageEvent event) {
-        if (!(event.getSpellDamageSource().getEntity() instanceof LivingEntity living)) return;
         if (living.level().isClientSide()) return;
 
         float totalBonus = getTotalDamageBonus(living);
