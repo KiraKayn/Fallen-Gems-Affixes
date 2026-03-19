@@ -2,11 +2,13 @@ package net.kayn.fallen_gems_affixes.adventure.boss;
 
 import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
 import dev.shadowsoffire.placebo.json.RandomAttributeModifier;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
@@ -15,6 +17,8 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Objects;
 
 public class UniversalBossEventHandler {
 
@@ -67,9 +71,14 @@ public class UniversalBossEventHandler {
 
         mob.setHealth(mob.getMaxHealth());
 
-        Component name = mob.hasCustomName()
-                ? mob.getCustomName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor()))
-                : mob.getName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor()));
+        String rarityPath = RarityRegistry.INSTANCE.getKey(rarity) != null
+                ? Objects.requireNonNull(RarityRegistry.INSTANCE.getKey(rarity)).getPath() : "unknown";
+        String rarityTitle = rarityPath.substring(0, 1).toUpperCase() + rarityPath.substring(1);
+        Component mobName = mob.hasCustomName() ? mob.getCustomName() : mob.getName();
+        assert mobName != null;
+        MutableComponent name = Component.literal(rarityTitle + " ")
+                .withStyle(Style.EMPTY.withColor(rarity.getColor()))
+                .append(mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
         mob.setCustomName(name);
         mob.setCustomNameVisible(true);
     }
