@@ -1,3 +1,4 @@
+/*
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
@@ -44,4 +45,4 @@ public class BossSlayerHandler {
             });
         });
     }
-}
+}*/
