@@ -1,3 +1,4 @@
+/*
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
@@ -59,4 +60,4 @@ public class BossResistanceHandler {
             event.setAmount(event.getAmount() * (1.0F - totalReduction[0]));
         }
     }
-}
+}*/
