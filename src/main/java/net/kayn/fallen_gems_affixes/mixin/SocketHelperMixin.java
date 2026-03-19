@@ -21,7 +21,7 @@ import static dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper.getSock
 
 @Mixin(value = SocketHelper.class, remap = false)
 public class SocketHelperMixin {
-    @Inject(method = {"getGemsImpl"}, at = {@At("HEAD")})
+    @Inject(method = {"getGems(Lnet/minecraft/world/item/ItemStack;)Ldev/shadowsoffire/apotheosis/adventure/socket/SocketedGems;"}, at = {@At("HEAD")})
     private static void suspendItemStack(ItemStack stack, CallbackInfoReturnable<SocketedGems> cir) {
         GemBonusModifier.suspendItemStack(stack);
     }
