@@ -1,3 +1,8 @@
+# 2.0.6
+- Removed SpellDamageEvent from AfflictedEventHandler, fixing the crash if ISS is not installed
+- Fixed Gem Power not applying correctly
+- Empowered enemies now have their rarity in their name
+
 # 2.0.5HF
 - Added ore compat to Prospector Affix, now highlights blocks tagged as #forge:ores and #c:ores in addition to vanilla ore tags
 
