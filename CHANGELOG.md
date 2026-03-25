@@ -1,3 +1,9 @@
+# 2.0.7
+- Fixed player-placed spawners converting into Boss Spawners
+- Added a feature that lets the universal_boss.json file use tags, instead of just entity ids
+- Affix Scroll Item now displays the category it goes on
+- Added a Config to set default sockets for all items with a valid LootCategory, globally
+
 # 2.0.6
 - Removed SpellDamageEvent from AfflictedEventHandler, fixing the crash if ISS is not installed
 - Fixed Gem Power not applying correctly
