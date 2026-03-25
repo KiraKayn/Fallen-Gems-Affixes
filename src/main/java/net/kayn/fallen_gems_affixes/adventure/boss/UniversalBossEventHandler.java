@@ -37,7 +37,7 @@ public class UniversalBossEventHandler {
         if (config == null) return;
 
         var entityId = ForgeRegistries.ENTITY_TYPES.getKey(mob.getType());
-        if (entityId != null && config.blacklist().contains(entityId)) return;
+        if (config.isBlacklisted(mob.getType(), entityId)) return;
 
         LootRarity rarity = config.rollRarity(mob.getRandom());
         if (rarity == null) return;

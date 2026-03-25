@@ -9,10 +9,13 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     private static final Map<String, Float> RAW_TIER_CHANCES = new LinkedHashMap<>();
     private static final Map<String, BossStats> RAW_STATS = new LinkedHashMap<>();
     private static final List<ResourceLocation> BLACKLIST = new ArrayList<>();
+    private static final List<TagKey<EntityType<?>>> BLACKLIST_TAGS = new ArrayList<>();
 
     @Nullable
     private static UniversalBossConfig resolvedConfig = null;
@@ -58,7 +62,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         }
 
         if (tierChances.isEmpty()) return null;
-        return new UniversalBossConfig(tierChances, statsMap, BLACKLIST);
+        return new UniversalBossConfig(tierChances, statsMap, BLACKLIST, BLACKLIST_TAGS);
     }
 
     @Nullable
@@ -76,6 +80,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         RAW_TIER_CHANCES.clear();
         RAW_STATS.clear();
         BLACKLIST.clear();
+        BLACKLIST_TAGS.clear();
         resolvedConfig = null;
 
         JsonObject json = null;
@@ -103,7 +108,15 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             }
 
             if (json.has("blacklist")) {
-                json.getAsJsonArray("blacklist").forEach(e -> BLACKLIST.add(new ResourceLocation(e.getAsString())));
+                json.getAsJsonArray("blacklist").forEach(e -> {
+                    String s = e.getAsString();
+                    if (s.startsWith("#")) {
+                        ResourceLocation tagId = new ResourceLocation(s.substring(1));
+                        BLACKLIST_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, tagId));
+                    } else {
+                        BLACKLIST.add(new ResourceLocation(s));
+                    }
+                });
             }
 
             FallenGemsAffixes.LOGGER.info("universal_boss: loaded {} raw tiers (resolution deferred until first use).", RAW_TIER_CHANCES.size());
