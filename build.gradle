@@ -194,7 +194,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:selene-499980:6611244")
     runtimeOnly fg.deobf("curse.maven:patchouli-306770:6164575")
     // fallen_lib-dev_version (not normal version)
-    implementation fg.deobf("io.github.rtxyd:fallen-lib:${fallen_lib_version}:dev")
+    implementation fg.deobf("io.github.rtxyd:fallen-lib:${fallen_lib_version}:core")
+    implementation fg.deobf("io.github.rtxyd:fallen-lib:${fallen_lib_version}:runtime")
 }
 
 mixin {
