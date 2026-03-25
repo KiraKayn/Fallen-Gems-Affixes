@@ -22,6 +22,8 @@ public class ModConfig {
     public static final ForgeConfigSpec.DoubleValue AFFIX_SCROLL_DROP_CHANCE;
     public static final ForgeConfigSpec.IntValue AFFIX_SCROLL_XP_COST;
     public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
+    public static final ForgeConfigSpec.BooleanValue SHOW_BOSS_RARITY_NAME;
+    public static final ForgeConfigSpec.IntValue EXTRA_SOCKETS;
 
     static {
         BUILDER.push("Mod Config");
@@ -71,7 +73,7 @@ public class ModConfig {
 
         AFFIX_SCROLL_DROP_CHANCE = BUILDER
                 .comment("Chance for a universal boss to drop an Affix Scroll on death (0.0 = never, 1.0 = always)")
-                .defineInRange("affixScrollDropChance", 0.5, 0.0, 1.0);
+                .defineInRange("affixScrollDropChance", 0.05, 0.0, 1.0);
 
         AFFIX_SCROLL_XP_COST = BUILDER
                 .comment("XP level cost to apply an Affix Scroll in the anvil")
@@ -80,6 +82,18 @@ public class ModConfig {
         MAX_SCROLL_SLOTS = BUILDER
                 .comment("Maximum number of Affix Scrolls that can be applied to a single item")
                 .defineInRange("maxScrollSlots", 2, 0, 10);
+
+        SHOW_BOSS_RARITY_NAME = BUILDER
+                .comment("If true, universal bosses will have their rarity name prefixed (e.g. 'Mythic Zombie').")
+                .define("showUniversalBossRarityName", true);
+
+        EXTRA_SOCKETS = BUILDER
+                .comment(
+                        "Adds extra sockets to ALL items with a valid LootCategory.",
+                        "This value is added on top of existing sockets.",
+                        "Set to 0 to disable."
+                )
+                .defineInRange("extraSockets", 0, 0, 10);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")

@@ -37,7 +37,7 @@ public class UniversalBossEventHandler {
         if (config == null) return;
 
         var entityId = ForgeRegistries.ENTITY_TYPES.getKey(mob.getType());
-        if (entityId != null && config.blacklist().contains(entityId)) return;
+        if (config.isBlacklisted(mob.getType(), entityId)) return;
 
         LootRarity rarity = config.rollRarity(mob.getRandom());
         if (rarity == null) return;
@@ -76,9 +76,15 @@ public class UniversalBossEventHandler {
         String rarityTitle = rarityPath.substring(0, 1).toUpperCase() + rarityPath.substring(1);
         Component mobName = mob.hasCustomName() ? mob.getCustomName() : mob.getName();
         assert mobName != null;
-        MutableComponent name = Component.literal(rarityTitle + " ")
-                .withStyle(Style.EMPTY.withColor(rarity.getColor()))
-                .append(mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
+        MutableComponent name;
+
+        if (net.kayn.fallen_gems_affixes.config.ModConfig.SHOW_BOSS_RARITY_NAME.get()) {
+            name = Component.literal(rarityTitle + " ")
+                    .withStyle(Style.EMPTY.withColor(rarity.getColor()))
+                    .append(mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
+        } else {
+            name = mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor()));
+        }
         mob.setCustomName(name);
         mob.setCustomNameVisible(true);
     }

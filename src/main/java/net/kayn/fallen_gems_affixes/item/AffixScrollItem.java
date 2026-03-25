@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.item;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import net.minecraft.ChatFormatting;
@@ -48,6 +49,19 @@ public class AffixScrollItem extends Item {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Nullable
+    private static LootCategory getAffixCategory(Affix affix, LootRarity rarity, ItemStack stack, float level) {
+        for (LootCategory cat : LootCategory.VALUES) {
+            if (cat.isNone()) continue;
+            try {
+                if (affix.canApplyTo(stack, cat, rarity)) {
+                    return cat;
+                }
+            } catch (Exception ignored) {}
+        }
+        return null;
     }
 
     public static float getAffixLevel(ItemStack stack) {
@@ -103,5 +117,19 @@ public class AffixScrollItem extends Item {
 
         tooltip.add(Component.translatable("item.fallen_gems_affixes.affix_scroll.tooltip")
                 .withStyle(ChatFormatting.GRAY));
+
+        if (affixId != null && rarity != null) {
+            Affix affix = AffixRegistry.INSTANCE.getValue(affixId);
+            if (affix != null) {
+                LootCategory category = getAffixCategory(affix, rarity, stack, affixLevel);
+
+                if (category != null) {
+                    tooltip.add(
+                            Component.translatable(category.getDescId())
+                                    .withStyle(Style.EMPTY.withColor(rarity.getColor()))
+                    );
+                }
+            }
+        }
     }
 }

@@ -141,6 +141,8 @@ dependencies {
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6608233")
     implementation fg.deobf("curse.maven:spark-361579:4738952")
+    runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
+    runtimeOnly fg.deobf("curse.maven:modernfix-790626:7515215")
 
 
     runtimeOnly fg.deobf("curse.maven:corpse-316582:6624394")

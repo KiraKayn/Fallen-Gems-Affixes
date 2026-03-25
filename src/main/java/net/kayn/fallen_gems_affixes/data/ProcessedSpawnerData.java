@@ -15,6 +15,7 @@ public class ProcessedSpawnerData extends SavedData {
 
     private static final String NAME = "fallen_gems_affixes_processed_spawners";
     private final Set<Long> processedPositions = new HashSet<>();
+    private final Set<Long> playerPlacedPositions = new HashSet<>();
 
     public static ProcessedSpawnerData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
@@ -22,6 +23,15 @@ public class ProcessedSpawnerData extends SavedData {
                 ProcessedSpawnerData::new,
                 NAME
         );
+    }
+
+    public boolean isPlayerPlaced(BlockPos pos) {
+        return playerPlacedPositions.contains(pos.asLong());
+    }
+
+    public void markPlayerPlaced(BlockPos pos) {
+        playerPlacedPositions.add(pos.asLong());
+        setDirty();
     }
 
     public boolean isProcessed(BlockPos pos) {
@@ -35,16 +45,26 @@ public class ProcessedSpawnerData extends SavedData {
 
     @Override
     public CompoundTag save(CompoundTag tag) {
-        ListTag list = new ListTag();
-        for (long l : processedPositions) list.add(LongTag.valueOf(l));
-        tag.put("positions", list);
+        ListTag processed = new ListTag();
+        for (long l : processedPositions) processed.add(LongTag.valueOf(l));
+        tag.put("positions", processed);
+
+        ListTag placed = new ListTag();
+        for (long l : playerPlacedPositions) placed.add(LongTag.valueOf(l));
+        tag.put("player_placed_positions", placed);
+
         return tag;
     }
 
     private static ProcessedSpawnerData load(CompoundTag tag) {
         ProcessedSpawnerData data = new ProcessedSpawnerData();
-        ListTag list = tag.getList("positions", Tag.TAG_LONG);
-        for (Tag entry : list) data.processedPositions.add(((LongTag) entry).getAsLong());
+
+        ListTag processed = tag.getList("positions", Tag.TAG_LONG);
+        for (Tag entry : processed) data.processedPositions.add(((LongTag) entry).getAsLong());
+
+        ListTag placed = tag.getList("player_placed_positions", Tag.TAG_LONG);
+        for (Tag entry : placed) data.playerPlacedPositions.add(((LongTag) entry).getAsLong());
+
         return data;
     }
 }
