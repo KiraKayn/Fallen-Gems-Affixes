@@ -1,3 +1,4 @@
+/*
 package net.kayn.fallen_gems_affixes.adventure.socket.gem;
 
 import java.util.List;
@@ -83,4 +84,4 @@ public class ExtraGemBonusRegistry extends DynamicRegistry<ExtraGemBonusRegistry
             return CODEC;
         }
     }
-}
+}*/

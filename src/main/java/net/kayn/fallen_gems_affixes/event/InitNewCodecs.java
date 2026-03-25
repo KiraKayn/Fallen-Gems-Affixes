@@ -3,7 +3,6 @@ package net.kayn.fallen_gems_affixes.event;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import net.kayn.fallen_gems_affixes.adventure.affix.*;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.ExtraGemBonusRegistry;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.*;
 import net.kayn.fallen_gems_affixes.util.GemBonusUtil;
 import net.minecraft.resources.ResourceLocation;
@@ -58,7 +57,7 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "mana_leech"), ManaLeechAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spellblade"), SpellbladeAffix.CODEC);
             }
-            ExtraGemBonusRegistry.INSTANCE.registerToBus();
+//            ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });
     }
 }

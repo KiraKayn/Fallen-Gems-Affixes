@@ -1,3 +1,4 @@
+/*
 package net.kayn.fallen_gems_affixes.mixin;
 
 import java.util.ArrayList;
@@ -74,4 +75,4 @@ public class GemMixin implements GemBonusExtension {
             list.accept(sum);
         }
     }
-}
+}*/

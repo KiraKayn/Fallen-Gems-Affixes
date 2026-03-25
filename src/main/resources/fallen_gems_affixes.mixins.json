@@ -10,7 +10,6 @@
     "AttributesLibTooltipFix",
     "AugmentingMenuMixin",
     "CritMixin",
-    "GemMixin",
     "LootControllerMixin",
     "SocketHelperMixin",
     "TrueShotMixin",
