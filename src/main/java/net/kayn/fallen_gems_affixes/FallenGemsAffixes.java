@@ -45,11 +45,7 @@ public class FallenGemsAffixes {
         LOGGER.info("Loading Fallen Gems & Affixes");
 
         // Ensure required library is available
-        try {
-            isLibAvailable();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        // now Fallen Lib check can be replaced by a mod.toml setting.
 
         // Config & setup listeners
         context.registerConfig(Type.COMMON, ModConfig.SPEC);
@@ -107,16 +103,6 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
             MinecraftForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
-        }
-    }
-
-    private void isLibAvailable() throws ClassNotFoundException {
-        try {
-            Class.forName("net.rtxyd.fallen.lib.service.FallenBootstrap");
-        } catch (ClassNotFoundException e) {
-            final String libId = "fallen_lib";
-            final String version = "1.2.0-hotfix";
-            throw new ClassNotFoundException(MiscUtil.missingModMessage(MOD_ID, libId, version));
         }
     }
 
