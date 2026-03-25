@@ -68,11 +68,11 @@ public class ModConfig {
 
         BOSS_SPAWNER_CHANCE = BUILDER
                 .comment("Chance for a natural spawner to become a boss spawner (0.0 = never, 1.0 = always)")
-                .defineInRange("bossSpawnerChance", 1, 0.0, 1.0);
+                .defineInRange("bossSpawnerChance", 0.15, 0.0, 1.0);
 
         AFFIX_SCROLL_DROP_CHANCE = BUILDER
                 .comment("Chance for a universal boss to drop an Affix Scroll on death (0.0 = never, 1.0 = always)")
-                .defineInRange("affixScrollDropChance", 0.5, 0.0, 1.0);
+                .defineInRange("affixScrollDropChance", 0.05, 0.0, 1.0);
 
         AFFIX_SCROLL_XP_COST = BUILDER
                 .comment("XP level cost to apply an Affix Scroll in the anvil")
