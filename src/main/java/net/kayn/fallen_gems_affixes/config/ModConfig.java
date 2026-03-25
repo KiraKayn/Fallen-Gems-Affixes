@@ -22,6 +22,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.DoubleValue AFFIX_SCROLL_DROP_CHANCE;
     public static final ForgeConfigSpec.IntValue AFFIX_SCROLL_XP_COST;
     public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
+    public static final ForgeConfigSpec.BooleanValue SHOW_BOSS_RARITY_NAME;
 
     static {
         BUILDER.push("Mod Config");
@@ -67,7 +68,7 @@ public class ModConfig {
 
         BOSS_SPAWNER_CHANCE = BUILDER
                 .comment("Chance for a natural spawner to become a boss spawner (0.0 = never, 1.0 = always)")
-                .defineInRange("bossSpawnerChance", 0.15, 0.0, 1.0);
+                .defineInRange("bossSpawnerChance", 1, 0.0, 1.0);
 
         AFFIX_SCROLL_DROP_CHANCE = BUILDER
                 .comment("Chance for a universal boss to drop an Affix Scroll on death (0.0 = never, 1.0 = always)")
@@ -80,6 +81,10 @@ public class ModConfig {
         MAX_SCROLL_SLOTS = BUILDER
                 .comment("Maximum number of Affix Scrolls that can be applied to a single item")
                 .defineInRange("maxScrollSlots", 2, 0, 10);
+
+        SHOW_BOSS_RARITY_NAME = BUILDER
+                .comment("If true, universal bosses will have their rarity name prefixed (e.g. 'Mythic Zombie').")
+                .define("showUniversalBossRarityName", true);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
