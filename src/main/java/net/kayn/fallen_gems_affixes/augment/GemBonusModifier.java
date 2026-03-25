@@ -4,6 +4,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -30,6 +31,7 @@ public class GemBonusModifier {
     private static ObjectModifierFactory FACTORY;
     private static final ThreadLocal<Boolean> isKeyValid = ThreadLocal.withInitial(() -> false);
     public static final ThreadLocal<ItemStack> currentSuspendedItemStack = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
+    public static final ThreadLocal<Boolean> clientMarker = ThreadLocal.withInitial(() -> false);
 
     @FallenInserter(type = InserterType.STANDARD)
     public static Object modifier(IInserterContext<Object, Object> ctx, Object... args) {
@@ -53,7 +55,13 @@ public class GemBonusModifier {
         eventBus.addListener(EventPriority.HIGHEST, GemBonusModifier::onTooltipEvent);
     }
 
+    // since gem stats are mostly computed on serverside.
+    // if there are some gem stats computed on clientside (visual things),
+    // we need to improve this implementation at that time.
     public static void onTooltipEvent(ItemTooltipEvent event) {
+        if (event.getEntity() != null) {
+            clientMarker.set(event.getEntity().level().isClientSide);
+        }
         suspendItemStack(event.getItemStack());
     }
 
