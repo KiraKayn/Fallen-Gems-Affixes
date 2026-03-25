@@ -23,6 +23,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.IntValue AFFIX_SCROLL_XP_COST;
     public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
     public static final ForgeConfigSpec.BooleanValue SHOW_BOSS_RARITY_NAME;
+    public static final ForgeConfigSpec.IntValue EXTRA_SOCKETS;
 
     static {
         BUILDER.push("Mod Config");
@@ -85,6 +86,14 @@ public class ModConfig {
         SHOW_BOSS_RARITY_NAME = BUILDER
                 .comment("If true, universal bosses will have their rarity name prefixed (e.g. 'Mythic Zombie').")
                 .define("showUniversalBossRarityName", true);
+
+        EXTRA_SOCKETS = BUILDER
+                .comment(
+                        "Adds extra sockets to ALL items with a valid LootCategory.",
+                        "This value is added on top of existing sockets.",
+                        "Set to 0 to disable."
+                )
+                .defineInRange("extraSockets", 0, 0, 10);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")
