@@ -56,6 +56,7 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "cooldown_reset"), CooldownResetAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "mana_leech"), ManaLeechAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "spellblade"), SpellbladeAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "mana_block"), ManaBlockAffix.CODEC);
             }
 //            ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });

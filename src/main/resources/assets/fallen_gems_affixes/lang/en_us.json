@@ -554,5 +554,9 @@
 
   "affix.fallen_gems_affixes:breaker/prospector": "Prospector's",
   "affix.fallen_gems_affixes:breaker/prospector.suffix": "of Prospecting",
-  "affix.fallen_gems_affixes.prospector.desc": "Nearby ores within %s blocks glow through walls"
+  "affix.fallen_gems_affixes.prospector.desc": "Nearby ores within %s blocks glow through walls",
+
+  "affix.fallen_gems_affixes.mana_block.desc": "Block %s%% damage with mana while above %s mana",
+  "affix.fallen_gems_affixes:shield/mana_block": "Buffered",
+  "affix.fallen_gems_affixes:shield/mana_block.suffix": "of Mana"
 }
