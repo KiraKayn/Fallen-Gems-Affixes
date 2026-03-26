@@ -53,8 +53,11 @@ public class ManaBlockAffix extends Affix {
         float reductionFactor = values.get(rarity).get(level);
         float mana = magicData.getMana();
         float reduction = amount * reductionFactor;
-        if (mana > leastMana && reduction > mana) {
-            magicData.setMana(leastMana);
+        if (mana > leastMana) {
+            if (reduction > mana) {
+                reduction = mana - leastMana;
+            }
+        } else {
             return amount;
         }
         magicData.setMana(mana - reduction);
