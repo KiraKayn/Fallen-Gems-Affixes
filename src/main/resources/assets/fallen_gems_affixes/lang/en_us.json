@@ -556,7 +556,7 @@
   "affix.fallen_gems_affixes:breaker/prospector.suffix": "of Prospecting",
   "affix.fallen_gems_affixes.prospector.desc": "Nearby ores within %s blocks glow through walls",
 
-  "affix.fallen_gems_affixes.mana_block.desc": "Consume mana to block %s%% damage while mana above %s, costing extra %s%% max mana per hit.",
+  "affix.fallen_gems_affixes.mana_block.desc": "While above %s mana, transfer %s%% incoming damage to mana loss, costing extra %s%% max mana per hit.",
   "affix.fallen_gems_affixes:shield/mana_block": "Buffered",
   "affix.fallen_gems_affixes:shield/mana_block.suffix": "of Mana"
 }
