@@ -1,3 +1,12 @@
+# 2.0.8
+- Improved Gem Power Augment logic and fixed Gem Flickering issue - rtxyd
+- Muted Extra Gem Bonus registry and ported it to Fallen Lib instead - rtxyd
+- Mana Block Affix - Block damage when above 200 mana, and lose mana based on damage amount +X% on every hit - rtxyd
+- Fixed that blocks drop Affix Scrolls when an empowered creeper blows them up - rtxyd
+- Fixed that every time you join the world already spawned mobs have a chance to become empowered again - rtxyd
+- Added Gem Injected tag to fix potential bugs - rtxyd
+- Now Scroll Affixes can't be rerolled in the Augmenting Table
+
 # 2.0.7
 - Fixed player-placed spawners converting into Boss Spawners
 - Added a feature that lets the universal_boss.json file use tags, instead of just entity ids
