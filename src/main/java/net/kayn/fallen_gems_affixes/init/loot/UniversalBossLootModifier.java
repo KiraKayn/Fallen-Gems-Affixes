@@ -52,7 +52,10 @@ public class UniversalBossLootModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext ctx) {
-
+        // exclude blocks
+        if (ctx.hasParam(LootContextParams.BLOCK_STATE)) {
+            return loot;
+        }
         Entity entity = ctx.getParamOrNull(LootContextParams.THIS_ENTITY);
         if (!(entity instanceof LivingEntity living)) return loot;
 
