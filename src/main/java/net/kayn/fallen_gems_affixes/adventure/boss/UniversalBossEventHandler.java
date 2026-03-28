@@ -14,6 +14,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,7 +27,7 @@ public class UniversalBossEventHandler {
     private static final String TAG = "fga.universal_boss";
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onEntityJoin(EntityJoinLevelEvent event) {
+    public static void onEntityJoin(MobSpawnEvent.FinalizeSpawn event) {
         if (event.getLevel().isClientSide()) return;
         if (!(event.getEntity() instanceof Monster mob)) return;
 
