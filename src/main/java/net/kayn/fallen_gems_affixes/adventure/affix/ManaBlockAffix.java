@@ -90,8 +90,8 @@ public class ManaBlockAffix extends Affix {
         float drainFactor = manaCost.get(rarity).get(level);
         return Component.translatable(
                 "affix.fallen_gems_affixes.mana_block.desc",
-                Affix.fmt(reductionFactor * 100f),
                 Affix.fmt(leastMana),
+                Affix.fmt(reductionFactor * 100f),
                 Affix.fmt(drainFactor * 100f)
         ).withStyle(ChatFormatting.YELLOW);
     }
