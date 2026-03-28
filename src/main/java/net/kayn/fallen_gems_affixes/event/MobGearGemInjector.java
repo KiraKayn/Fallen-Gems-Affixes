@@ -25,6 +25,7 @@ import java.util.List;
 public class MobGearGemInjector {
 
     private static final String BOSS_KEY = "apoth.boss";
+    private static final String INJECTED_KEY = "fga.gem_injected";
 
     @SubscribeEvent
     public static void onEntityJoin(EntityJoinLevelEvent event) {
@@ -36,7 +37,7 @@ public class MobGearGemInjector {
         if (level.isClientSide()) return;
 
         CompoundTag tag = le.getPersistentData();
-        if (!tag.getBoolean(BOSS_KEY)) return;
+        if (!tag.getBoolean(BOSS_KEY) && !tag.getBoolean(INJECTED_KEY)) return;
 
         RandomSource random = level.getRandom();
 
@@ -74,5 +75,6 @@ public class MobGearGemInjector {
 
             SocketHelper.setGems(stack, new SocketedGems(gems));
         }
+        tag.putBoolean(INJECTED_KEY, true);
     }
 }
