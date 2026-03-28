@@ -83,46 +83,46 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         BLACKLIST_TAGS.clear();
         resolvedConfig = null;
 
-        JsonObject json = null;
-        for (Map.Entry<ResourceLocation, JsonElement> entry : objects.entrySet()) {
-            json = entry.getValue().getAsJsonObject();
-            break;
-        }
-
-        if (json == null) {
+        if (objects.isEmpty()) {
             FallenGemsAffixes.LOGGER.warn("No universal_boss JSON found — universal boss system disabled.");
             return;
         }
 
-        try {
-            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("tier_chances").entrySet()) {
-                RAW_TIER_CHANCES.put(entry.getKey(), entry.getValue().getAsFloat());
-            }
-
-            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("stats").entrySet()) {
-                BossStats stats = BossStats.CODEC
-                        .parse(JsonOps.INSTANCE, entry.getValue())
-                        .resultOrPartial(err -> FallenGemsAffixes.LOGGER.error("Failed to parse BossStats for '{}': {}", entry.getKey(), err))
-                        .orElse(null);
-                if (stats != null) RAW_STATS.put(entry.getKey(), stats);
-            }
-
-            if (json.has("blacklist")) {
-                json.getAsJsonArray("blacklist").forEach(e -> {
-                    String s = e.getAsString();
-                    if (s.startsWith("#")) {
-                        ResourceLocation tagId = new ResourceLocation(s.substring(1));
-                        BLACKLIST_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, tagId));
-                    } else {
-                        BLACKLIST.add(new ResourceLocation(s));
+        for (Map.Entry<ResourceLocation, JsonElement> entry : objects.entrySet()) {
+            JsonObject json = entry.getValue().getAsJsonObject();
+            try {
+                if (json.has("tier_chances")) {
+                    for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("tier_chances").entrySet()) {
+                        RAW_TIER_CHANCES.put(e.getKey(), e.getValue().getAsFloat());
                     }
-                });
+                }
+
+                if (json.has("stats")) {
+                    for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("stats").entrySet()) {
+                        BossStats stats = BossStats.CODEC
+                                .parse(JsonOps.INSTANCE, e.getValue())
+                                .resultOrPartial(err -> FallenGemsAffixes.LOGGER.error("Failed to parse BossStats for '{}': {}", e.getKey(), err))
+                                .orElse(null);
+                        if (stats != null) RAW_STATS.put(e.getKey(), stats);
+                    }
+                }
+
+                if (json.has("blacklist")) {
+                    json.getAsJsonArray("blacklist").forEach(e -> {
+                        String s = e.getAsString();
+                        if (s.startsWith("#")) {
+                            ResourceLocation tagId = new ResourceLocation(s.substring(1));
+                            BLACKLIST_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, tagId));
+                        } else {
+                            BLACKLIST.add(new ResourceLocation(s));
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                FallenGemsAffixes.LOGGER.error("Failed to load universal_boss JSON from {}", entry.getKey(), e);
             }
-
-            FallenGemsAffixes.LOGGER.info("universal_boss: loaded {} raw tiers (resolution deferred until first use).", RAW_TIER_CHANCES.size());
-
-        } catch (Exception e) {
-            FallenGemsAffixes.LOGGER.error("Failed to load universal_boss JSON", e);
         }
+
+        FallenGemsAffixes.LOGGER.info("universal_boss: loaded {} raw tiers.", RAW_TIER_CHANCES.size());
     }
 }
