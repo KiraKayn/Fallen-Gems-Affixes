@@ -53,10 +53,18 @@ public class AffixScrollAnvilHandler {
         Affix affix = AffixRegistry.INSTANCE.getValue(affixId);
         if (affix == null) return;
 
-        if (!affix.canApplyTo(left, category, rarity)) {
-            return;
+        LootCategory validCategory = null;
+        for (LootCategory cat : LootCategory.VALUES) {
+            if (cat.isNone()) continue;
+            try {
+                if (affix.canApplyTo(left, cat, rarity)) {
+                    validCategory = cat;
+                    break;
+                }
+            } catch (Exception ignored) {}
         }
 
+        if (validCategory == null) return;
         if (!itemRarity.equals(rarity)) return;
 
         var currentAffixes = AffixHelper.getAffixes(left);
