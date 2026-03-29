@@ -558,5 +558,7 @@
 
   "affix.fallen_gems_affixes.mana_block.desc": "While above %s mana, transfer %s%% incoming damage to mana loss, costing extra %s%% max mana per hit.",
   "affix.fallen_gems_affixes:shield/mana_block": "Buffered",
-  "affix.fallen_gems_affixes:shield/mana_block.suffix": "of Mana"
+  "affix.fallen_gems_affixes:shield/mana_block.suffix": "of Mana",
+
+  "button.fallen_gems_affixes.scroll_affix_no_reroll": "Cannot reroll Scroll Affixes"
 }

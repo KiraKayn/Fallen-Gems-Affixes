@@ -7,6 +7,7 @@
   "mixins": [
     "AffixHelperMixin",
     "AttributeAffixAccessor",
+    "AttributeAffixMixin",
     "AttributesLibTooltipFix",
     "AugmentingMenuMixin",
     "CritMixin",
@@ -14,10 +15,10 @@
     "SocketHelperMixin",
     "TrueShotMixin",
     "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin",
-    "AttributeAffixMixin"
+    "permanent_effect.LivingEntityMixin"
   ],
   "client": [
+    "AugmentingScreenMixin",
     "permanent_effect.client.AbstractContainerMenuMixin",
     "permanent_effect.client.LivingEntityMixin",
     "permanent_effect.client.MinecraftMixin",
