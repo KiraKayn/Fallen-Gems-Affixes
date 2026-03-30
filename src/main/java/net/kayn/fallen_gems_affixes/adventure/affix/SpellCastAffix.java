@@ -25,19 +25,23 @@ import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpellCastAffix extends Affix {
 
-    private static final ThreadLocal<Set<UUID>> TRIGGERING_CASTERS = ThreadLocal.withInitial(HashSet::new);
+    public static final Map<UUID, Long> ACTIVE_TRIGGERS = new ConcurrentHashMap<>();
     private static final Map<String, Map<UUID, Long>> COOLDOWNS = new HashMap<>();
 
     public static boolean isCurrentlyTriggering(LivingEntity caster) {
-        return TRIGGERING_CASTERS.get().contains(caster.getUUID());
+        return ACTIVE_TRIGGERS.getOrDefault(caster.getUUID(), 0L) > caster.level().getGameTime();
     }
 
     public static void setTriggering(LivingEntity caster, boolean value) {
-        if (value) TRIGGERING_CASTERS.get().add(caster.getUUID());
-        else TRIGGERING_CASTERS.get().remove(caster.getUUID());
+        if (value) {
+            ACTIVE_TRIGGERS.put(caster.getUUID(), caster.level().getGameTime() + 3);
+        } else {
+            ACTIVE_TRIGGERS.remove(caster.getUUID());
+        }
     }
 
     public static boolean isOnCooldown(String id, int ignoredCooldown, LivingEntity caster) {

@@ -69,5 +69,8 @@
     "gem_class.celestial_melee": "Celestial Melee",
     "gem_class.celestial_ranged": "Celestial Ranged",
     "gem_class.celestial_weapons": "Celestial Weapons",
-    "gem_class.melee_ranged": "Weapons"
+    "gem_class.melee_ranged": "Weapons",
+
+    "item.apotheosis.gem.fallen_gems_affixes:void_hunter": "Void Hunter Gem",
+    "gem_class.melee_weapons": "Melee Weapons"
 }

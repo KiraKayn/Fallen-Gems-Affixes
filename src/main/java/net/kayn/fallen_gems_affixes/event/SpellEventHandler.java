@@ -12,21 +12,97 @@ import io.redspace.ironsspellbooks.api.events.SpellDamageEvent;
 import io.redspace.ironsspellbooks.api.events.SpellHealEvent;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
+import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
+import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
+import io.redspace.ironsspellbooks.network.casting.SyncTargetingDataPacket;
+import io.redspace.ironsspellbooks.setup.PacketDistributor;
 import net.kayn.fallen_gems_affixes.adventure.affix.*;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEffectBonus;
+import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+
+import static net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix.isCurrentlyTriggering;
 
 public class SpellEventHandler {
+
+    private static final Map<UUID, Map<String, Integer>> ACTIVE_CAST_LEVELS = new ConcurrentHashMap<>();
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onSpellCastCaptureLevel(SpellOnCastEvent event) {
+        Player caster = event.getEntity();
+
+        ACTIVE_CAST_LEVELS
+                .computeIfAbsent(caster.getUUID(), u -> new ConcurrentHashMap<>())
+                .put(event.getSpellId(), event.getSpellLevel());
+
+        if (ACTIVE_CAST_LEVELS.size() % 128 == 0) {
+            ServerLevel serverLevel = (ServerLevel) caster.level();
+
+            ACTIVE_CAST_LEVELS.keySet().removeIf(uuid -> {
+                Entity ent = serverLevel.getEntity(uuid);
+
+                return ent == null || ent.isRemoved() || !ent.isAlive();
+            });
+        }
+    }
+
+    public static void updateTargetData(LivingEntity caster, Entity entityHit, MagicData playerMagicData, AbstractSpell spell, Predicate<LivingEntity> filter) {
+
+        if (playerMagicData.getAdditionalCastData() != null) {
+            return;
+        }
+
+        if (spell.getSpellId().equals("irons_spellbooks:teleport")) {
+            return;
+        }
+        LivingEntity livingTarget = null;
+        if (entityHit instanceof LivingEntity livingEntity && filter.test(livingEntity)) {
+            livingTarget = livingEntity;
+        } else if (entityHit instanceof PartEntity<?> partEntity &&
+                partEntity.getParent() instanceof LivingEntity livingParent &&
+                filter.test(livingParent)) {
+            livingTarget = livingParent;
+        }
+
+        if (livingTarget != null) {
+            playerMagicData.setAdditionalCastData(new TargetEntityCastData(livingTarget));
+            if (caster instanceof ServerPlayer serverPlayer) {
+                if (spell.getCastType() != CastType.INSTANT) {
+                    PacketDistributor.sendToPlayer(serverPlayer, new SyncTargetingDataPacket(livingTarget, spell));
+                }
+            }
+        } else if (caster instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, new ClientboundSetActionBarTextPacket(
+                    Component.translatable("ui.irons_spellbooks.cast_error_target").withStyle(ChatFormatting.RED)
+            ));
+        }
+    }
 
     private static LivingEntity getSpellTarget(Optional<SpellCastAffix.TargetType> targetType,
                                                LivingEntity caster, LivingEntity contextTarget) {
@@ -34,26 +110,30 @@ public class SpellEventHandler {
                 .map(type -> caster).orElse(contextTarget);
     }
 
-
     @SubscribeEvent
     public static void onSpellCast(SpellOnCastEvent event) {
         LivingEntity caster = event.getEntity();
         if (caster.level().isClientSide()) return;
-        if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
+        if (isCurrentlyTriggering(caster)) return;
         if (event.getCastSource() == CastSource.COMMAND) return;
 
-        String castSpellId = event.getSpellId();
+        AbstractSpell castedSpell = SpellRegistry.getSpell(new ResourceLocation(event.getSpellId()));
 
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof CooldownResetAffix affix) {
-                    affix.onSpellCast(caster, castSpellId, inst.rarity().get(), inst.level());
+                    affix.onSpellCast(caster, event.getSpellId(), inst.rarity().get(), inst.level());
                 } else if (inst.affix().get() instanceof AutocastAffix affix) {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
-                    if (isTargetMode) return;
-                    affix.onSpellCast(caster, castSpellId, caster, inst.rarity().get());
+                    if (!isTargetMode) {
+                        affix.onSpellCast(caster, event.getSpellId(), caster, inst.rarity().get());
+                    }
                 }
             });
+        }
+
+        if (castedSpell != null) {
+            SpellEchoHandler.handle(caster, castedSpell, event.getSpellLevel(), caster);
         }
     }
 
@@ -68,34 +148,41 @@ public class SpellEventHandler {
 
         if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
 
-        String castSpellId = source.spell().getSpellId();
+        final String castSpellId = source.spell().getSpellId();
+
+        final int spellLevel = ACTIVE_CAST_LEVELS
+                .getOrDefault(caster.getUUID(), Collections.emptyMap())
+                .getOrDefault(castSpellId, 1);
+
 
         for (ItemStack stack : caster.getAllSlots()) {
+            if (stack.isEmpty()) continue;
+
             AffixHelper.streamAffixes(stack).forEach(inst -> {
-                if (inst.affix().get() instanceof SpellEffectAffix affix) {
-                    if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_TARGET) {
-                        affix.applyEffect(target, inst.rarity().get(), inst.level());
-                    } else if (affix.target == SpellEffectAffix.Target.SPELL_DAMAGE_SELF) {
-                        affix.applyEffect(caster, inst.rarity().get(), inst.level());
+                if (!inst.isValid()) return;
+                var affix = inst.affix().get();
+                var rarity = inst.rarity().get();
+                float affixLevel = inst.level();
+
+                if (affix instanceof SpellEffectAffix effectAffix) {
+                    if (effectAffix.target == SpellEffectAffix.Target.SPELL_DAMAGE_TARGET) {
+                        effectAffix.applyEffect(target, rarity, affixLevel);
+                    } else if (effectAffix.target == SpellEffectAffix.Target.SPELL_DAMAGE_SELF) {
+                        effectAffix.applyEffect(caster, rarity, affixLevel);
                     }
-                } else if (inst.affix().get() instanceof SpellCastAffix affix
-                        && affix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
-                    LivingEntity actualTarget = getSpellTarget(affix.target, caster, target);
-                    affix.triggerSpell(caster, actualTarget, inst.rarity().get(), (int) inst.level());
-                } else if (inst.affix().get() instanceof AutocastAffix affix) {
-                    boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
-                    if (!isTargetMode) return;
-                    affix.onSpellCast(caster, castSpellId, target, inst.rarity().get());
-                }
-
-                if (inst.affix().get() instanceof SpellFocusAffix affix) {
-                    float mult = affix.onSpellDamage(caster, target, castSpellId, inst.rarity().get(), inst.level());
+                } else if (affix instanceof SpellCastAffix castAffix && castAffix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
+                    LivingEntity actualTarget = getSpellTarget(castAffix.target, caster, target);
+                    castAffix.triggerSpell(caster, actualTarget, rarity, (int) affixLevel);
+                } else if (affix instanceof AutocastAffix autocastAffix) {
+                    boolean isTargetMode = autocastAffix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
+                    if (isTargetMode) {
+                        autocastAffix.onSpellCast(caster, castSpellId, target, rarity);
+                    }
+                } else if (affix instanceof SpellFocusAffix focusAffix) {
+                    float mult = focusAffix.onSpellDamage(caster, target, castSpellId, rarity, affixLevel);
                     event.setAmount(event.getAmount() * mult);
-                }
-
-                if (inst.affix().get() instanceof ManaDamageAffix affix
-                        && caster instanceof Player player) {
-                    float mult = affix.getDamageMultiplier(player, inst.rarity().get(), inst.level());
+                } else if (affix instanceof ManaDamageAffix manaAffix && caster instanceof Player player) {
+                    float mult = manaAffix.getDamageMultiplier(player, rarity, affixLevel);
                     event.setAmount(event.getAmount() * mult);
                 }
             });
@@ -111,11 +198,19 @@ public class SpellEventHandler {
     }
 
     @SubscribeEvent
+    public static void onServerStopping(ServerStoppingEvent event) {
+        ACTIVE_CAST_LEVELS.clear();
+        SpellEchoHandler.LAST_ECHO_TICK.clear();
+        DelayedTaskScheduler.clear();
+        SpellCastAffix.ACTIVE_TRIGGERS.clear();
+    }
+
+    @SubscribeEvent
     public static void onSpellHeal(SpellHealEvent event) {
         if (event.getEntity().level().isClientSide()) return;
 
         LivingEntity caster = event.getEntity();
-        if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
+        if (isCurrentlyTriggering(caster)) return;
 
         LivingEntity healTarget = event.getTargetEntity();
 
@@ -144,8 +239,6 @@ public class SpellEventHandler {
         }
     }
 
-    // Mana Event Handlers
-
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onChangeMana_Cost(ChangeManaEvent event) {
         if (event.getEntity().level().isClientSide()) return;
@@ -168,7 +261,7 @@ public class SpellEventHandler {
         if (totalReduction <= 0f) return;
 
         totalReduction = Math.min(totalReduction, 0.9f);
-        float manaCost    = event.getOldMana() - event.getNewMana();
+        float manaCost = event.getOldMana() - event.getNewMana();
         float reducedCost = manaCost * (1f - totalReduction);
         event.setNewMana(event.getOldMana() - reducedCost);
     }

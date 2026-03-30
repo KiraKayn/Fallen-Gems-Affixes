@@ -1,0 +1,59 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "weight": 3,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "epic",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_melee"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:void_hunter",
+        "gem_class": {
+          "key": "melee_weapons",
+          "types": [
+            "sword",
+            "heavy_weapon",
+            "trident"
+          ]
+        },
+        "cooldown": {
+          "epic": 15.0,
+          "mythic": 12.5,
+          "ancient": 10.0
+        },
+        "duration": {
+          "epic": 2.0,
+          "mythic": 3.0,
+          "ancient": 4.0
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:spell_echo",
+      "gem_class": {
+        "key": "staffs",
+        "types": [
+          "staffs"
+        ]
+      },
+      "school": "irons_spellbooks:ender",
+      "delay_ticks": {
+        "epic": 10,
+        "mythic": 8,
+        "ancient": 6
+      }
+    }
+  ]
+}

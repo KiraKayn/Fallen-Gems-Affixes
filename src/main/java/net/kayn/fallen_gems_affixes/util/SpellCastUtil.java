@@ -8,21 +8,15 @@ import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.network.casting.OnCastStartedPacket;
 import io.redspace.ironsspellbooks.network.casting.OnClientCastPacket;
-import io.redspace.ironsspellbooks.network.casting.SyncTargetingDataPacket;
 import io.redspace.ironsspellbooks.network.casting.UpdateCastingStatePacket;
 import io.redspace.ironsspellbooks.setup.PacketDistributor;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.entity.PartEntity;
 
-import java.util.function.Predicate;
+import static net.kayn.fallen_gems_affixes.event.SpellEventHandler.updateTargetData;
 
 public class SpellCastUtil {
 
@@ -34,18 +28,18 @@ public class SpellCastUtil {
         MagicData magicData = MagicData.getPlayerMagicData(caster);
         if (magicData.isCasting()) {
             FallenGemsAffixes.LOGGER.debug(
-                    "SpellCastAffix: Entity is still casting {}, forcing spell completion",
+                    "SpellCastAffix: Entity is still casting {}, resetting state for new cast",
                     magicData.getCastingSpellId()
             );
             AbstractSpell oldSpell = magicData.getCastingSpell().getSpell();
-            oldSpell.onCast(caster.level(), magicData.getCastingSpellLevel(), caster, magicData.getCastSource(), magicData);
-            oldSpell.onServerCastComplete(caster.level(), magicData.getCastingSpellLevel(), caster, magicData, false);
+            oldSpell.onServerCastComplete(caster.level(), magicData.getCastingSpellLevel(), caster, magicData, true);
+
             magicData.resetCastingState();
             magicData = MagicData.getPlayerMagicData(caster);
         }
+        updateTargetData(caster, target, magicData, spell, x -> true);
 
         FallenGemsAffixes.LOGGER.debug("SpellCastAffix: Merging target data, target: {}", target.getName().getString());
-        updateTargetData(caster, target, magicData, spell, x -> true);
 
         if (caster instanceof ServerPlayer serverPlayer) {
             FallenGemsAffixes.LOGGER.debug("Casting SPELL FOR SERVERPLAYA");
@@ -113,30 +107,6 @@ public class SpellCastUtil {
             spell.onCast(serverPlayer.level(), spellLevel, serverPlayer, CastSource.COMMAND, magicData);
             PacketDistributor.sendToPlayer(serverPlayer, new OnClientCastPacket(
                     spell.getSpellId(), spellLevel, CastSource.COMMAND, magicData.getAdditionalCastData()
-            ));
-        }
-    }
-
-    public static void updateTargetData(LivingEntity caster, Entity entityHit, MagicData playerMagicData, AbstractSpell spell, Predicate<LivingEntity> filter) {
-        LivingEntity livingTarget = null;
-        if (entityHit instanceof LivingEntity livingEntity && filter.test(livingEntity)) {
-            livingTarget = livingEntity;
-        } else if (entityHit instanceof PartEntity<?> partEntity &&
-                partEntity.getParent() instanceof LivingEntity livingParent &&
-                filter.test(livingParent)) {
-            livingTarget = livingParent;
-        }
-
-        if (livingTarget != null) {
-            playerMagicData.setAdditionalCastData(new TargetEntityCastData(livingTarget));
-            if (caster instanceof ServerPlayer serverPlayer) {
-                if (spell.getCastType() != CastType.INSTANT) {
-                    PacketDistributor.sendToPlayer(serverPlayer, new SyncTargetingDataPacket(livingTarget, spell));
-                }
-            }
-        } else if (caster instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.sendToPlayer(serverPlayer, new ClientboundSetActionBarTextPacket(
-                    Component.translatable("ui.irons_spellbooks.cast_error_target").withStyle(ChatFormatting.RED)
             ));
         }
     }

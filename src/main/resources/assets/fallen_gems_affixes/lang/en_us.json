@@ -560,5 +560,10 @@
   "affix.fallen_gems_affixes:shield/mana_block": "Buffered",
   "affix.fallen_gems_affixes:shield/mana_block.suffix": "of Mana",
 
-  "button.fallen_gems_affixes.scroll_affix_no_reroll": "Cannot reroll Scroll Affixes"
+  "button.fallen_gems_affixes.scroll_affix_no_reroll": "Cannot reroll Scroll Affixes",
+
+  "bonus.fallen_gems_affixes.void_hunter": "Void Hunter",
+  "bonus.fallen_gems_affixes.void_hunter.desc": "On kill: Blink to nearest enemy, strike and gain %s for %s [%s]",
+  "bonus.fallen_gems_affixes.spell_echo": "Spell Echo",
+  "bonus.fallen_gems_affixes.spell_echo.desc": "After casting a %s spell, cast it again after%s"
 }

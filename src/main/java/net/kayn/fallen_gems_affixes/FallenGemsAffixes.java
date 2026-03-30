@@ -5,6 +5,8 @@ import net.kayn.fallen_gems_affixes.adventure.affix.BerserkerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.VoidHunterEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
@@ -19,7 +21,6 @@ import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
-import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -89,6 +90,8 @@ public class FallenGemsAffixes {
             modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
             MinecraftForge.EVENT_BUS.register(SpellEventHandler.class);
             MinecraftForge.EVENT_BUS.register(CooldownResetAffix.class);
+            MinecraftForge.EVENT_BUS.register(VoidHunterEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(SpellEchoHandler.class);
         }
 
         if (ModList.get().isLoaded("celestisynth")) {
