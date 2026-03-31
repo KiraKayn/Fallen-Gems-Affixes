@@ -11,13 +11,16 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
 import net.kayn.fallen_gems_affixes.util.SpellCastUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -144,6 +147,18 @@ public class AutocastAffix extends Affix {
 
         SpellCastAffix.setTriggering(caster, true);
         try {
+            // Reset i-frames on the entity the triggering spell actually hit
+            // actualTarget may be the caster for non-damage triggered autocasts,
+            // so look up the real last-hit entity the same way the echo handler does
+            if (caster.level() instanceof ServerLevel sl) {
+                UUID lastTargetId = SpellEventHandler.LAST_SPELL_DAMAGE_TARGET.get(caster.getUUID());
+                if (lastTargetId != null) {
+                    Entity lastTarget = sl.getEntity(lastTargetId);
+                    if (lastTarget instanceof LivingEntity le && !le.isRemoved()) {
+                        le.invulnerableTime = 0;
+                    }
+                }
+            }
             if (!actualTarget.isRemoved()) {
                 actualTarget.invulnerableTime = 0;
             }

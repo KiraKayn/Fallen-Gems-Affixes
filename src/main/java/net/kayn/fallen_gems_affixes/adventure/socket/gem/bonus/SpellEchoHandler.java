@@ -9,8 +9,11 @@ import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.api.spells.ICastData;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
 import net.kayn.fallen_gems_affixes.util.SpellCastUtil;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -81,20 +84,27 @@ public class SpellEchoHandler {
                     () -> waitThenEcho(caster, spell, level, target, data.getAdditionalCastData()));
             return;
         }
+        LAST_ECHO_TICK.put(caster.getUUID(), caster.level().getGameTime());
 
         setTriggering(caster, true);
         try {
             if (originalCastData != null) {
                 data.setAdditionalCastData(originalCastData);
             }
-            if (target != null && !target.isRemoved()) {
-                target.invulnerableTime = 0;
+// Reset i-frames on the entity the original spell actually hit
+            if (caster.level() instanceof ServerLevel sl) {
+                UUID lastTargetId = SpellEventHandler.LAST_SPELL_DAMAGE_TARGET.get(caster.getUUID());
+                if (lastTargetId != null) {
+                    Entity lastTarget = sl.getEntity(lastTargetId);
+                    if (lastTarget instanceof LivingEntity le && !le.isRemoved()) {
+                        le.invulnerableTime = 0;
+                    }
+                }
             }
             SpellCastUtil.castSpell(caster, spell, level, target);
         } catch (Exception e) {
             FallenGemsAffixes.LOGGER.warn("Echo failed for spell {}", spell.getSpellId(), e);
         } finally {
-
             var server = caster.level().getServer();
             if (server != null) {
                 server.execute(() -> setTriggering(caster, false));

@@ -52,6 +52,7 @@ import static net.kayn.fallen_gems_affixes.adventure.affix.SpellCastAffix.isCurr
 public class SpellEventHandler {
 
     private static final Map<UUID, Map<String, Integer>> ACTIVE_CAST_LEVELS = new ConcurrentHashMap<>();
+    public static final Map<UUID, UUID> LAST_SPELL_DAMAGE_TARGET = new ConcurrentHashMap<>();
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onSpellCastCaptureLevel(SpellOnCastEvent event) {
@@ -146,6 +147,10 @@ public class SpellEventHandler {
         Entity entity = source.getEntity();
         if (!(entity instanceof LivingEntity caster)) return;
 
+        if (!SpellCastAffix.isCurrentlyTriggering(caster)) {
+            LAST_SPELL_DAMAGE_TARGET.put(caster.getUUID(), target.getUUID());
+        }
+
         if (SpellCastAffix.isCurrentlyTriggering(caster)) return;
 
         final String castSpellId = source.spell().getSpellId();
@@ -200,6 +205,7 @@ public class SpellEventHandler {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         ACTIVE_CAST_LEVELS.clear();
+        LAST_SPELL_DAMAGE_TARGET.clear();
         SpellEchoHandler.LAST_ECHO_TICK.clear();
         DelayedTaskScheduler.clear();
         SpellCastAffix.ACTIVE_TRIGGERS.clear();

@@ -108,6 +108,7 @@ public class SpellCastUtil {
             PacketDistributor.sendToPlayer(serverPlayer, new OnClientCastPacket(
                     spell.getSpellId(), spellLevel, CastSource.COMMAND, magicData.getAdditionalCastData()
             ));
+            spell.onServerCastComplete(serverPlayer.level(), spellLevel, serverPlayer, magicData, false);
         }
     }
 }

@@ -521,7 +521,7 @@
 
   "item.fallen_gems_affixes.affix_scroll": "Affix Scroll",
   "item.fallen_gems_affixes.affix_scroll.empty": "No affix inscribed",
-  "item.fallen_gems_affixes.affix_scroll.tooltip": "Apply via anvil to add an affix to equipment",
+  "item.fallen_gems_affixes.affix_scroll.tooltip": "Apply via anvil to add the affix to equipment with the same rarity",
   "item.fallen_gems_affixes.sigil_of_erasure": "Sigil of Erasure",
   "item.fallen_gems_affixes.sigil_of_erasure.tooltip": "Removes all scroll-applied affixes from an item",
 
