@@ -31,6 +31,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     private static final Map<String, BossStats> RAW_STATS = new LinkedHashMap<>();
     private static final List<ResourceLocation> BLACKLIST = new ArrayList<>();
     private static final List<TagKey<EntityType<?>>> BLACKLIST_TAGS = new ArrayList<>();
+    private static final Map<String, List<String>> RAW_DIMENSION_RARITIES = new LinkedHashMap<>();
 
     @Nullable
     private static UniversalBossConfig resolvedConfig = null;
@@ -61,8 +62,20 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             if (rarity != null) statsMap.put(rarity, entry.getValue());
         }
 
+        Map<ResourceLocation, List<LootRarity>> dimensionRarities = new LinkedHashMap<>();
+        for (Map.Entry<String, List<String>> entry : RAW_DIMENSION_RARITIES.entrySet()) {
+            ResourceLocation dimId = new ResourceLocation(entry.getKey());
+            List<LootRarity> rarities = new ArrayList<>();
+            for (String name : entry.getValue()) {
+                LootRarity rarity = resolveRarity(name);
+                if (rarity != null) rarities.add(rarity);
+                else FallenGemsAffixes.LOGGER.warn("universal_boss: cannot resolve dimension rarity '{}'", name);
+            }
+            if (!rarities.isEmpty()) dimensionRarities.put(dimId, rarities);
+        }
+
         if (tierChances.isEmpty()) return null;
-        return new UniversalBossConfig(tierChances, statsMap, BLACKLIST, BLACKLIST_TAGS);
+        return new UniversalBossConfig(tierChances, statsMap, BLACKLIST, BLACKLIST_TAGS, dimensionRarities);
     }
 
     @Nullable
@@ -81,6 +94,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         RAW_STATS.clear();
         BLACKLIST.clear();
         BLACKLIST_TAGS.clear();
+
         resolvedConfig = null;
 
         if (objects.isEmpty()) {
@@ -118,6 +132,15 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
                         }
                     });
                 }
+
+                if (json.has("dimension_rarities")) {
+                    for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("dimension_rarities").entrySet()) {
+                        List<String> rarityNames = new ArrayList<>();
+                        e.getValue().getAsJsonArray().forEach(el -> rarityNames.add(el.getAsString()));
+                        RAW_DIMENSION_RARITIES.put(e.getKey(), rarityNames);
+                    }
+                }
+
             } catch (Exception e) {
                 FallenGemsAffixes.LOGGER.error("Failed to load universal_boss JSON from {}", entry.getKey(), e);
             }
