@@ -200,7 +200,7 @@ dependencies {
 
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
-    config "${modid}.mixins.json"
+    //config "${modid}.mixins.json"
 }
 
 tasks.named('processResources', ProcessResources).configure {

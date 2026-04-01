@@ -5,7 +5,6 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
-    "AbstractSpellMixin",
     "AffixHelperMixin",
     "AttributeAffixAccessor",
     "AttributeAffixMixin",

@@ -10,6 +10,7 @@
 - Fixed I frame issue for Spell Cast Affix
 - Nerfed the weight for Ragnarok, Yggdrasil and Abyssal Pearl Gems
 - Added Dimension based rarities for Universal Boss feature and buffed the chance for the Empowered Mob spawns
+- Added Concentration Affix for Staffs - Spells can't be interrupted by damage
 
 # 2.0.8
 - Improved Gem Power Augment logic and fixed Gem Flickering issue - rtxyd
