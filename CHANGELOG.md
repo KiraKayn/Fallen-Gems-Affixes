@@ -1,3 +1,16 @@
+# 2.0.9
+- Blocked the Reroll Button for Scroll Affixes visually
+- Fixed category bug for Affix Scrolls, now they are appliable to all categories for that affix and also display all available categories
+- Fixed the Universal Boss Json file not being overrideable with a datapack
+- Added Additional Attributes condition for Spell Level Gems so they dont give an error in the log
+- Added new Void Hunter Gem with the following bonuses:
+- Void Hunter - On entity kill: teleport to the nearest entity, attack once, and gain the Echoing Strikes effect for a few seconds
+- Arrow Teleport - On Arrow Impact: Teleport to the entity/block and deal damage to all entities in trajectory in a radius
+- Spell Echo - On Spell cast, cast the same spell again with different delay based on rarity
+- Fixed I frame issue for Spell Cast Affix
+- Nerfed the weight for Ragnarok, Yggdrasil and Abyssal Pearl Gems
+- Added Dimension based rarities for Universal Boss feature 
+
 # 2.0.8
 - Improved Gem Power Augment logic and fixed Gem Flickering issue - rtxyd
 - Muted Extra Gem Bonus registry and ported it to Fallen Lib instead - rtxyd
