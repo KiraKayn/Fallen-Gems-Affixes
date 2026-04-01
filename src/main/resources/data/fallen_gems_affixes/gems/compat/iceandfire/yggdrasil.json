@@ -5,7 +5,7 @@
       "modid": "iceandfire"
     }
   ],
-  "weight": 5,
+  "weight": 1,
   "quality": 0,
   "unique": true,
   "min_rarity": "common",
