@@ -4,7 +4,6 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -17,6 +16,8 @@ import net.rtxyd.fallen.lib.api.annotation.FallenInserter;
 import net.rtxyd.fallen.lib.type.util.patch.IInserterContext;
 import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
 import net.rtxyd.fallen.lib.util.patch.InserterType;
+
+import java.util.Map;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
@@ -38,7 +39,7 @@ public class GemBonusModifier {
         if (args.length > 0 && args[0] instanceof LootRarity) {
             Object ret = ctx.ret();
             if (ret != null) {
-                return modifyLPre(ctx.ret());
+                return modifyLPre(ctx.receiver(), ctx.ret());
             }
         }
         return ctx.ret();
@@ -90,23 +91,62 @@ public class GemBonusModifier {
         return FACTORY.copyAndModifyNumbers(obj, multiplied);
     }
 
-    public static Object modifyLPre(Object obj) {
-        if (shouldNotModify()) return obj;
+    public static Object modifyLPre(Object rec, Object ret) {
+        if (shouldNotModify()) return ret;
         ItemStack stack = currentSuspendedItemStack.get();
         float multiplied;
-        if (obj instanceof StepFunction sf) {
+        if (ret instanceof StepFunction sf) {
             multiplied = getGemPower(stack);
+            if (rec instanceof Map m) {
+                switch(checkReverse(m)) {
+                    case 1 -> {
+                        return new StepFunction(sf.min() / multiplied, sf.steps(), sf.step());
+                    }
+                    case -1 -> {
+                        return sf;
+                    }
+                }
+            }
             return new StepFunction(sf.min() * multiplied, sf.steps(), sf.step() * multiplied);
-        } else if (obj instanceof Number) {
+        } else if (ret instanceof Number) {
             multiplied = getGemPower(stack);
-            return ObjectModifierFactory.modifyNumber((Number) obj, multiplied);
-        } else if (clazzCheck(obj.getClass())) {
+            return ObjectModifierFactory.modifyNumber((Number) ret, multiplied);
+        } else if (clazzCheck(ret.getClass())) {
             multiplied = getGemPower(stack);
-            return modifyL(obj, multiplied);
+            return modifyL(ret, multiplied);
         }
-        return obj;
+        return ret;
     }
 
+
+    private static int checkReverse(Map<LootRarity, StepFunction> m) {
+        Float last = null;
+        LootRarity lastR = null;
+        for (LootRarity rarity : m.keySet()) {
+            if (last == null) {
+                last = m.get(rarity).min();
+                lastR = rarity;
+            } else {
+                boolean check = rarity.ordinal() > lastR.ordinal();
+                float current = m.get(rarity).min();
+                if (current == last) return -1;
+                if (current > last) {
+                    if (check) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    if (!check) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
     /**
      * Returns the gem-power multiplier for {@code stack}.
      *
@@ -119,9 +159,9 @@ public class GemBonusModifier {
      */
     private static float getGemPower(ItemStack stack) {
         CompoundTag itemTag = stack.getTag();
-        if (itemTag == null || !itemTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return 1F;
+        if (itemTag == null || !itemTag.contains(AUGMENT_DATA)) return 1F;
 
-        CompoundTag augmentData = itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
+        CompoundTag augmentData = itemTag.getCompound(AUGMENT_DATA);
         ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
         float currentGemPower = 1F;
 
