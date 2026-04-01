@@ -565,5 +565,7 @@
   "bonus.fallen_gems_affixes.void_hunter": "Void Hunter",
   "bonus.fallen_gems_affixes.void_hunter.desc": "On kill: Blink to nearest enemy, strike and gain %s for %s [%s]",
   "bonus.fallen_gems_affixes.spell_echo": "Spell Echo",
-  "bonus.fallen_gems_affixes.spell_echo.desc": "After casting a %s spell, cast it again after%s"
+  "bonus.fallen_gems_affixes.spell_echo.desc": "After casting a %s spell, cast it again after%s",
+  "bonus.fallen_gems_affixes.arrow_teleport": "Arrow Teleport",
+  "bonus.fallen_gems_affixes.arrow_teleport.desc": "On Arrow Impact: teleport and slash nearby enemies with your offhand weapon [%s] [%s]"
 }
