@@ -9,7 +9,7 @@
 - Spell Echo - On Spell cast, cast the same spell again with different delay based on rarity
 - Fixed I frame issue for Spell Cast Affix
 - Nerfed the weight for Ragnarok, Yggdrasil and Abyssal Pearl Gems
-- Added Dimension based rarities for Universal Boss feature 
+- Added Dimension based rarities for Universal Boss feature and buffed the chance for the Empowered Mob spawns
 
 # 2.0.8
 - Improved Gem Power Augment logic and fixed Gem Flickering issue - rtxyd
