@@ -105,20 +105,35 @@ public class SpellCastAffix extends Affix {
         int cooldownTicks = Math.max(2, this.getCooldown(rarity));
         if (!hasActiveRecast && isOnCooldown(this.getId().toString(), cooldownTicks, caster)) return;
 
-        setTriggering(caster, true);
-        try {
-            SpellCastUtil.castSpell(caster, this.spell, spellLevel, target);
-            if (!hasActiveRecast) startCooldown(this.getId().toString(), caster, cooldownTicks);
-        } catch (Exception e) {
-            StackTraceElement top = e.getStackTrace()[0];
-            if (top.getMethodName().startsWith("irons_Restrictions")) {
-                FallenGemsAffixes.LOGGER.warn("Spell cast failed due to: irons_Restrictions");
-            } else {
-                FallenGemsAffixes.LOGGER.warn("Spell {} cast failed due to: {}", this.spell, e);
+        if (!hasActiveRecast) startCooldown(this.getId().toString(), caster, cooldownTicks);
+
+        net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler.schedule(caster.level(), 1, () -> {
+            if (caster.isRemoved() || target == null || target.isRemoved()) return;
+
+            setTriggering(caster, true);
+            try {
+                if (caster.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+                    java.util.UUID lastTargetId = net.kayn.fallen_gems_affixes.event.SpellEventHandler.LAST_SPELL_DAMAGE_TARGET.get(caster.getUUID());
+                    if (lastTargetId != null) {
+                        net.minecraft.world.entity.Entity lastTarget = sl.getEntity(lastTargetId);
+                        if (lastTarget instanceof LivingEntity le && !le.isRemoved()) {
+                            le.invulnerableTime = 0;
+                        }
+                    }
+                }
+                target.invulnerableTime = 0;
+                SpellCastUtil.castSpell(caster, this.spell, spellLevel, target);
+            } catch (Exception e) {
+                StackTraceElement top = e.getStackTrace()[0];
+                if (top.getMethodName().startsWith("irons_Restrictions")) {
+                    FallenGemsAffixes.LOGGER.warn("Spell cast failed due to: irons_Restrictions");
+                } else {
+                    FallenGemsAffixes.LOGGER.warn("Spell {} cast failed due to: {}", this.spell, e);
+                }
+            } finally {
+                Objects.requireNonNull(caster.level().getServer()).execute(() -> setTriggering(caster, false));
             }
-        } finally {
-            Objects.requireNonNull(caster.level().getServer()).execute(() -> setTriggering(caster, false));
-        }
+        });
     }
 
     private LivingEntity determineTarget(LivingEntity caster, LivingEntity defaultTarget) {
