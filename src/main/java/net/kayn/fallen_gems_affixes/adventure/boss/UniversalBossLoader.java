@@ -94,6 +94,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         RAW_STATS.clear();
         BLACKLIST.clear();
         BLACKLIST_TAGS.clear();
+        RAW_DIMENSION_RARITIES.clear();
 
         resolvedConfig = null;
 
