@@ -1,17 +1,33 @@
 {
   "tier_chances": {
-    "common": 0.070,
-    "uncommon": 0.035,
-    "rare": 0.017,
-    "epic": 0.009,
-    "mythic": 0.005,
-    "ancient": 0.004
+    "common": 0.06,
+    "uncommon": 0.05,
+    "rare": 0.04,
+    "epic": 0.03,
+    "mythic": 0.02,
+    "ancient": 0.01
   },
   "blacklist": [
     "minecraft:villager",
     "minecraft:wandering_trader",
     "minecraft:armor_stand"
   ],
+  "dimension_rarities": {
+    "minecraft:overworld": [
+      "common",
+      "uncommon",
+      "rare"
+    ],
+    "minecraft:the_nether": [
+      "rare",
+      "epic"
+    ],
+    "minecraft:the_end": [
+      "epic",
+      "mythic",
+      "ancient"
+    ]
+  },
   "stats": {
     "common": {
       "enchant_chance": 0.0,

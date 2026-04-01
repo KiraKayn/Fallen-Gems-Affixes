@@ -10,17 +10,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class UniversalBossEventHandler {
 
@@ -41,7 +42,14 @@ public class UniversalBossEventHandler {
         var entityId = ForgeRegistries.ENTITY_TYPES.getKey(mob.getType());
         if (config.isBlacklisted(mob.getType(), entityId)) return;
 
-        LootRarity rarity = config.rollRarity(mob.getRandom());
+        ResourceLocation dimensionId = ((net.minecraft.server.level.ServerLevel) event.getLevel())
+                .dimension().location();
+
+        List<LootRarity> allowed = config.getRaritiesForDimension(dimensionId);
+        if (allowed != null && allowed.isEmpty()) return;
+
+        Set<LootRarity> allowedSet = allowed != null ? new java.util.HashSet<>(allowed) : null;
+        LootRarity rarity = config.rollRarity(mob.getRandom(), allowedSet);
         if (rarity == null) return;
 
         BossStats stats = config.stats().get(rarity);
