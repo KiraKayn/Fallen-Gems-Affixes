@@ -567,5 +567,9 @@
   "bonus.fallen_gems_affixes.spell_echo": "Spell Echo",
   "bonus.fallen_gems_affixes.spell_echo.desc": "After casting a %s spell, cast it again after%s",
   "bonus.fallen_gems_affixes.arrow_teleport": "Arrow Teleport",
-  "bonus.fallen_gems_affixes.arrow_teleport.desc": "On Arrow Impact: teleport and slash nearby enemies with your offhand weapon [%s] [%s]"
+  "bonus.fallen_gems_affixes.arrow_teleport.desc": "On Arrow Impact: teleport and slash nearby enemies with your offhand weapon [%s] [%s]",
+
+  "affix.fallen_gems_affixes:staffs/concentration": "Concentration",
+  "affix.fallen_gems_affixes:staffs/concentration.suffix": "of Unwavering Focus",
+  "affix.fallen_gems_affixes.concentration.desc": "Spells cannot be interrupted by damage"
 }
