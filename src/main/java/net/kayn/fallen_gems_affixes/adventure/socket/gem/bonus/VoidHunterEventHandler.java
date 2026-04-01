@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
@@ -7,9 +8,9 @@ import io.redspace.ironsspellbooks.network.particles.TeleportParticlesPacket;
 import io.redspace.ironsspellbooks.setup.PacketDistributor;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,11 +22,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class VoidHunterEventHandler {
 
@@ -46,20 +43,16 @@ public class VoidHunterEventHandler {
         VoidHunterBonus bonus = null;
         LootRarity rarity = null;
 
+        LootCategory weaponCat = LootCategory.forItem(weapon);
         for (GemInstance inst : SocketHelper.getGems(weapon).gems()) {
             if (!inst.isValid()) continue;
-
-            for (var b : inst.gem().get().getBonuses()) {
-                if (b instanceof VoidHunterBonus vhb) {
-                    LootRarity r = inst.rarity().get();
-                    if (vhb.supports(r)) {
-                        bonus = vhb;
-                        rarity = r;
-                        break;
-                    }
-                }
+            LootRarity r = inst.rarity().get();
+            Optional<?> opt = inst.gem().get().getBonus(weaponCat, r);
+            if (opt.isPresent() && opt.get() instanceof VoidHunterBonus vhb && vhb.supports(r)) {
+                bonus = vhb;
+                rarity = r;
+                break;
             }
-
             if (bonus != null) break;
         }
 
@@ -128,7 +121,8 @@ public class VoidHunterEventHandler {
         if (effectType != null) {
             int durationTicks = (int) (bonus.getDuration(rarity) * 20);
             target.removeEffect(effectType);
-            player.addEffect(new MobEffectInstance(effectType, durationTicks, 0, false, true));
+            int amplifier = bonus.getAmplifier(rarity);
+            player.addEffect(new MobEffectInstance(effectType, durationTicks, amplifier, false, true));
         }
     }
 }

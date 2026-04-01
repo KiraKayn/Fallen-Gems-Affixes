@@ -25,17 +25,28 @@ public class VoidHunterBonus extends GemBonus {
     public static final Codec<VoidHunterBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
             VALUES_CODEC.fieldOf("cooldown").forGetter(b -> b.cooldown),
-            VALUES_CODEC.fieldOf("duration").forGetter(b -> b.duration)
+            VALUES_CODEC.fieldOf("duration").forGetter(b -> b.duration),
+            VALUES_CODEC.fieldOf("amplifier").forGetter(b -> b.amplifier)
     ).apply(inst, VoidHunterBonus::new));
 
     public final Map<LootRarity, StepFunction> cooldown;
     public final Map<LootRarity, StepFunction> duration;
+    public final Map<LootRarity, StepFunction> amplifier;
 
-    public VoidHunterBonus(GemClass gemClass, Map<LootRarity, StepFunction> cooldown, Map<LootRarity, StepFunction> duration) {
+    public VoidHunterBonus(GemClass gemClass, Map<LootRarity, StepFunction> cooldown,
+                           Map<LootRarity, StepFunction> duration,
+                           Map<LootRarity, StepFunction> amplifier) {
         super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "void_hunter"), gemClass);
         this.cooldown = cooldown;
         this.duration = duration;
+        this.amplifier = amplifier;
     }
+
+    public int getAmplifier(LootRarity rarity) {
+        StepFunction fn = amplifier.get(rarity);
+        return fn != null ? (int) fn.get(0) : 0;
+    }
+
 
     @Override
     public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
@@ -68,13 +79,14 @@ public class VoidHunterBonus extends GemBonus {
 
     @Override
     public boolean supports(LootRarity rarity) {
-        return cooldown.containsKey(rarity) && duration.containsKey(rarity);
+        return cooldown.containsKey(rarity) && duration.containsKey(rarity) && amplifier.containsKey(rarity);
     }
 
     @Override
     public VoidHunterBonus validate() {
         Preconditions.checkNotNull(this.cooldown, "VoidHunterBonus missing cooldown values");
         Preconditions.checkNotNull(this.duration, "VoidHunterBonus missing duration values");
+        Preconditions.checkNotNull(this.amplifier, "VoidHunterBonus missing amplifier values");
         return this;
     }
 

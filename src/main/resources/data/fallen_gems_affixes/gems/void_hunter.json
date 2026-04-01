@@ -22,11 +22,7 @@
         "type": "fallen_gems_affixes:void_hunter",
         "gem_class": {
           "key": "melee_weapons",
-          "types": [
-            "sword",
-            "heavy_weapon",
-            "trident"
-          ]
+          "types": ["sword", "heavy_weapon", "trident"]
         },
         "cooldown": {
           "epic": 15.0,
@@ -37,6 +33,11 @@
           "epic": 2.0,
           "mythic": 3.0,
           "ancient": 4.0
+        },
+        "amplifier": {
+          "epic": 0,
+          "mythic": 1,
+          "ancient": 2
         }
       }
     },
