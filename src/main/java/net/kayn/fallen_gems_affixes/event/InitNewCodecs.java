@@ -60,7 +60,7 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(new ResourceLocation("fallen_gems_affixes", "concentration"), ConcentrationAffix.CODEC);
                 GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "void_hunter"), VoidHunterBonus.CODEC);
                 GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "spell_echo"), SpellEchoBonus.CODEC);
-                GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "arrow_teleport"), ArrowTeleportBonus.CODEC);
+                GemBonus.CODEC.register(new ResourceLocation("fallen_gems_affixes", "arrow_tele_slash"), ArrowTeleSlashBonus.CODEC);
             }
 //            ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });

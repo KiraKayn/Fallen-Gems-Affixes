@@ -16,21 +16,21 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Locale;
 import java.util.Map;
 
-public class ArrowTeleportBonus extends GemBonus {
+public class ArrowTeleSlashBonus extends GemBonus {
 
-    public static final Codec<ArrowTeleportBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    public static final Codec<ArrowTeleSlashBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
             VALUES_CODEC.fieldOf("cooldown").forGetter(b -> b.cooldown),
             VALUES_CODEC.fieldOf("radius").forGetter(b -> b.radius)
-    ).apply(inst, ArrowTeleportBonus::new));
+    ).apply(inst, ArrowTeleSlashBonus::new));
 
     public final Map<LootRarity, StepFunction> cooldown;
     public final Map<LootRarity, StepFunction> radius;
 
-    public ArrowTeleportBonus(GemClass gemClass,
-                              Map<LootRarity, StepFunction> cooldown,
-                              Map<LootRarity, StepFunction> radius) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "arrow_teleport"), gemClass);
+    public ArrowTeleSlashBonus(GemClass gemClass,
+                               Map<LootRarity, StepFunction> cooldown,
+                               Map<LootRarity, StepFunction> radius) {
+        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "arrow_tele_slash"), gemClass);
         this.cooldown = cooldown;
         this.radius = radius;
     }
@@ -63,9 +63,9 @@ public class ArrowTeleportBonus extends GemBonus {
     }
 
     @Override
-    public ArrowTeleportBonus validate() {
-        Preconditions.checkNotNull(this.cooldown, "ArrowTeleportBonus missing cooldown");
-        Preconditions.checkNotNull(this.radius,   "ArrowTeleportBonus missing radius");
+    public ArrowTeleSlashBonus validate() {
+        Preconditions.checkNotNull(this.cooldown, "ArrowTeleSlashBonus missing cooldown");
+        Preconditions.checkNotNull(this.radius,   "ArrowTeleSlashBonus missing radius");
         return this;
     }
 

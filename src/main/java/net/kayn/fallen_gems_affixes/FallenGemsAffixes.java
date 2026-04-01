@@ -5,7 +5,7 @@ import net.kayn.fallen_gems_affixes.adventure.affix.BerserkerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.ArrowTeleportEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.ArrowTeleSlashEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.VoidHunterEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
@@ -93,7 +93,7 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.register(CooldownResetAffix.class);
             MinecraftForge.EVENT_BUS.register(VoidHunterEventHandler.class);
             MinecraftForge.EVENT_BUS.register(SpellEchoHandler.class);
-            MinecraftForge.EVENT_BUS.register(ArrowTeleportEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(ArrowTeleSlashEventHandler.class);
         }
 
         if (ModList.get().isLoaded("celestisynth")) {

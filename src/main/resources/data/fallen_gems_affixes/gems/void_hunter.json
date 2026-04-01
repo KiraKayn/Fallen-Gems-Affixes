@@ -57,7 +57,7 @@
       }
     },
     {
-      "type": "fallen_gems_affixes:arrow_teleport",
+      "type": "fallen_gems_affixes:arrow_tele_slash",
       "gem_class": {
         "key": "ranged_weapon",
         "types": ["bow", "crossbow"]
