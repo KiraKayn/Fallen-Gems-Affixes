@@ -37,7 +37,7 @@ public class MobGearGemInjector {
         if (level.isClientSide()) return;
 
         CompoundTag tag = le.getPersistentData();
-        if (!tag.getBoolean(BOSS_KEY) && !tag.getBoolean(INJECTED_KEY)) return;
+        if (!tag.getBoolean(BOSS_KEY) || tag.getBoolean(INJECTED_KEY)) return;
 
         RandomSource random = level.getRandom();
 
