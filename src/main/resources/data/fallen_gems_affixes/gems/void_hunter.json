@@ -55,6 +55,23 @@
         "mythic": 8,
         "ancient": 6
       }
+    },
+    {
+      "type": "fallen_gems_affixes:arrow_teleport",
+      "gem_class": {
+        "key": "ranged_weapon",
+        "types": ["bow", "crossbow"]
+      },
+      "cooldown": {
+        "epic": 8.0,
+        "mythic": 6.0,
+        "ancient": 4.0
+      },
+      "radius": {
+        "epic": 3.0,
+        "mythic": 4.0,
+        "ancient": 5.0
+      }
     }
   ]
 }

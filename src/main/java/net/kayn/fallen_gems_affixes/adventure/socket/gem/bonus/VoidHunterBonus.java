@@ -52,13 +52,20 @@ public class VoidHunterBonus extends GemBonus {
     public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
         float cd = cooldown.get(rarity).get(0);
         float dur = duration.get(rarity).get(0);
+        int amp = getAmplifier(rarity);
 
         Component effectName = getEchoingStrikesName();
+        Component effectWithLevel = effectName == null
+                ? Component.literal("Echoing Strikes")
+                : ((net.minecraft.network.chat.MutableComponent) effectName)
+                .append(Component.literal(" "))
+                .append(Component.translatable("enchantment.level." + (amp + 1)));
+
         Component durationText = Component.literal(formatSeconds(dur) + "s").withStyle(ChatFormatting.YELLOW);
         Component cooldownText = Component.literal(formatSeconds(cd) + "s").withStyle(ChatFormatting.YELLOW);
 
         return Component.translatable("bonus.fallen_gems_affixes.void_hunter.desc",
-                effectName,
+                effectWithLevel,
                 durationText,
                 cooldownText
         ).withStyle(ChatFormatting.YELLOW);
