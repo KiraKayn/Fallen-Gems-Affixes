@@ -31,8 +31,6 @@ import java.util.*;
 
 public class ArrowTeleSlashEventHandler {
 
-    private static final Map<UUID, Long> COOLDOWNS = new HashMap<>();
-
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
         if (!(event.getProjectile() instanceof AbstractArrow arrow)) return;
