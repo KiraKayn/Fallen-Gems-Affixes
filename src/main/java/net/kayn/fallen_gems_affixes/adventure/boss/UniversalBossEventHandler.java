@@ -42,8 +42,7 @@ public class UniversalBossEventHandler {
         var entityId = ForgeRegistries.ENTITY_TYPES.getKey(mob.getType());
         if (config.isBlacklisted(mob.getType(), entityId)) return;
 
-        ResourceLocation dimensionId = ((net.minecraft.server.level.ServerLevel) event.getLevel())
-                .dimension().location();
+        ResourceLocation dimensionId = event.getLevel().getLevel().dimension().location();
 
         List<LootRarity> allowed = config.getRaritiesForDimension(dimensionId);
         if (allowed != null && allowed.isEmpty()) return;
