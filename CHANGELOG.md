@@ -5,12 +5,13 @@
 - Added Additional Attributes condition for Spell Level Gems so they dont give an error in the log
 - Added new Void Hunter Gem with the following bonuses:
 - Void Hunter - On entity kill: teleport to the nearest entity, attack once, and gain the Echoing Strikes effect for a few seconds
-- Arrow Teleport - On Arrow Impact: Teleport to the entity/block and deal damage to all entities in trajectory in a radius
+- Arrow Teleport Slash - On Arrow Impact: Teleport to the entity/block (only if there is atleast one entity around) and deal damage to all entities in its trajectory in a radius - rtxyd
 - Spell Echo - On Spell cast, cast the same spell again with different delay based on rarity
 - Fixed I frame issue for Spell Cast Affix
 - Nerfed the weight for Ragnarok, Yggdrasil and Abyssal Pearl Gems
 - Added Dimension based rarities for Universal Boss feature and buffed the chance for the Empowered Mob spawns
 - Added Concentration Affix for Staffs - Spells can't be interrupted by damage
+- Fixed Fortify Affix, now works on entities and you lose the bonus armor correctly
 
 # 2.0.8
 - Improved Gem Power Augment logic and fixed Gem Flickering issue - rtxyd
