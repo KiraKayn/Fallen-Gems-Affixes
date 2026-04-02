@@ -1,3 +1,6 @@
+# 2.0.9HF
+- Fixed crash caused by Universal Boss Spawns
+
 # 2.0.9
 - Blocked the Reroll Button for Scroll Affixes visually
 - Fixed category bug for Affix Scrolls, now they are appliable to all categories for that affix and also display all available categories
