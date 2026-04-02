@@ -10,7 +10,7 @@ public class LivingEntityMixin implements LivingEntitySetter {
     @Shadow
     protected int attackStrengthTicker;
     @Override
-    public void FGA$setAttackStrengthTicker() {
-        this.attackStrengthTicker = 1000;
+    public void FGA$setAttackStrengthTicker(int value) {
+        this.attackStrengthTicker = value;
     };
 }
