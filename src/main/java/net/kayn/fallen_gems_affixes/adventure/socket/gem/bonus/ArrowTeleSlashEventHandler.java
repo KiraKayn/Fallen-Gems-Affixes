@@ -14,6 +14,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -120,6 +121,9 @@ public class ArrowTeleSlashEventHandler {
         }
 
         player.teleportTo(destination.x, destination.y, destination.z);
+        double d0 = -Mth.sin(player.getYRot() * ((float)Math.PI / 180F));
+        double d1 = Mth.cos(player.getYRot() * ((float)Math.PI / 180F));
+        level.sendParticles(ParticleTypes.SWEEP_ATTACK, player.getX() + d0, player.getY(0.5D), player.getZ() + d1, 4, d0, 0.0D, d1, 0.0D);
 
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                 new TeleportParticlesPacket(from, destination));
