@@ -21,6 +21,5 @@ public class PlayerLogoutHandler {
         SpellFocusAffix.clearState(uuid);
         BerserkerAffix.clearState(uuid);
         AdaptiveAffix.clearState(uuid);
-        FortifyAffix.clearState(uuid);
     }
 }

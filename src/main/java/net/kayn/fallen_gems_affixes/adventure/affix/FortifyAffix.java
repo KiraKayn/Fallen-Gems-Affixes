@@ -9,14 +9,19 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,8 +45,6 @@ public class FortifyAffix extends Affix {
     protected final Map<LootRarity, StepFunction> values;
     protected final Set<LootCategory> types;
 
-    private static final Map<UUID, Float> BONUS_CACHE = new HashMap<>();
-
     public FortifyAffix(Map<LootRarity, StepFunction> values, Set<LootCategory> types) {
         super(AffixType.ABILITY);
         this.values = values;
@@ -50,41 +53,47 @@ public class FortifyAffix extends Affix {
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        BONUS_CACHE.remove(event.getEntity().getUUID());
+        event.getEntity().getPersistentData().remove(FORTIFY_NAME);
     }
 
     @SubscribeEvent
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide()) return;
-        if (player.tickCount % 5 != 0) return;
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
+        if (entity.tickCount % 5 != 0) return;
 
-        AttributeInstance armorAttr = player.getAttribute(Attributes.ARMOR);
-        if (armorAttr == null) return;
+        Vec3 lastPosition = entity.position();
+        DelayedTaskScheduler.schedule(entity.level(), 1, () -> {
+            if (!entity.isAlive()) return;
 
-        armorAttr.removeModifier(FORTIFY_UUID);
+            AttributeInstance armorAttr = entity.getAttribute(Attributes.ARMOR);
+            if (armorAttr == null) return;
+            armorAttr.removeModifier(FORTIFY_UUID);
 
-        float cachedBonus = BONUS_CACHE.computeIfAbsent(player.getUUID(), k -> computeBonus(player));
-        if (cachedBonus <= 0f) return;
+            CompoundTag tag = entity.getPersistentData();
+            float cachedBonus;
+            if (!tag.contains(FORTIFY_NAME)) {
+                cachedBonus = computeBonus(entity);
+                tag.putFloat(FORTIFY_NAME, cachedBonus);
+            } else {
+                cachedBonus = tag.getFloat(FORTIFY_NAME);
+            }
+            if (cachedBonus <= 0f) return;
 
-        boolean standing = player.getDeltaMovement().horizontalDistanceSqr() < 0.001
-                && !player.isFallFlying()
-                && !player.isSwimming();
-
-        if (!standing) return;
-
-        // Remove first so getAttributeValue doesn't include our own modifier
-        double armorWithoutBonus = armorAttr.getValue();
-        armorAttr.addTransientModifier(new AttributeModifier(
-                FORTIFY_UUID, FORTIFY_NAME,
-                armorWithoutBonus * cachedBonus,
-                AttributeModifier.Operation.ADDITION));
+            if (entity.position().distanceToSqr(lastPosition) < 0.001) {
+                // Remove first so getAttributeValue doesn't include our own modifier
+                double armorWithoutBonus = armorAttr.getValue();
+                armorAttr.addTransientModifier(new AttributeModifier(
+                        FORTIFY_UUID, FORTIFY_NAME,
+                        armorWithoutBonus * cachedBonus,
+                        AttributeModifier.Operation.ADDITION));
+            }
+        });
     }
 
-    private static float computeBonus(Player player) {
+    private static float computeBonus(LivingEntity entity) {
         float total = 0f;
-        for (ItemStack stack : player.getAllSlots()) {
+        for (ItemStack stack : entity.getAllSlots()) {
             for (var inst : AffixHelper.getAffixes(stack).values()) {
                 if (!inst.isValid()) continue;
                 if (!(inst.affix().get() instanceof FortifyAffix affix)) continue;
@@ -92,10 +101,6 @@ public class FortifyAffix extends Affix {
             }
         }
         return total;
-    }
-
-    public static void clearState(UUID uuid) {
-        BONUS_CACHE.remove(uuid);
     }
 
     @Override
