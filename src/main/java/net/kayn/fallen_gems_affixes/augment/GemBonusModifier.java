@@ -173,13 +173,17 @@ public class GemBonusModifier {
                 GemPowerAugment.GemPowerData data = (GemPowerAugment.GemPowerData)
                         Fallen.Augments.GEM_POWER.deserializeInnerData(tag.getCompound(INNER_DATA));
                 currentGemPower = data.getPower();
-            }
-            else if (GenesisAugment.augmentId().equals(typeId)) {
-                // Genesis present — always return its gemPower, no further checks needed
-                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
-                currentGemPower = genesisGemPower != null ? genesisGemPower * currentGemPower : currentGemPower;
-            }
 
+            } else if (GenesisAugment.augmentId().equals(typeId)) {
+                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
+                currentGemPower = genesisGemPower != null
+                        ? genesisGemPower * currentGemPower
+                        : currentGemPower;
+
+            } else if (MaliceAugment.augmentId().equals(typeId)) {
+                Float maliceGemPower = MaliceAugment.getMaliceGemPower(stack);
+                if (maliceGemPower != null) currentGemPower *= maliceGemPower;
+            }
         }
 
         return currentGemPower;

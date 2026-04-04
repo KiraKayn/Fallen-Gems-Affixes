@@ -6,6 +6,7 @@ import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
+import net.kayn.fallen_gems_affixes.augment.MaliceAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.core.RegistryAccess;
@@ -53,6 +54,8 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
         if (out.isEmpty()) return ItemStack.EMPTY;
 
         boolean hadSupremacy = hasSupremacy(out);
+        boolean hadMalice    = MaliceAugment.hasRevealedMalice(out);
+        Float maliceAffixPower = hadMalice ? MaliceAugment.getMaliceAffixPower(out) : null;
 
         int slots = AugmentSlotHelper.getAugmentSlots(out);
         out.getOrCreateTag().remove(Fallen.AugmentMisc.AUGMENT_DATA);
@@ -61,6 +64,10 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
 
         if (hadSupremacy) {
             restoreAffixLevels(out);
+        }
+
+        if (hadMalice && maliceAffixPower != null && maliceAffixPower != 0f && maliceAffixPower != 1f) {
+            MaliceAugment.applyAffixPower(out, 1f / maliceAffixPower);
         }
 
         return out;

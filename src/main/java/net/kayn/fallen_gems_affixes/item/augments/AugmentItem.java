@@ -61,6 +61,8 @@ public class AugmentItem extends Item {
                 inner.putFloat("defaultPower",    data.getDefaultPower());
                 inner.putFloat("affixPowerBoost", data.getAffixPowerBoost());
                 inner.putFloat("gemPowerBoost",   data.getGemPowerBoost());
+                inner.putFloat("powerBoost", data.getPowerBoost());
+                inner.putFloat("powerNerf",  data.getPowerNerf());
                 // Duality fields
                 inner.putFloat("critChanceMultiplier", data.getCritChanceMultiplier());
                 inner.putFloat("critDamageReduction", data.getCritDamageReduction());
@@ -219,6 +221,9 @@ public class AugmentItem extends Item {
                     float defaultPower    = 0.5f;
                     float affixPowerBoost = 0.1f;
                     float gemPowerBoost   = 0.1f;
+                    float powerBoost = 2.0f;
+                    float powerNerf  = 0.5f;
+
 
                     if (json.has("default_power")) {
                         try { defaultPower = json.get("default_power").getAsFloat(); }
@@ -236,6 +241,18 @@ public class AugmentItem extends Item {
                         try { gemPowerBoost = json.get("gem_power_boost").getAsFloat(); }
                         catch (Exception ex) {
                             FallenGemsAffixes.LOGGER.warn("Invalid gem_power_boost for augment {}", id);
+                        }
+                    }
+                    if (json.has("power_boost")) {
+                        try { powerBoost = json.get("power_boost").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn("Invalid power_boost for augment {}", id);
+                        }
+                    }
+                    if (json.has("power_nerf")) {
+                        try { powerNerf = json.get("power_nerf").getAsFloat(); }
+                        catch (Exception ex) {
+                            FallenGemsAffixes.LOGGER.warn("Invalid power_nerf for augment {}", id);
                         }
                     }
                     // duality fields
@@ -276,6 +293,7 @@ public class AugmentItem extends Item {
                     AUGMENT_DATA.put(augmentId, new AugmentData(
                             augmentId, texture, categories,
                             power, defaultPower, affixPowerBoost, gemPowerBoost,
+                            powerBoost, powerNerf,
                             critChanceMultiplier, critDamageReduction, physicalRatio, magicRatio));
 
                 } catch (Exception e) {
@@ -296,6 +314,8 @@ public class AugmentItem extends Item {
         private final float defaultPower;
         private final float affixPowerBoost;
         private final float gemPowerBoost;
+        private final float powerBoost;
+        private final float powerNerf;
 
         /**
          * Duality
@@ -306,24 +326,33 @@ public class AugmentItem extends Item {
         private final float magicRatio;
 
         public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
-                           Set<LootCategory> categories, float power, float critChanceMultiplier, float critDamageReduction, float physicalRatio, float magicRatio) {
-            this(augmentId, texture, categories, power, 0.5f, 0.1f, 0.1f, magicRatio, physicalRatio, critDamageReduction, critChanceMultiplier);
+                           Set<LootCategory> categories, float power,
+                           float critChanceMultiplier, float critDamageReduction,
+                           float physicalRatio, float magicRatio) {
+            this(augmentId, texture, categories, power,
+                    0.5f, 0.1f, 0.1f, 2.0f, 0.5f,
+                    critChanceMultiplier, critDamageReduction, physicalRatio, magicRatio);
         }
 
         public AugmentData(ResourceLocation augmentId, ResourceLocation texture,
                            Set<LootCategory> categories, float power,
-                           float defaultPower, float affixPowerBoost, float gemPowerBoost, float critChanceMultiplier, float critDamageReduction, float physicalRatio, float magicRatio) {
-            this.augmentId       = augmentId;
-            this.texture         = texture;
-            this.categories      = categories;
-            this.power           = power;
-            this.defaultPower    = defaultPower;
-            this.affixPowerBoost = affixPowerBoost;
-            this.gemPowerBoost   = gemPowerBoost;
+                           float defaultPower, float affixPowerBoost, float gemPowerBoost,
+                           float powerBoost, float powerNerf,
+                           float critChanceMultiplier, float critDamageReduction,
+                           float physicalRatio, float magicRatio) {
+            this.augmentId            = augmentId;
+            this.texture              = texture;
+            this.categories           = categories;
+            this.power                = power;
+            this.defaultPower         = defaultPower;
+            this.affixPowerBoost      = affixPowerBoost;
+            this.gemPowerBoost        = gemPowerBoost;
+            this.powerBoost           = powerBoost;
+            this.powerNerf            = powerNerf;
             this.critChanceMultiplier = critChanceMultiplier;
-            this.critDamageReduction = critDamageReduction;
-            this.physicalRatio = physicalRatio;
-            this.magicRatio = magicRatio;
+            this.critDamageReduction  = critDamageReduction;
+            this.physicalRatio        = physicalRatio;
+            this.magicRatio           = magicRatio;
         }
 
         public ResourceLocation  getAugmentId()      { return augmentId; }
@@ -333,6 +362,8 @@ public class AugmentItem extends Item {
         public float             getDefaultPower()    { return defaultPower; }
         public float             getAffixPowerBoost() { return affixPowerBoost; }
         public float             getGemPowerBoost()   { return gemPowerBoost; }
+        public float getPowerBoost() { return powerBoost; }
+        public float getPowerNerf()  { return powerNerf; }
 
         public boolean canApplyTo(LootCategory category) {
             return categories.isEmpty() || categories.contains(category);

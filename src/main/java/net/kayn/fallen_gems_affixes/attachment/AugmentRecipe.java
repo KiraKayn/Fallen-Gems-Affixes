@@ -2,10 +2,7 @@ package net.kayn.fallen_gems_affixes.attachment;
 
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
-import net.kayn.fallen_gems_affixes.augment.CascadeAugment;
-import net.kayn.fallen_gems_affixes.augment.GenesisAugment;
-import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
+import net.kayn.fallen_gems_affixes.augment.*;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentRecipe;
@@ -73,7 +70,11 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
     public ItemStack assemble(Container inv, RegistryAccess access) {
         ItemStack result = inv.getItem(1).copy();
         result.setCount(1);
-        ItemStack augmentItem = inv.getItem(2).copy();
+
+        ItemStack augmentItemRef = inv.getItem(2);
+        MaliceAugment.ensurePendingRoll(augmentItemRef);
+
+        ItemStack augmentItem = augmentItemRef.copy();
         augmentItem.setCount(1);
         return addAugmentData(result, augmentItem);
     }
@@ -139,6 +140,7 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         boolean addedSupremacy = false;
         boolean addedGenesis   = false;
         boolean addedCascade   = false;
+        boolean addedMalice    = false;
 
         for (Tag t : ingredientAugments) {
             if (!(t instanceof CompoundTag c) || !c.contains(TYPE)) continue;
@@ -155,6 +157,7 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
             if (augment instanceof SupremacyAugment) addedSupremacy = true;
             if (augment instanceof GenesisAugment)   addedGenesis   = true;
             if (augment instanceof CascadeAugment)   addedCascade   = true;
+            if (augment instanceof MaliceAugment)    addedMalice    = true;
         }
 
         // Commit NBT BEFORE calling apply methods so they see the full augment list
@@ -165,6 +168,7 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
         if (addedSupremacy) SupremacyAugment.apply(result);
         if (addedGenesis)   GenesisAugment.apply(result, augmentItem);
         if (addedCascade)   CascadeAugment.apply(augmentItem, result);
+        if (addedMalice)    MaliceAugment.applyFromPendingRoll(result, augmentItem);
 
         return result;
     }

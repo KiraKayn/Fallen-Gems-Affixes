@@ -1,0 +1,7 @@
+{
+  "augment": "fallen_gems_affixes:malice",
+  "texture": "fallen_gems_affixes:textures/item/augments/malice.png",
+  "categories": [],
+  "power_boost": 2.0,
+  "power_nerf": 0.5
+}

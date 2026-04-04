@@ -123,12 +123,14 @@ public class Fallen {
         public static final IAugment GENESIS = AugmentRegistry.register(new GenesisAugment());
         public static final IAugment CASCADE = AugmentRegistry.register(new CascadeAugment());
         public static final IAugment DUALITY = AugmentRegistry.register(new DualityAugment());
+        public static final IAugment MALICE = AugmentRegistry.register(new MaliceAugment());
 
         public static final String GEM_POWER_STRING = GemPowerAugment.augmentId().toString();
         public static final String SUPREMACY_STRING = SupremacyAugment.augmentId().toString();
         public static final String GENESIS_STRING = GenesisAugment.augmentId().toString();
         public static final String CASCADE_STRING = CascadeAugment.augmentId().toString();
         public static final String DUALITY_STRING = DualityAugment.augmentId().toString();
+        public static final String MALICE_STRING = MaliceAugment.augmentId().toString();
 
         public static void bootstrap() {
         }

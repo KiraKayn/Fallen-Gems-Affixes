@@ -571,5 +571,16 @@
 
   "affix.fallen_gems_affixes:staffs/concentration": "Concentration",
   "affix.fallen_gems_affixes:staffs/concentration.suffix": "of Unwavering Focus",
-  "affix.fallen_gems_affixes.concentration.desc": "Spells cannot be interrupted by damage"
+  "affix.fallen_gems_affixes.concentration.desc": "Spells cannot be interrupted by damage",
+
+  "item.fallen_gems_affixes.augment.malice": "Augment of Malice",
+  "fallen_gems_affixes.augment.malice.type": "Malice:",
+
+  "fallen_gems_affixes.augment.malice.desc.chance":   "50/50 on application — you won't know which:",
+  "fallen_gems_affixes.augment.malice.desc.option_a": "Affix Dominant: 2x Affix Power, 0.5x Gem Power",
+  "fallen_gems_affixes.augment.malice.desc.option_b": "Gem Dominant: 2x Gem Power, 0.5x Affix Power",
+
+  "fallen_gems_affixes.augment.malice.socket_desc.hidden": "Outcome: \u2753\u2753\u2753",
+  "fallen_gems_affixes.augment.malice.socket_desc.affix":  "Affix Dominant \u2014 Affix: %1$sx | Gem: %2$sx",
+  "fallen_gems_affixes.augment.malice.socket_desc.gem":    "Gem Dominant \u2014 Gem: %1$sx | Affix: %2$sx"
 }
