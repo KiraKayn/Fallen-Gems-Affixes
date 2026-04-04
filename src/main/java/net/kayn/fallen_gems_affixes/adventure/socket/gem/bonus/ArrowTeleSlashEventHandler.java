@@ -30,11 +30,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.*;
 
 public class ArrowTeleSlashEventHandler {
-
+    public static final String ATS_COUNTED = "fga.ats_counted";
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
         if (!(event.getProjectile() instanceof AbstractArrow arrow)) return;
         if (arrow.getPersistentData().getBoolean("apoth.generated")) return;
+        if (arrow.getTags().contains(ATS_COUNTED)) return;
+        arrow.addTag(ATS_COUNTED);
         if (!(arrow.getOwner() instanceof ServerPlayer player)) return;
 
         ArrowTeleSlashBonus bonus = null;
@@ -89,8 +91,8 @@ public class ArrowTeleSlashEventHandler {
                 hasTarget = true;
             }
             for (LivingEntity e : entities) {
-                if (!e.getTags().contains("fga.ats_counted")) {
-                    e.addTag("fga.ats_counted");
+                if (!e.getTags().contains(ATS_COUNTED)) {
+                    e.addTag(ATS_COUNTED);
                     targets.add(e);
                     if (targets.size() > 20) break outer;
                 }
