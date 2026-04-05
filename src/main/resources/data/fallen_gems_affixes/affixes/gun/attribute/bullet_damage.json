@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "scguns:additional_bullet_damage",
+  "attribute": "scguns:bullet_damage_multiplier",
   "operation": "MULTIPLY_BASE",
   "values": {
     "common": {
