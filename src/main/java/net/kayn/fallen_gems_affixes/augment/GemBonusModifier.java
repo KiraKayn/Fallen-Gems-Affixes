@@ -181,8 +181,11 @@ public class GemBonusModifier {
                         : currentGemPower;
 
             } else if (MaliceAugment.augmentId().equals(typeId)) {
-                Float maliceGemPower = MaliceAugment.getMaliceGemPower(stack);
-                if (maliceGemPower != null) currentGemPower *= maliceGemPower;
+                CompoundTag inner = tag.getCompound(INNER_DATA);
+                if (inner.getBoolean("revealed")) {
+                    Float maliceGemPower = MaliceAugment.getMaliceGemPower(stack);
+                    if (maliceGemPower != null) currentGemPower *= maliceGemPower;
+                }
             }
         }
 

@@ -55,20 +55,15 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
 
         boolean hadSupremacy = hasSupremacy(out);
         boolean hadMalice    = MaliceAugment.hasRevealedMalice(out);
-        Float maliceAffixPower = hadMalice ? MaliceAugment.getMaliceAffixPower(out) : null;
+
+        if (hadMalice) MaliceAugment.restoreOriginalAffixLevels(out);
 
         int slots = AugmentSlotHelper.getAugmentSlots(out);
         out.getOrCreateTag().remove(Fallen.AugmentMisc.AUGMENT_DATA);
         out.getOrCreateTag().remove("fallen_gems_affixes:fabled");
         AugmentSlotHelper.setAugmentSlots(out, slots);
 
-        if (hadSupremacy) {
-            restoreAffixLevels(out);
-        }
-
-        if (hadMalice && maliceAffixPower != null && maliceAffixPower != 0f && maliceAffixPower != 1f) {
-            MaliceAugment.applyAffixPower(out, 1f / maliceAffixPower);
-        }
+        if (hadSupremacy) restoreAffixLevels(out);
 
         return out;
     }

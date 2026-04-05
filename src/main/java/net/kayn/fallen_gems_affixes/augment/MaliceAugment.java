@@ -111,9 +111,9 @@ public class MaliceAugment implements IAugment {
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
-    public static void ensurePendingRoll(ItemStack augmentItem) {
-        if (augmentItem.isEmpty()) return;
-        CompoundTag tag = augmentItem.getTag();
+    public static void ensurePendingRoll(ItemStack augmentSlotItem) {
+        if (augmentSlotItem.isEmpty()) return;
+        CompoundTag tag = augmentSlotItem.getTag();
         if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
         ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
                 .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
@@ -131,14 +131,9 @@ public class MaliceAugment implements IAugment {
     }
 
     public static void applyFromPendingRoll(ItemStack result, ItemStack augmentItem) {
-        CompoundTag augTag = augmentItem.getTag();
-
-        boolean affixDominant = (augTag != null && augTag.contains("malice_pending_dominant"))
-                ? augTag.getBoolean("malice_pending_dominant")
-                : RANDOM.nextBoolean();
-
         float dominantPower = 2.0f;
         float penaltyPower  = 0.5f;
+        CompoundTag augTag = augmentItem.getTag();
         if (augTag != null && augTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
             ListTag list = augTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
                     .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
@@ -152,8 +147,14 @@ public class MaliceAugment implements IAugment {
             }
         }
 
+        boolean affixDominant = (augTag != null && augTag.contains("malice_pending_dominant"))
+                ? augTag.getBoolean("malice_pending_dominant")
+                : RANDOM.nextBoolean();
+
         float affixPower = affixDominant ? dominantPower : penaltyPower;
         float gemPower   = affixDominant ? penaltyPower  : dominantPower;
+
+        CompoundTag originalLevels = snapshotAffixLevels(result);
 
         CompoundTag tag = result.getTag();
         if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
@@ -163,17 +164,63 @@ public class MaliceAugment implements IAugment {
             CompoundTag entry = augments.getCompound(i);
             if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
             CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            inner.putBoolean("affixDominant", affixDominant);
-            inner.putFloat("affixPower",      affixPower);
-            inner.putFloat("gemPower",        gemPower);
-            inner.putBoolean("revealed",      false);
+            inner.putBoolean("affixDominant",  affixDominant);
+            inner.putFloat("affixPower",       affixPower);
+            inner.putFloat("gemPower",         gemPower);
+            inner.putBoolean("revealed",       true);
+            inner.put("originalAffixLevels",   originalLevels);
             entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
             break;
         }
         augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
         tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
 
-        applyAffixPower(result, affixPower);
+        var affixes = AffixHelper.getAffixes(result);
+        if (affixes != null && !affixes.isEmpty()) {
+            AffixHelper.setAffixes(result, affixes);
+        }
+    }
+
+    private static CompoundTag snapshotAffixLevels(ItemStack stack) {
+        CompoundTag affixData = stack.getTagElement(AFFIX_DATA);
+        if (affixData == null || !affixData.contains(AFFIXES_KEY)) return new CompoundTag();
+        return affixData.getCompound(AFFIXES_KEY).copy();
+    }
+
+    public static void restoreOriginalAffixLevels(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
+        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
+                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
+        for (int i = 0; i < list.size(); i++) {
+            CompoundTag entry = list.getCompound(i);
+            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
+            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
+            if (!inner.contains("originalAffixLevels")) return;
+            CompoundTag originals = inner.getCompound("originalAffixLevels");
+
+            CompoundTag itemTag = stack.getTag();
+            if (itemTag == null || !itemTag.contains(AFFIX_DATA)) return;
+            CompoundTag affixData = itemTag.getCompound(AFFIX_DATA);
+            if (!affixData.contains(AFFIXES_KEY)) return;
+
+            CompoundTag affixes    = affixData.getCompound(AFFIXES_KEY);
+            CompoundTag newAffixes = new CompoundTag();
+            Set<String> durableKeys = getDurableAffixKeys(stack);
+
+            for (String key : affixes.getAllKeys()) {
+                if (durableKeys.contains(key)) {
+                    newAffixes.putFloat(key, affixes.getFloat(key));
+                } else if (originals.contains(key)) {
+                    newAffixes.putFloat(key, originals.getFloat(key));
+                } else {
+                    newAffixes.putFloat(key, affixes.getFloat(key));
+                }
+            }
+            affixData.put(AFFIXES_KEY, newAffixes);
+            itemTag.put(AFFIX_DATA, affixData);
+            return;
+        }
     }
 
     public static void revealIfPending(ItemStack stack) {
@@ -185,12 +232,13 @@ public class MaliceAugment implements IAugment {
             CompoundTag entry = augments.getCompound(i);
             if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
             CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            if (!inner.contains("affixPower") || inner.getBoolean("revealed")) break;
+            if (!inner.contains("affixPower") || inner.getBoolean("revealed")) return;
             inner.putBoolean("revealed", true);
             entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
             augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
             tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-            break;
+            applyAffixPower(stack, inner.getFloat("affixPower"));
+            return;
         }
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -68,15 +69,18 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
 
     @Override
     public ItemStack assemble(Container inv, RegistryAccess access) {
+        MaliceAugment.ensurePendingRoll(inv.getItem(2));
+
         ItemStack result = inv.getItem(1).copy();
         result.setCount(1);
-
-        ItemStack augmentItemRef = inv.getItem(2);
-        MaliceAugment.ensurePendingRoll(augmentItemRef);
-
-        ItemStack augmentItem = augmentItemRef.copy();
+        ItemStack augmentItem = inv.getItem(2).copy();
         augmentItem.setCount(1);
         return addAugmentData(result, augmentItem);
+    }
+
+    @Override
+    public void onCraft(Container inv, Player player, ItemStack output) {
+        MaliceAugment.revealIfPending(output);
     }
 
     @SuppressWarnings("ConstantConditions")
