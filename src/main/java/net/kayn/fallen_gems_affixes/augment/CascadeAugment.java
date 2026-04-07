@@ -19,8 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -140,7 +138,7 @@ public class CascadeAugment implements IAugment {
 
         CascadeData effective = new CascadeData();
         // Chance should not over 100%
-        effective.chance      = Mth.clamp(1.0f, base.chance, base.chance + excessChance);
+        effective.chance      = Mth.clamp(base.chance, base.chance + excessChance, 1.0f);
         // Max extra damage 100%
         effective.damageBonus = base.damageBonus + Math.min(1.0f, excessDamage);
         return effective;
