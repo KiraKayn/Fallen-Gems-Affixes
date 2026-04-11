@@ -1,0 +1,21 @@
+{
+  "type": "fallen_gems_affixes:enchant_boost",
+  "values": {
+    "epic": {
+      "min": 2.0,
+      "steps": 3,
+      "step": 1.0
+    },
+    "mythic": {
+      "min": 3.0,
+      "steps": 3,
+      "step": 1.0
+    },
+    "ancient": {
+      "min": 4.0,
+      "steps": 3,
+      "step": 1.0
+    }
+  },
+  "types": []
+}

@@ -349,8 +349,8 @@
   "affix.fallen_gems_affixes:heavy_weapon/spell/blazebound": "Blazebound",
   "affix.fallen_gems_affixes:heavy_weapon/spell/blazebound.suffix": "of the Phoenix",
 
-  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar": "Glaciar",
-  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar.suffix": "of Blazing Tempest",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar": "Glacial",
+  "affix.fallen_gems_affixes:heavy_weapon/spell/glaciar.suffix": "of Frozen Tempest",
 
   "affix.fallen_gems_affixes:staffs/spell/bastion": "Bastion",
   "affix.fallen_gems_affixes:staffs/spell/bastion.suffix": "of Endurance",
@@ -594,5 +594,10 @@
   "button.fallen_gems_affixes.gem_case.upgrade_no_materials": "Insufficient Materials",
   "button.fallen_gems_affixes.gem_case.upgrade_cost": "Cost: %s %s and %s %s",
   "button.fallen_gems_affixes.gem_case.upgrade_all": "Will upgrade as many gems as possible!",
-  "menu.fallen_gems_affixes.gem_case": "Gem Case"
+  "menu.fallen_gems_affixes.gem_case": "Gem Case",
+
+  "affix.fallen_gems_affixes:enchant_boost": "Arcanist's",
+  "affix.fallen_gems_affixes:enchant_boost.suffix": "of Empowerment",
+  "affix.fallen_gems_affixes.enchant_boost.desc": "%s levels to %s",
+  "affix.fallen_gems_affixes.enchant_boost.desc.unknown": "Empowers an enchantment"
 }
