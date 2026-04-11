@@ -580,5 +580,19 @@
   "fallen_gems_affixes.augment.malice.desc.option_b": "Gem Dominant: 2x Gem Power, 0.5x Affix Power",
 
   "fallen_gems_affixes.augment.malice.socket_desc.affix":  "Affix Dominant \u2014 Affix: %1$sx | Gem: %2$sx",
-  "fallen_gems_affixes.augment.malice.socket_desc.gem":    "Gem Dominant \u2014 Gem: %1$sx | Affix: %2$sx"
+  "fallen_gems_affixes.augment.malice.socket_desc.gem":    "Gem Dominant \u2014 Gem: %1$sx | Affix: %2$sx",
+
+
+  "block.fallen_gems_affixes.gem_case": "Gem Case",
+  "tooltip.fallen_gems_affixes.gem_case.capacity": "Capacity: %s Gems",
+  "tooltip.fallen_gems_affixes.gem_case.unique_gems": "Contains %s different gems",
+  "tooltip.fallen_gems_affixes.gem_case.none_owned": "None Owned",
+  "block.fallen_gems_affixes.ender_gem_case": "Gem Case of House Fabergé",
+
+  "button.fallen_gems_affixes.gem_case.upgrade": "Upgrade 2 %s gems to %s",
+  "button.fallen_gems_affixes.gem_case.upgrade_no_gems": "Insufficient Gems",
+  "button.fallen_gems_affixes.gem_case.upgrade_no_materials": "Insufficient Materials",
+  "button.fallen_gems_affixes.gem_case.upgrade_cost": "Cost: %s %s and %s %s",
+  "button.fallen_gems_affixes.gem_case.upgrade_all": "Will upgrade as many gems as possible!",
+  "menu.fallen_gems_affixes.gem_case": "Gem Case"
 }

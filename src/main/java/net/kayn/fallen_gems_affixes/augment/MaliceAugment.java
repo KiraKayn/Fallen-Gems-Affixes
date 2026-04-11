@@ -331,8 +331,6 @@ public class MaliceAugment implements IAugment {
 
         @Override
         public MutableComponent combineText() {
-            if (!revealed)
-                return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.hidden");
             if (affixDominant)
                 return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.affix",
                         String.format("%.1f", affixPower), String.format("%.1f", gemPower));

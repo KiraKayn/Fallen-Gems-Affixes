@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.registry;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -25,6 +26,8 @@ public class ModCreativeTabs {
                         output.accept(ModItems.REINFORCED_GEM_SLATE.get());
                         output.accept(ModItems.AFFIX_SCROLL.get());
                         output.accept(ModItems.SIGIL_OF_ERASURE.get());
+                        output.accept(GemCaseRegistry.GEM_CASE_ITEM.get());
+                        output.accept(GemCaseRegistry.ENDER_GEM_CASE_ITEM.get());
                     })
                     .build());
 

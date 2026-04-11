@@ -8,6 +8,8 @@ import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.ArrowTeleSlashEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.VoidHunterEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseNetwork;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
@@ -59,6 +61,7 @@ public class FallenGemsAffixes {
         AAAttributes.ATTRIBUTES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        GemCaseRegistry.register(modEventBus);
 
         // Bootstraps
         Fallen.bootstrap(modEventBus);
@@ -112,6 +115,7 @@ public class FallenGemsAffixes {
     }
 
     public void commonSetup(final FMLCommonSetupEvent event) {
+        GemCaseNetwork.init();
         // Any common setup logic
     }
 
