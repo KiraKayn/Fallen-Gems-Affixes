@@ -599,5 +599,11 @@
   "affix.fallen_gems_affixes:enchant_boost": "Arcanist's",
   "affix.fallen_gems_affixes:enchant_boost.suffix": "of Empowerment",
   "affix.fallen_gems_affixes.enchant_boost.desc": "%s levels to %s",
-  "affix.fallen_gems_affixes.enchant_boost.desc.unknown": "Empowers an enchantment"
+  "affix.fallen_gems_affixes.enchant_boost.desc.unknown": "Empowers an enchantment",
+
+  "config.jade.plugin_fallen_gems_affixes.entity_affixes": "Show Entity Affixes",
+  "jade.fga.entity_affixes": "Affixes:",
+  "fallen_gems_affixes:berserker": "Berserker",
+  "fallen_gems_affixes:armor/afflicted": "Afflicted",
+  "fallen_gems_affixes:armor/fortify":   "Fortify"
 }

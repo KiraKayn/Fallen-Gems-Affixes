@@ -8,20 +8,24 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixBehavior;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class AfflictedAffix extends Affix {
+public class AfflictedAffix extends Affix implements EntityAffixBehavior {
 
-    public static final UUID SPEED_MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
+    public static final UUID   SPEED_MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     public static final String SPEED_MODIFIER_NAME = "fga:afflicted_speed";
 
     public static final Codec<AfflictedAffix> CODEC = RecordCodecBuilder.create(inst -> inst
@@ -33,7 +37,7 @@ public class AfflictedAffix extends Affix {
 
     protected final Map<LootRarity, StepFunction> damagePerEffect;
     protected final Map<LootRarity, StepFunction> speedPerEffect;
-    protected final Set<LootCategory> types;
+    protected final Set<LootCategory>             types;
 
     public AfflictedAffix(Map<LootRarity, StepFunction> damagePerEffect,
                           Map<LootRarity, StepFunction> speedPerEffect,
@@ -41,19 +45,17 @@ public class AfflictedAffix extends Affix {
         super(AffixType.ABILITY);
         this.damagePerEffect = damagePerEffect;
         this.speedPerEffect  = speedPerEffect;
-        this.types           = types;
+        this.types = types;
     }
 
     public float getDamageBonus(LivingEntity entity, LootRarity rarity, float level) {
         int count = countNegativeEffects(entity);
-        if (count == 0) return 0f;
-        return damagePerEffect.get(rarity).get(level) * count;
+        return count == 0 ? 0f : damagePerEffect.get(rarity).get(level) * count;
     }
 
     public float getSpeedBonus(LivingEntity entity, LootRarity rarity, float level) {
         int count = countNegativeEffects(entity);
-        if (count == 0) return 0f;
-        return speedPerEffect.get(rarity).get(level) * count;
+        return count == 0 ? 0f : speedPerEffect.get(rarity).get(level) * count;
     }
 
     public static int countNegativeEffects(LivingEntity entity) {
@@ -61,6 +63,26 @@ public class AfflictedAffix extends Affix {
                 .filter(e -> e.getEffect().getCategory() == MobEffectCategory.HARMFUL)
                 .count();
     }
+
+    @Override
+    public void tickEntityAffix(LivingEntity entity, LootRarity rarity, float level) {
+        AttributeInstance speedAttr = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speedAttr == null) return;
+
+        speedAttr.removeModifier(SPEED_MODIFIER_UUID);
+        float bonus = getSpeedBonus(entity, rarity, level);
+        if (bonus > 0f) {
+            speedAttr.addTransientModifier(new AttributeModifier(
+                    SPEED_MODIFIER_UUID, SPEED_MODIFIER_NAME,
+                    bonus, AttributeModifier.Operation.MULTIPLY_BASE));
+        }
+    }
+
+    @Override
+    public int tickInterval() {
+        return 5;
+    }
+
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {

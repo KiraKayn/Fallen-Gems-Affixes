@@ -7,21 +7,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
-import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossConfig;
-import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.commands.synchronization.SuggestionProviders;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.phys.Vec3;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixRegistry;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossConfig;
+import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
 import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.item.AffixScrollItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
@@ -31,16 +24,26 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
@@ -181,11 +184,37 @@ public class ModCommands {
             var stats = config.stats().get(rarity);
             if (stats != null) {
                 int duration = mob instanceof Creeper ? 6000 : Integer.MAX_VALUE;
+
                 for (var inst : stats.effects()) {
                     if (mob.getRandom().nextFloat() <= inst.chance()) mob.addEffect(inst.create(mob.getRandom(), duration));
                 }
-                for (var modif : stats.modifiers()) modif.apply(mob.getRandom(), mob);
+                float statChance = config.getStatChance(rarity);
+                for (var modif : stats.modifiers()) {
+                    if (mob.getRandom().nextFloat() < statChance) {
+                        modif.apply(mob.getRandom(), mob);
+                    }
+                }
+
                 mob.setHealth(mob.getMaxHealth());
+            }
+
+            String rarityKey = rarityId.getPath();
+            for (var entry : config.getAffixesForRarity(rarity)) {
+                if (mob.getRandom().nextFloat() < entry.chance()) {
+                    net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper.addAffix(mob, entry.affixId(), rarityKey, entry.level());
+                }
+            }
+
+            List<EntityAffixInstance> resolved =
+                    net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper.getAffixes(mob);
+            for (var inst : resolved) {
+                if (!inst.isValid()) continue;
+                for (net.minecraft.world.entity.EquipmentSlot slot : net.minecraft.world.entity.EquipmentSlot.values()) {
+                    inst.affix().get().addModifiers(ItemStack.EMPTY, inst.rarity().get(), inst.level(), slot, (attr, mod) -> {
+                        var attrInst = mob.getAttribute(attr);
+                        if (attrInst != null && !attrInst.hasModifier(mod)) attrInst.addPermanentModifier(mod);
+                    });
+                }
             }
         }
 
@@ -194,7 +223,8 @@ public class ModCommands {
         mob.getPersistentData().putBoolean("apoth.boss", true);
         mob.getPersistentData().putString("apoth.rarity", rarityId.getPath());
 
-        mob.setCustomName(mob.getName().copy().withStyle(net.minecraft.network.chat.Style.EMPTY.withColor(rarity.getColor())));
+        mob.setCustomName(mob.getName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
+        mob.setCustomNameVisible(false);
 
         level.addFreshEntity(mob);
 

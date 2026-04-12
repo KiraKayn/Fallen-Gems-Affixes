@@ -9,6 +9,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixBehavior;
 import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -18,22 +19,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class FortifyAffix extends Affix {
+public class FortifyAffix extends Affix implements EntityAffixBehavior {
 
-    public static final UUID FORTIFY_UUID = UUID.fromString("f07f1f00-aaaa-bbbb-cccc-000000000001");
+    public static final UUID   FORTIFY_UUID = UUID.fromString("f07f1f00-aaaa-bbbb-cccc-000000000001");
     public static final String FORTIFY_NAME = "fga:fortify_armor";
 
     public static final Codec<FortifyAffix> CODEC = RecordCodecBuilder.create(inst -> inst
@@ -43,7 +41,7 @@ public class FortifyAffix extends Affix {
             .apply(inst, FortifyAffix::new));
 
     protected final Map<LootRarity, StepFunction> values;
-    protected final Set<LootCategory> types;
+    protected final Set<LootCategory>             types;
 
     public FortifyAffix(Map<LootRarity, StepFunction> values, Set<LootCategory> types) {
         super(AffixType.ABILITY);
@@ -65,7 +63,6 @@ public class FortifyAffix extends Affix {
         Vec3 lastPosition = entity.position();
         DelayedTaskScheduler.schedule(entity.level(), 1, () -> {
             if (!entity.isAlive()) return;
-
             AttributeInstance armorAttr = entity.getAttribute(Attributes.ARMOR);
             if (armorAttr == null) return;
             armorAttr.removeModifier(FORTIFY_UUID);
@@ -81,7 +78,6 @@ public class FortifyAffix extends Affix {
             if (cachedBonus <= 0f) return;
 
             if (entity.position().distanceToSqr(lastPosition) < 0.001) {
-                // Remove first so getAttributeValue doesn't include our own modifier
                 double armorWithoutBonus = armorAttr.getValue();
                 armorAttr.addTransientModifier(new AttributeModifier(
                         FORTIFY_UUID, FORTIFY_NAME,
@@ -101,6 +97,34 @@ public class FortifyAffix extends Affix {
             }
         }
         return total;
+    }
+
+    @Override
+    public void tickEntityAffix(LivingEntity entity, LootRarity rarity, float level) {
+        Vec3 lastPos = entity.position();
+        DelayedTaskScheduler.schedule(entity.level(), 1, () -> {
+            if (!entity.isAlive()) return;
+            AttributeInstance armorAttr = entity.getAttribute(Attributes.ARMOR);
+            if (armorAttr == null) return;
+
+            // Remove first to get clean baseline
+            armorAttr.removeModifier(FORTIFY_UUID);
+            float bonus = values.get(rarity).get(level);
+            if (bonus <= 0f) return;
+
+            if (entity.position().distanceToSqr(lastPos) < 0.001) {
+                double base = armorAttr.getValue();
+                armorAttr.addTransientModifier(new AttributeModifier(
+                        FORTIFY_UUID, FORTIFY_NAME,
+                        base * bonus,
+                        AttributeModifier.Operation.ADDITION));
+            }
+        });
+    }
+
+    @Override
+    public int tickInterval() {
+        return 5;
     }
 
     @Override

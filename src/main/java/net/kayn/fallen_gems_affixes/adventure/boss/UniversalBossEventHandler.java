@@ -6,14 +6,20 @@ import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
 import dev.shadowsoffire.placebo.json.RandomAttributeModifier;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,7 +49,6 @@ public class UniversalBossEventHandler {
         if (config.isBlacklisted(mob.getType(), entityId)) return;
 
         ResourceLocation dimensionId = event.getLevel().getLevel().dimension().location();
-
         List<LootRarity> allowed = config.getRaritiesForDimension(dimensionId);
         if (allowed != null && allowed.isEmpty()) return;
 
@@ -53,11 +58,11 @@ public class UniversalBossEventHandler {
 
         BossStats stats = config.stats().get(rarity);
         if (stats == null) {
-            FallenGemsAffixes.LOGGER.warn("No stats defined for rarity {} in universal boss config", config.getRarityKey(rarity));
+            FallenGemsAffixes.LOGGER.warn("[FGA] No BossStats for rarity '{}'", config.getRarityKey(rarity));
             return;
         }
 
-        apply(mob, stats, rarity);
+        applyBoss(mob, stats, rarity, config);
 
         data.putBoolean(TAG, true);
         data.putString(TAG + ".rarity", config.getRarityKey(rarity));
@@ -65,7 +70,7 @@ public class UniversalBossEventHandler {
         data.putString("apoth.rarity", config.getRarityKey(rarity));
     }
 
-    private static void apply(Mob mob, BossStats stats, LootRarity rarity) {
+    private static void applyBoss(Mob mob, BossStats stats, LootRarity rarity, UniversalBossConfig config) {
         int duration = mob instanceof Creeper ? 6000 : Integer.MAX_VALUE;
 
         for (ChancedEffectInstance inst : stats.effects()) {
@@ -74,11 +79,39 @@ public class UniversalBossEventHandler {
             }
         }
 
+        float statChance = config.getStatChance(rarity);
         for (RandomAttributeModifier modif : stats.modifiers()) {
-            modif.apply(mob.getRandom(), mob);
+            if (mob.getRandom().nextFloat() < statChance) {
+                modif.apply(mob.getRandom(), mob);
+            }
         }
 
         mob.setHealth(mob.getMaxHealth());
+
+        String rarityKey = config.getRarityKey(rarity);
+        List<EntityAffixEntry> affixEntries = config.getAffixesForRarity(rarity);
+
+        for (EntityAffixEntry entry : affixEntries) {
+            if (mob.getRandom().nextFloat() < entry.chance()) {
+                EntityAffixHelper.addAffix(mob, entry.affixId(), rarityKey, entry.level());
+            }
+        }
+
+        if (!affixEntries.isEmpty()) {
+            List<EntityAffixInstance> resolved = EntityAffixHelper.getAffixes(mob);
+            for (EntityAffixInstance inst : resolved) {
+                if (!inst.isValid()) continue;
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    inst.affix().get().addModifiers(ItemStack.EMPTY, inst.rarity().get(), inst.level(), slot,
+                            (attr, mod) -> {
+                                AttributeInstance attrInst = mob.getAttribute(attr);
+                                if (attrInst != null && !attrInst.hasModifier(mod)) {
+                                    attrInst.addPermanentModifier(mod);
+                                }
+                            });
+                }
+            }
+        }
 
         String rarityPath = RarityRegistry.INSTANCE.getKey(rarity) != null
                 ? Objects.requireNonNull(RarityRegistry.INSTANCE.getKey(rarity)).getPath() : "unknown";
@@ -95,6 +128,6 @@ public class UniversalBossEventHandler {
             name = mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor()));
         }
         mob.setCustomName(name);
-        mob.setCustomNameVisible(true);
+        mob.setCustomNameVisible(false);
     }
 }

@@ -1,11 +1,11 @@
 {
   "tier_chances": {
-    "common": 0.06,
+    "common": 1,
     "uncommon": 0.05,
     "rare": 0.04,
-    "epic": 0.03,
-    "mythic": 0.02,
-    "ancient": 0.01
+    "epic": 1,
+    "mythic": 1,
+    "ancient": 1
   },
   "blacklist": [
     "minecraft:villager",
@@ -28,170 +28,184 @@
       "ancient"
     ]
   },
+  "affixes": {
+    "epic": [
+      {
+        "affix": "fallen_gems_affixes:berserker",
+        "level": 0.50,
+        "chance": 0.6
+      },
+      {
+        "affix": "fallen_gems_affixes:armor/afflicted",
+        "level": 0.40,
+        "chance": 0.4
+      }
+    ],
+    "mythic": [
+      {
+        "affix": "fallen_gems_affixes:berserker",
+        "level": 0.75,
+        "chance": 0.7
+      },
+      {
+        "affix": "fallen_gems_affixes:armor/afflicted",
+        "level": 0.65,
+        "chance": 0.5
+      },
+      {
+        "affix": "fallen_gems_affixes:armor/fortify",
+        "level": 0.50,
+        "chance": 0.4
+      }
+    ],
+    "ancient": [
+      {
+        "affix": "fallen_gems_affixes:berserker",
+        "level": 1.00,
+        "chance": 0.8
+      },
+      {
+        "affix": "fallen_gems_affixes:armor/afflicted",
+        "level": 0.90,
+        "chance": 0.7
+      },
+      {
+        "affix": "fallen_gems_affixes:armor/fortify",
+        "level": 0.75,
+        "chance": 0.6
+      }
+    ]
+  },
   "stats": {
     "common": {
+      "stat_chance": 0.5,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.25,
-            "steps": 3,
-            "step": 0.05
-          }
+          "value": { "min": 0.25, "steps": 3, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.1,
-            "steps": 3,
-            "step": 0.05
-          }
+          "value": { "min": 0.10, "steps": 3, "step": 0.05 }
+        },
+        {
+          "attribute": "minecraft:generic.movement_speed",
+          "operation": "MULTIPLY_BASE",
+          "value": { "min": 0.03, "steps": 3, "step": 0.01 }
         }
       ]
     },
     "uncommon": {
+      "stat_chance": 0.45,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.5,
-            "steps": 4,
-            "step": 0.05
-          }
+          "value": { "min": 0.50, "steps": 4, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.2,
-            "steps": 4,
-            "step": 0.05
-          }
+          "value": { "min": 0.20, "steps": 4, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.movement_speed",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.05,
-            "steps": 3,
-            "step": 0.02
-          }
+          "value": { "min": 0.05, "steps": 3, "step": 0.02 }
+        },
+        {
+          "attribute": "minecraft:generic.armor",
+          "operation": "ADDITION",
+          "value": 1
+        },
+        {
+          "attribute": "attributeslib:dodge_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.02, "steps": 3, "step": 0.01 }
         }
       ]
     },
     "rare": {
+      "stat_chance": 0.40,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [
-        {
-          "effect": "minecraft:resistance",
-          "chance": 0.5
-        }
+        { "effect": "minecraft:resistance", "chance": 0.5 }
       ],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.8,
-            "steps": 5,
-            "step": 0.05
-          }
+          "value": { "min": 0.80, "steps": 5, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.35,
-            "steps": 5,
-            "step": 0.05
-          }
+          "value": { "min": 0.35, "steps": 5, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.movement_speed",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.1,
-            "steps": 4,
-            "step": 0.02
-          }
+          "value": { "min": 0.10, "steps": 4, "step": 0.02 }
         },
         {
           "attribute": "minecraft:generic.armor",
           "operation": "ADDITION",
           "value": 2
+        },
+        {
+          "attribute": "attributeslib:dodge_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.04, "steps": 4, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:armor_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 1.0, "steps": 3, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:crit_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 3, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:crit_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.10, "steps": 3, "step": 0.05 }
         }
       ]
     },
     "epic": {
+      "stat_chance": 0.35,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [
-        {
-          "effect": "minecraft:resistance",
-          "chance": 0.75
-        },
-        {
-          "effect": "minecraft:fire_resistance",
-          "chance": 0.5
-        }
+        { "effect": "minecraft:resistance",      "chance": 0.75 },
+        { "effect": "minecraft:fire_resistance", "chance": 0.50 }
       ],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 1.2,
-            "steps": 6,
-            "step": 0.05
-          }
+          "value": { "min": 1.20, "steps": 6, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.5,
-            "steps": 6,
-            "step": 0.05
-          }
+          "value": { "min": 0.50, "steps": 6, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.movement_speed",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.15,
-            "steps": 5,
-            "step": 0.02
-          }
+          "value": { "min": 0.15, "steps": 5, "step": 0.02 }
         },
         {
           "attribute": "minecraft:generic.armor",
@@ -201,59 +215,74 @@
         {
           "attribute": "minecraft:generic.knockback_resistance",
           "operation": "ADDITION",
-          "value": 0.5
+          "value": { "min": 0.25, "steps": 3, "step": 0.25 }
+        },
+        {
+          "attribute": "attributeslib:crit_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.08, "steps": 5, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:crit_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.20, "steps": 5, "step": 0.10 }
+        },
+        {
+          "attribute": "attributeslib:armor_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 2.0, "steps": 4, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:armor_shred",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 4, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:dodge_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.06, "steps": 5, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:current_hp_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.02, "steps": 5, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:life_steal",
+          "operation": "ADDITION",
+          "value": { "min": 0.03, "steps": 4, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:healing_received",
+          "operation": "MULTIPLY_BASE",
+          "value": { "min": 0.10, "steps": 4, "step": 0.05 }
         }
       ]
     },
     "mythic": {
+      "stat_chance": 0.30,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [
-        {
-          "effect": "minecraft:resistance",
-          "chance": 1.0
-        },
-        {
-          "effect": "minecraft:fire_resistance",
-          "chance": 0.75
-        },
-        {
-          "effect": "minecraft:strength",
-          "chance": 0.5
-        }
+        { "effect": "minecraft:resistance",      "chance": 1.00 },
+        { "effect": "minecraft:fire_resistance", "chance": 0.75 },
+        { "effect": "minecraft:strength",        "chance": 0.50 }
       ],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 1.75,
-            "steps": 8,
-            "step": 0.05
-          }
+          "value": { "min": 1.75, "steps": 8, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.7,
-            "steps": 8,
-            "step": 0.05
-          }
+          "value": { "min": 0.70, "steps": 8, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.movement_speed",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.2,
-            "steps": 6,
-            "step": 0.02
-          }
+          "value": { "min": 0.20, "steps": 6, "step": 0.02 }
         },
         {
           "attribute": "minecraft:generic.armor",
@@ -261,65 +290,102 @@
           "value": 6
         },
         {
+          "attribute": "minecraft:generic.armor_toughness",
+          "operation": "ADDITION",
+          "value": { "min": 1.0, "steps": 4, "step": 0.5 }
+        },
+        {
           "attribute": "minecraft:generic.knockback_resistance",
           "operation": "ADDITION",
-          "value": 0.75
+          "value": { "min": 0.50, "steps": 4, "step": 0.25 }
+        },
+        {
+          "attribute": "attributeslib:crit_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.12, "steps": 6, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:crit_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.40, "steps": 6, "step": 0.10 }
+        },
+        {
+          "attribute": "attributeslib:armor_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 3.0, "steps": 5, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:armor_shred",
+          "operation": "ADDITION",
+          "value": { "min": 0.08, "steps": 5, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:prot_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 1.0, "steps": 4, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:dodge_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.08, "steps": 6, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:current_hp_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.04, "steps": 6, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:life_steal",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 5, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:cold_damage",
+          "operation": "ADDITION",
+          "value": { "min": 1.0, "steps": 5, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:fire_damage",
+          "operation": "ADDITION",
+          "value": { "min": 1.0, "steps": 5, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:healing_received",
+          "operation": "MULTIPLY_BASE",
+          "value": { "min": 0.20, "steps": 5, "step": 0.05 }
+        },
+        {
+          "attribute": "attributeslib:overheal",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 4, "step": 0.02 }
         }
       ]
     },
     "ancient": {
+      "stat_chance": 0.35,
       "enchant_chance": 0.0,
-      "enchantment_levels": [
-        0,
-        0,
-        0,
-        0
-      ],
+      "enchantment_levels": [0, 0, 0, 0],
       "effects": [
-        {
-          "effect": "minecraft:resistance",
-          "chance": 1.0
-        },
-        {
-          "effect": "minecraft:fire_resistance",
-          "chance": 1.0
-        },
-        {
-          "effect": "minecraft:strength",
-          "chance": 1.0
-        },
-        {
-          "effect": "minecraft:speed",
-          "chance": 0.5
-        }
+        { "effect": "minecraft:resistance",      "chance": 1.0 },
+        { "effect": "minecraft:fire_resistance", "chance": 1.0 },
+        { "effect": "minecraft:strength",        "chance": 1.0 },
+        { "effect": "minecraft:speed",           "chance": 0.5 }
       ],
       "attribute_modifiers": [
         {
           "attribute": "minecraft:generic.max_health",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 2.5,
-            "steps": 10,
-            "step": 0.05
-          }
+          "value": { "min": 2.50, "steps": 10, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.attack_damage",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 1.0,
-            "steps": 10,
-            "step": 0.05
-          }
+          "value": { "min": 1.00, "steps": 10, "step": 0.05 }
         },
         {
           "attribute": "minecraft:generic.movement_speed",
           "operation": "MULTIPLY_BASE",
-          "value": {
-            "min": 0.25,
-            "steps": 8,
-            "step": 0.02
-          }
+          "value": { "min": 0.25, "steps": 8,  "step": 0.02 }
         },
         {
           "attribute": "minecraft:generic.armor",
@@ -329,12 +395,82 @@
         {
           "attribute": "minecraft:generic.armor_toughness",
           "operation": "ADDITION",
-          "value": 4
+          "value": { "min": 2.0, "steps": 5, "step": 0.5 }
         },
         {
           "attribute": "minecraft:generic.knockback_resistance",
           "operation": "ADDITION",
-          "value": 1.0
+          "value": { "min": 0.75, "steps": 4, "step": 0.25 }
+        },
+        {
+          "attribute": "attributeslib:crit_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.18, "steps": 8, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:crit_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.60, "steps": 8, "step": 0.10 }
+        },
+        {
+          "attribute": "attributeslib:armor_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 4.0, "steps": 6, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:armor_shred",
+          "operation": "ADDITION",
+          "value": { "min": 0.12, "steps": 6, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:prot_pierce",
+          "operation": "ADDITION",
+          "value": { "min": 2.0, "steps": 5, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:prot_shred",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 5, "step": 0.02 }
+        },
+        {
+          "attribute": "fallen_gems_affixes:max_health_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.05, "steps": 5, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:dodge_chance",
+          "operation": "ADDITION",
+          "value": { "min": 0.1, "steps": 10, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:current_hp_damage",
+          "operation": "ADDITION",
+          "value": { "min": 0.06, "steps": 8, "step": 0.01 }
+        },
+        {
+          "attribute": "attributeslib:life_steal",
+          "operation": "ADDITION",
+          "value": { "min": 0.08, "steps": 6, "step": 0.02 }
+        },
+        {
+          "attribute": "attributeslib:cold_damage",
+          "operation": "ADDITION",
+          "value": { "min": 2.0, "steps": 6, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:fire_damage",
+          "operation": "ADDITION",
+          "value": { "min": 2.0, "steps": 6, "step": 0.5 }
+        },
+        {
+          "attribute": "attributeslib:healing_received",
+          "operation": "MULTIPLY_BASE",
+          "value": { "min": 0.30, "steps": 6, "step": 0.05 }
+        },
+        {
+          "attribute": "attributeslib:overheal",
+          "operation": "ADDITION",
+          "value": { "min": 0.08, "steps": 6, "step": 0.02 }
         }
       ]
     }

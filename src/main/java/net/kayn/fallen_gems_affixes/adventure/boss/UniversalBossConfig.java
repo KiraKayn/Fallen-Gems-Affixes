@@ -3,25 +3,24 @@ package net.kayn.fallen_gems_affixes.adventure.boss;
 import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public record UniversalBossConfig(
         Map<LootRarity, Float> tierChances,
         Map<LootRarity, BossStats> stats,
         List<ResourceLocation> blacklist,
         List<TagKey<EntityType<?>>> blacklistTags,
-        Map<ResourceLocation, List<LootRarity>> dimensionRarities
+        Map<ResourceLocation, List<LootRarity>> dimensionRarities,
+        Map<String, List<EntityAffixEntry>> affixes,
+        Map<String, Float> statChances
 ) {
-
 
     @Nullable
     public List<LootRarity> getRaritiesForDimension(ResourceLocation dimensionId) {
@@ -43,11 +42,9 @@ public record UniversalBossConfig(
                 if (allowed.contains(entry.getKey())) pool.put(entry.getKey(), entry.getValue());
             }
         }
-
         float totalWeight = pool.values().stream().reduce(0f, Float::sum);
         if (totalWeight <= 0f) return null;
         if (rand.nextFloat() >= totalWeight) return null;
-
         float roll = rand.nextFloat() * totalWeight;
         float cumulative = 0f;
         for (Map.Entry<LootRarity, Float> entry : pool.entrySet()) {
@@ -65,8 +62,16 @@ public record UniversalBossConfig(
         return false;
     }
 
+    public List<EntityAffixEntry> getAffixesForRarity(LootRarity rarity) {
+        return affixes.getOrDefault(getRarityKey(rarity), Collections.emptyList());
+    }
+
+    public float getStatChance(LootRarity rarity) {
+        return statChances.getOrDefault(getRarityKey(rarity), 1.0f);
+    }
+
     public String getRarityKey(LootRarity rarity) {
-        ResourceLocation key = RarityRegistry.INSTANCE.getKey(rarity);
-        return key != null ? key.getPath() : "unknown";
+        ResourceLocation loc = RarityRegistry.INSTANCE.getKey(rarity);
+        return loc != null ? loc.getPath() : "unknown";
     }
 }
