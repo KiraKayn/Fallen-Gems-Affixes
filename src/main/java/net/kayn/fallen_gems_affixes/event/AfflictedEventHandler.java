@@ -1,8 +1,9 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import net.kayn.fallen_gems_affixes.adventure.affix.AfflictedAffix;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
+import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -68,14 +69,21 @@ public class AfflictedEventHandler {
 
     private static float getTotalDamageBonus(LivingEntity entity) {
         float total = 0f;
+
         for (ItemStack stack : entity.getAllSlots()) {
             for (var inst : AffixHelper.getAffixes(stack).values()) {
                 if (!inst.isValid()) continue;
                 if (!(inst.affix().get() instanceof AfflictedAffix affix)) continue;
-                LootRarity rarity = inst.rarity().get();
-                total += affix.getDamageBonus(entity, rarity, inst.level());
+                total += affix.getDamageBonus(entity, inst.rarity().get(), inst.level());
             }
         }
+
+        for (EntityAffixInstance inst : EntityAffixHelper.getAffixes(entity)) {
+            if (!inst.isValid()) continue;
+            if (!(inst.affix().get() instanceof AfflictedAffix affix)) continue;
+            total += affix.getDamageBonus(entity, inst.rarity().get(), inst.level());
+        }
+
         return total;
     }
 
@@ -85,10 +93,16 @@ public class AfflictedEventHandler {
             for (var inst : AffixHelper.getAffixes(stack).values()) {
                 if (!inst.isValid()) continue;
                 if (!(inst.affix().get() instanceof AfflictedAffix affix)) continue;
-                LootRarity rarity = inst.rarity().get();
-                total += affix.getSpeedBonus(entity, rarity, inst.level());
+                total += affix.getSpeedBonus(entity, inst.rarity().get(), inst.level());
             }
         }
+
+        for (EntityAffixInstance inst : EntityAffixHelper.getAffixes(entity)) {
+            if (!inst.isValid()) continue;
+            if (!(inst.affix().get() instanceof AfflictedAffix affix)) continue;
+            total += affix.getSpeedBonus(entity, inst.rarity().get(), inst.level());
+        }
+
         return total;
     }
 }
