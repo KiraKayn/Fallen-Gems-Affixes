@@ -1,8 +1,11 @@
 package net.kayn.fallen_gems_affixes.augment;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.client.CascadeAugmentClient;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
@@ -32,32 +35,35 @@ import java.util.List;
 public class CascadeAugment implements IAugment {
 
     private static final ResourceLocation CASCADE_ID =
-            new ResourceLocation(FallenGemsAffixes.MOD_ID, "cascade");
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "cascade");
 
     public static final float DEFAULT_CHANCE       = 0.35f;
     public static final float DEFAULT_DAMAGE_BONUS = 0.40f;
 
     private static final String KEY_CHANCE       = "chance";
     private static final String KEY_DAMAGE_BONUS = "damage_bonus";
-
-    public static ResourceLocation augmentId() { return CASCADE_ID; }
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(CascadeData.CODEC);
 
     @Override public ResourceLocation getId()   { return CASCADE_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean needsInstance()     { return false; }
+    @Override public boolean shouldAttachToPlayer()     { return false; }
 
     @Override
-    public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
-        gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
-        AugmentItem.AugmentData data = AugmentItem.getAugmentData(CASCADE_ID);
-        if (data == null) return;
-        ItemStack stack = AugmentItem.createAugment(CASCADE_ID);
-        var pose = gui.pose();
-        pose.pushPose();
-        pose.translate(x, y, 0);
-        pose.scale(0.5F, 0.5F, 1);
-        gui.renderFakeItem(stack, 0, 0);
-        pose.popPose();
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
+
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
+        CascadeData data = new CascadeData();
+        data.damageBonus = DEFAULT_CHANCE;
+        data.chance = DEFAULT_DAMAGE_BONUS;
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return IAugment.string(this);
     }
 
     @Override
@@ -68,25 +74,30 @@ public class CascadeAugment implements IAugment {
     }
 
     @Override
-    public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-        if (!(innerData instanceof CascadeData base)) {
-            return Component.translatable("fallen_gems_affixes.augment.cascade.desc",
-                            (int)(DEFAULT_CHANCE * 100), (int)(DEFAULT_DAMAGE_BONUS * 100))
-                    .withStyle(ChatFormatting.YELLOW);
-        }
+    public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
+        gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
+        AugmentMeta data = Fallen.Registries.AUGMENT_REGISTRY.getMetaData(CASCADE_ID);
+        if (data == null) return;
+        ItemStack stack = AugmentItem.createAugment(data.getAugment());
+        var pose = gui.pose();
+        pose.pushPose();
+        pose.translate(x, y, 0);
+        pose.scale(0.5F, 0.5F, 1);
+        gui.renderFakeItem(stack, 0, 0);
+        pose.popPose();
+    }
 
+    @Override
+    public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         // Safe client-only call via DistExecutor — never touches Minecraft class on server
+        CascadeData base = (CascadeData) innerData;
         CascadeData[] effective = {null};
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
                 effective[0] = CascadeAugmentClient.getEffectiveData(base));
 
         if (effective[0] != null) {
             boolean scaled = effective[0].chance != base.chance || effective[0].damageBonus != base.damageBonus;
-            MutableComponent comp = Component.translatable(
-                    "fallen_gems_affixes.augment.cascade.desc",
-                    (int)(effective[0].chance * 100),
-                    (int)(effective[0].damageBonus * 100)
-            ).withStyle(ChatFormatting.YELLOW);
+            MutableComponent comp = effective[0].combineText().withStyle(ChatFormatting.YELLOW);
 
             if (scaled) {
                 comp = comp.append(Component.literal(
@@ -216,6 +227,18 @@ public class CascadeAugment implements IAugment {
     }
 
     public static class CascadeData implements IAugmentInnerData {
+        public static final Codec<CascadeData> CODEC = RecordCodecBuilder.create(inst ->
+            inst.group(
+                    Codec.FLOAT.fieldOf(KEY_CHANCE).forGetter(d -> d.chance),
+                    Codec.FLOAT.fieldOf(KEY_DAMAGE_BONUS).forGetter(d -> d.damageBonus)
+            ).apply(inst, (chance, damageBonus) -> {
+                CascadeData data = (CascadeData) Fallen.Augments.CASCADE.fallbackInnerData();
+                data.chance = chance;
+                data.damageBonus = damageBonus;
+                return data;
+            })
+        );
+
         public float chance      = DEFAULT_CHANCE;
         public float damageBonus = DEFAULT_DAMAGE_BONUS;
 
@@ -244,10 +267,10 @@ public class CascadeAugment implements IAugment {
             chance      = tag.contains(KEY_CHANCE)       ? tag.getFloat(KEY_CHANCE)       : DEFAULT_CHANCE;
             damageBonus = tag.contains(KEY_DAMAGE_BONUS) ? tag.getFloat(KEY_DAMAGE_BONUS) : DEFAULT_DAMAGE_BONUS;
         }
-    }
 
-    @Override
-    public String toString() {
-        return "CascadeAugment{id=" + augmentId() + "}";
+        @Override
+        public Codec<? extends IAugmentInnerData> getCodec() {
+            return CODEC;
+        }
     }
 }

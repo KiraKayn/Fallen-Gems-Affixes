@@ -1,8 +1,11 @@
 package net.kayn.fallen_gems_affixes.augment;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -18,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,13 +48,32 @@ import java.util.List;
 public class DualityAugment implements IAugment {
 
     private static final ResourceLocation DUALITY_ID =
-            new ResourceLocation(FallenGemsAffixes.MOD_ID, "duality");
-
-    public static ResourceLocation augmentId() { return DUALITY_ID; }
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "duality");
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(DualityData.CODEC);
 
     @Override public ResourceLocation getId()   { return DUALITY_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean needsInstance()     { return false; }
+    @Override public boolean shouldAttachToPlayer()     { return false; }
+
+    @Override
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
+
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
+        DualityData data = new DualityData();
+        data.critChanceMultiplier = 2.0f;
+        data.critDamageReduction  = 0.3f;
+        data.physicalRatio        = 0.5f;
+        data.magicRatio           = 0.5f;
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return IAugment.string(this);
+    }
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
@@ -63,7 +86,7 @@ public class DualityAugment implements IAugment {
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui,
                             IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
-        ItemStack displayStack = AugmentItem.createAugment(DUALITY_ID);
+        ItemStack displayStack = AugmentItem.createAugment(Fallen.Augments.DUALITY);
         PoseStack pose = gui.pose();
         pose.pushPose();
         pose.translate(x, y, 0);
@@ -75,16 +98,9 @@ public class DualityAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof DualityData data) {
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.duality.socket_desc",
-                    String.format("%.1f", data.critChanceMultiplier),
-                    String.format("%.0f%%", data.critDamageReduction * 100f),
-                    String.format("%.0f%%", data.physicalRatio * 100f),
-                    String.format("%.0f%%", data.magicRatio * 100f)
-            ).withStyle(ChatFormatting.YELLOW);
+            return data.combineText().withStyle(ChatFormatting.YELLOW);
         }
-        return Component.translatable("fallen_gems_affixes.augment.duality.socket_desc")
-                .withStyle(ChatFormatting.YELLOW);
+        return Component.empty();
     }
 
     @Override
@@ -93,11 +109,23 @@ public class DualityAugment implements IAugment {
         tooltip.add(Component.translatable("fallen_gems_affixes.augment.duality.type")
                 .withStyle(ChatFormatting.GOLD));
 
-        AugmentItem.AugmentData config = AugmentItem.getAugmentData(stack);
-        float critChanceMult  = config != null ? config.getCritChanceMultiplier()  : 2.0f;
-        float critDmgReduce   = config != null ? config.getCritDamageReduction()   : 0.3f;
-        float physRatio       = config != null ? config.getPhysicalRatio()         : 0.5f;
-        float magicRatio      = config != null ? config.getMagicRatio()            : 0.5f;
+        AugmentMeta meta = AugmentItem.getAugmentData(stack);
+        float critChanceMult;
+        float critDmgReduce;
+        float physRatio;
+        float magicRatio;
+        if (meta != null) {
+            DualityData data = (DualityData) meta.getDefaultData();
+            critChanceMult  =  data.critChanceMultiplier;
+            critDmgReduce   =  data.critDamageReduction;
+            physRatio       =  data.physicalRatio;
+            magicRatio      =  data.magicRatio;
+        } else {
+            critChanceMult  =  2.0f;
+            critDmgReduce   =  0.3f;
+            physRatio       =  0.5f;
+            magicRatio      =  0.5f;
+        }
 
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
@@ -138,6 +166,21 @@ public class DualityAugment implements IAugment {
     }
 
     public static class DualityData implements IAugmentInnerData {
+        public static final Codec<DualityData> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.FLOAT.fieldOf("crit_chance_multiplier").forGetter(d -> d.critChanceMultiplier),
+                        Codec.FLOAT.fieldOf("crit_damage_reduction").forGetter(d -> d.critDamageReduction),
+                        Codec.FLOAT.fieldOf("physical_ratio").forGetter(d -> d.physicalRatio),
+                        Codec.FLOAT.fieldOf("magic_ratio").forGetter(d -> d.magicRatio)
+                ).apply(inst, (critChanceMultiplier, critDamageReduction, physicalRatio, magicRatio) -> {
+                    DualityData data = (DualityData) Fallen.Augments.DUALITY.fallbackInnerData();
+                    data.critChanceMultiplier = critChanceMultiplier;
+                    data.critDamageReduction = critDamageReduction;
+                    data.physicalRatio = physicalRatio;
+                    data.magicRatio = magicRatio;
+                    return data;
+                })
+        );
 
         float critChanceMultiplier = 2.0f;
         float critDamageReduction  = 0.3f;
@@ -180,10 +223,10 @@ public class DualityAugment implements IAugment {
             physicalRatio        = tag.getFloat("physicalRatio");
             magicRatio           = tag.getFloat("magicRatio");
         }
-    }
 
-    @Override
-    public String toString() {
-        return "DualityAugment{id=" + augmentId() + "}";
+        @Override
+        public Codec<DualityData> getCodec() {
+            return CODEC;
+        }
     }
 }

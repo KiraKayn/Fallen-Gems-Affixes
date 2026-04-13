@@ -1,6 +1,11 @@
 package net.kayn.fallen_gems_affixes.types.augment;
 
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -14,16 +19,30 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
 public interface IAugment {
-    ResourceLocation AUGMENT_ICON = new ResourceLocation("fallen_gems_affixes", "textures/gui/augment_socket.png");
+    static String string(IAugment augment) {
+        return "Augment{id=" + augment.getId() + "}";
+    }
+
+    static final Codec<Supplier<IAugment>> CODEC = new Codec<Supplier<IAugment>>() {
+        @Override
+        public <T> DataResult<Pair<Supplier<IAugment>, T>> decode(DynamicOps<T> ops, T input) {
+            ResourceLocation id = ResourceLocation.CODEC.decode(ops, input).getOrThrow(false, t -> {}).getFirst();
+            Supplier<IAugment> augment = () -> Fallen.Registries.AUGMENT_REGISTRY.getValue(id);
+            return DataResult.success(new Pair<>(augment, input));
+        }
+
+        @Override
+        public <T> DataResult<T> encode(Supplier<IAugment> input, DynamicOps<T> ops, T prefix) {
+            return ResourceLocation.CODEC.encode(input.get().getId(), ops, prefix);
+        }
+    };
+
+    ResourceLocation AUGMENT_ICON = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "textures/gui/augment_socket.png");
 
     Component TEXT = Component.literal("Empty Crest");
-
-//    static Component getTooltip(CompoundTag tag) {
-//        return Component.translatable(tag.getString(Fallen.AugmentMisc.TYPE));
-//    }
-
 
     //Every augment must have a unique ID.
      // Used for serialization
@@ -31,7 +50,7 @@ public interface IAugment {
     ResourceLocation getId();
 
     default IAugmentInnerData parse(CompoundTag augmentData) {
-        if (!needsInstance()) {
+        if (!shouldAttachToPlayer()) {
             return null;
         }
         return IAugmentInnerData.EMPTY;
@@ -39,22 +58,9 @@ public interface IAugment {
 
     boolean isUnique();
 
-    boolean needsInstance();
-
-    default AugmentInstance createInstanceFromStack(ItemStack stack) {
-        if (!needsInstance()) {
-            return null;
-        }
-        return new AugmentInstance();
-    }
-
-//    TooltipComponent createTooltipComponent(CompoundTag tag);
+    boolean shouldAttachToPlayer();
 
     void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData);
-
-//    default void renderText(Font font, int x, int y, Matrix4f matrix, MultiBufferSource.BufferSource bufferSource, IAugmentInnerData innerData) {
-//        font.drawInBatch(organizeTooltipText(innerData), x + 12, y + 1, 0xAABBCC, true, matrix, bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-//    };
 
     default MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         return Component.translatable(this.getId().toString());
@@ -64,8 +70,13 @@ public interface IAugment {
     }
 
     default String getDescString() {
-        return "desc." + this.getId().toString();
+        return this.getId().getNamespace() + ".augment." + this.getId().getPath() + ".desc";
     }
 
     IAugmentInnerData deserializeInnerData(CompoundTag tag);
+
+    Codec<AugmentMeta> getMetaDataCodec();
+
+    IAugmentInnerData fallbackInnerData();
+//    void apply(ItemStack augmentItem, ItemStack weaponStack);
 }

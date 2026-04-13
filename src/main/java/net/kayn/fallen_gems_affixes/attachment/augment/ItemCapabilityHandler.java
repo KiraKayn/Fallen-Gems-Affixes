@@ -1,5 +1,6 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ItemCapabilityHandler {
 
     private static final ResourceLocation AUGMENT_CAPABILITY_ID =
-            new ResourceLocation("fallen_gems_affixes", "augment_capability");
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "augment_capability");
 
     @SubscribeEvent
     public static void onItemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event) {

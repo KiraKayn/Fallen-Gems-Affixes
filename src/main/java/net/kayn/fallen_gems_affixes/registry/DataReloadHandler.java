@@ -12,7 +12,6 @@ public class DataReloadHandler {
 
     @SubscribeEvent
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new AugmentItem.Loader());
         event.addListener(UniversalBossLoader.INSTANCE);
         FallenGemsAffixes.LOGGER.info("Registered Augment JSON loader!");
     }

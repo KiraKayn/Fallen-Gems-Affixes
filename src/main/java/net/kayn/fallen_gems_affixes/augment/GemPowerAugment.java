@@ -1,8 +1,11 @@
 package net.kayn.fallen_gems_affixes.augment;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -21,20 +24,28 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class GemPowerAugment implements IAugment {
-    private static final ResourceLocation GEM_POWER_ID = new ResourceLocation("fallen_gems_affixes", "gem_power");
-
-    public static ResourceLocation augmentId() {
-        return GEM_POWER_ID;
-    }
-
+    private static final ResourceLocation GEM_POWER_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "gem_power");
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(GemPowerData.CODEC);
     @Override
     public ResourceLocation getId() {
         return GEM_POWER_ID;
     }
 
     @Override
-    public IAugmentInnerData parse(CompoundTag augmentData) {
-        return IAugment.super.parse(augmentData);
+    public String toString() {
+        return IAugment.string(this);
+    }
+
+    @Override
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
+
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
+        GemPowerData data = new GemPowerData();
+        data.power = 1.5f;
+        return data;
     }
 
     @Override
@@ -43,32 +54,9 @@ public class GemPowerAugment implements IAugment {
     }
 
     @Override
-    public boolean needsInstance() {
+    public boolean shouldAttachToPlayer() {
         return false;
     }
-
-/*    @Override
-    public AugmentInstance createInstanceFromStack(ItemStack stack) {
-        float power = 1.0f;
-        AugmentItem.AugmentData data = null;
-
-        ResourceLocation id = AugmentItem.getAugmentId(stack);
-        if (id != null) {
-            data = AugmentItem.getAugmentData(id);
-        }
-        if (data == null) {
-            data = AugmentItem.getAugmentData(GEM_POWER_ID);
-        }
-
-        if (data != null) {
-            power = data.getPower();
-        }
-
-        GemPowerData innerData = new GemPowerData();
-        innerData.power = power;
-
-        return new AugmentInstance(this, innerData);
-    }*/
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
@@ -77,7 +65,7 @@ public class GemPowerAugment implements IAugment {
         var data = AugmentItem.getAugmentData(GEM_POWER_ID);
         if (data == null) return;
 
-        ItemStack stack = AugmentItem.createAugment(GEM_POWER_ID);
+        ItemStack stack = AugmentItem.createAugment(Fallen.Augments.GEM_POWER);
 
         PoseStack pose = gui.pose();
         pose.pushPose();
@@ -90,14 +78,10 @@ public class GemPowerAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof GemPowerData data) {
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.gem_power.desc",
-                    data.getPower()
-            ).withStyle(ChatFormatting.YELLOW);
+            return data.combineText().withStyle(ChatFormatting.YELLOW);
         }
 
-        return Component.translatable("fallen_gems_affixes.augment.gem_power.desc")
-                .withStyle(ChatFormatting.YELLOW);
+        return Component.empty();
     }
 
     @Override
@@ -114,19 +98,14 @@ public class GemPowerAugment implements IAugment {
                 .withStyle(ChatFormatting.GOLD));
 
         float power = 1.0f;
-        AugmentItem.AugmentData data = null;
 
-        ResourceLocation id = AugmentItem.getAugmentId(stack);
-        if (id != null) {
-            data = AugmentItem.getAugmentData(id);
-        }
+        String id = AugmentItem.getAugmentId(stack);
+        AugmentMeta data = Fallen.Registries.AUGMENT_REGISTRY.getMetaData(ResourceLocation.parse(id));
         if (data == null) {
-            data = AugmentItem.getAugmentData(GEM_POWER_ID);
+            return;
         }
 
-        if (data != null) {
-            power = data.getPower();
-        }
+        power = ((GemPowerData) data.getDefaultData()).getGemPower();
 
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
@@ -134,22 +113,23 @@ public class GemPowerAugment implements IAugment {
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
-    public static class GemPowerData implements IAugmentInnerData {
+    public static class GemPowerData implements IAugmentInnerData, IGemPowerProvider {
+        public static final Codec<GemPowerData> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.FLOAT.fieldOf("power").forGetter(d -> d.power)
+                ).apply(inst, (power) -> {
+                    GemPowerData data = new GemPowerData();
+                    data.power = power;
+                    return data;
+                })
+        );
         float power;
 
-        public float getPower() {
-            return power;
-        }
+        @Override
+        public void enable() {}
 
         @Override
-        public void enable() {
-
-        }
-
-        @Override
-        public void disable() {
-
-        }
+        public void disable() {}
 
         @Override
         public boolean isFunctional() {
@@ -172,10 +152,15 @@ public class GemPowerAugment implements IAugment {
         public void deserializeNBT(CompoundTag tag) {
             power = tag.getFloat("power");
         }
-    }
 
-    @Override
-    public String toString() {
-        return "GemPowerAugment{" + "id=" + augmentId() + "}";
+        @Override
+        public float getGemPower() {
+            return power;
+        }
+
+        @Override
+        public Codec<GemPowerData> getCodec() {
+            return CODEC;
+        }
     }
 }

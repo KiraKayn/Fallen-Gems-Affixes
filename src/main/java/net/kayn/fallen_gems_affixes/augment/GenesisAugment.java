@@ -1,6 +1,8 @@
 package net.kayn.fallen_gems_affixes.augment;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
@@ -8,6 +10,10 @@ import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipe;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -49,7 +55,8 @@ import java.util.Set;
 public class GenesisAugment implements IAugment {
 
     private static final ResourceLocation GENESIS_ID =
-            new ResourceLocation(FallenGemsAffixes.MOD_ID, "genesis");
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "genesis");
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(GenesisData.CODEC);
 
     /** NBT key inside affix_data where affix levels live. */
     private static final String AFFIX_DATA   = "affix_data";
@@ -61,33 +68,34 @@ public class GenesisAugment implements IAugment {
     // IAugment identity
     // -------------------------------------------------------------------------
 
-    public static ResourceLocation augmentId() { return GENESIS_ID; }
-
     @Override public ResourceLocation getId()   { return GENESIS_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean needsInstance()     { return false; }
+    @Override public boolean shouldAttachToPlayer()     { return false; }
 
-    // -------------------------------------------------------------------------
-    // Instance creation
-    // -------------------------------------------------------------------------
+    @Override
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
 
-/*    @Override
-    public AugmentInstance createInstanceFromStack(ItemStack stack) {
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
         GenesisData data = new GenesisData();
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag list = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < list.size(); i++) {
-                CompoundTag entry = list.getCompound(i);
-                if (GENESIS_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) {
-                    data.deserializeNBT(entry.getCompound(Fallen.AugmentMisc.INNER_DATA));
-                    break;
-                }
-            }
-        }
-        return new AugmentInstance(this, data);
-    }*/
+        data.originalAffixLevels = new CompoundTag();
+        data.defaultPower    = 0.5f;
+        data.affixPowerBoost = 0.1f;
+        data.gemPowerBoost   = 0.1f;
+        data.affixPower      = 0.5f;
+        data.gemPower        = 0.5f;
+        data.bossKillCount   = 0;
+//        data.killedBossIds     = new HashSet<>();
+        data.originalAffixLevels     = new CompoundTag();
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return IAugment.string(this);
+    }
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
@@ -104,7 +112,7 @@ public class GenesisAugment implements IAugment {
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui,
                             IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
-        ItemStack displayStack = AugmentItem.createAugment(GENESIS_ID);
+        ItemStack displayStack = AugmentItem.createAugment(Fallen.Augments.GENESIS);
         PoseStack pose = gui.pose();
         pose.pushPose();
         pose.translate(x, y, 0);
@@ -120,15 +128,9 @@ public class GenesisAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof GenesisData data) {
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.genesis.socket_desc",
-                    data.bossKillCount,
-                    String.format("%.2f", data.affixPower),
-                    String.format("%.2f", data.gemPower)
-            ).withStyle(ChatFormatting.YELLOW);
+            return data.combineText().withStyle(ChatFormatting.YELLOW);
         }
-        return Component.translatable("fallen_gems_affixes.augment.genesis.socket_desc")
-                .withStyle(ChatFormatting.YELLOW);
+        return Component.empty();
     }
 
     @Override
@@ -137,10 +139,19 @@ public class GenesisAugment implements IAugment {
         tooltip.add(Component.translatable("fallen_gems_affixes.augment.genesis.type")
                 .withStyle(ChatFormatting.GOLD));
 
-        AugmentItem.AugmentData config = AugmentItem.getAugmentData(stack);
-        float defaultPower = config != null ? config.getDefaultPower()    : 0.5f;
-        float affixBoost   = config != null ? config.getAffixPowerBoost() : 0.1f;
-        float gemBoost     = config != null ? config.getGemPowerBoost()   : 0.1f;
+        AugmentMeta meta = AugmentItem.getAugmentData(stack);
+        float defaultPower;
+        float affixBoost;
+        float gemBoost;
+        GenesisData data;
+        if (meta == null) {
+            data = (GenesisData) Fallen.Augments.GENESIS.fallbackInnerData();
+        } else {
+            data = (GenesisData) meta.getDefaultData();
+        }
+        defaultPower = data.defaultPower;
+        affixBoost = data.affixPowerBoost;
+        gemBoost = data.gemPowerBoost;
 
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
@@ -166,7 +177,7 @@ public class GenesisAugment implements IAugment {
 
 
     /**
-     * Called from {@link net.kayn.fallen_gems_affixes.attachment.AugmentRecipe} after genesis
+     * Called from {@link AugmentRecipe} after genesis
      * NBT has been committed to {@code result}.
      *
      * <p>Reads affix levels directly from {@code affix_data.affixes} NBT (bypassing
@@ -174,41 +185,33 @@ public class GenesisAugment implements IAugment {
      * baseline, then immediately applies {@code defaultPower} as the starting multiplier.
      */
     public static void apply(ItemStack result, ItemStack augmentItem) {
-        AugmentItem.AugmentData config = AugmentItem.getAugmentData(augmentItem);
-        float defaultPower    = config != null ? config.getDefaultPower()    : 0.5f;
-        float affixPowerBoost = config != null ? config.getAffixPowerBoost() : 0.1f;
-        float gemPowerBoost   = config != null ? config.getGemPowerBoost()   : 0.1f;
+        AugmentMeta meta = AugmentItem.getAugmentData(augmentItem);
+
+        GenesisData data1;
+        if (meta == null) {
+            data1 = (GenesisData) Fallen.Augments.GENESIS.fallbackInnerData();
+        } else {
+            data1 = (GenesisData) meta.getDefaultData();
+        }
 
         // Snapshot raw affix values now, before we touch anything
         CompoundTag originalLevels = snapshotAffixLevels(result);
 
         // Write genesis config + state into inner_data
-        CompoundTag tag         = result.getOrCreateTag();
-        CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments        = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
+        AugmentInstance inst = AugmentHelper.getAugments(result).get(Fallen.Augments.GENESIS);
+        GenesisData data = (GenesisData) inst.getData();
+        data.defaultPower = data1.defaultPower;
+        data.affixPowerBoost = data1.affixPowerBoost;
+        data.gemPowerBoost = data1.gemPowerBoost;
+        data.affixPower = data1.defaultPower;
+        data.gemPower = data1.defaultPower;
+        data.bossKillCount = 0;
+        data.originalAffixLevels = originalLevels;
 
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            if (!GENESIS_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            inner.putFloat("defaultPower",    defaultPower);
-            inner.putFloat("affixPowerBoost", affixPowerBoost);
-            inner.putFloat("gemPowerBoost",   gemPowerBoost);
-            inner.putFloat("affixPower",      defaultPower);
-            inner.putFloat("gemPower",        defaultPower);
-            inner.putInt("bossKillCount",     0);
-            inner.put("killedBosses",         new ListTag());
-            inner.put("originalAffixLevels",  originalLevels);
-            entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
-            break;
-        }
-
-        augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
-        tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
+        AugmentHelper.applyAugment(result, inst);
 
         // Apply starting multiplier: every affix becomes originalLevel * defaultPower
-        applyAffixPower(result, defaultPower);
+        applyAffixPower(result, data1.defaultPower);
     }
 
     /**
@@ -319,8 +322,20 @@ public class GenesisAugment implements IAugment {
         return null;
     }
 
-
-    public static class GenesisData implements IAugmentInnerData {
+    public static class GenesisData implements IAugmentInnerData, IGemPowerProvider, IAffixPowerProvider {
+        public static final Codec<GenesisData> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.FLOAT.fieldOf("default_power").forGetter(d -> d.defaultPower),
+                        Codec.FLOAT.fieldOf("affix_power_boost").forGetter(d -> d.affixPowerBoost),
+                        Codec.FLOAT.fieldOf("gem_power_boost").forGetter(d -> d.gemPowerBoost)
+                ).apply(inst, (defaultPower, affixPowerBoost, gemPowerBoost) -> {
+                    GenesisData data = (GenesisData) Fallen.Augments.GENESIS.fallbackInnerData();
+                    data.defaultPower = defaultPower;
+                    data.affixPowerBoost = affixPowerBoost;
+                    data.gemPowerBoost = gemPowerBoost;
+                    return data;
+                })
+        );
 
         float defaultPower    = 0.5f;
         float affixPowerBoost = 0.1f;
@@ -331,7 +346,9 @@ public class GenesisAugment implements IAugment {
         final Set<String> killedBossIds     = new HashSet<>();
         CompoundTag originalAffixLevels     = new CompoundTag();
 
+        @Override
         public float getAffixPower()    { return affixPower; }
+        @Override
         public float getGemPower()      { return gemPower; }
         public int   getBossKillCount() { return bossKillCount; }
 
@@ -379,10 +396,10 @@ public class GenesisAugment implements IAugment {
             for (Tag t : tag.getList("killedBosses", Tag.TAG_STRING))
                 killedBossIds.add(t.getAsString());
         }
-    }
 
-    @Override
-    public String toString() {
-        return "GenesisAugment{id=" + augmentId() + "}";
+        @Override
+        public Codec<GenesisData> getCodec() {
+            return CODEC;
+        }
     }
 }

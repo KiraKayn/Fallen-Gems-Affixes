@@ -8,7 +8,6 @@
     "AffixHelperMixin",
     "AttributeAffixAccessor",
     "AttributeAffixMixin",
-    "AttributesLibTooltipFix",
     "AugmentingMenuMixin",
     "CritMixin",
     "LivingEntityMixin",

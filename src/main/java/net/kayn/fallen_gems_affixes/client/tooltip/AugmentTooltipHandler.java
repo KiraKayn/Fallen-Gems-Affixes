@@ -1,11 +1,9 @@
 package net.kayn.fallen_gems_affixes.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
-import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.attributeslib.api.client.AddAttributeTooltipsEvent;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +20,6 @@ import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.core.net.Priority;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -81,7 +78,7 @@ public class AugmentTooltipHandler {
             CompoundTag tag = listTag.getCompound(i);
 
             ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
-            IAugment augment = AugmentRegistry.get(typeId);
+            IAugment augment = Fallen.Registries.AUGMENT_REGISTRY.getValue(typeId);
 
             if (augment != null) {
                 IAugmentInnerData inner = augment.deserializeInnerData(tag.getCompound(INNER_DATA));

@@ -1,6 +1,6 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;
 import net.minecraft.nbt.CompoundTag;
@@ -83,7 +83,7 @@ public class AugmentContainer implements IAugmentContainer, INBTSerializable<Com
 
         for (String key : augmentsTag.getAllKeys()) {
             ResourceLocation id = new ResourceLocation(key);
-            IAugment augment = AugmentRegistry.get(id);
+            IAugment augment = Fallen.Registries.AUGMENT_REGISTRY.getValue(id);
             if (augment == null) continue;
 
             ListTag list = augmentsTag.getList(key, Tag.TAG_COMPOUND);

@@ -1,13 +1,17 @@
 {
   "augment": "fallen_gems_affixes:cascade",
-  "texture": "fallen_gems_affixes:textures/item/augments/cascade.png",
-  "categories": [
-    "sword",
-    "heavy_weapon",
-    "staffs",
-    "celestial_melee",
-    "celestial_ranged"
-  ],
-  "chance": 0.35,
-  "damage_bonus": 0.40
+  "general": {
+    "texture": "fallen_gems_affixes:textures/item/augments/cascade.png",
+    "categories": [
+      "sword",
+      "heavy_weapon",
+      "staffs",
+      "celestial_melee",
+      "celestial_ranged"
+    ]
+  },
+  "inner_data": {
+    "chance": 0.35,
+    "damage_bonus": 0.40
+  }
 }

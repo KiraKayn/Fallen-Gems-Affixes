@@ -1,6 +1,9 @@
 package net.kayn.fallen_gems_affixes.augment;
 
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -31,7 +34,7 @@ public class GenesisEventHandler {
 
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(
             Registries.ENTITY_TYPE,
-            new ResourceLocation("fallen_gems_affixes", "boss_slayer"));
+            ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "boss_slayer"));
 
     public static void bootstrap(IEventBus eventBus) {
         eventBus.addListener(GenesisEventHandler::onLivingDeath);
@@ -53,46 +56,15 @@ public class GenesisEventHandler {
 
 
     private static void updateGenesisOnBossKill(ItemStack stack, ResourceLocation bossType) {
-        CompoundTag itemTag = stack.getTag();
-        if (itemTag == null || !itemTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
-
-        CompoundTag augmentData = itemTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            ResourceLocation typeId = ResourceLocation.tryParse(entry.getString(Fallen.AugmentMisc.TYPE));
-            if (!GenesisAugment.augmentId().equals(typeId)) continue;
-
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-
-            // Deduplicate by entity type - the same boss can only be coutned once
-            String bossStr = bossType.toString();
-            ListTag killedList = inner.getList("killedBosses", Tag.TAG_STRING);
-            for (Tag t : killedList) {
-                if (bossStr.equals(t.getAsString())) return;
-            }
-
-            // Record the kill
-            killedList.add(StringTag.valueOf(bossStr));
-            inner.put("killedBosses", killedList);
-            inner.putInt("bossKillCount", inner.getInt("bossKillCount") + 1);
-
-            // Always boost both powers — no hasAffixes / hasGems checks
-            float newAffix = inner.getFloat("affixPower") + inner.getFloat("affixPowerBoost");
-            float newGem   = inner.getFloat("gemPower")   + inner.getFloat("gemPowerBoost");
-            inner.putFloat("affixPower", newAffix);
-            inner.putFloat("gemPower",   newGem);
-
-            // Re-apply affix levels immediately (no-ops if item has no affixes yet)
-            GenesisAugment.applyAffixPower(stack, newAffix);
-
-            // Gem power is picked up passively by GemBonusModifier on the next calculation
-            entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
-            augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
-            itemTag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-            break;
-        }
+        AugmentInstance inst = AugmentHelper.getAugments(stack).get(Fallen.Augments.GENESIS);
+        if (inst == null) return;
+        GenesisAugment.GenesisData data = (GenesisAugment.GenesisData) inst.getData();
+        data.bossKillCount += 1;
+        data.killedBossIds.add(bossType.toString());
+        AugmentHelper.applyAugment(stack, new AugmentInstance(inst.getAugment(), data));
+        // Deduplicate by entity type - the same boss can only be coutned once
+        // Re-apply affix levels immediately (no-ops if item has no affixes yet)
+        GenesisAugment.applyAffixPower(stack, data.affixPower + data.affixPowerBoost);
     }
 
     private static List<ItemStack> getAllItems(ServerPlayer player) {

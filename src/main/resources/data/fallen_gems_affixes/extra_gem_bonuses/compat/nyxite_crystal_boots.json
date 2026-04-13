@@ -5,7 +5,7 @@
       "modid": "traveloptics"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "fallen_lib:extra_gem_bonus",
   "gem": "fallen_gems_affixes:compat/nyxite_crystal",
   "bonuses": [
     {

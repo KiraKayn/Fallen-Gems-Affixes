@@ -8,15 +8,13 @@ import dev.shadowsoffire.attributeslib.AttributesLib;
 import dev.shadowsoffire.attributeslib.api.IFormattableAttribute;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.mixin.AttributeAffixAccessor;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,9 +24,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
-
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.INNER_DATA;
 
 @Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SupremacyStarTooltip {
@@ -54,8 +49,7 @@ public class SupremacyStarTooltip {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        CompoundTag root = stack.getTag();
-        if (root == null || !hasSupremacy(root)) return;
+        if (AugmentHelper.hasAugment(stack, Fallen.Augments.SUPREMACY)) return;
 
         List<Component> tooltips = event.getToolTip();
         if (tooltips == null || tooltips.isEmpty()) return;
@@ -130,20 +124,6 @@ public class SupremacyStarTooltip {
                 }
             }
         }
-    }
-
-    private static boolean hasSupremacy(CompoundTag root) {
-        if (root.contains(AUGMENT_DATA)) {
-            CompoundTag augmentData = root.getCompound(AUGMENT_DATA);
-            ListTag augments = augmentData.getList(AUGMENTS, CompoundTag.TAG_COMPOUND);
-            for (int i = 0; i < augments.size(); i++) {
-                CompoundTag augment = augments.getCompound(i);
-                if (augment.getString(TYPE).equals(Fallen.Augments.SUPREMACY_STRING)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private static MutableComponent starPrefix(Component desc) {

@@ -1,18 +1,19 @@
 package net.kayn.fallen_gems_affixes;
 
-import com.google.gson.JsonObject;
-import net.kayn.fallen_gems_affixes.attachment.AugmentRecipeSerializer;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipeSerializer;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.*;
+import net.kayn.fallen_gems_affixes.network.ClientLikeSyncAugmentPacket;
 import net.kayn.fallen_gems_affixes.recipe.*;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
-import net.minecraft.network.FriendlyByteBuf;
+import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
+import net.rtxyd.fallen.lib.runtime.forgemod.network.Connection;
 
 public class Fallen {
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
@@ -22,82 +23,47 @@ public class Fallen {
         RecipeSerializers.bootstrap(bus);
         Augments.bootstrap();
         AugmentMisc.bootstrap();
+        Registries.bootstrap();
+    }
+
+    public static class Registries {
+        public static final AugmentRegistry AUGMENT_REGISTRY = new AugmentRegistry();
+        public static void bootstrap() {
+            Connection.registerRegistryBoundPacketPayloads(AUGMENT_REGISTRY, ClientLikeSyncAugmentPacket.BUF_CODEC,
+                    ClientLikeSyncAugmentPacket.Begin.class,    ClientLikeSyncAugmentPacket.Begin::new,     ClientLikeSyncAugmentPacket.Begin::handle,
+                    ClientLikeSyncAugmentPacket.class,          ClientLikeSyncAugmentPacket::new,           ClientLikeSyncAugmentPacket::handle,
+                    ClientLikeSyncAugmentPacket.End.class,      ClientLikeSyncAugmentPacket.End::new,       ClientLikeSyncAugmentPacket.End::handle);
+
+            for (IAugment augment : AUGMENT_REGISTRY.registryView().values()) {
+                AUGMENT_REGISTRY.registerCodec(augment.getId(), augment.getMetaDataCodec());
+            }
+        }
     }
 
     public static class RecipeSerializers {
         public static final RegistryObject<AugmentRecipeSerializer> ADD_AUGMENT =
-                SERIALIZERS.register("add_augment", AugmentRecipeSerializer::new);
+                SERIALIZERS.register("add_augment",
+                        AugmentRecipeSerializer::new);
 
         public static final RegistryObject<RecipeSerializer<AugmentCraftingRecipe>> AUGMENT_CRAFTING =
-                SERIALIZERS.register("augment_crafting", AugmentCraftingRecipe.Serializer::new);
+                SERIALIZERS.register("augment_crafting",
+                        AugmentCraftingRecipe.Serializer::new);
 
         public static final RegistryObject<RecipeSerializer<SocketConversionRecipe>> SOCKET_CONVERSION =
-                SERIALIZERS.register("socket_conversion", () -> new RecipeSerializer<>() {
-                    @Override
-                    public @NotNull SocketConversionRecipe fromJson(ResourceLocation id, JsonObject json) {
-                        return new SocketConversionRecipe();
-                    }
-
-                    @Override
-                    public SocketConversionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-                        return new SocketConversionRecipe();
-                    }
-
-                    @Override
-                    public void toNetwork(FriendlyByteBuf buf, SocketConversionRecipe recipe) {
-                    }
-                });
+                SERIALIZERS.register("socket_conversion",
+                        MiscUtil.simpleRecipeSerializer(SocketConversionRecipe::new));
 
         public static final RegistryObject<RecipeSerializer<TransmutationRecipe>> TRANSMUTATION =
-                SERIALIZERS.register("transmutation", () -> new RecipeSerializer<>() {
-                    @Override
-                    public @NotNull TransmutationRecipe fromJson(ResourceLocation id, JsonObject json) {
-                        return new TransmutationRecipe();
-                    }
-
-                    @Override
-                    public TransmutationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-                        return new TransmutationRecipe();
-                    }
-
-                    @Override
-                    public void toNetwork(FriendlyByteBuf buf, TransmutationRecipe recipe) {
-                    }
-                });
+                SERIALIZERS.register("transmutation",
+                        MiscUtil.simpleRecipeSerializer(TransmutationRecipe::new));
 
         public static final RegistryObject<RecipeSerializer<SeveranceRecipe>> SEVERANCE =
-                SERIALIZERS.register("severance", () -> new RecipeSerializer<>() {
-                    @Override
-                    public @NotNull SeveranceRecipe fromJson(ResourceLocation id, JsonObject json) {
-                        return new SeveranceRecipe();
-                    }
-
-                    @Override
-                    public SeveranceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-                        return new SeveranceRecipe();
-                    }
-
-                    @Override
-                    public void toNetwork(FriendlyByteBuf buf, SeveranceRecipe recipe) {
-                    }
-                });
+                SERIALIZERS.register("severance",
+                        MiscUtil.simpleRecipeSerializer(SeveranceRecipe::new));
 
         public static final RegistryObject<RecipeSerializer<ErasureRecipe>> ERASURE =
-                SERIALIZERS.register("erasure", () -> new RecipeSerializer<>() {
-                    @Override
-                    public @NotNull ErasureRecipe fromJson(ResourceLocation id, JsonObject json) {
-                        return new ErasureRecipe();
-                    }
-
-                    @Override
-                    public ErasureRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-                        return new ErasureRecipe();
-                    }
-
-                    @Override
-                    public void toNetwork(FriendlyByteBuf buf, ErasureRecipe recipe) {
-                    }
-                });
+                SERIALIZERS.register("erasure",
+                        MiscUtil.simpleRecipeSerializer(ErasureRecipe::new));
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
@@ -105,8 +71,11 @@ public class Fallen {
     }
 
     public static class AugmentMisc {
-        public static final ResourceLocation AUGMENT_CAP_ID = new ResourceLocation(FallenGemsAffixes.MOD_ID, "augment_cap");
+        public static final ResourceLocation AUGMENT_CAP_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "augment_cap");
+        public static final String AUGMENT_CACHED_OBJECT = "fallen_gems_affixes:augments";
         public static final String AUGMENT_DATA = "fallen_gems_affixes:augment_data";
+        public static final String AUGMENT_ID_TAG = "AugmentId";
+        public static final String AUGMENT_SLOTS = "augment_slots";
         public static final String AUGMENTS = "augments";
         public static final String TYPE = "type";
         public static final String UNIQUE_ID = "uuid";
@@ -118,21 +87,22 @@ public class Fallen {
     }
 
     public static class Augments {
-        public static final IAugment GEM_POWER = AugmentRegistry.register(new GemPowerAugment());
-        public static final IAugment SUPREMACY = AugmentRegistry.register(new SupremacyAugment());
-        public static final IAugment GENESIS = AugmentRegistry.register(new GenesisAugment());
-        public static final IAugment CASCADE = AugmentRegistry.register(new CascadeAugment());
-        public static final IAugment DUALITY = AugmentRegistry.register(new DualityAugment());
-        public static final IAugment MALICE = AugmentRegistry.register(new MaliceAugment());
+        public static final IAugment GEM_POWER = Registries.AUGMENT_REGISTRY.register(new GemPowerAugment());
+        public static final IAugment SUPREMACY = Registries.AUGMENT_REGISTRY.register(new SupremacyAugment());
+        public static final IAugment GENESIS = Registries.AUGMENT_REGISTRY.register(new GenesisAugment());
+        public static final IAugment CASCADE = Registries.AUGMENT_REGISTRY.register(new CascadeAugment());
+        public static final IAugment DUALITY = Registries.AUGMENT_REGISTRY.register(new DualityAugment());
+        public static final IAugment MALICE = Registries.AUGMENT_REGISTRY.register(new MaliceAugment());
 
-        public static final String GEM_POWER_STRING = GemPowerAugment.augmentId().toString();
-        public static final String SUPREMACY_STRING = SupremacyAugment.augmentId().toString();
-        public static final String GENESIS_STRING = GenesisAugment.augmentId().toString();
-        public static final String CASCADE_STRING = CascadeAugment.augmentId().toString();
-        public static final String DUALITY_STRING = DualityAugment.augmentId().toString();
-        public static final String MALICE_STRING = MaliceAugment.augmentId().toString();
+        public static final String GEM_POWER_STRING = GEM_POWER.getId().toString();
+        public static final String SUPREMACY_STRING = SUPREMACY.getId().toString();
+        public static final String GENESIS_STRING = GENESIS.getId().toString();
+        public static final String CASCADE_STRING = CASCADE.getId().toString();
+        public static final String DUALITY_STRING = DUALITY.getId().toString();
+        public static final String MALICE_STRING = MALICE.getId().toString();
 
         public static void bootstrap() {
+
         }
     }
 }

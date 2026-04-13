@@ -1,6 +1,6 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
@@ -119,7 +119,7 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
             String augmentIdString = tag.getString(AUGMENT_ID);
             ResourceLocation augmentId = new ResourceLocation(augmentIdString);
 
-            IAugment template = AugmentRegistry.get(augmentId);
+            IAugment template = Fallen.Registries.AUGMENT_REGISTRY.getValue(augmentId);
             if (template != null) {
                 this.augment = template;
 

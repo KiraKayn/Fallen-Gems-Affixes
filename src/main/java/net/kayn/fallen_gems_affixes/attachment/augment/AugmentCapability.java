@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentAccessor;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentContainer;

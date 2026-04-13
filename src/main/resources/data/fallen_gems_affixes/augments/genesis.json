@@ -1,9 +1,13 @@
 {
   "augment": "fallen_gems_affixes:genesis",
-  "texture": "fallen_gems_affixes:item/augments/genesis.png",
-  "categories": [
-  ],
-  "default_power":      0.5,
-  "affix_power_boost":  0.05,
-  "gem_power_boost":    0.05
+  "general": {
+    "texture": "fallen_gems_affixes:item/augments/genesis.png",
+    "categories": [
+    ]
+  },
+  "inner_data": {
+    "default_power":      0.5,
+    "affix_power_boost":  0.05,
+    "gem_power_boost":    0.05
+  }
 }

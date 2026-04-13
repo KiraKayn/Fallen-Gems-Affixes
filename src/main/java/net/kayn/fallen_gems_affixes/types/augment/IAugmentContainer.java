@@ -1,6 +1,6 @@
 package net.kayn.fallen_gems_affixes.types.augment;
 
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 
 import java.util.List;
 import java.util.Map;

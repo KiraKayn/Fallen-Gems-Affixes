@@ -3,11 +3,8 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
-import net.kayn.fallen_gems_affixes.Fallen;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -18,8 +15,6 @@ import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
 import net.rtxyd.fallen.lib.util.patch.InserterType;
 
 import java.util.Map;
-
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
 /**
  * This class should manage the logic on both client and server, must be thread-safe.
@@ -158,34 +153,11 @@ public class GemBonusModifier {
      * </ol>
      */
     private static float getGemPower(ItemStack stack) {
-        CompoundTag itemTag = stack.getTag();
-        if (itemTag == null || !itemTag.contains(AUGMENT_DATA)) return 1F;
-
-        CompoundTag augmentData = itemTag.getCompound(AUGMENT_DATA);
-        ListTag listTag = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
         float currentGemPower = 1F;
 
-        for (int i = 0; i < listTag.size(); i++) {
-            CompoundTag tag = listTag.getCompound(i);
-            ResourceLocation typeId = ResourceLocation.tryParse(tag.getString(TYPE));
-
-            if (GemPowerAugment.augmentId().equals(typeId)) {
-                GemPowerAugment.GemPowerData data = (GemPowerAugment.GemPowerData)
-                        Fallen.Augments.GEM_POWER.deserializeInnerData(tag.getCompound(INNER_DATA));
-                currentGemPower = data.getPower();
-
-            } else if (GenesisAugment.augmentId().equals(typeId)) {
-                Float genesisGemPower = GenesisAugment.getGenesisGemPower(stack);
-                currentGemPower = genesisGemPower != null
-                        ? genesisGemPower * currentGemPower
-                        : currentGemPower;
-
-            } else if (MaliceAugment.augmentId().equals(typeId)) {
-                CompoundTag inner = tag.getCompound(INNER_DATA);
-                if (inner.getBoolean("revealed")) {
-                    Float maliceGemPower = MaliceAugment.getMaliceGemPower(stack);
-                    if (maliceGemPower != null) currentGemPower *= maliceGemPower;
-                }
+        for (AugmentInstance instance : AugmentHelper.getAugments(stack).instances()) {
+            if (instance.getData() instanceof IGemPowerProvider data) {
+                currentGemPower += data.getGemPower();
             }
         }
 

@@ -2,7 +2,7 @@ package net.kayn.fallen_gems_affixes.recipe;
 
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;

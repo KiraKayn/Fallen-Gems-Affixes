@@ -1,4 +1,4 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation; // Import added
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -47,9 +46,9 @@ public class AugmentModel implements BakedModel {
     }
 
     private BakedModel resolve(ItemStack stack, BakedModel original) {
-        AugmentItem.AugmentData data = AugmentItem.getAugmentData(stack);
+        AugmentMeta data = AugmentItem.getAugmentData(stack);
         if (data != null) {
-            return Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(FallenGemsAffixes.MOD_ID, "item/augments/" + data.getAugmentId().getPath()));
+            return Minecraft.getInstance().getModelManager().getModel(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "item/augments/" + data.getAugment().getId().getPath()));
         }
         return original;
     }

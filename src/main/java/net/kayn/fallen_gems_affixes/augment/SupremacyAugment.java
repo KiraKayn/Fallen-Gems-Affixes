@@ -1,5 +1,7 @@
 package net.kayn.fallen_gems_affixes.augment;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
@@ -7,7 +9,9 @@ import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -15,8 +19,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -31,17 +33,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SupremacyAugment implements IAugment {
-    private static final ResourceLocation SUPREMACY_ID = new ResourceLocation(FallenGemsAffixes.MOD_ID, "supremacy");
+    private static final ResourceLocation SUPREMACY_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "supremacy");
     public static final float STANDARD_MAX_LEVEL = 1.0f;
     public static final float MAX_AFFIX_LEVEL = 2.0f;
-
-    public static ResourceLocation augmentId() {
-        return SUPREMACY_ID;
-    }
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(SupremacyData.CODEC);
 
     @Override
     public ResourceLocation getId() {
         return SUPREMACY_ID;
+    }
+
+    @Override
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
+
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
+        SupremacyData data = new SupremacyData();
+        data.power = 1.5f;
+        return data;
     }
 
     @Override
@@ -50,28 +61,18 @@ public class SupremacyAugment implements IAugment {
     }
 
     @Override
-    public boolean needsInstance() {
+    public boolean shouldAttachToPlayer() {
         return false;
     }
-
-/*    @Override
-    public AugmentInstance createInstanceFromStack(ItemStack stack) {
-        float power = getAugmentPower(stack);
-
-        SupremacyData innerData = new SupremacyData();
-        innerData.power = power;
-
-        return new AugmentInstance(this, innerData);
-    }*/
 
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
 
-        AugmentItem.AugmentData data = AugmentItem.getAugmentData(SUPREMACY_ID);
+        AugmentMeta data = AugmentItem.getAugmentData(SUPREMACY_ID);
         if (data == null) return;
 
-        ItemStack stack = AugmentItem.createAugment(SUPREMACY_ID);
+        ItemStack stack = AugmentItem.createAugment(Fallen.Augments.SUPREMACY);
 
         var pose = gui.pose();
         pose.pushPose();
@@ -91,13 +92,6 @@ public class SupremacyAugment implements IAugment {
 
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
-        if (innerData instanceof SupremacyData data) {
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.supremacy.desc",
-                    data.getPower()
-            ).withStyle(ChatFormatting.YELLOW);
-        }
-
         return Component.translatable("fallen_gems_affixes.augment.supremacy.desc")
                 .withStyle(ChatFormatting.YELLOW);
     }
@@ -124,25 +118,9 @@ public class SupremacyAugment implements IAugment {
         CompoundTag root = stack.getOrCreateTag();
         root.putBoolean("fallen_gems_affixes:fabled", true);
 
-        if (root.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = root.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-            for (int i = 0; i < augments.size(); i++) {
-                CompoundTag augment = augments.getCompound(i);
-                if (augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.SUPREMACY_STRING)) {
-                    CompoundTag innerData = augment.getCompound(Fallen.AugmentMisc.INNER_DATA);
-                    if (!innerData.contains("power")) {
-                        innerData.putFloat("power", power);
-                        augment.put(Fallen.AugmentMisc.INNER_DATA, innerData);
-                    }
-                    break;
-                }
-            }
-
-            augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
-            root.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-        }
+        SupremacyData data = new SupremacyData();
+        data.power = power;
+        AugmentHelper.applyAugment(stack, new AugmentInstance(Fallen.Augments.SUPREMACY, data));
 
         for (var entry : affixes.entrySet()) {
             var holder = entry.getKey();
@@ -168,19 +146,24 @@ public class SupremacyAugment implements IAugment {
     }
 
     private static float getAugmentPower(ItemStack stack) {
-        AugmentItem.AugmentData data = AugmentItem.getAugmentData(stack);
+        AugmentMeta data = AugmentItem.getAugmentData(stack);
         if (data != null) {
-            return data.getPower();
+            return ((SupremacyData)data.getDefaultData()).power;
         }
         return 1.5f;
     }
 
-    public static class SupremacyData implements IAugmentInnerData {
+    public static class SupremacyData implements IAugmentInnerData, IAffixPowerProvider {
+        public static final Codec<SupremacyData> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.FLOAT.fieldOf("power").forGetter(d -> d.power)
+                ).apply(inst, (power) -> {
+                    SupremacyData data = (SupremacyData) Fallen.Augments.SUPREMACY.fallbackInnerData();
+                    data.power = power;
+                    return data;
+                })
+        );
         float power;
-
-        public float getPower() {
-            return power;
-        }
 
         @Override
         public void enable() {
@@ -211,10 +194,15 @@ public class SupremacyAugment implements IAugment {
         public void deserializeNBT(CompoundTag tag) {
             power = tag.getFloat("power");
         }
-    }
 
-    @Override
-    public String toString() {
-        return "SupremacyAugment{" + "id=" + augmentId() + "}";
+        @Override
+        public float getAffixPower() {
+            return power;
+        }
+
+        @Override
+        public Codec<SupremacyData> getCodec() {
+            return CODEC;
+        }
     }
 }

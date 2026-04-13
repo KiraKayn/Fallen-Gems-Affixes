@@ -53,7 +53,7 @@ public class AugmentCraftingRecipe extends ShapedRecipe {
                     GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC
             );
 
-            ResourceLocation augmentId = new ResourceLocation(GsonHelper.getAsString(json, "augment"));
+            ResourceLocation augmentId = ResourceLocation.parse(GsonHelper.getAsString(json, "augment"));
 
             Map<String, Ingredient> key = keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
             String[] pattern = patternFromJson(GsonHelper.getAsJsonArray(json, "pattern"));

@@ -5,7 +5,7 @@
       "modid": "celestisynth"
     }
   ],
-  "type": "fallen_gems_affixes:extra_gem_bonus",
+  "type": "fallen_lib:extra_gem_bonus",
   "gem": "apotheosis:core/slipstream",
   "bonuses": [
     {

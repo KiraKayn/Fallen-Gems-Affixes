@@ -1,15 +1,19 @@
 {
   "augment": "fallen_gems_affixes:duality",
-  "texture": "fallen_gems_affixes:textures/item/augments/duality.png",
-  "categories": [
-    "sword",
-    "heavy_weapon",
-    "staffs",
-    "celestial_melee",
-    "celestial_ranged"
-  ],
-  "crit_chance_multiplier": 2.0,
-  "crit_damage_reduction": 0.3,
-  "physical_ratio": 0.5,
-  "magic_ratio": 0.5
+  "general": {
+    "texture": "fallen_gems_affixes:textures/item/augments/duality.png",
+    "categories": [
+      "sword",
+      "heavy_weapon",
+      "staffs",
+      "celestial_melee",
+      "celestial_ranged"
+    ]
+  },
+  "inner_data": {
+    "crit_chance_multiplier": 2.0,
+    "crit_damage_reduction": 0.3,
+    "physical_ratio": 0.5,
+    "magic_ratio": 0.5
+  }
 }

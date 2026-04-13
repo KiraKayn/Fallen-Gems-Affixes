@@ -27,7 +27,7 @@ public class FallenJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(FallenGemsAffixes.MOD_ID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "jei_plugin");
     }
 
     @Override
@@ -77,11 +77,11 @@ public class FallenJeiPlugin implements IModPlugin {
     static class AugmentSubtypes implements IIngredientSubtypeInterpreter<ItemStack> {
         @Override
         public String apply(ItemStack stack, UidContext context) {
-            ResourceLocation augmentId = AugmentItem.getAugmentId(stack);
-            if (augmentId == null) {
+            String augmentId = AugmentItem.getAugmentId(stack);
+            if (augmentId.isEmpty()) {
                 return ForgeRegistries.ITEMS.getKey(stack.getItem()).toString();
             }
-            return augmentId.toString();
+            return augmentId;
 
         }
     }

@@ -1,27 +1,26 @@
-package net.kayn.fallen_gems_affixes.attachment;
+package net.kayn.fallen_gems_affixes.attachment.augment;
 
-import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
-public class AugmentSlotHelper {
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
-    public static final String AUGMENT_SLOTS = "augment_slots";
+public class AugmentSlotHelper {
 
     public static int getAugmentSlots(ItemStack stack) {
         if (!stack.hasTag()) {
             return 0;
         }
-        CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
+        CompoundTag augmentData = stack.getTagElement(AUGMENT_DATA);
         return augmentData != null ? augmentData.getInt(AUGMENT_SLOTS) : 0;
     }
 
     public static void setAugmentSlots(ItemStack stack, int slots) {
         int max = ModConfig.MAX_AUGMENT_SLOTS.get();
-        stack.getOrCreateTagElement(Fallen.AugmentMisc.AUGMENT_DATA)
+        stack.getOrCreateTagElement(AUGMENT_DATA)
                 .putInt(AUGMENT_SLOTS, Math.min(slots, max));
     }
 
@@ -38,11 +37,11 @@ public class AugmentSlotHelper {
 
     @SuppressWarnings("ConstantConditions")
     public static int getAugmentCount(ItemStack stack) {
-        if (!stack.hasTag() || !stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
+        if (!stack.hasTag() || !stack.getTag().contains(AUGMENT_DATA)) {
             return 0;
         }
-        CompoundTag augmentData = stack.getTag().getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, 10);
+        CompoundTag augmentData = stack.getTag().getCompound(AUGMENT_DATA);
+        ListTag augments = augmentData.getList(AUGMENTS, 10);
         return augments.size();
     }
 

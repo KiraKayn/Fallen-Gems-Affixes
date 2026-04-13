@@ -51,11 +51,11 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
         List<String> raw = ModConfig.IRONS_ITEMS_MAP.get();
         raw.forEach((entry) -> {
             String[] split = entry.trim().split("\\|", 0);
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(split[0]));
+            Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(split[0]));
             if (item == null) return;
             Set<SchoolType> schoolTypes = new HashSet<>();
             for (int i = 1; i < split.length; i++) {
-                SchoolType school = SchoolRegistry.getSchool(new ResourceLocation(split[i]));
+                SchoolType school = SchoolRegistry.getSchool(ResourceLocation.parse(split[i]));
                 if (school != null) {
                     schoolTypes.add(school);
                 }

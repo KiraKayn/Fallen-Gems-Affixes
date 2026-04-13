@@ -1,7 +1,7 @@
 package net.kayn.fallen_gems_affixes.client;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.AugmentModel;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;

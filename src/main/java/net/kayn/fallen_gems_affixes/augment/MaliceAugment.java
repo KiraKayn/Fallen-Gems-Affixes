@@ -1,5 +1,7 @@
 package net.kayn.fallen_gems_affixes.augment;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
@@ -7,6 +9,8 @@ import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -35,20 +39,39 @@ import java.util.Set;
 public class MaliceAugment implements IAugment {
 
     public static final ResourceLocation MALICE_ID =
-            new ResourceLocation(FallenGemsAffixes.MOD_ID, "malice");
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "malice");
 
     private static final String AFFIX_DATA  = "affix_data";
     private static final String AFFIXES_KEY = "affixes";
     public  static final float  MAX_AFFIX_LEVEL = SupremacyAugment.MAX_AFFIX_LEVEL;
 
     private static final Random RANDOM = new Random();
-
-    public static ResourceLocation augmentId() { return MALICE_ID; }
+    private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(MaliceData.CODEC);
 
     @Override public ResourceLocation getId()   { return MALICE_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean needsInstance()     { return false; }
+    @Override public boolean shouldAttachToPlayer()     { return false; }
 
+
+    @Override
+    public String toString() {
+        return IAugment.string(this);
+    }
+
+    @Override
+    public Codec<AugmentMeta> getMetaDataCodec() {
+        return META_CODEC;
+    }
+
+    @Override
+    public IAugmentInnerData fallbackInnerData() {
+        MaliceData data = new MaliceData();
+        data.affixDominant = true;
+        data.powerBoost = 2.0f;
+        data.powerNerf = 0.5f;
+        data.revealed = false;
+        return data;
+    }
 
     @Override
     public IAugmentInnerData deserializeInnerData(CompoundTag tag) {
@@ -61,7 +84,7 @@ public class MaliceAugment implements IAugment {
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui,
                             IAugmentInnerData innerData) {
         gui.blit(IAugment.AUGMENT_ICON, x, y, 0, 0, 0, 9, 9, 9, 9);
-        ItemStack displayStack = AugmentItem.createAugment(MALICE_ID);
+        ItemStack displayStack = AugmentItem.createAugment(Fallen.Augments.MALICE);
         var pose = gui.pose();
         pose.pushPose();
         pose.translate(x, y, 0);
@@ -74,19 +97,11 @@ public class MaliceAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof MaliceData data && data.revealed) {
-            if (data.affixDominant) {
-                return Component.translatable(
-                        "fallen_gems_affixes.augment.malice.socket_desc.affix",
-                        String.format("%.1f", data.affixPower),
-                        String.format("%.1f", data.gemPower)
-                ).withStyle(ChatFormatting.YELLOW);
-            } else {
-                return Component.translatable(
-                        "fallen_gems_affixes.augment.malice.socket_desc.gem",
-                        String.format("%.1f", data.gemPower),
-                        String.format("%.1f", data.affixPower)
-                ).withStyle(ChatFormatting.YELLOW);
-            }
+            return Component.translatable(
+                    "fallen_gems_affixes.augment.malice.socket_desc.affix",
+                    String.format("%.1f", data.getAffixPower()),
+                    String.format("%.1f", data.getGemPower())
+            ).withStyle(ChatFormatting.YELLOW);
         }
         return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.hidden")
                 .withStyle(ChatFormatting.GOLD);
@@ -114,17 +129,7 @@ public class MaliceAugment implements IAugment {
     public static void ensurePendingRoll(ItemStack augmentSlotItem) {
         if (augmentSlotItem.isEmpty()) return;
         CompoundTag tag = augmentSlotItem.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
-        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        boolean isMalice = false;
-        for (int i = 0; i < list.size(); i++) {
-            if (MALICE_ID.toString().equals(list.getCompound(i).getString(Fallen.AugmentMisc.TYPE))) {
-                isMalice = true;
-                break;
-            }
-        }
-        if (!isMalice) return;
+        if (!AugmentHelper.hasAugment(augmentSlotItem, Fallen.Augments.MALICE)) return;
         if (!tag.contains("malice_pending_dominant")) {
             tag.putBoolean("malice_pending_dominant", RANDOM.nextBoolean());
         }
@@ -318,32 +323,60 @@ public class MaliceAugment implements IAugment {
         return null;
     }
 
+    public static class MaliceData implements IAugmentInnerData, IAffixPowerProvider, IGemPowerProvider {
+        public static final Codec<MaliceData> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.FLOAT.fieldOf("power_boost").forGetter(d -> d.powerBoost),
+                        Codec.FLOAT.fieldOf("power_nerf").forGetter(d -> d.powerNerf)
+                ).apply(inst, (powerBoost, powerNerf) -> {
+                    MaliceData data = (MaliceData) Fallen.Augments.MALICE.fallbackInnerData();
+                    data.powerBoost = powerBoost;
+                    data.powerNerf = powerNerf;
+                    return data;
+                })
+        );
 
-    public static class MaliceData implements IAugmentInnerData {
         boolean affixDominant = true;
-        float   affixPower    = 2.0f;
-        float   gemPower      = 0.5f;
+        float   powerBoost    = 2.0f;
+        float   powerNerf     = 0.5f;
         boolean revealed      = false;
 
         @Override public void enable()              {}
         @Override public void disable()             {}
         @Override public boolean isFunctional()     { return true; }
 
+        public boolean isRevealed() {
+            return revealed;
+        }
+
+        public boolean isAffixDominant() {
+            return affixDominant;
+        }
+
+        @Override
+        public float getAffixPower() {
+            return affixDominant ? powerBoost : powerNerf;
+        }
+        @Override
+        public float getGemPower() {
+            return affixDominant ? powerNerf : powerBoost;
+        }
+
         @Override
         public MutableComponent combineText() {
             if (affixDominant)
                 return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.affix",
-                        String.format("%.1f", affixPower), String.format("%.1f", gemPower));
+                        String.format("%.1f", getAffixPower()), String.format("%.1f", getGemPower()));
             return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.gem",
-                    String.format("%.1f", gemPower), String.format("%.1f", affixPower));
+                    String.format("%.1f", getGemPower()), String.format("%.1f", getAffixPower()));
         }
 
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
             tag.putBoolean("affixDominant", affixDominant);
-            tag.putFloat("affixPower",      affixPower);
-            tag.putFloat("gemPower",        gemPower);
+            tag.putFloat("affixPower",      getAffixPower());
+            tag.putFloat("gemPower",        getGemPower());
             tag.putBoolean("revealed",      revealed);
             return tag;
         }
@@ -351,14 +384,16 @@ public class MaliceAugment implements IAugment {
         @Override
         public void deserializeNBT(CompoundTag tag) {
             affixDominant = tag.getBoolean("affixDominant");
-            affixPower    = tag.getFloat("affixPower");
-            gemPower      = tag.getFloat("gemPower");
-            revealed      = tag.getBoolean("revealed");
+            float affixPower = tag.getFloat("affixPower");
+            float gemPower = tag.getFloat("gemPower");
+            powerBoost = affixDominant ? affixPower : gemPower;
+            powerNerf = affixDominant ? gemPower : affixPower;
+            revealed = tag.getBoolean("revealed");
         }
-    }
 
-    @Override
-    public String toString() {
-        return "MaliceAugment{id=" + augmentId() + "}";
+        @Override
+        public Codec<? extends IAugmentInnerData> getCodec() {
+            return CODEC;
+        }
     }
 }

@@ -15,7 +15,9 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossConfig;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
-import net.kayn.fallen_gems_affixes.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.AffixScrollItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.commands.CommandBuildContext;
@@ -53,7 +55,7 @@ public class ModCommands {
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_APPLICABLE_AUGMENT = (ctx, builder) -> {
         Entity entity = ctx.getSource().getEntity();
         if (entity instanceof ServerPlayer) {
-            Stream<String> suggestions = AugmentRegistry.BY_ID.keySet().stream().map(ResourceLocation::toString);
+            Stream<String> suggestions = Fallen.Registries.AUGMENT_REGISTRY.registryView().keySet().stream().map(ResourceLocation::toString);
             return SharedSuggestionProvider.suggest(suggestions, builder);
         }
         return SharedSuggestionProvider.suggest(Collections.emptyList(), builder);
@@ -256,9 +258,9 @@ public class ModCommands {
     private static int addAugmentToMainHandItem(CommandContext<CommandSourceStack> ctx, float extraData) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
         ResourceLocation augID = ctx.getArgument("Augment", ResourceLocation.class);
-        IAugment augment = augID != null ? AugmentRegistry.get(augID) : null;
+        AugmentMeta meta = augID != null ? Fallen.Registries.AUGMENT_REGISTRY.getMetaData(augID) : null;
 
-        if (augment == null) {
+        if (meta == null) {
             ctx.getSource().sendFailure(Component.literal("Unknown Augment"));
             return 0;
         }
@@ -269,37 +271,14 @@ public class ModCommands {
             return 0;
         }
 
-        boolean hasTag = stack.hasTag() && stack.getTag().contains(AUGMENT_DATA);
-        CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag augmentData = tag.getCompound(AUGMENT_DATA);
-        ListTag augments = augmentData.getList(AUGMENTS, Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag aug = augments.getCompound(i);
-            String type = aug.getString(TYPE);
-            ResourceLocation id = ResourceLocation.tryParse(type);
-            if (id != null) {
-                IAugment existing = AugmentRegistry.get(id);
-                if (existing != null && augID.equals(id) && augment.isUnique()) {
-                    ctx.getSource().sendFailure(Component.literal("Failed adding Augment, Augment is unique."));
-                    return 0;
-                }
+        for (IAugment iAugment : AugmentHelper.getAugments(stack).augments()) {
+            if (iAugment == meta.getAugment() && iAugment.isUnique()) {
+                ctx.getSource().sendFailure(Component.literal("Failed adding Augment, Augment is unique."));
+                return 0;
             }
         }
 
-        CompoundTag augTag = new CompoundTag();
-        CompoundTag innerData = new CompoundTag();
-        augTag.putString(TYPE, augID.toString());
-        if (augment == Fallen.Augments.GEM_POWER) {
-            innerData.putFloat("power", extraData);
-        }
-        augTag.put(INNER_DATA, innerData);
-        augments.add(augTag);
-
-        if (!hasTag) {
-            augmentData.put(AUGMENTS, augments);
-            tag.put(AUGMENT_DATA, augmentData);
-        }
+        AugmentHelper.applyAugment(stack, new AugmentInstance(meta.getAugment(), meta.getDefaultData()));
 
         ctx.getSource().sendSuccess(
                 () -> Component.literal("Added Augment " + augID + " to " + player.getName().getString()),

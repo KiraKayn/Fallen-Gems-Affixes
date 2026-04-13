@@ -1,7 +1,11 @@
 {
   "augment": "fallen_gems_affixes:supremacy",
-  "texture": "fallen_gems_affixes:textures/item/augments/supremacy.png",
-  "categories": [
-  ],
-  "power": 1.5
+  "general": {
+    "texture": "fallen_gems_affixes:textures/item/augments/supremacy.png",
+    "categories": [
+    ]
+  },
+  "inner_data": {
+    "power": 1.5
+  }
 }

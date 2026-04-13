@@ -5,7 +5,8 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.attachment.AugmentSlotHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.augment.MaliceAugment;
 import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
@@ -53,7 +54,7 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
         ItemStack out = inv.getItem(1).copy();
         if (out.isEmpty()) return ItemStack.EMPTY;
 
-        boolean hadSupremacy = hasSupremacy(out);
+        boolean hadSupremacy = AugmentHelper.hasAugment(out, Fallen.Augments.SUPREMACY);
         boolean hadMalice    = MaliceAugment.hasRevealedMalice(out);
 
         if (hadMalice) MaliceAugment.restoreOriginalAffixLevels(out);
@@ -66,20 +67,6 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
         if (hadSupremacy) restoreAffixLevels(out);
 
         return out;
-    }
-
-    private boolean hasSupremacy(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
-            ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < augments.size(); i++) {
-                CompoundTag augment = augments.getCompound(i);
-                if (augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.SUPREMACY_STRING)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void restoreAffixLevels(ItemStack stack) {
