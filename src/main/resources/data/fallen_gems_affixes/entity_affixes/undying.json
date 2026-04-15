@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:undying",
+  "heal_on_trigger": {
+    "min": 0.25,
+    "max": 0.5
+  }
+}

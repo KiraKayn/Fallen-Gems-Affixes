@@ -1,0 +1,5 @@
+{
+  "type": "fallen_gems_affixes:phase",
+  "invuln_ticks": 20,
+  "cooldown_ticks": 200
+}

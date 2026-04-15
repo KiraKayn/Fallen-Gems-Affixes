@@ -1,0 +1,13 @@
+{
+  "type": "fallen_gems_affixes:pack_leader",
+  "radius": 16.0,
+  "attack_boost": {
+    "min": 0.2,
+    "max": 0.5
+  },
+  "speed_boost": {
+    "min": 0.1,
+    "max": 0.3
+  },
+  "interval": 40
+}

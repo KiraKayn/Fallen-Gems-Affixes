@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:mob_thorns",
+  "reflect": {
+    "min": 1.5,
+    "max": 6.0
+  }
+}

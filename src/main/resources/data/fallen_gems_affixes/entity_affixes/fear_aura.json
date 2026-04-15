@@ -1,0 +1,8 @@
+{
+  "type": "fallen_gems_affixes:fear_aura",
+  "radius": 8.0,
+  "slowness_amplifier": 1,
+  "weakness_amplifier": 0,
+  "effect_duration": 80,
+  "interval": 40
+}

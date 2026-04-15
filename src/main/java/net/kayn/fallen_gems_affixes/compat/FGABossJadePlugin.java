@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.compat;
 
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
+import net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -31,18 +32,28 @@ public class FGABossJadePlugin implements IWailaPlugin, IEntityComponentProvider
     @Override
     public void appendServerData(CompoundTag tag, EntityAccessor access) {
         if (!(access.getEntity() instanceof LivingEntity living)) return;
-        CompoundTag data = living.getPersistentData();
-        if (!data.contains(EntityAffixHelper.TAG, Tag.TAG_LIST)) return;
-
-        ListTag stored = data.getList(EntityAffixHelper.TAG, Tag.TAG_COMPOUND);
-        if (stored.isEmpty()) return;
 
         ListTag out = new ListTag();
-        for (Tag t : stored) {
-            if (!(t instanceof CompoundTag entry)) continue;
-            String affixId = entry.getString("affix");
-            if (!affixId.isEmpty()) out.add(StringTag.valueOf(affixId));
+        CompoundTag data = living.getPersistentData();
+
+        // Player-compatible affixes
+        if (data.contains(EntityAffixHelper.TAG, Tag.TAG_LIST)) {
+            for (Tag t : data.getList(EntityAffixHelper.TAG, Tag.TAG_COMPOUND)) {
+                if (!(t instanceof CompoundTag entry)) continue;
+                String id = entry.getString("affix");
+                if (!id.isEmpty()) out.add(StringTag.valueOf(id));
+            }
         }
+
+        // Mob-only affixes
+        if (data.contains(MobAffixHelper.TAG, Tag.TAG_LIST)) {
+            for (Tag t : data.getList(MobAffixHelper.TAG, Tag.TAG_COMPOUND)) {
+                if (!(t instanceof CompoundTag entry)) continue;
+                String id = entry.getString("affix");
+                if (!id.isEmpty()) out.add(StringTag.valueOf(id));
+            }
+        }
+
         if (!out.isEmpty()) tag.put("fga.entity_affixes", out);
     }
 
@@ -55,9 +66,8 @@ public class FGABossJadePlugin implements IWailaPlugin, IEntityComponentProvider
         if (list.isEmpty()) return;
 
         tooltip.add(Component.translatable("jade.fga.entity_affixes").withStyle(ChatFormatting.GRAY));
-
         for (Tag t : list) {
-            tooltip.add(Component.translatable(t.getAsString()).withStyle(ChatFormatting.YELLOW));
+            tooltip.add(Component.translatable(t.getAsString()).withStyle(ChatFormatting.GOLD));
         }
     }
 

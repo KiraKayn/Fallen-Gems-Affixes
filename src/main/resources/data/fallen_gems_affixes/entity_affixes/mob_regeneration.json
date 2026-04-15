@@ -1,0 +1,8 @@
+{
+  "type": "fallen_gems_affixes:mob_regeneration",
+  "heal_percent": {
+    "min": 0.005,
+    "max": 0.02
+  },
+  "interval": 40
+}

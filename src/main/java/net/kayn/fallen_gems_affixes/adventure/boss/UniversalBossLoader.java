@@ -19,10 +19,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
 
@@ -35,6 +32,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     private static final List<TagKey<EntityType<?>>>         BLACKLIST_TAGS         = new ArrayList<>();
     private static final Map<String, List<String>>           RAW_DIMENSION_RARITIES = new LinkedHashMap<>();
     private static final Map<String, List<EntityAffixEntry>> RAW_AFFIXES            = new LinkedHashMap<>();
+    private static final Map<String, List<EntityAffixEntry>> RAW_MOB_AFFIXES        = new LinkedHashMap<>();
 
     @Nullable
     private static UniversalBossConfig resolvedConfig = null;
@@ -81,7 +79,10 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
 
         return new UniversalBossConfig(
                 tierChances, statsMap, BLACKLIST, BLACKLIST_TAGS,
-                dimensionRarities, new LinkedHashMap<>(RAW_AFFIXES), new LinkedHashMap<>(RAW_STAT_CHANCES));
+                dimensionRarities,
+                new LinkedHashMap<>(RAW_AFFIXES),
+                new LinkedHashMap<>(RAW_STAT_CHANCES),
+                new LinkedHashMap<>(RAW_MOB_AFFIXES));
     }
 
     @Nullable
@@ -103,6 +104,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         BLACKLIST_TAGS.clear();
         RAW_DIMENSION_RARITIES.clear();
         RAW_AFFIXES.clear();
+        RAW_MOB_AFFIXES.clear();
         resolvedConfig = null;
 
         if (objects.isEmpty()) {
@@ -118,13 +120,14 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
                 parseBlacklist(json);
                 parseDimensionRarities(json);
                 parseAffixes(json);
+                parseMobAffixes(json);
             } catch (Exception e) {
                 FallenGemsAffixes.LOGGER.error("[FGA] Failed to load universal_boss from {}", entry.getKey(), e);
             }
         }
 
-        FallenGemsAffixes.LOGGER.info("[FGA] universal_boss loaded: {} tiers, {} affix groups.",
-                RAW_TIER_CHANCES.size(), RAW_AFFIXES.size());
+        FallenGemsAffixes.LOGGER.info("[FGA] universal_boss loaded: {} tiers, {} affix groups, {} mob affix groups.",
+                RAW_TIER_CHANCES.size(), RAW_AFFIXES.size(), RAW_MOB_AFFIXES.size());
     }
 
     private static void parseTierChances(JsonObject json) {
@@ -137,14 +140,12 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         if (!json.has("stats")) return;
         for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("stats").entrySet()) {
             JsonObject statObj = e.getValue().getAsJsonObject().deepCopy();
-
             float statChance = 1.0f;
             if (statObj.has("stat_chance")) {
                 statChance = Math.max(0f, Math.min(1f, statObj.get("stat_chance").getAsFloat()));
                 statObj.remove("stat_chance");
             }
             RAW_STAT_CHANCES.put(e.getKey(), statChance);
-
             BossStats stats = BossStats.CODEC
                     .parse(JsonOps.INSTANCE, statObj)
                     .resultOrPartial(err -> FallenGemsAffixes.LOGGER.error("[FGA] Bad BossStats '{}': {}", e.getKey(), err))
@@ -187,6 +188,23 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
                 entries.add(new EntityAffixEntry(affixId, level, chance));
             }
             if (!entries.isEmpty()) RAW_AFFIXES.put(rarityKey, entries);
+        }
+    }
+
+    private static void parseMobAffixes(JsonObject json) {
+        if (!json.has("mob_affixes")) return;
+        for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("mob_affixes").entrySet()) {
+            String rarityKey = e.getKey();
+            List<EntityAffixEntry> entries = new ArrayList<>();
+            for (JsonElement el : e.getValue().getAsJsonArray()) {
+                JsonObject obj = el.getAsJsonObject();
+                if (!obj.has("affix")) continue;
+                ResourceLocation affixId = new ResourceLocation(obj.get("affix").getAsString());
+                float level  = obj.has("level")  ? Math.max(0f, Math.min(1f, obj.get("level").getAsFloat()))  : 0.5f;
+                float chance = obj.has("chance") ? Math.max(0f, Math.min(1f, obj.get("chance").getAsFloat())) : 1.0f;
+                entries.add(new EntityAffixEntry(affixId, level, chance));
+            }
+            if (!entries.isEmpty()) RAW_MOB_AFFIXES.put(rarityKey, entries);
         }
     }
 }

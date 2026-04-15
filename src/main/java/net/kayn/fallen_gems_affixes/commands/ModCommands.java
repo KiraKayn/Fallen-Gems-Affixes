@@ -14,7 +14,6 @@ import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossConfig;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
-import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
@@ -186,28 +185,26 @@ public class ModCommands {
             var stats = config.stats().get(rarity);
             if (stats != null) {
                 int duration = mob instanceof Creeper ? 6000 : Integer.MAX_VALUE;
-
                 for (var inst : stats.effects()) {
                     if (mob.getRandom().nextFloat() <= inst.chance()) mob.addEffect(inst.create(mob.getRandom(), duration));
                 }
                 float statChance = config.getStatChance(rarity);
                 for (var modif : stats.modifiers()) {
-                    if (mob.getRandom().nextFloat() < statChance) {
-                        modif.apply(mob.getRandom(), mob);
-                    }
+                    if (mob.getRandom().nextFloat() < statChance) modif.apply(mob.getRandom(), mob);
                 }
-
                 mob.setHealth(mob.getMaxHealth());
             }
 
             String rarityKey = rarityId.getPath();
+
+            // Player-compatible affixes
             for (var entry : config.getAffixesForRarity(rarity)) {
                 if (mob.getRandom().nextFloat() < entry.chance()) {
                     net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper.addAffix(mob, entry.affixId(), rarityKey, entry.level());
                 }
             }
 
-            List<EntityAffixInstance> resolved =
+            List<net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance> resolved =
                     net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper.getAffixes(mob);
             for (var inst : resolved) {
                 if (!inst.isValid()) continue;
@@ -216,6 +213,13 @@ public class ModCommands {
                         var attrInst = mob.getAttribute(attr);
                         if (attrInst != null && !attrInst.hasModifier(mod)) attrInst.addPermanentModifier(mod);
                     });
+                }
+            }
+
+            // Mob-only affixes
+            for (var entry : config.getMobAffixesForRarity(rarity)) {
+                if (mob.getRandom().nextFloat() < entry.chance()) {
+                    net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper.addAffix(mob, entry.affixId(), entry.level());
                 }
             }
         }

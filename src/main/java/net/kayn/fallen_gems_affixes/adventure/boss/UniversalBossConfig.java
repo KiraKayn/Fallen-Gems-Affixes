@@ -19,7 +19,8 @@ public record UniversalBossConfig(
         List<TagKey<EntityType<?>>> blacklistTags,
         Map<ResourceLocation, List<LootRarity>> dimensionRarities,
         Map<String, List<EntityAffixEntry>> affixes,
-        Map<String, Float> statChances
+        Map<String, Float> statChances,
+        Map<String, List<EntityAffixEntry>> mobAffixes
 ) {
 
     @Nullable
@@ -64,6 +65,10 @@ public record UniversalBossConfig(
 
     public List<EntityAffixEntry> getAffixesForRarity(LootRarity rarity) {
         return affixes.getOrDefault(getRarityKey(rarity), Collections.emptyList());
+    }
+
+    public List<EntityAffixEntry> getMobAffixesForRarity(LootRarity rarity) {
+        return mobAffixes.getOrDefault(getRarityKey(rarity), Collections.emptyList());
     }
 
     public float getStatChance(LootRarity rarity) {

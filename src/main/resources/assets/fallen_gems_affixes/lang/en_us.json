@@ -605,5 +605,19 @@
   "jade.fga.entity_affixes": "Affixes:",
   "fallen_gems_affixes:berserker": "Berserker",
   "fallen_gems_affixes:armor/afflicted": "Afflicted",
-  "fallen_gems_affixes:armor/fortify":   "Fortify"
+  "fallen_gems_affixes:armor/fortify":   "Fortify",
+  "fallen_gems_affixes:armor/adaptive": "Adaptive",
+
+
+  "fallen_gems_affixes:enrage": "Enrage",
+  "fallen_gems_affixes:mob_thorns": "Thorns",
+  "fallen_gems_affixes:mob_regeneration":"Regeneration",
+  "fallen_gems_affixes:phase":"Phase",
+  "fallen_gems_affixes:fear_aura": "Fear Aura",
+  "fallen_gems_affixes:undying": "Undying",
+  "fallen_gems_affixes:pack_leader": "Pack Leader",
+  "fallen_gems_affixes:cursed": "Cursed",
+  "fallen_gems_affixes:soul_drain": "Soul Drain",
+  "fallen_gems_affixes:shadow_step": "Shadow Step",
+  "fallen_gems_affixes:arcane_shield": "Arcane Shield"
 }

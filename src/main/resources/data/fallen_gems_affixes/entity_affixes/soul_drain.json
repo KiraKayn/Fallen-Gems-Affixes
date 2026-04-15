@@ -1,0 +1,12 @@
+{
+  "type": "fallen_gems_affixes:soul_drain",
+  "steal_amount": {
+    "min": 4.0,
+    "max": 10.0
+  },
+  "duration_ticks": 200,
+  "chance": {
+    "min": 0.3,
+    "max": 0.6
+  }
+}

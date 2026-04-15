@@ -6,6 +6,7 @@ import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.entity.affix.MobAffixEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.ArrowTeleSlashEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.VoidHunterEventHandler;
@@ -87,6 +88,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(FortifyAffix.class);
         MinecraftForge.EVENT_BUS.register(PlayerLogoutHandler.class);
         MinecraftForge.EVENT_BUS.register(EntityAffixEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(MobAffixEventHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

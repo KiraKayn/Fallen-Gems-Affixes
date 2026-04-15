@@ -9,6 +9,7 @@ import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
+import net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -88,9 +89,9 @@ public class UniversalBossEventHandler {
 
         mob.setHealth(mob.getMaxHealth());
 
+        // Player-compatible affixes (EntityAffixHelper)
         String rarityKey = config.getRarityKey(rarity);
         List<EntityAffixEntry> affixEntries = config.getAffixesForRarity(rarity);
-
         for (EntityAffixEntry entry : affixEntries) {
             if (mob.getRandom().nextFloat() < entry.chance()) {
                 EntityAffixHelper.addAffix(mob, entry.affixId(), rarityKey, entry.level());
@@ -110,6 +111,13 @@ public class UniversalBossEventHandler {
                                 }
                             });
                 }
+            }
+        }
+
+        // Mob-only affixes (MobAffixHelper)
+        for (EntityAffixEntry entry : config.getMobAffixesForRarity(rarity)) {
+            if (mob.getRandom().nextFloat() < entry.chance()) {
+                MobAffixHelper.addAffix(mob, entry.affixId(), entry.level());
             }
         }
 
