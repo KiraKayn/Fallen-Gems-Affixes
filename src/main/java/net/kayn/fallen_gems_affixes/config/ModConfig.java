@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.config;
 
+import net.kayn.fallen_gems_affixes.adventure.socket.TieredSocketMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
     public static final ForgeConfigSpec.BooleanValue SHOW_BOSS_RARITY_NAME;
     public static final ForgeConfigSpec.IntValue EXTRA_SOCKETS;
+    public static final ForgeConfigSpec.EnumValue<TieredSocketMode> TIERED_SOCKET_MODE;
 
     static {
         BUILDER.push("Mod Config");
@@ -94,6 +96,19 @@ public class ModConfig {
                         "Set to 0 to disable."
                 )
                 .defineInRange("extraSockets", 0, 0, 10);
+
+        TIERED_SOCKET_MODE = BUILDER
+                .comment(
+                        "Tiered Socket Mode – controls gem-socket compatibility at the smithing table.",
+                        "ON       - A gem of equal or LOWER tier may be placed in a higher-tier socket",
+                        "           (e.g. a Common gem can go into an Epic socket).",
+                        "HARDCORE - Only a gem of the EXACT same tier fits the socket",
+                        "           (e.g. only an Epic gem can go into an Epic socket).",
+                        "",
+                        "To disable tiered sockets entirely, remove or empty the socket tier datapack folder",
+                        "When no tier definitions are loaded all sockets behave as plain Apotheosis sockets."
+                )
+                .defineEnum("tiered_socket_mode", TieredSocketMode.ON);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")

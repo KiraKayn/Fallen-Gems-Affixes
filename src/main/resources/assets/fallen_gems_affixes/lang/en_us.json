@@ -619,5 +619,17 @@
   "fallen_gems_affixes:cursed": "Cursed",
   "fallen_gems_affixes:soul_drain": "Soul Drain",
   "fallen_gems_affixes:shadow_step": "Shadow Step",
-  "fallen_gems_affixes:arcane_shield": "Arcane Shield"
+  "fallen_gems_affixes:arcane_shield": "Arcane Shield",
+
+  "socket_tier.apotheosis.common.empty": "Empty Common Socket",
+  "socket_tier.apotheosis.uncommon.empty": "Empty Uncommon Socket",
+  "socket_tier.apotheosis.rare.empty": "Empty Rare Socket",
+  "socket_tier.apotheosis.epic.empty": "Empty Epic Socket",
+  "socket_tier.apotheosis.mythic.empty": "Empty Mythic Socket",
+  "socket_tier.apotheosis.ancient.empty": "Empty Ancient Socket",
+  "socket_tier.fallen_gems_affixes.empty.regular": "Empty Socket",
+
+  "item.fallen_gems_affixes.sigil_of_elevation": "Sigil of Elevation",
+  "item.fallen_gems_affixes.sigil_of_elevation.desc": "Elevates all Tiered Socket slots to the next rarity",
+  "item.fallen_gems_affixes.sigil_of_elevation.cap_hint": "Cannot exceed: %s"
 }

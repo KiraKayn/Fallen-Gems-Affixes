@@ -28,6 +28,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.SIGIL_OF_ERASURE.get());
                         output.accept(GemCaseRegistry.GEM_CASE_ITEM.get());
                         output.accept(GemCaseRegistry.ENDER_GEM_CASE_ITEM.get());
+                        output.accept(ModItems.SIGIL_OF_ELEVATION.get());
                     })
                     .build());
 

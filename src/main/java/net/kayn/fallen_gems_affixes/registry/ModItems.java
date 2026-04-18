@@ -35,4 +35,7 @@ public class ModItems {
     public static final RegistryObject<Item> REINFORCED_GEM_SLATE = ITEMS.register("reinforced_gem_slate",
             () -> new ReinforcedGemSlateItem(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)
             ));
+    public static final RegistryObject<Item> SIGIL_OF_ELEVATION = ITEMS.register("sigil_of_elevation",
+            () -> new SigilOfElevationItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
+            ));
 }

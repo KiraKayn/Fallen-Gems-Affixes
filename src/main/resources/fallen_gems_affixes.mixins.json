@@ -15,7 +15,9 @@
     "SocketHelperMixin",
     "TrueShotMixin",
     "permanent_effect.InventoryMixin",
-    "permanent_effect.LivingEntityMixin"
+    "permanent_effect.LivingEntityMixin",
+    "TieredAddSocketsRecipeMixin",
+    "TieredSocketingRecipeMixin"
   ],
   "client": [
     "AugmentingScreenMixin",
@@ -23,7 +25,8 @@
     "permanent_effect.client.LivingEntityMixin",
     "permanent_effect.client.MinecraftMixin",
     "permanent_effect.client.PlayerMixin",
-    "permanent_effect.client.SlotMixin"
+    "permanent_effect.client.SlotMixin",
+    "SocketTooltipRendererMixin",
   ],
   "minVersion": "0.8"
 }

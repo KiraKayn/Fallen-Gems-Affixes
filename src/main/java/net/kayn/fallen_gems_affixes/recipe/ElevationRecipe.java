@@ -1,11 +1,10 @@
 package net.kayn.fallen_gems_affixes.recipe;
 
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.adventure.socket.SocketTierManager;
 import net.kayn.fallen_gems_affixes.adventure.socket.TieredSocketHelper;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -16,17 +15,14 @@ import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
-public class SocketConversionRecipe extends SmithingTransformRecipe {
+public class ElevationRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:socket_conversion");
+    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:elevation");
 
-    public SocketConversionRecipe() {
-        super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_ASCENSION.get()), ItemStack.EMPTY);
-    }
-
-    private int getBaseSocketCount(ItemStack stack) {
-        CompoundTag afxData = stack.getTagElement("affix_data");
-        return afxData != null ? afxData.getInt("sockets") : 0;
+    public ElevationRecipe() {
+        super(ID, Ingredient.EMPTY, Ingredient.EMPTY,
+                Ingredient.of(ModItems.SIGIL_OF_ELEVATION.get()),
+                ItemStack.EMPTY);
     }
 
     @Override
@@ -34,11 +30,17 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
         ItemStack base  = inv.getItem(1);
         ItemStack sigil = inv.getItem(2);
 
-        if (!sigil.is(ModItems.SIGIL_OF_ASCENSION.get())) return false;
+        if (!sigil.is(ModItems.SIGIL_OF_ELEVATION.get())) return false;
+        if (base.isEmpty()) return false;
 
-        if (!TieredSocketHelper.hasEmptyRegularSocket(base)) return false;
+        int maxOrdinal = SocketTierManager.INSTANCE.getMaxOrdinal();
+        if (maxOrdinal < 0) return false;
 
-        return AugmentSlotHelper.canAddMoreSlots(base);
+        int[] tiers = TieredSocketHelper.getSocketTiers(base);
+        for (int tier : tiers) {
+            if (tier >= 0 && tier < maxOrdinal) return true;
+        }
+        return false;
     }
 
     @Override
@@ -47,20 +49,17 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
         ItemStack result = base.copy();
         result.setCount(1);
 
-        int currentBaseGemSockets = getBaseSocketCount(result);
+        int maxOrdinal = SocketTierManager.INSTANCE.getMaxOrdinal();
+        int[] tiers = TieredSocketHelper.getSocketTiers(result);
 
-        int removedSocketIndex = TieredSocketHelper.getFirstEmptyRegularSocket(result);
-        if (removedSocketIndex < 0) return result;
+        for (int i = 0; i < tiers.length; i++) {
+            int tier = tiers[i];
+            if (tier >= 0 && tier < maxOrdinal) {
+                tiers[i] = tier + 1;
+            }
+        }
 
-        CompoundTag tag     = result.getOrCreateTag();
-        CompoundTag afxData = tag.getCompound("affix_data");
-        afxData.putInt("sockets", currentBaseGemSockets - 1);
-        tag.put("affix_data", afxData);
-
-        TieredSocketHelper.removeSocketTierAt(result, removedSocketIndex);
-
-        AugmentSlotHelper.addAugmentSlots(result, 1);
-
+        TieredSocketHelper.setSocketTiers(result, tiers);
         return result;
     }
 
@@ -96,6 +95,6 @@ public class SocketConversionRecipe extends SmithingTransformRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Fallen.RecipeSerializers.SOCKET_CONVERSION.get();
+        return Fallen.RecipeSerializers.SOCKET_ELEVATION.get();
     }
 }

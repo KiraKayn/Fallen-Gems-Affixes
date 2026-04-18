@@ -64,6 +64,9 @@ public class Fallen {
         public static final RegistryObject<RecipeSerializer<ErasureRecipe>> ERASURE =
                 SERIALIZERS.register("erasure",
                         MiscUtil.simpleRecipeSerializer(ErasureRecipe::new));
+        public static final RegistryObject<RecipeSerializer<ElevationRecipe>> SOCKET_ELEVATION =
+                SERIALIZERS.register("elevation",
+                        MiscUtil.simpleRecipeSerializer(ElevationRecipe::new));
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);

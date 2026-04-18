@@ -6,7 +6,8 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketedGems;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
-import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemRegistry;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.kayn.fallen_gems_affixes.adventure.socket.GemSocketInjectionHelper;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class SocketGemModifier extends LootModifier {
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (!ModConfig.ENABLE_SOCKET_GEM_MODIFIER.get()) return generatedLoot;
 
-        RandomSource rand = context.getRandom();
-        ServerLevel level = context.getLevel();
+        RandomSource rand   = context.getRandom();
+        ServerLevel level   = context.getLevel();
 
         for (ItemStack stack : generatedLoot) {
             if (stack.isEmpty()) continue;
@@ -51,23 +51,7 @@ public class SocketGemModifier extends LootModifier {
             List<GemInstance> gems = new ArrayList<>(Collections.nCopies(sockets, GemInstance.EMPTY));
 
             for (int i = 0; i < sockets; i++) {
-                GemInstance selected = GemInstance.EMPTY;
-
-                if (rand.nextFloat() <= ModConfig.SOCKET_GEM_CHANCE.get()) {
-                    ItemStack gemStack = GemRegistry.createRandomGemStack(rand, level, 1.0F, g ->
-                            g.getBonuses().stream()
-                                    .anyMatch(bonus -> bonus.getGemClass() != null && bonus.getGemClass().types().contains(category))
-                    );
-
-                    if (!gemStack.isEmpty()) {
-                        GemInstance instance = GemInstance.socketed(stack, gemStack);
-                        if (instance.isValid()) {
-                            selected = instance;
-                        }
-                    }
-                }
-
-                gems.set(i, selected);
+                gems.set(i, GemSocketInjectionHelper.rollGemForSocket(stack, category, i, rand, level));
             }
 
             SocketHelper.setGems(stack, new SocketedGems(gems));
