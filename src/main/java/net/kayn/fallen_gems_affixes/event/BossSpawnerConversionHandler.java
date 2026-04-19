@@ -1,9 +1,10 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import net.kayn.fallen_gems_affixes.config.ModConfig;
-import net.kayn.fallen_gems_affixes.data.ProcessedSpawnerData;
+//import net.kayn.fallen_gems_affixes.data.ProcessedSpawnerData;
 import net.kayn.fallen_gems_affixes.util.DelayedTaskScheduler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -19,9 +20,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class BossSpawnerConversionHandler {
+
+    private static final String KEY_PLAYER_PLACED = "fga:player_placed";
+    private static final String KEY_PROCESSED = "fga:processed";
+    private static final ResourceLocation BOSS_SPAWNER = ResourceLocation.fromNamespaceAndPath("apotheosis", "boss_spawner");
 
     @SubscribeEvent
     public static void onSpawnerPlaced(BlockEvent.EntityPlaceEvent event) {
@@ -30,8 +36,11 @@ public class BossSpawnerConversionHandler {
         if (!event.getPlacedBlock().is(Blocks.SPAWNER)) return;
         if (!(event.getLevel() instanceof ServerLevel level)) return;
 
-        ProcessedSpawnerData data = ProcessedSpawnerData.get(level);
-        data.markPlayerPlaced(event.getPos());
+        BlockEntity be = level.getBlockEntity(event.getPos());
+        if (!(be instanceof SpawnerBlockEntity spawner)) return;
+
+        spawner.getPersistentData().putBoolean(KEY_PLAYER_PLACED, true);
+        spawner.setChanged();
     }
 
     @SubscribeEvent
@@ -40,28 +49,31 @@ public class BossSpawnerConversionHandler {
         if (!ModConfig.ENABLE_BOSS_SPAWNER_CONVERSION.get()) return;
         if (!(event.getChunk() instanceof LevelChunk chunk)) return;
 
-        ProcessedSpawnerData data = ProcessedSpawnerData.get(level);
         double chance = ModConfig.BOSS_SPAWNER_CHANCE.get();
+        List<SpawnerBlockEntity> spawners = new ArrayList<>();
+        for (BlockEntity be : chunk.getBlockEntities().values()) {
+            if (!(be instanceof SpawnerBlockEntity spawner)) continue;
 
-        for (BlockEntity be : new ArrayList<>(chunk.getBlockEntities().values())) {
-            if (!(be instanceof SpawnerBlockEntity)) continue;
-            BlockPos pos = be.getBlockPos().immutable();
+            CompoundTag persistent = spawner.getPersistentData();
 
-            if (data.isProcessed(pos)) continue;
-            if (data.isPlayerPlaced(pos)) continue;
+            if (persistent.getBoolean(KEY_PLAYER_PLACED)) continue;
+            if (persistent.getBoolean(KEY_PROCESSED)) continue;
 
-            data.markProcessed(pos);
-
-            if (level.getRandom().nextDouble() < chance) {
-                DelayedTaskScheduler.schedule(level, 1, () -> {
-                    Block bossSpawnerBlock = ForgeRegistries.BLOCKS.getValue(
-                            new ResourceLocation("apotheosis", "boss_spawner"));
+            persistent.putBoolean(KEY_PROCESSED, true);
+            spawners.add(spawner);
+        }
+        DelayedTaskScheduler.schedule(level, 1, () -> {
+            Block bossSpawnerBlock = ForgeRegistries.BLOCKS.getValue(BOSS_SPAWNER);
+            spawners.forEach(spawner -> {
+                if (level.getRandom().nextDouble() < chance) {
+                    BlockPos pos = spawner.getBlockPos().immutable();
                     if (bossSpawnerBlock == null) return;
                     if (level.isLoaded(pos)) {
                         level.setBlock(pos, bossSpawnerBlock.defaultBlockState(), 3);
                     }
-                });
-            }
-        }
+                    spawner.setChanged();
+                }
+            });
+        });
     }
 }
