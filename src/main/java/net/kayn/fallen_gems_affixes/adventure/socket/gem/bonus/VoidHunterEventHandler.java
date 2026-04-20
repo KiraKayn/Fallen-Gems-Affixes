@@ -117,7 +117,7 @@ public class VoidHunterEventHandler {
 
         player.attack(target);
 
-        MobEffect effectType = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(ECHOING_STRIKES_ID));
+        MobEffect effectType = ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.parse(ECHOING_STRIKES_ID));
         if (effectType != null) {
             int durationTicks = (int) (bonus.getDuration(rarity) * 20);
             target.removeEffect(effectType);

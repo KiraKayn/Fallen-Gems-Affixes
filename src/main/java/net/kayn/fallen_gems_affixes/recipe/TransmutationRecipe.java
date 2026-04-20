@@ -27,7 +27,7 @@ import java.util.UUID;
 
 public class TransmutationRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:transmutation");
+    private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:transmutation");
 
     private static Ingredient buildGearIngredient() {
         List<Item> gear = new ArrayList<>();

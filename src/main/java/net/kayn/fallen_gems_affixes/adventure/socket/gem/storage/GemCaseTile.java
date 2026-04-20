@@ -153,12 +153,12 @@ public abstract class GemCaseTile extends BlockEntity implements TickingBlockEnt
         gems.clear();
         CompoundTag gemsTag = tag.getCompound("gems");
         for (String gemKey : gemsTag.getAllKeys()) {
-            DynamicHolder<Gem> gemHolder = GemRegistry.INSTANCE.holder(new ResourceLocation(gemKey));
+            DynamicHolder<Gem> gemHolder = GemRegistry.INSTANCE.holder(ResourceLocation.parse(gemKey));
             if (!gemHolder.isBound()) continue;
             CompoundTag rarityTag = gemsTag.getCompound(gemKey);
             Map<DynamicHolder<LootRarity>, Integer> map = new HashMap<>();
             for (String rarityKey : rarityTag.getAllKeys()) {
-                DynamicHolder<LootRarity> rarityHolder = RarityRegistry.INSTANCE.holder(new ResourceLocation(rarityKey));
+                DynamicHolder<LootRarity> rarityHolder = RarityRegistry.INSTANCE.holder(ResourceLocation.parse(rarityKey));
                 if (!rarityHolder.isBound()) continue;
                 int count = rarityTag.getInt(rarityKey);
                 if (count > 0) map.put(rarityHolder, count);

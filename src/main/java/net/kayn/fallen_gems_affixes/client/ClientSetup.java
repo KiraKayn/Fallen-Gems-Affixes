@@ -30,7 +30,7 @@ public class ClientSetup {
                 .keySet();
         for (ResourceLocation s : locs) {
             String path = s.getPath().substring("models/".length(), s.getPath().length() - ".json".length());
-            e.register(new ResourceLocation(FallenGemsAffixes.MOD_ID, path));
+            e.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, path));
         }
     }
 

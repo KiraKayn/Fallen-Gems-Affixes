@@ -31,7 +31,7 @@ public class BossResistanceBonus extends GemBonus implements IDamageOrResistance
     public final Map<LootRarity, StepFunction> values;
 
     public BossResistanceBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "boss_resistance"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "boss_resistance"), gemClass);
         this.entityTag = tag;
         this.values = values;
     }

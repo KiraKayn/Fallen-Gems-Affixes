@@ -18,8 +18,8 @@ public class AquafloraSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation AQUAFLORA_ID = new ResourceLocation("celestisynth", "aquaflora");
-    private static final ResourceLocation NATURE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "nature_spell_power");
+    private static final ResourceLocation AQUAFLORA_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "aquaflora");
+    private static final ResourceLocation NATURE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "nature_spell_power");
     private static final Lazy<Attribute> NATURE_SPELL_POWER = Lazy.of(() -> {
         if (!HAS_IRONS) return null;
         return ForgeRegistries.ATTRIBUTES.getValue(NATURE_SPELL_POWER_ID);

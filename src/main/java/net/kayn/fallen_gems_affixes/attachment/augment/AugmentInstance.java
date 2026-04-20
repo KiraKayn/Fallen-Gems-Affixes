@@ -117,7 +117,7 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(CompoundTag tag) {
         if (tag.contains(AUGMENT_ID)) {
             String augmentIdString = tag.getString(AUGMENT_ID);
-            ResourceLocation augmentId = new ResourceLocation(augmentIdString);
+            ResourceLocation augmentId = ResourceLocation.parse(augmentIdString);
 
             IAugment template = Fallen.Registries.AUGMENT_REGISTRY.getValue(augmentId);
             if (template != null) {
@@ -132,14 +132,6 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
             this.uuid = tag.getUUID(UNIQUE_ID);
         }
     }
-
-//    private AugmentInstance createNewInstance(IAugment template, IAugmentInnerData augmentData) {
-//        if (template instanceof SoulboundAugment && augmentData instanceof SoulboundAugment.SoulboundData) {
-//            return new AugmentInstance(template, augmentData);
-//        }
-//
-//        return null;
-//    }
 
     @Override
     public String toString() {

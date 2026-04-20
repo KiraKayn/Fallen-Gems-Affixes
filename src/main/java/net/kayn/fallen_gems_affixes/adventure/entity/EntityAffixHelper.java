@@ -54,7 +54,7 @@ public final class EntityAffixHelper {
         for (Tag t : list) {
             if (!(t instanceof CompoundTag entry)) continue;
             try {
-                ResourceLocation affixId = new ResourceLocation(entry.getString("affix"));
+                ResourceLocation affixId = ResourceLocation.parse(entry.getString("affix"));
                 String rarityKey = entry.getString("rarity");
                 float level = entry.getFloat("level");
 

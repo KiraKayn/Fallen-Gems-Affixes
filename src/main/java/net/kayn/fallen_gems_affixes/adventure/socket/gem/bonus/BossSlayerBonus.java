@@ -35,14 +35,14 @@ public class BossSlayerBonus extends GemBonus implements IDamageOrResistanceBonu
 
     public static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(
             ForgeRegistries.ENTITY_TYPES.getRegistryKey(),
-            new ResourceLocation("fallen_gems_affixes", "boss_slayer")
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "boss_slayer")
     );
 
     public final TagKey<EntityType<?>> entityTag;
     public final Map<LootRarity, StepFunction> values;
 
     public BossSlayerBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "boss_slayer"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "boss_slayer"), gemClass);
         this.entityTag = tag;
         this.values = values;
     }

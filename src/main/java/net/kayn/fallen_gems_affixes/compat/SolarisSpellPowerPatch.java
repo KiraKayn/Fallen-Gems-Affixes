@@ -18,8 +18,8 @@ public class SolarisSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation SOLARIS_ID = new ResourceLocation("celestisynth", "solaris");
-    private static final ResourceLocation FIRE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "fire_spell_power");
+    private static final ResourceLocation SOLARIS_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "solaris");
+    private static final ResourceLocation FIRE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "fire_spell_power");
     private static final Lazy<Attribute> FIRE_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(FIRE_SPELL_POWER_ID) : null);
 
     @SubscribeEvent

@@ -37,7 +37,7 @@ public class DragonResistanceBonus extends GemBonus implements IDamageOrResistan
     public final Map<LootRarity, StepFunction> values;
 
     public DragonResistanceBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "dragon_resistance"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "dragon_resistance"), gemClass);
         this.entityTag = tag;
         this.values = values;
     }

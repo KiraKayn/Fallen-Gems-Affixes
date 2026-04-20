@@ -18,8 +18,8 @@ public class FrostboundSpellPowerPatch {
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
 
-    private static final ResourceLocation FROSTBOUND_ID = new ResourceLocation("celestisynth", "frostbound");
-    private static final ResourceLocation ICE_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "ice_spell_power");
+    private static final ResourceLocation FROSTBOUND_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "frostbound");
+    private static final ResourceLocation ICE_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "ice_spell_power");
     private static final Lazy<Attribute> ICE_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(ICE_SPELL_POWER_ID) : null);
 
     @SubscribeEvent

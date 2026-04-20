@@ -34,14 +34,14 @@ public class DragonSlayerBonus extends GemBonus implements IDamageOrResistanceBo
     ));
     public static final TagKey<EntityType<?>> DRAGON_TAG = TagKey.create(
             ForgeRegistries.ENTITY_TYPES.getRegistryKey(),
-            new ResourceLocation("fallen_gems_affixes", "dragon_slayer")
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "dragon_slayer")
     );
 
     public final TagKey<EntityType<?>> entityTag;
     public final Map<LootRarity, StepFunction> values;
 
     public DragonSlayerBonus(GemClass gemClass, TagKey<EntityType<?>> tag, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "dragon_slayer"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "dragon_slayer"), gemClass);
         this.entityTag = tag;
         this.values = values;
     }

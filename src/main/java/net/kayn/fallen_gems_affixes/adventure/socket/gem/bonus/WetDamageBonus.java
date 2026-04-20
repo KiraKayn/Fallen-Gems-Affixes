@@ -29,7 +29,7 @@ public class WetDamageBonus extends GemBonus implements IDamageOrResistanceBonus
     public final Map<LootRarity, StepFunction> values;
 
     public WetDamageBonus(GemClass gemClass, Map<LootRarity, StepFunction> values) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "wet_damage"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "wet_damage"), gemClass);
         this.values = values;
     }
 

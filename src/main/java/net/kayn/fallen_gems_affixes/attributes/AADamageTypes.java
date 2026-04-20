@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.attributes;
 
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
@@ -10,7 +11,7 @@ public class AADamageTypes {
 
     public static final ResourceKey<DamageType> MAX_HEALTH_DAMAGE = ResourceKey.create(
             Registries.DAMAGE_TYPE,
-            new ResourceLocation("fallen_gems_affixes", "max_health_damage")
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "max_health_damage")
     );
 
     public static void bootstrap(BootstapContext<DamageType> context) {

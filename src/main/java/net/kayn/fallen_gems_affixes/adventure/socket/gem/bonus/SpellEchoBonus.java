@@ -29,7 +29,7 @@ public class SpellEchoBonus extends GemBonus {
     private final Map<LootRarity, StepFunction> delayTicks;
 
     public SpellEchoBonus(GemClass gemClass, ResourceLocation schoolId, Map<LootRarity, StepFunction> delayTicks) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "spell_echo"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "spell_echo"), gemClass);
         this.schoolId = schoolId;
         this.delayTicks = delayTicks;
     }

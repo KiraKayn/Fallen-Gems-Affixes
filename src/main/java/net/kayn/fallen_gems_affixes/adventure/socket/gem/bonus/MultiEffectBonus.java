@@ -12,6 +12,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -50,7 +51,7 @@ public class MultiEffectBonus extends GemBonus {
     protected final String desc;
 
     public MultiEffectBonus(GemClass gemClass, List<EffectInst> effects, Target target, boolean stackOnReapply, String desc) {
-        super(new ResourceLocation("fallen_gems_affixes", "multi_effect"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "multi_effect"), gemClass);
         this.effects = effects;
         this.target = target;
         this.stackOnReapply = stackOnReapply;
@@ -165,7 +166,7 @@ public class MultiEffectBonus extends GemBonus {
 
         int cooldown = data.cooldown;
 
-        ResourceLocation cooldownId = new ResourceLocation(
+        ResourceLocation cooldownId = ResourceLocation.fromNamespaceAndPath(
                 this.getId().getNamespace(),
                 this.getId().getPath() + "_" + ForgeRegistries.MOB_EFFECTS.getKey(effectInst.effect).getPath()
         );

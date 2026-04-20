@@ -23,7 +23,7 @@ public class FallenSmithingCategory implements IRecipeCategory<SmithingRecipe> {
 
     public static final RecipeType<SmithingRecipe> RECIPE_TYPE = RecipeType.create(FallenGemsAffixes.MOD_ID, "smithing", SmithingRecipe.class);
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/smithing.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/container/smithing.png");
 
     private static final Map<Class<? extends SmithingRecipe>, Extension<SmithingRecipe>> EXTENSIONS = new IdentityHashMap<>();
 

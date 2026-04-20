@@ -30,7 +30,7 @@ import java.util.*;
 
 public class GemCaseScreen extends AbstractContainerScreen<GemCaseMenu> {
 
-    public static final ResourceLocation TEXTURES = new ResourceLocation(FallenGemsAffixes.MOD_ID, "textures/gui/gem_case.png");
+    public static final ResourceLocation TEXTURES = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "textures/gui/gem_case.png");
 
     public static final int MAX_ROWS = 3;
     public static final int SLOTS_PER_ROW = 6;

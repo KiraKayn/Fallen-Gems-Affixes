@@ -8,6 +8,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -42,7 +43,7 @@ public class SpellEffectBonus extends GemBonus {
     protected final boolean stackOnReapply;
 
     public SpellEffectBonus(GemClass gemClass, MobEffect effect, SpellEffectAffix.Target target, Map<LootRarity, SpellEffectBonus.EffectData> values, boolean stackOnReapply, int stackingLimit) {
-        super(new ResourceLocation("fallen_gems_affixes","mob_effect"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID,"mob_effect"), gemClass);
         this.effect = effect;
         this.target = target;
         this.values = values;

@@ -16,7 +16,7 @@ public final class GemCaseNetwork {
 
     private static final String VERSION = "1";
 
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(FallenGemsAffixes.MOD_ID, "gem_case"), () -> VERSION, VERSION::equals, VERSION::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "gem_case"), () -> VERSION, VERSION::equals, VERSION::equals);
 
     private GemCaseNetwork() {
     }

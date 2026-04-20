@@ -18,8 +18,8 @@ public class KeresSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation KERES_ID = new ResourceLocation("celestisynth", "keres");
-    private static final ResourceLocation BLOOD_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "blood_spell_power");
+    private static final ResourceLocation KERES_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "keres");
+    private static final ResourceLocation BLOOD_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "blood_spell_power");
     private static final Lazy<Attribute> BLOOD_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(BLOOD_SPELL_POWER_ID) : null);
 
     @SubscribeEvent
