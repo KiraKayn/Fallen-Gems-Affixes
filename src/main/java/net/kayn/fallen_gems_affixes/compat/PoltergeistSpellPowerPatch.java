@@ -18,8 +18,8 @@ public class PoltergeistSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation ELDRITCH_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "eldritch_spell_power");
-    private static final ResourceLocation POLTERGEIST_ID = new ResourceLocation("celestisynth", "poltergeist");
+    private static final ResourceLocation ELDRITCH_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "eldritch_spell_power");
+    private static final ResourceLocation POLTERGEIST_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "poltergeist");
 
     private static final Lazy<Attribute> ELDRITCH_SPELL_POWER = Lazy.of(() -> {
         if (!HAS_IRONS) return null;

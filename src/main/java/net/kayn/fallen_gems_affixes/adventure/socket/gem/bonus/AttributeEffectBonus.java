@@ -13,6 +13,7 @@ import dev.shadowsoffire.attributeslib.AttributesLib;
 import dev.shadowsoffire.attributeslib.api.IFormattableAttribute;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -66,7 +67,7 @@ public class AttributeEffectBonus extends GemBonus {
 
     public AttributeEffectBonus(GemClass gemClass, Attribute attribute, Operation operation, Map<LootRarity, StepFunction> attributeValues,
                                 MobEffect effect, Target target, Map<LootRarity, EffectData> effectValues, boolean stackOnReapply) {
-        super(new ResourceLocation("fallen_gems_affixes", "attribute_effect"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "attribute_effect"), gemClass);
         this.attribute = attribute;
         this.operation = operation;
         this.attributeValues = attributeValues;

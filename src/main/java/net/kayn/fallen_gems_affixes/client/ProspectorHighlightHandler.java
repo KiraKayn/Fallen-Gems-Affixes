@@ -11,6 +11,7 @@ import net.kayn.fallen_gems_affixes.adventure.affix.ProspectorAffix;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -68,8 +69,8 @@ public class ProspectorHighlightHandler {
                             || state.is(BlockTags.LAPIS_ORES)
                             || state.is(BlockTags.REDSTONE_ORES)
                             || state.is(BlockTags.COPPER_ORES)
-                            || state.is(net.minecraft.tags.BlockTags.create(new net.minecraft.resources.ResourceLocation("forge", "ores")))
-                            || state.is(net.minecraft.tags.BlockTags.create(new net.minecraft.resources.ResourceLocation("c", "ores")))) {
+                            || state.is(net.minecraft.tags.BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", "ores")))
+                            || state.is(net.minecraft.tags.BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores")))) {
                         found.add(mutable.immutable());
                     }
                 }

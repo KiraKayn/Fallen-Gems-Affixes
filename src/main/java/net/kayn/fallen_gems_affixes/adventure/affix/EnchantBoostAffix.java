@@ -53,7 +53,7 @@ public class EnchantBoostAffix extends Affix {
         CompoundTag affixData = stack.getTagElement("affix_data");
         if (affixData != null && affixData.contains(TAG_CHOSEN_ENCHANT)) {
             String id = affixData.getString(TAG_CHOSEN_ENCHANT);
-            Enchantment stored = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(id));
+            Enchantment stored = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.parse(id));
             if (stored != null) return stored;
         }
 

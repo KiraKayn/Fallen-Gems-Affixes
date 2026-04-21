@@ -18,8 +18,8 @@ public class CrescentiaSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation CRESCENTIA_ID = new ResourceLocation("celestisynth", "crescentia");
-    private static final ResourceLocation ENDER_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "ender_spell_power");
+    private static final ResourceLocation CRESCENTIA_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "crescentia");
+    private static final ResourceLocation ENDER_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "ender_spell_power");
     private static final Lazy<Attribute> ENDER_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(ENDER_SPELL_POWER_ID) : null);
 
     @SubscribeEvent

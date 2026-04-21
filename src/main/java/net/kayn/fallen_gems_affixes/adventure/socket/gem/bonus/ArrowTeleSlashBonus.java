@@ -30,7 +30,7 @@ public class ArrowTeleSlashBonus extends GemBonus {
     public ArrowTeleSlashBonus(GemClass gemClass,
                                Map<LootRarity, StepFunction> cooldown,
                                Map<LootRarity, StepFunction> radius) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "arrow_tele_slash"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "arrow_tele_slash"), gemClass);
         this.cooldown = cooldown;
         this.radius = radius;
     }

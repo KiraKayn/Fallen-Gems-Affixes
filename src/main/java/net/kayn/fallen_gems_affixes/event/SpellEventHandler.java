@@ -118,7 +118,7 @@ public class SpellEventHandler {
         if (isCurrentlyTriggering(caster)) return;
         if (event.getCastSource() == CastSource.COMMAND) return;
 
-        AbstractSpell castedSpell = SpellRegistry.getSpell(new ResourceLocation(event.getSpellId()));
+        AbstractSpell castedSpell = SpellRegistry.getSpell(ResourceLocation.parse(event.getSpellId()));
 
         for (ItemStack stack : caster.getAllSlots()) {
             AffixHelper.streamAffixes(stack).forEach(inst -> {

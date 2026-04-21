@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class UndyingAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "undying");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "undying");
     private static final String TRIGGERED_KEY = "fga.undying_triggered";
 
     public static final Codec<UndyingAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(

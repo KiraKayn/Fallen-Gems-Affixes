@@ -26,7 +26,7 @@ public class ErasureRecipe extends SmithingTransformRecipe {
     public static final String TAG_SCROLL_AFFIXES  = "fga:scroll_affixes";
     public static final String TAG_SCROLL_SLOTS_USED = "fga:scroll_slots_used";
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:erasure");
+    private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:erasure");
 
     public ErasureRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_ERASURE.get()), ItemStack.EMPTY);

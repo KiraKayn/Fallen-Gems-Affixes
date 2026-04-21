@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class SoulDrainAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "soul_drain");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "soul_drain");
 
     private static final UUID   DRAIN_UUID = UUID.fromString("cc000003-0000-0000-0003-000000000001");
     private static final String DRAIN_NAME = "fga:soul_drain_hp";

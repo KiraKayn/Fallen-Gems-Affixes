@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class SocketConversionRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:socket_conversion");
+    private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:socket_conversion");
 
     public SocketConversionRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_ASCENSION.get()), ItemStack.EMPTY);

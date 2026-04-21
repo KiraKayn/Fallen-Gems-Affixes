@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class PhaseAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "phase");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "phase");
     private static final String CD_KEY = "fga.phase_next";
 
     public static final Codec<PhaseAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(

@@ -35,7 +35,7 @@ public class HydraBonus extends GemBonus implements IDamageOrResistanceBonus {
     public final Map<LootRarity, StepFunction> firePenalty;
 
     public HydraBonus(GemClass gemClass, Map<LootRarity, StepFunction> reduction, Map<LootRarity, StepFunction> firePenalty) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "hydra"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "hydra"), gemClass);
         this.reduction = reduction;
         this.firePenalty = firePenalty;
     }

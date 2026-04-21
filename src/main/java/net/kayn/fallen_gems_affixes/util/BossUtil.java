@@ -10,7 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 public class BossUtil {
 
     private static final TagKey<EntityType<?>> FORGE_BOSSES =
-            TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses"));
+            TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses"));
 
     public static boolean isBoss(LivingEntity entity, TagKey<EntityType<?>> extraBossTag) {
         return entity.getType().is(FORGE_BOSSES)

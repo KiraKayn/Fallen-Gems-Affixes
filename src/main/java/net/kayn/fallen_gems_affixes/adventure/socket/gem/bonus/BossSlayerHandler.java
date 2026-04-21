@@ -20,7 +20,7 @@ public class BossSlayerHandler {
 
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(
             ForgeRegistries.ENTITY_TYPES.getRegistryKey(),
-            new ResourceLocation("fallen_gems_affixes", "boss_slayer")
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "boss_slayer")
     );
 
     @SubscribeEvent

@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class PermanentEffectBonus extends GemBonus {
     public static final Codec<PermanentEffectBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
             ResourceLocation.CODEC.fieldOf("effect")
-                    .xmap(BuiltInRegistries.MOB_EFFECT::get, BuiltInRegistries.MOB_EFFECT::getKey)
+                    .xmap(ForgeRegistries.MOB_EFFECTS::getValue, ForgeRegistries.MOB_EFFECTS::getKey)
                     .forGetter(b -> b.effect),
 
             Codec.unboundedMap(LootRarity.CODEC, Codec.INT)
@@ -33,7 +35,7 @@ public class PermanentEffectBonus extends GemBonus {
     ).apply(inst, PermanentEffectBonus::new));
 
     public PermanentEffectBonus(GemClass gemClass, MobEffect effect, Map<LootRarity, Integer> values) {
-        super(new ResourceLocation("fallen_gems_affixes", "permanent_effect"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "permanent_effect"), gemClass);
         this.effect = effect;
         this.values = values;
     }

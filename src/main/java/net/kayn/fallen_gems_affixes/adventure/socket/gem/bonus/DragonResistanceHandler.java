@@ -21,7 +21,7 @@ public class DragonResistanceHandler {
 
     private static final TagKey<EntityType<?>> DRAGON_TAG = TagKey.create(
             ForgeRegistries.ENTITY_TYPES.getRegistryKey(),
-            new ResourceLocation("fallen_gems_affixes", "dragon_slayer")
+            ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "dragon_slayer")
     );
 
     @SubscribeEvent

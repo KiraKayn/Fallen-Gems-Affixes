@@ -18,8 +18,8 @@ public class RainfallSpellPowerPatch {
     private static final boolean HAS_CELESTISYNTH = ModList.get().isLoaded("celestisynth");
     private static final boolean HAS_IRONS = ModList.get().isLoaded("irons_spellbooks");
 
-    private static final ResourceLocation RAINFALL_SERENITY_ID = new ResourceLocation("celestisynth", "rainfall_serenity");
-    private static final ResourceLocation LIGHTNING_SPELL_POWER_ID = new ResourceLocation("irons_spellbooks", "lightning_spell_power");
+    private static final ResourceLocation RAINFALL_SERENITY_ID = ResourceLocation.fromNamespaceAndPath("celestisynth", "rainfall_serenity");
+    private static final ResourceLocation LIGHTNING_SPELL_POWER_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "lightning_spell_power");
     private static final Lazy<Attribute> LIGHTNING_SPELL_POWER = Lazy.of(() -> HAS_IRONS ? ForgeRegistries.ATTRIBUTES.getValue(LIGHTNING_SPELL_POWER_ID) : null);
 
     @SubscribeEvent

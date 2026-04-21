@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class VoidHunterBonus extends GemBonus {
 
-    private static final ResourceLocation ECHOING_STRIKES_ID = new ResourceLocation("irons_spellbooks", "echoing_strikes");
+    private static final ResourceLocation ECHOING_STRIKES_ID = ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "echoing_strikes");
 
     public static final Codec<VoidHunterBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
@@ -36,7 +36,7 @@ public class VoidHunterBonus extends GemBonus {
     public VoidHunterBonus(GemClass gemClass, Map<LootRarity, StepFunction> cooldown,
                            Map<LootRarity, StepFunction> duration,
                            Map<LootRarity, StepFunction> amplifier) {
-        super(new ResourceLocation(FallenGemsAffixes.MOD_ID, "void_hunter"), gemClass);
+        super(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "void_hunter"), gemClass);
         this.cooldown = cooldown;
         this.duration = duration;
         this.amplifier = amplifier;

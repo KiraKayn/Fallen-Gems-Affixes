@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class RegenerationAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "mob_regeneration");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "mob_regeneration");
 
     public static final Codec<RegenerationAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ScaledValue.CODEC.fieldOf("heal_percent").forGetter(a -> a.healPercent),

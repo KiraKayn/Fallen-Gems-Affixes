@@ -50,7 +50,7 @@ public class AugmentMeta implements ICodecProvider<AugmentMeta> {
     }
 
     public boolean canApplyTo(LootCategory cat) {
-        return general.categories.contains(cat);
+        return general.categories.isEmpty() || general.categories.contains(cat);
     }
 
     public Set<LootCategory> getCategories() {

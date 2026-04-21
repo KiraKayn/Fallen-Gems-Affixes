@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class ArcaneShieldAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "arcane_shield");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "arcane_shield");
     private static final String SHIELD_KEY = "fga.arcane_shield_hp";
     private static final String CD_KEY     = "fga.arcane_shield_next";
 

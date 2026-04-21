@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.event;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,7 @@ public class SoulboundEventHandler {
 
     private static final String TAG_SOULBOUND = "fallen_gems_affixes:soulbound_items";
     private static final String TAG_EQUIPPED_ITEMS = "fallen_gems_affixes:equipped_items";
-    private static final ResourceLocation SOULBOUND_ID = new ResourceLocation("fallen_gems_affixes", "soulbound");
+    private static final ResourceLocation SOULBOUND_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "soulbound");
 
     // Temporary storage for equipped items (only exists during death process)
     private static final Map<UUID, List<ItemStack>> tempEquippedItems = new HashMap<>();

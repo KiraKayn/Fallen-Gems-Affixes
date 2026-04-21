@@ -66,7 +66,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
 
         Map<ResourceLocation, List<LootRarity>> dimensionRarities = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> e : RAW_DIMENSION_RARITIES.entrySet()) {
-            ResourceLocation dimId = new ResourceLocation(e.getKey());
+            ResourceLocation dimId = ResourceLocation.parse(e.getKey());
             List<LootRarity> rarities = new ArrayList<>();
             for (String name : e.getValue()) {
                 LootRarity r = resolveRarity(name);
@@ -159,9 +159,9 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         json.getAsJsonArray("blacklist").forEach(e -> {
             String s = e.getAsString();
             if (s.startsWith("#"))
-                BLACKLIST_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(s.substring(1))));
+                BLACKLIST_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse(s.substring(1))));
             else
-                BLACKLIST.add(new ResourceLocation(s));
+                BLACKLIST.add(ResourceLocation.parse(s));
         });
     }
 
@@ -182,7 +182,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             for (JsonElement el : e.getValue().getAsJsonArray()) {
                 JsonObject obj = el.getAsJsonObject();
                 if (!obj.has("affix")) continue;
-                ResourceLocation affixId = new ResourceLocation(obj.get("affix").getAsString());
+                ResourceLocation affixId = ResourceLocation.parse(obj.get("affix").getAsString());
                 float level  = obj.has("level")  ? Math.max(0f, Math.min(1f, obj.get("level").getAsFloat()))  : 0.5f;
                 float chance = obj.has("chance") ? Math.max(0f, Math.min(1f, obj.get("chance").getAsFloat())) : 1.0f;
                 entries.add(new EntityAffixEntry(affixId, level, chance));
@@ -199,7 +199,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             for (JsonElement el : e.getValue().getAsJsonArray()) {
                 JsonObject obj = el.getAsJsonObject();
                 if (!obj.has("affix")) continue;
-                ResourceLocation affixId = new ResourceLocation(obj.get("affix").getAsString());
+                ResourceLocation affixId = ResourceLocation.parse(obj.get("affix").getAsString());
                 float level  = obj.has("level")  ? Math.max(0f, Math.min(1f, obj.get("level").getAsFloat()))  : 0.5f;
                 float chance = obj.has("chance") ? Math.max(0f, Math.min(1f, obj.get("chance").getAsFloat())) : 1.0f;
                 entries.add(new EntityAffixEntry(affixId, level, chance));

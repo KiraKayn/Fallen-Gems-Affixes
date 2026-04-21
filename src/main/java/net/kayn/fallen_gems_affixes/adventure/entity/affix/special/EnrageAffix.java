@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class EnrageAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "enrage");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "enrage");
     private static final UUID   ATK_UUID = UUID.fromString("aa000001-0000-0000-0001-000000000001");
     private static final UUID   SPD_UUID = UUID.fromString("aa000001-0000-0000-0001-000000000002");
     private static final String ATK_NAME = "fga:enrage_attack";

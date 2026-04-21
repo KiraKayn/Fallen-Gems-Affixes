@@ -49,7 +49,7 @@ public class SupremacyStarTooltip {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if (AugmentHelper.hasAugment(stack, Fallen.Augments.SUPREMACY)) return;
+        if (!AugmentHelper.hasAugment(stack, Fallen.Augments.SUPREMACY)) return;
 
         List<Component> tooltips = event.getToolTip();
         if (tooltips == null || tooltips.isEmpty()) return;

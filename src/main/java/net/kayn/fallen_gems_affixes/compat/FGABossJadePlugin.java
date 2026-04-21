@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes.compat;
 
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
 import net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper;
 import net.minecraft.ChatFormatting;
@@ -18,7 +19,7 @@ import snownee.jade.api.config.IPluginConfig;
 @WailaPlugin
 public class FGABossJadePlugin implements IWailaPlugin, IEntityComponentProvider, IServerDataProvider<EntityAccessor> {
 
-    public static final ResourceLocation UID = new ResourceLocation("fallen_gems_affixes", "entity_affixes");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "entity_affixes");
 
     @Override
     public void register(IWailaCommonRegistration reg) {
