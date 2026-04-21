@@ -1,5 +1,6 @@
 package net.kayn.fallen_gems_affixes;
 
+import dev.shadowsoffire.placebo.util.PlaceboUtil;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.BerserkerAffix;
 import net.kayn.fallen_gems_affixes.adventure.affix.CooldownResetAffix;
@@ -17,6 +18,7 @@ import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
 import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
 import net.kayn.fallen_gems_affixes.augment.GenesisEventHandler;
+import net.kayn.fallen_gems_affixes.color.FabledColor;
 import net.kayn.fallen_gems_affixes.commands.ModCommands;
 import net.kayn.fallen_gems_affixes.compat.*;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
@@ -121,6 +123,9 @@ public class FallenGemsAffixes {
     public void commonSetup(final FMLCommonSetupEvent event) {
         GemCaseNetwork.init();
         // Any common setup logic
+        event.enqueueWork(() -> {
+            PlaceboUtil.registerCustomColor(FabledColor.FABLED);
+        });
     }
 
     @SubscribeEvent

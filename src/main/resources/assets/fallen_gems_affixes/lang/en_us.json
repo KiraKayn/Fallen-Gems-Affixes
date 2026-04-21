@@ -631,5 +631,8 @@
 
   "item.fallen_gems_affixes.sigil_of_elevation": "Sigil of Elevation",
   "item.fallen_gems_affixes.sigil_of_elevation.desc": "Elevates all Tiered Socket slots to the next rarity",
-  "item.fallen_gems_affixes.sigil_of_elevation.cap_hint": "Cannot exceed: %s"
+  "item.fallen_gems_affixes.sigil_of_elevation.cap_hint": "Cannot exceed: %s",
+
+  "item.fallen_gems_affixes.fabled_material": "Relic of the Renowned",
+  "rarity.fallen_gems_affixes:fabled": "Fabled"
 }

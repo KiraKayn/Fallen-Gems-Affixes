@@ -1,8 +1,11 @@
 package net.kayn.fallen_gems_affixes.registry;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.salvaging.SalvageItem;
+import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.item.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
@@ -38,4 +41,8 @@ public class ModItems {
     public static final RegistryObject<Item> SIGIL_OF_ELEVATION = ITEMS.register("sigil_of_elevation",
             () -> new SigilOfElevationItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)
             ));
+    public static final RegistryObject<Item> FABLED_MATERIAL = ITEMS.register("fabled_material",
+            () -> new SalvageItem(
+                    RarityRegistry.INSTANCE.holder(new ResourceLocation(FallenGemsAffixes.MOD_ID, "fabled")),
+                    new Item.Properties().stacksTo(64)));
 }
