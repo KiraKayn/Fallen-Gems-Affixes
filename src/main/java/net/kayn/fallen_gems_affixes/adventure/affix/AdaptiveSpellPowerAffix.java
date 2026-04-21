@@ -103,7 +103,7 @@ public class AdaptiveSpellPowerAffix extends AttributeAffix {
         }
 
         for (Attribute attribute : foundAttributes) {
-            ResourceLocation attrId = BuiltInRegistries.ATTRIBUTE.getKey(attribute);
+            ResourceLocation attrId = ForgeRegistries.ATTRIBUTES.getKey(attribute);
             if (attrId != null) {
                 String path = attrId.getPath();
                 if (path.endsWith("spell_power") && path.length() != 11) {

@@ -82,7 +82,7 @@ public class AugmentContainer implements IAugmentContainer, INBTSerializable<Com
         augments.clear();
 
         for (String key : augmentsTag.getAllKeys()) {
-            ResourceLocation id = new ResourceLocation(key);
+            ResourceLocation id = ResourceLocation.parse(key);
             IAugment augment = Fallen.Registries.AUGMENT_REGISTRY.getValue(id);
             if (augment == null) continue;
 

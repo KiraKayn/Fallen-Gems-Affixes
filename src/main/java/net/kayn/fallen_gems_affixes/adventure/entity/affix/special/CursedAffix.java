@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CursedAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "cursed");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "cursed");
 
     private static final List<MobEffect> POOL = List.of(
             MobEffects.MOVEMENT_SLOWDOWN,

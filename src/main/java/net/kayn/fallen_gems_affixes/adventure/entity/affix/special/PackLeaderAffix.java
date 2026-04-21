@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class PackLeaderAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "pack_leader");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "pack_leader");
 
     private static final UUID   ATK_UUID = UUID.fromString("bb000002-0000-0000-0002-000000000001");
     private static final UUID   SPD_UUID = UUID.fromString("bb000002-0000-0000-0002-000000000002");

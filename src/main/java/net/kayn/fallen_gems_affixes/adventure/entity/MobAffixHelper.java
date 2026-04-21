@@ -45,7 +45,7 @@ public final class MobAffixHelper {
         for (Tag t : list) {
             if (!(t instanceof CompoundTag entry)) continue;
             try {
-                ResourceLocation id = new ResourceLocation(entry.getString("affix"));
+                ResourceLocation id = ResourceLocation.parse(entry.getString("affix"));
                 float level = entry.getFloat("level");
                 EntityAffix affix = EntityAffixRegistry.getInstance(id);
                 if (affix != null) result.add(new ResolvedMobAffix(affix, level));

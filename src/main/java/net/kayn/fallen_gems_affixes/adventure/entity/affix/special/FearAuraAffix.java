@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class FearAuraAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "fear_aura");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "fear_aura");
 
     public static final Codec<FearAuraAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.FLOAT.optionalFieldOf("radius", 8.0f).forGetter(a -> a.radius),

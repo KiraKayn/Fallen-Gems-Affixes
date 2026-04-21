@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class ShadowStepAffix extends EntityAffix {
 
-    public static final ResourceLocation TYPE = new ResourceLocation("fallen_gems_affixes", "shadow_step");
+    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "shadow_step");
     private static final String CD_KEY = "fga.shadow_step_next";
 
     public static final Codec<ShadowStepAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(

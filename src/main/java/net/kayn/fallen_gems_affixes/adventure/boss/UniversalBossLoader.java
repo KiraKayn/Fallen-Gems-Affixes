@@ -199,7 +199,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             for (JsonElement el : e.getValue().getAsJsonArray()) {
                 JsonObject obj = el.getAsJsonObject();
                 if (!obj.has("affix")) continue;
-                ResourceLocation affixId = new ResourceLocation(obj.get("affix").getAsString());
+                ResourceLocation affixId = ResourceLocation.parse(obj.get("affix").getAsString());
                 float level  = obj.has("level")  ? Math.max(0f, Math.min(1f, obj.get("level").getAsFloat()))  : 0.5f;
                 float chance = obj.has("chance") ? Math.max(0f, Math.min(1f, obj.get("chance").getAsFloat())) : 1.0f;
                 entries.add(new EntityAffixEntry(affixId, level, chance));

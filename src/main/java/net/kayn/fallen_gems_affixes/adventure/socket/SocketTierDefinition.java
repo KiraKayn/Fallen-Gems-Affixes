@@ -45,7 +45,7 @@ public final class SocketTierDefinition {
     @Nullable
     public static SocketTierDefinition parse(JsonObject obj) {
         try {
-            ResourceLocation rarityId = new ResourceLocation(GsonHelper.getAsString(obj, "rarity"));
+            ResourceLocation rarityId = ResourceLocation.parse(GsonHelper.getAsString(obj, "rarity"));
 
             String colorStr  = GsonHelper.getAsString(obj, "color", "#FFFFFF");
             boolean rainbow  = colorStr.equalsIgnoreCase("rainbow");
