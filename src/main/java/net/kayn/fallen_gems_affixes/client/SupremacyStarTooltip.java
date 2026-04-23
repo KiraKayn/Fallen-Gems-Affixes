@@ -28,8 +28,6 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = FallenGemsAffixes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SupremacyStarTooltip {
 
-    private static final String FABLED_KEY = "fallen_gems_affixes:fabled";
-
     /**
      * Pre-compute the exact tooltip of an {@link AttributeAffix} to compare.
      * @param stack the item stack where the inst is
