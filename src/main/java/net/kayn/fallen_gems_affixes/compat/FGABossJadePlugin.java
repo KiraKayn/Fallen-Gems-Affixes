@@ -83,7 +83,7 @@ public class FGABossJadePlugin implements IWailaPlugin, IEntityComponentProvider
 
             if (!isLastInTotal) {
                 if (countInLine < 3) {
-                    line.append(Component.literal(", ").withStyle(ChatFormatting.GRAY));
+                    line.append(Component.literal(", ").withStyle(ChatFormatting.GOLD));
                 }
             }
 
