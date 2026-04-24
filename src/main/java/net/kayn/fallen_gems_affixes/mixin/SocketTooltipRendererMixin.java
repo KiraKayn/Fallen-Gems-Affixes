@@ -3,7 +3,10 @@ package net.kayn.fallen_gems_affixes.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.shadowsoffire.apotheosis.adventure.client.SocketTooltipRenderer;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.color.GradientColor;
+import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketConfig;
+import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketHelper;
 import net.kayn.fallen_gems_affixes.adventure.socket.SocketTierDefinition;
 import net.kayn.fallen_gems_affixes.adventure.socket.SocketTierManager;
 import net.kayn.fallen_gems_affixes.adventure.socket.TieredSocketHelper;
@@ -41,14 +44,36 @@ public class SocketTooltipRendererMixin {
     private void renderTieredText(Font font, int x, int y, Matrix4f matrix,
                                   BufferSource bufferSource, CallbackInfo ci) {
 
+        ItemStack socketed = this.comp.socketed();
+
+        if (CatalystSocketHelper.hasCatalystSocket(socketed)) {
+            ci.cancel();
+            GemInstance inst = this.comp.gems().isEmpty() ? null : this.comp.gems().get(0);
+            Component text;
+
+            if (inst != null && inst.isValid()) {
+                float multi = CatalystSocketHelper.getGemPowerMultiplier(socketed);
+                text = Component.translatable("socket.fallen_gems_affixes.catalyst.filled",
+                        inst.getSocketBonusTooltip(),
+                        String.format("%.0f", (multi - 1.0f) * 100));
+            } else {
+                int count = CatalystSocketHelper.getCatalystSocketCount(socketed);
+                float power = CatalystSocketHelper.getCatalystPower(socketed);
+                text = Component.translatable("socket.fallen_gems_affixes.catalyst.empty",
+                        count, String.format("%.0f", count * power * 100));
+            }
+
+            font.drawInBatch(text, x + 12, y + 1, catalystTextColor(), true, matrix, bufferSource,
+                    Font.DisplayMode.NORMAL, 0, 15728880);
+            return;
+        }
+
         if (!SocketTierManager.INSTANCE.isEnabled()) return;
         ci.cancel();
 
-        List<RenderSlot> slots = buildSortedSlots(this.comp.socketed());
-
+        List<RenderSlot> slots = buildSortedSlots(socketed);
         for (int i = 0; i < slots.size(); i++) {
             RenderSlot slot = slots.get(i);
-
             final Component text;
             final int color;
 
@@ -71,10 +96,29 @@ public class SocketTooltipRendererMixin {
     @Inject(method = "renderImage", at = @At("HEAD"), cancellable = true)
     private void renderTieredImage(Font font, int x, int y, GuiGraphics gfx, CallbackInfo ci) {
 
+        ItemStack socketed = this.comp.socketed();
+
+        if (CatalystSocketHelper.hasCatalystSocket(socketed)) {
+            ci.cancel();
+            float[] rgb = catalystRGB();
+            RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1f);
+            gfx.blit(TIERED_SOCKET, x, y, 0, 0, 0, 9, 9, 9, 9);
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+            if (!this.comp.gems().isEmpty() && this.comp.gems().get(0).isValid()) {
+                PoseStack pose = gfx.pose();
+                pose.pushPose();
+                pose.scale(0.5F, 0.5F, 1F);
+                gfx.renderFakeItem(this.comp.gems().get(0).gemStack(), 2 * x + 1, 2 * y + 1);
+                pose.popPose();
+            }
+            return;
+        }
+
         if (!SocketTierManager.INSTANCE.isEnabled()) return;
         ci.cancel();
 
-        List<RenderSlot> slots = buildSortedSlots(this.comp.socketed());
+        List<RenderSlot> slots = buildSortedSlots(socketed);
 
         for (int i = 0; i < slots.size(); i++) {
             int tier  = slots.get(i).tier();
@@ -106,16 +150,25 @@ public class SocketTooltipRendererMixin {
 
     private List<RenderSlot> buildSortedSlots(ItemStack socketed) {
         List<RenderSlot> slots = new ArrayList<>(this.comp.gems().size());
-
         for (int i = 0; i < this.comp.gems().size(); i++) {
             int tier = TieredSocketHelper.getSocketTier(socketed, i);
             slots.add(new RenderSlot(i, tier, this.comp.gems().get(i)));
         }
-
         slots.sort(Comparator.comparingInt(s ->
                 s.tier() == TieredSocketHelper.REGULAR_SOCKET ? Integer.MAX_VALUE : s.tier()));
-
         return slots;
+    }
+
+    private static int catalystTextColor() {
+        CatalystSocketConfig cfg = CatalystSocketConfig.INSTANCE;
+        if (cfg.isRainbow()) return GradientColor.RAINBOW.getValue() | 0xFF000000;
+        return cfg.getColorPacked() | 0xFF000000;
+    }
+
+    private static float[] catalystRGB() {
+        CatalystSocketConfig cfg = CatalystSocketConfig.INSTANCE;
+        int packed = cfg.isRainbow() ? GradientColor.RAINBOW.getValue() : cfg.getColorPacked();
+        return new float[]{((packed >> 16) & 0xFF) / 255f, ((packed >> 8) & 0xFF) / 255f, (packed & 0xFF) / 255f};
     }
 
     private static int resolveTextColor(int ordinal) {
@@ -128,17 +181,9 @@ public class SocketTooltipRendererMixin {
     private static float[] resolveRGB(int ordinal) {
         SocketTierDefinition def = SocketTierManager.INSTANCE.getByOrdinal(ordinal);
         int packed;
-        if (def == null) {
-            packed = 0xFFFFFF;
-        } else if (def.rainbow()) {
-            packed = GradientColor.RAINBOW.getValue();
-        } else {
-            packed = def.colorPacked();
-        }
-        return new float[]{
-                ((packed >> 16) & 0xFF) / 255f,
-                ((packed >>  8) & 0xFF) / 255f,
-                ( packed        & 0xFF) / 255f
-        };
+        if (def == null) packed = 0xFFFFFF;
+        else if (def.rainbow()) packed = GradientColor.RAINBOW.getValue();
+        else packed = def.colorPacked();
+        return new float[]{((packed >> 16) & 0xFF) / 255f, ((packed >> 8) & 0xFF) / 255f, (packed & 0xFF) / 255f};
     }
 }

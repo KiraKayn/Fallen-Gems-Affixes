@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.augment;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.minecraft.world.item.ItemStack;
@@ -161,6 +162,6 @@ public class GemBonusModifier {
             }
         }
 
-        return currentGemPower;
+        return currentGemPower * CatalystSocketHelper.getGemPowerMultiplier(stack);
     }
 }

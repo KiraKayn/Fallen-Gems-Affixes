@@ -91,6 +91,7 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(PlayerLogoutHandler.class);
         MinecraftForge.EVENT_BUS.register(EntityAffixEventHandler.class);
         MinecraftForge.EVENT_BUS.register(MobAffixEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(CatalystSocketEventHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

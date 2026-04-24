@@ -634,5 +634,11 @@
   "item.fallen_gems_affixes.sigil_of_elevation.cap_hint": "Cannot exceed: %s",
 
   "item.fallen_gems_affixes.fabled_material": "Relic of the Renowned",
-  "rarity.fallen_gems_affixes:fabled": "Fabled"
+  "rarity.fallen_gems_affixes:fabled": "Fabled",
+
+  "item.fallen_gems_affixes.sigil_of_prismatic_conversion": "Sigil of Prismatic Conversion",
+  "item.fallen_gems_affixes.sigil_of_prismatic_conversion.desc": "Unifies all sockets into a single Catalyst Socket",
+  "item.fallen_gems_affixes.sigil_of_prismatic_conversion.desc2": "Gem power scales with the number of consumed sockets. Requires all sockets to be empty.",
+  "socket.fallen_gems_affixes.catalyst.empty": "Catalyst Socket",
+  "socket.fallen_gems_affixes.catalyst.filled": "%s §7[§b+%s%% power§7]"
 }

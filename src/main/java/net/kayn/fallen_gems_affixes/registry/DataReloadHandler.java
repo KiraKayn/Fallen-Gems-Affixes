@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.registry;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
 import net.kayn.fallen_gems_affixes.adventure.entity.affix.EntityAffixLoader;
+import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketConfig;
 import net.kayn.fallen_gems_affixes.adventure.socket.SocketTierManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +17,7 @@ public class DataReloadHandler {
         event.addListener(UniversalBossLoader.INSTANCE);
         event.addListener(EntityAffixLoader.INSTANCE);
         event.addListener(SocketTierManager.INSTANCE);
+        event.addListener(CatalystSocketConfig.INSTANCE);
         FallenGemsAffixes.LOGGER.info("Registered Augment JSON loader!");
     }
 }

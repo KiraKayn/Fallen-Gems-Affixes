@@ -30,6 +30,7 @@ public class ModCreativeTabs {
                         output.accept(GemCaseRegistry.ENDER_GEM_CASE_ITEM.get());
                         output.accept(ModItems.SIGIL_OF_ELEVATION.get());
                         output.accept(ModItems.FABLED_MATERIAL.get());
+                        output.accept(ModItems.SIGIL_OF_PRISMATIC_CONVERSION.get());
                     })
                     .build());
 

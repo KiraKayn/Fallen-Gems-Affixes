@@ -45,4 +45,7 @@ public class ModItems {
             () -> new SalvageItem(
                     RarityRegistry.INSTANCE.holder(new ResourceLocation(FallenGemsAffixes.MOD_ID, "fabled")),
                     new Item.Properties().stacksTo(64)));
+
+    public static final RegistryObject<Item> SIGIL_OF_PRISMATIC_CONVERSION = ITEMS.register("sigil_of_prismatic_conversion",
+            () -> new SigilOfPrismaticConversionItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 }

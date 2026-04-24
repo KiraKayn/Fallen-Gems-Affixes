@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootController;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketHelper;
 import net.kayn.fallen_gems_affixes.adventure.socket.TieredSocketHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -36,6 +37,8 @@ public class LootControllerMixin {
 
         ItemStack result = cir.getReturnValue();
         if (!result.isEmpty()) {
+            if (CatalystSocketHelper.hasCatalystSocket(result)) return;
+
             TieredSocketHelper.assignSocketTiersToLootItem(result, rand);
         }
     }

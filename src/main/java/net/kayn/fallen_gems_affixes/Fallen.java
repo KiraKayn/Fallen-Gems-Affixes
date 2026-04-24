@@ -28,11 +28,12 @@ public class Fallen {
 
     public static class Registries {
         public static final AugmentRegistry AUGMENT_REGISTRY = new AugmentRegistry();
+
         public static void bootstrap() {
             Connection.registerRegistryBoundPacketPayloads(AUGMENT_REGISTRY, ClientLikeSyncAugmentPacket.BUF_CODEC,
-                    ClientLikeSyncAugmentPacket.Begin.class,    ClientLikeSyncAugmentPacket.Begin::new,     ClientLikeSyncAugmentPacket.Begin::handle,
-                    ClientLikeSyncAugmentPacket.class,          ClientLikeSyncAugmentPacket::new,           ClientLikeSyncAugmentPacket::handle,
-                    ClientLikeSyncAugmentPacket.End.class,      ClientLikeSyncAugmentPacket.End::new,       ClientLikeSyncAugmentPacket.End::handle);
+                    ClientLikeSyncAugmentPacket.Begin.class, ClientLikeSyncAugmentPacket.Begin::new, ClientLikeSyncAugmentPacket.Begin::handle,
+                    ClientLikeSyncAugmentPacket.class, ClientLikeSyncAugmentPacket::new, ClientLikeSyncAugmentPacket::handle,
+                    ClientLikeSyncAugmentPacket.End.class, ClientLikeSyncAugmentPacket.End::new, ClientLikeSyncAugmentPacket.End::handle);
 
             for (IAugment augment : AUGMENT_REGISTRY.registryView().values()) {
                 AUGMENT_REGISTRY.registerCodec(augment.getId(), augment.getMetaDataCodec());
@@ -67,6 +68,9 @@ public class Fallen {
         public static final RegistryObject<RecipeSerializer<ElevationRecipe>> SOCKET_ELEVATION =
                 SERIALIZERS.register("elevation",
                         MiscUtil.simpleRecipeSerializer(ElevationRecipe::new));
+        public static final RegistryObject<RecipeSerializer<PrismaticConversionRecipe>> PRISMATIC_CONVERSION =
+                SERIALIZERS.register("prismatic_conversion",
+                        MiscUtil.simpleRecipeSerializer(PrismaticConversionRecipe::new));
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
