@@ -5,5 +5,8 @@
     "max": 0.7
   },
   "duration_ticks": 100,
-  "amplifier": 0
+  "amplifier": 0,
+  "blacklist": [
+    "minecraft:bad_omen"
+  ]
 }
