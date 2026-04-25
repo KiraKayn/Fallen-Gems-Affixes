@@ -29,6 +29,12 @@ public final class EntityAffixRegistry {
         registerType(PhaseAffix.TYPE, PhaseAffix.CODEC);
         registerType(FearAuraAffix.TYPE, FearAuraAffix.CODEC);
         registerType(UndyingAffix.TYPE, UndyingAffix.CODEC);
+        registerType(ExecutionerAffix.TYPE, ExecutionerAffix.CODEC);
+        registerType(ColossusAffix.TYPE, ColossusAffix.CODEC);
+        registerType(OverloadAffix.TYPE, OverloadAffix.CODEC);
+        registerType(PredatorAffix.TYPE, PredatorAffix.CODEC);
+        registerType(ApexAffix.TYPE, ApexAffix.CODEC);
+        registerType(HunterAffix.TYPE, HunterAffix.CODEC);
     }
 
     public static <T extends EntityAffix> void registerType(ResourceLocation typeId, Codec<T> codec) {

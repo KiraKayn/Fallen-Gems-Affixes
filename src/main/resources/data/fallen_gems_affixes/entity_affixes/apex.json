@@ -1,0 +1,8 @@
+{
+  "type": "fallen_gems_affixes:apex",
+  "bonus_damage": {
+    "min": 3.0,
+    "max": 10.0
+  },
+  "check_radius": 16.0
+}

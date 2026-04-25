@@ -51,9 +51,17 @@
     ]
   },
   "mob_affixes": {
+    "rare": [
+      { "affix": "fallen_gems_affixes:executioner", "level": 0.3, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:predator",    "level": 0.3, "chance": 0.3 }
+    ],
     "epic": [
-      { "affix": "fallen_gems_affixes:enrage",    "level": 0.4, "chance": 0.4 },
-      { "affix": "fallen_gems_affixes:cursed",    "level": 0.4, "chance": 0.3 }
+      { "affix": "fallen_gems_affixes:enrage",      "level": 0.4, "chance": 0.4 },
+      { "affix": "fallen_gems_affixes:cursed",      "level": 0.4, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:executioner", "level": 0.4, "chance": 0.4 },
+      { "affix": "fallen_gems_affixes:predator",    "level": 0.4, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:overload",    "level": 0.3, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:apex",        "level": 0.4, "chance": 0.3 }
     ],
     "mythic": [
       { "affix": "fallen_gems_affixes:enrage",           "level": 0.7, "chance": 0.6 },
@@ -61,7 +69,13 @@
       { "affix": "fallen_gems_affixes:mob_regeneration", "level": 0.5, "chance": 0.4 },
       { "affix": "fallen_gems_affixes:cursed",           "level": 0.6, "chance": 0.4 },
       { "affix": "fallen_gems_affixes:soul_drain",       "level": 0.5, "chance": 0.3 },
-      { "affix": "fallen_gems_affixes:pack_leader",      "level": 0.5, "chance": 0.3 }
+      { "affix": "fallen_gems_affixes:pack_leader",      "level": 0.5, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:executioner",      "level": 0.6, "chance": 0.5 },
+      { "affix": "fallen_gems_affixes:colossus",         "level": 0.5, "chance": 0.4 },
+      { "affix": "fallen_gems_affixes:overload",         "level": 0.5, "chance": 0.4 },
+      { "affix": "fallen_gems_affixes:predator",         "level": 0.6, "chance": 0.4 },
+      { "affix": "fallen_gems_affixes:apex",             "level": 0.6, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:hunter",           "level": 0.5, "chance": 0.3 }
     ],
     "ancient": [
       { "affix": "fallen_gems_affixes:enrage",           "level": 1.0, "chance": 0.7 },
@@ -74,7 +88,8 @@
       { "affix": "fallen_gems_affixes:soul_drain",       "level": 0.8, "chance": 0.4 },
       { "affix": "fallen_gems_affixes:shadow_step",      "level": 0.8, "chance": 0.4 },
       { "affix": "fallen_gems_affixes:arcane_shield",    "level": 0.7, "chance": 0.3 },
-      { "affix": "fallen_gems_affixes:pack_leader",      "level": 0.8, "chance": 0.3 }
+      { "affix": "fallen_gems_affixes:pack_leader",      "level": 0.8, "chance": 0.3 },
+      { "affix": "fallen_gems_affixes:executioner",      "level": 0.9, "chance": 0.6 }
     ],
     "fabled": [
       { "affix": "fallen_gems_affixes:enrage",           "level": 1.0, "chance": 0.7 },
@@ -87,7 +102,13 @@
       { "affix": "fallen_gems_affixes:soul_drain",       "level": 1.0, "chance": 0.5 },
       { "affix": "fallen_gems_affixes:shadow_step",      "level": 1.0, "chance": 0.6 },
       { "affix": "fallen_gems_affixes:arcane_shield",    "level": 1.0, "chance": 0.5 },
-      { "affix": "fallen_gems_affixes:pack_leader",      "level": 1.0, "chance": 0.5 }
+      { "affix": "fallen_gems_affixes:pack_leader",      "level": 1.0, "chance": 0.5 },
+      { "affix": "fallen_gems_affixes:executioner",      "level": 1.0, "chance": 0.7 },
+      { "affix": "fallen_gems_affixes:colossus",         "level": 1.0, "chance": 0.6 },
+      { "affix": "fallen_gems_affixes:overload",         "level": 1.0, "chance": 0.6 },
+      { "affix": "fallen_gems_affixes:predator",         "level": 1.0, "chance": 0.6 },
+      { "affix": "fallen_gems_affixes:apex",             "level": 1.0, "chance": 0.5 },
+      { "affix": "fallen_gems_affixes:hunter",           "level": 1.0, "chance": 0.5 }
     ]
   },
   "stats": {

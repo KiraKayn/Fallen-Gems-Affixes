@@ -1,0 +1,9 @@
+{
+  "type": "fallen_gems_affixes:overload",
+  "hits_required": 5,
+  "aoe_damage": {
+    "min": 3.0,
+    "max": 8.0
+  },
+  "radius": 4.0
+}

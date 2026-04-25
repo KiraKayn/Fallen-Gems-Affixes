@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:colossus",
+  "max_damage_per_hit": {
+    "min": 8.0,
+    "max": 20.0
+  }
+}

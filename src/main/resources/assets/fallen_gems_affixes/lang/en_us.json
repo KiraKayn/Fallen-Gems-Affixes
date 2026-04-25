@@ -620,6 +620,12 @@
   "fallen_gems_affixes:soul_drain": "Soul Drain",
   "fallen_gems_affixes:shadow_step": "Shadow Step",
   "fallen_gems_affixes:arcane_shield": "Arcane Shield",
+  "fallen_gems_affixes:executioner": "Executioner",
+  "fallen_gems_affixes:colossus": "Colossus",
+  "fallen_gems_affixes:overload": "Overload",
+  "fallen_gems_affixes:predator": "Predator",
+  "fallen_gems_affixes:apex": "Apex",
+  "fallen_gems_affixes:hunter": "Hunter",
 
   "socket_tier.apotheosis.common.empty": "Empty Common Socket",
   "socket_tier.apotheosis.uncommon.empty": "Empty Uncommon Socket",

@@ -1,0 +1,8 @@
+{
+  "type": "fallen_gems_affixes:executioner",
+  "threshold": 0.30,
+  "bonus_damage": {
+    "min": 3.0,
+    "max": 10.0
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:predator",
+  "bonus_damage": {
+    "min": 2.0,
+    "max": 8.0
+  }
+}

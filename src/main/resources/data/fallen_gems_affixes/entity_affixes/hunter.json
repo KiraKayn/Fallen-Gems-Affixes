@@ -1,0 +1,9 @@
+{
+  "type": "fallen_gems_affixes:hunter",
+  "mark_interval_ticks": 100,
+  "mark_duration_ticks": 80,
+  "damage_bonus": {
+    "min": 2.0,
+    "max": 6.0
+  }
+}
