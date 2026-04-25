@@ -90,7 +90,9 @@ public class UniversalBossEventHandler {
         data.putBoolean(TAG, true);
         data.putString(TAG + ".rarity", config.getRarityKey(rarity));
         data.putBoolean("apoth.boss", true);
-        data.putString("apoth.rarity", config.getRarityKey(rarity));
+        ResourceLocation rarityId = RarityRegistry.INSTANCE.getKey(rarity);
+        String rarityIdStr = rarityId != null ? rarityId.toString() : config.getRarityKey(rarity);
+        data.putString("apoth.rarity", rarityIdStr);
     }
 
     private static void applyBoss(Mob mob, BossStats stats, LootRarity rarity, UniversalBossConfig config) {

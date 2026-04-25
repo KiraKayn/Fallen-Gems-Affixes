@@ -26,6 +26,7 @@ public class ModConfig {
     public static final ForgeConfigSpec.BooleanValue SHOW_BOSS_RARITY_NAME;
     public static final ForgeConfigSpec.IntValue EXTRA_SOCKETS;
     public static final ForgeConfigSpec.EnumValue<TieredSocketMode> TIERED_SOCKET_MODE;
+    public static final ForgeConfigSpec.DoubleValue FABLED_AUGMENT_DROP_CHANCE;
 
     static {
         BUILDER.push("Mod Config");
@@ -109,6 +110,10 @@ public class ModConfig {
                         "When no tier definitions are loaded all sockets behave as plain Apotheosis sockets."
                 )
                 .defineEnum("tiered_socket_mode", TieredSocketMode.ON);
+
+        FABLED_AUGMENT_DROP_CHANCE = BUILDER
+                .comment("Chance for a Fabled universal boss to drop a random Augment on death (0.0 = never, 1.0 = always)")
+                .defineInRange("fabledAugmentDropChance", 0.05, 0.0, 1.0);
 
         IRONS_ITEMS_MAP = BUILDER
                 .comment("Map of item Resource Locations to School Type IDs for Adaptive Spell Power Affixes")

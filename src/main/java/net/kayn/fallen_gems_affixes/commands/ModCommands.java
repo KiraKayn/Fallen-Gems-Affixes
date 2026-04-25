@@ -227,7 +227,9 @@ public class ModCommands {
         mob.getPersistentData().putBoolean("fga.universal_boss", true);
         mob.getPersistentData().putString("fga.universal_boss.rarity", rarityId.getPath());
         mob.getPersistentData().putBoolean("apoth.boss", true);
-        mob.getPersistentData().putString("apoth.rarity", rarityId.getPath());
+        ResourceLocation resId = RarityRegistry.INSTANCE.getKey(rarity);
+        String rarityIdStr = resId != null ? resId.toString() : rarityId.toString();
+        mob.getPersistentData().putString("apoth.rarity", rarityIdStr);
 
         mob.setCustomName(mob.getName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
         mob.setCustomNameVisible(false);

@@ -5,5 +5,9 @@
   "weight": 0,
   "quality": 0,
   "rules": [
+    {
+      "type": "ancient",
+      "chance": 1.0
+    }
   ]
 }

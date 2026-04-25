@@ -95,12 +95,17 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
 
     @Nullable
     private static LootRarity resolveRarity(String name) {
-        try {
-            DynamicHolder<LootRarity> holder = RarityRegistry.byLegacyId(name);
-            return holder.isBound() ? holder.get() : null;
-        } catch (Exception e) {
-            return null;
+        DynamicHolder<LootRarity> holder = RarityRegistry.byLegacyId(name);
+        if (holder.isBound()) return holder.get();
+
+        for (LootRarity rarity : RarityRegistry.INSTANCE.getValues()) {
+            ResourceLocation id = RarityRegistry.INSTANCE.getKey(rarity);
+            if (id != null && id.getPath().equalsIgnoreCase(name)) {
+                return rarity;
+            }
         }
+
+        return null;
     }
 
     @Override
