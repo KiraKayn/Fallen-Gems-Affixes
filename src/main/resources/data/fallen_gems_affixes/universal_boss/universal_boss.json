@@ -1,11 +1,19 @@
 {
   "tier_chances": {
-    "common": 0.06,
+    "common":   0.06,
     "uncommon": 0.05,
-    "rare": 0.04,
-    "epic": 0.03,
-    "mythic": 0.02,
-    "ancient": 0.01
+    "rare":     0.04,
+    "epic":     0.03,
+    "mythic":   0.02,
+    "ancient":  0.01
+  },
+  "gear_bonus": {
+    "common":   0.002,
+    "uncommon": 0.003,
+    "rare":     0.005,
+    "epic":     0.008,
+    "mythic":   0.012,
+    "ancient":  0.018
   },
   "blacklist": [
     "minecraft:villager",

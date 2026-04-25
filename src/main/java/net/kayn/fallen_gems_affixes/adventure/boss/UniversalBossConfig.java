@@ -20,7 +20,8 @@ public record UniversalBossConfig(
         Map<ResourceLocation, List<LootRarity>> dimensionRarities,
         Map<String, List<EntityAffixEntry>> affixes,
         Map<String, Float> statChances,
-        Map<String, List<EntityAffixEntry>> mobAffixes
+        Map<String, List<EntityAffixEntry>> mobAffixes,
+        Map<LootRarity, Float> gearBonus
 ) {
 
     @Nullable
@@ -31,17 +32,21 @@ public record UniversalBossConfig(
 
     @Nullable
     public LootRarity rollRarity(RandomSource rand) {
-        return rollRarity(rand, null);
+        return rollRarity(rand, null, Collections.emptyMap());
     }
 
     @Nullable
     public LootRarity rollRarity(RandomSource rand, @Nullable Set<LootRarity> allowed) {
-        Map<LootRarity, Float> pool = tierChances;
-        if (allowed != null) {
-            pool = new LinkedHashMap<>();
-            for (Map.Entry<LootRarity, Float> entry : tierChances.entrySet()) {
-                if (allowed.contains(entry.getKey())) pool.put(entry.getKey(), entry.getValue());
-            }
+        return rollRarity(rand, allowed, Collections.emptyMap());
+    }
+
+    @Nullable
+    public LootRarity rollRarity(RandomSource rand, @Nullable Set<LootRarity> allowed, Map<LootRarity, Float> bonuses) {
+        Map<LootRarity, Float> pool = new LinkedHashMap<>();
+        for (Map.Entry<LootRarity, Float> entry : tierChances.entrySet()) {
+            if (allowed != null && !allowed.contains(entry.getKey())) continue;
+            float adjusted = entry.getValue() + bonuses.getOrDefault(entry.getKey(), 0f);
+            if (adjusted > 0f) pool.put(entry.getKey(), adjusted);
         }
         float totalWeight = pool.values().stream().reduce(0f, Float::sum);
         if (totalWeight <= 0f) return null;

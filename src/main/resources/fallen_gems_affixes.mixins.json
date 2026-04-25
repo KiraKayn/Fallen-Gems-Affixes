@@ -27,6 +27,7 @@
     "permanent_effect.client.PlayerMixin",
     "permanent_effect.client.SlotMixin",
     "SocketTooltipRendererMixin",
+    "UniversalBossGlowMixin"
   ],
   "minVersion": "0.8"
 }

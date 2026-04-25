@@ -1,10 +1,10 @@
 package net.kayn.fallen_gems_affixes.adventure.boss;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
-import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
-import dev.shadowsoffire.placebo.json.RandomAttributeModifier;
+import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
@@ -20,15 +20,16 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
+import dev.shadowsoffire.placebo.json.RandomAttributeModifier;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class UniversalBossEventHandler {
 
@@ -54,7 +55,28 @@ public class UniversalBossEventHandler {
         if (allowed != null && allowed.isEmpty()) return;
 
         Set<LootRarity> allowedSet = allowed != null ? new java.util.HashSet<>(allowed) : null;
-        LootRarity rarity = config.rollRarity(mob.getRandom(), allowedSet);
+
+        Map<LootRarity, Float> gearBonuses = Collections.emptyMap();
+        if (!config.gearBonus().isEmpty()) {
+            Player nearestPlayer = event.getLevel().getLevel()
+                    .getNearestPlayer(event.getX(), event.getY(), event.getZ(), 64, false);
+            if (nearestPlayer != null) {
+                gearBonuses = new HashMap<>();
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    ItemStack item = nearestPlayer.getItemBySlot(slot);
+                    if (item.isEmpty()) continue;
+                    DynamicHolder<LootRarity> rarityHolder = AffixHelper.getRarity(item);
+                    if (!rarityHolder.isBound()) continue;
+                    LootRarity itemRarity = rarityHolder.get();
+                    Float bonus = config.gearBonus().get(itemRarity);
+                    if (bonus != null && bonus > 0f) {
+                        gearBonuses.merge(itemRarity, bonus, Float::sum);
+                    }
+                }
+            }
+        }
+
+        LootRarity rarity = config.rollRarity(mob.getRandom(), allowedSet, gearBonuses);
         if (rarity == null) return;
 
         BossStats stats = config.stats().get(rarity);
@@ -89,7 +111,6 @@ public class UniversalBossEventHandler {
 
         mob.setHealth(mob.getMaxHealth());
 
-        // Player-compatible affixes (EntityAffixHelper)
         String rarityKey = config.getRarityKey(rarity);
         List<EntityAffixEntry> affixEntries = config.getAffixesForRarity(rarity);
         for (EntityAffixEntry entry : affixEntries) {
@@ -114,7 +135,6 @@ public class UniversalBossEventHandler {
             }
         }
 
-        // Mob-only affixes (MobAffixHelper)
         for (EntityAffixEntry entry : config.getMobAffixesForRarity(rarity)) {
             if (mob.getRandom().nextFloat() < entry.chance()) {
                 MobAffixHelper.addAffix(mob, entry.affixId(), entry.level());

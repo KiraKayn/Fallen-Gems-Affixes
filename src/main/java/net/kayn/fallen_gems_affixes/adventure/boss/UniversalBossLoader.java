@@ -33,6 +33,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     private static final Map<String, List<String>>           RAW_DIMENSION_RARITIES = new LinkedHashMap<>();
     private static final Map<String, List<EntityAffixEntry>> RAW_AFFIXES            = new LinkedHashMap<>();
     private static final Map<String, List<EntityAffixEntry>> RAW_MOB_AFFIXES        = new LinkedHashMap<>();
+    private static final Map<String, Float>                  RAW_GEAR_BONUS         = new LinkedHashMap<>();
 
     @Nullable
     private static UniversalBossConfig resolvedConfig = null;
@@ -75,6 +76,12 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             if (!rarities.isEmpty()) dimensionRarities.put(dimId, rarities);
         }
 
+        Map<LootRarity, Float> gearBonus = new LinkedHashMap<>();
+        for (Map.Entry<String, Float> e : RAW_GEAR_BONUS.entrySet()) {
+            LootRarity r = resolveRarity(e.getKey());
+            if (r != null) gearBonus.put(r, e.getValue());
+        }
+
         if (tierChances.isEmpty()) return null;
 
         return new UniversalBossConfig(
@@ -82,7 +89,8 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
                 dimensionRarities,
                 new LinkedHashMap<>(RAW_AFFIXES),
                 new LinkedHashMap<>(RAW_STAT_CHANCES),
-                new LinkedHashMap<>(RAW_MOB_AFFIXES));
+                new LinkedHashMap<>(RAW_MOB_AFFIXES),
+                gearBonus);
     }
 
     @Nullable
@@ -105,6 +113,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
         RAW_DIMENSION_RARITIES.clear();
         RAW_AFFIXES.clear();
         RAW_MOB_AFFIXES.clear();
+        RAW_GEAR_BONUS.clear();
         resolvedConfig = null;
 
         if (objects.isEmpty()) {
@@ -121,6 +130,7 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
                 parseDimensionRarities(json);
                 parseAffixes(json);
                 parseMobAffixes(json);
+                parseGearBonus(json);
             } catch (Exception e) {
                 FallenGemsAffixes.LOGGER.error("[FGA] Failed to load universal_boss from {}", entry.getKey(), e);
             }
@@ -206,5 +216,11 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
             }
             if (!entries.isEmpty()) RAW_MOB_AFFIXES.put(rarityKey, entries);
         }
+    }
+
+    private static void parseGearBonus(JsonObject json) {
+        if (!json.has("gear_bonus")) return;
+        for (Map.Entry<String, JsonElement> e : json.getAsJsonObject("gear_bonus").entrySet())
+            RAW_GEAR_BONUS.put(e.getKey(), e.getValue().getAsFloat());
     }
 }
