@@ -1,30 +1,23 @@
 package net.kayn.fallen_gems_affixes.item.augments;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
-import net.kayn.fallen_gems_affixes.Fallen;
-import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRegistry;
+import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENT_ID_TAG;
 import static net.kayn.fallen_gems_affixes.Fallen.Registries.AUGMENT_REGISTRY;
@@ -35,8 +28,12 @@ public class AugmentItem extends Item {
         super(properties);
     }
 
+    public static boolean is(ItemStack stack) {
+        return stack.is(ModItems.AUGMENT_ITEM.get());
+    }
+
     public static ItemStack createAugment(IAugment augment) {
-        ItemStack stack = new ItemStack(net.kayn.fallen_gems_affixes.registry.ModItems.AUGMENT_ITEM.get());
+        ItemStack stack = new ItemStack(ModItems.AUGMENT_ITEM.get());
         if (AUGMENT_REGISTRY.getMetaData(augment) != null) {
             CompoundTag tag = stack.getOrCreateTag();
             tag.putString(AUGMENT_ID_TAG, augment.getId().toString());
@@ -45,13 +42,11 @@ public class AugmentItem extends Item {
     }
 
     public static ItemStack createAugment(ResourceLocation id) {
-        ItemStack stack = new ItemStack(net.kayn.fallen_gems_affixes.registry.ModItems.AUGMENT_ITEM.get());
-        AugmentMeta meta = AUGMENT_REGISTRY.getMetaData(id);
-        if (meta != null) {
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.putString(AUGMENT_ID_TAG, meta.getAugment().getId().toString());
+        IAugment aug = AUGMENT_REGISTRY.getValue(id);
+        if (aug != null) {
+            return createAugment(aug);
         }
-        return stack;
+        return new ItemStack(ModItems.AUGMENT_ITEM.get());
     }
 
     @SuppressWarnings("ConstantConditions")
