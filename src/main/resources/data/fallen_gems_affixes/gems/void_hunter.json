@@ -22,7 +22,11 @@
         "type": "fallen_gems_affixes:void_hunter",
         "gem_class": {
           "key": "melee_weapons",
-          "types": ["sword", "heavy_weapon", "trident"]
+          "types": [
+            "sword",
+            "heavy_weapon",
+            "trident"
+          ]
         },
         "cooldown": {
           "epic": 15.0,
@@ -57,20 +61,32 @@
       }
     },
     {
-      "type": "fallen_gems_affixes:arrow_tele_slash",
-      "gem_class": {
-        "key": "ranged_weapon",
-        "types": ["bow", "crossbow"]
-      },
-      "cooldown": {
-        "epic": 8.0,
-        "mythic": 6.0,
-        "ancient": 4.0
-      },
-      "radius": {
-        "epic": 3.0,
-        "mythic": 4.0,
-        "ancient": 5.0
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_ranged"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:arrow_tele_slash",
+        "gem_class": {
+          "key": "ranged_weapon",
+          "types": [
+            "bow",
+            "crossbow"
+          ]
+        },
+        "cooldown": {
+          "epic": 8.0,
+          "mythic": 6.0,
+          "ancient": 4.0
+        },
+        "radius": {
+          "epic": 3.0,
+          "mythic": 4.0,
+          "ancient": 5.0
+        }
       }
     }
   ]

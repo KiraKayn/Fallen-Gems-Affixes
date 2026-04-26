@@ -15,15 +15,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class SpellEchoBonus extends GemBonus {
 
-    public static final Codec<SpellEchoBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            gemClass(),
-            ResourceLocation.CODEC.fieldOf("school").forGetter(b -> b.schoolId),
-            VALUES_CODEC.fieldOf("delay_ticks").forGetter(b -> b.delayTicks)
-    ).apply(inst, SpellEchoBonus::new));
+    public static final Codec<SpellEchoBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(gemClass(), ResourceLocation.CODEC.fieldOf("school").forGetter(b -> b.schoolId), VALUES_CODEC.fieldOf("delay_ticks").forGetter(b -> b.delayTicks)).apply(inst, SpellEchoBonus::new));
 
     private final ResourceLocation schoolId;
     private final Map<LootRarity, StepFunction> delayTicks;
@@ -52,20 +49,11 @@ public class SpellEchoBonus extends GemBonus {
         SchoolType school = getSchool();
         int ticks = getDelayTicks(rarity);
         float seconds = ticks / 20f;
-        String timeStr = seconds == (int) seconds
-                ? String.valueOf((int) seconds) + "s"
-                : String.format("%.1fs", seconds);
 
-        Component schoolName = school != null
-                ? school.getDisplayName().copy().withStyle(school.getDisplayName().getStyle())
-                : Component.literal(schoolId.getPath()).withStyle(ChatFormatting.YELLOW);
-
-        Component timeComp = Component.literal(" [" + timeStr + "]").withStyle(ChatFormatting.YELLOW);
-
-        return Component.translatable("bonus.fallen_gems_affixes.spell_echo.desc",
-                schoolName,
-                timeComp
-        ).withStyle(ChatFormatting.YELLOW);
+        String timeStr = seconds == (int) seconds ? String.valueOf((int) seconds) + "s" : String.format(Locale.ROOT, "%.1fs", seconds);
+        Component schoolName = school != null ? school.getDisplayName().copy().withStyle(school.getDisplayName().getStyle()) : Component.literal(schoolId.getPath()).withStyle(ChatFormatting.YELLOW);
+        Component timeComp = Component.literal(" " + timeStr).withStyle(ChatFormatting.YELLOW);
+        return Component.translatable("bonus.fallen_gems_affixes.spell_echo.desc", schoolName, timeComp).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
