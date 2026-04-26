@@ -50,7 +50,7 @@ public class SpecialAffixEventHandler {
                 NOT_REFRESH.set(true);
                 event.setTransientAffixes(getAffixesManualRefresh(stack, inses, augs, 0));
             } finally {
-                NOT_REFRESH.set(true);
+                NOT_REFRESH.set(false);
             }
         }
     }
