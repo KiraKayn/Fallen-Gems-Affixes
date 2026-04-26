@@ -1,38 +1,23 @@
 package net.kayn.fallen_gems_affixes.recipe;
 
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
-import net.kayn.fallen_gems_affixes.augment.MaliceAugment;
-import net.kayn.fallen_gems_affixes.augment.SupremacyAugment;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SeveranceRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:severance");
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "severance");
 
     public SeveranceRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_SEVERANCE.get()), ItemStack.EMPTY);
@@ -54,73 +39,12 @@ public class SeveranceRecipe extends SmithingTransformRecipe {
         ItemStack out = inv.getItem(1).copy();
         if (out.isEmpty()) return ItemStack.EMPTY;
 
-        boolean hadSupremacy = AugmentHelper.hasAugment(out, Fallen.Augments.SUPREMACY);
-        boolean hadMalice    = MaliceAugment.hasRevealedMalice(out);
-
-        if (hadMalice) MaliceAugment.restoreOriginalAffixLevels(out);
-
         int slots = AugmentSlotHelper.getAugmentSlots(out);
         out.getOrCreateTag().remove(Fallen.AugmentMisc.AUGMENT_DATA);
-        out.getOrCreateTag().remove("fallen_gems_affixes:fabled");
+        out.getOrCreateTag().remove(Fallen.AugmentMisc.FABLED_TAG);
         AugmentSlotHelper.setAugmentSlots(out, slots);
 
-        if (hadSupremacy) restoreAffixLevels(out);
-
         return out;
-    }
-
-    private void restoreAffixLevels(ItemStack stack) {
-        var affixes = AffixHelper.getAffixes(stack);
-        if (affixes == null || affixes.isEmpty()) return;
-
-        Map<DynamicHolder<? extends dev.shadowsoffire.apotheosis.adventure.affix.Affix>, AffixInstance> newAffixes = new HashMap<>();
-
-        for (var entry : affixes.entrySet()) {
-            var holder = entry.getKey();
-            var affixIns = entry.getValue();
-            var affix = holder.get();
-
-            if (!(affix instanceof DurableAffix)) {
-                float currentLevel = affixIns.level();
-                if (currentLevel > SupremacyAugment.STANDARD_MAX_LEVEL) {
-                    float restoredLevel = Mth.clamp(currentLevel, 0, SupremacyAugment.STANDARD_MAX_LEVEL);
-
-                    newAffixes.put(holder, new AffixInstance(
-                            affixIns.affix(),
-                            affixIns.stack(),
-                            affixIns.rarity(),
-                            restoredLevel
-                    ));
-                } else {
-                    newAffixes.put(holder, affixIns);
-                }
-            } else {
-                newAffixes.put(holder, affixIns);
-            }
-        }
-
-        AffixHelper.setAffixes(stack, newAffixes);
-    }
-
-    public void onCraft(Container inv, Player player, ItemStack output) {
-        ItemStack base = inv.getItem(1);
-        if (base.hasTag() && base.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            CompoundTag augmentRoot = base.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
-            if (augmentRoot != null) {
-                ListTag augments = augmentRoot.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-                for (int i = 0; i < augments.size(); i++) {
-                    try {
-                        ItemStack stack = ItemStack.of(augments.getCompound(i));
-                        if (!stack.isEmpty()) {
-                            if (!player.addItem(stack)) {
-                                Block.popResource(player.level(), player.blockPosition(), stack);
-                            }
-                        }
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        }
     }
 
     @Override
