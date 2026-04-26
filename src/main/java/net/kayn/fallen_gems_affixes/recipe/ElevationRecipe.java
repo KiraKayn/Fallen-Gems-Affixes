@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class ElevationRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:elevation");
+    private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:elevation");
 
     public ElevationRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY,

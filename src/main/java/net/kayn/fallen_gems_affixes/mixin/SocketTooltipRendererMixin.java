@@ -35,7 +35,7 @@ public class SocketTooltipRendererMixin {
     @Shadow @Final public static ResourceLocation SOCKET;
 
     private static final ResourceLocation TIERED_SOCKET =
-            new ResourceLocation("fallen_gems_affixes", "textures/gui/tiered_socket.png");
+            ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "textures/gui/tiered_socket.png");
 
     @Shadow @Final private SocketTooltipRenderer.SocketComponent comp;
     @Shadow @Final private int spacing;

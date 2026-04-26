@@ -11,6 +11,8 @@ import net.kayn.fallen_gems_affixes.adventure.entity.affix.MobAffixEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.*;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseNetwork;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
+import net.kayn.fallen_gems_affixes.attachment.augment.SpecialAffixEventHandler;
+import net.kayn.fallen_gems_affixes.attachment.augment.mod_events.InternalAugmentEventHandler;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
 import net.kayn.fallen_gems_affixes.augment.DualityCritModifierHandler;
@@ -69,6 +71,8 @@ public class FallenGemsAffixes {
         Fallen.bootstrap(modEventBus);
         GemBonusModifier.bootstrap(MinecraftForge.EVENT_BUS);
         GenesisEventHandler.bootstrap(MinecraftForge.EVENT_BUS);
+        SpecialAffixEventHandler.register();
+        InternalAugmentEventHandler.register();
         AALootCategories.init();
 
         // Attributes / handlers
@@ -137,6 +141,6 @@ public class FallenGemsAffixes {
     }
 
     public static ResourceLocation id(@NotNull String path) {
-        return new ResourceLocation(FallenGemsAffixes.MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, path);
     }
 }
