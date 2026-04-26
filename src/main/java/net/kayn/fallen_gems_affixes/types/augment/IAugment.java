@@ -5,13 +5,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.LiveAugments;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -19,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public interface IAugment {
@@ -44,13 +50,12 @@ public interface IAugment {
 
     Component TEXT = Component.literal("Empty Crest");
 
-    //Every augment must have a unique ID.
-     // Used for serialization
-
+    // Every augment must have a unique ID.
+    // Used for serialization
     ResourceLocation getId();
 
-    default IAugmentInnerData parse(CompoundTag augmentData) {
-        if (!shouldAttachToPlayer()) {
+    default IAugmentInnerData parseEntityAugment(CompoundTag augmentData) {
+        if (!shouldAttachToEntity()) {
             return null;
         }
         return IAugmentInnerData.EMPTY;
@@ -58,13 +63,13 @@ public interface IAugment {
 
     boolean isUnique();
 
-    boolean shouldAttachToPlayer();
+    boolean shouldAttachToEntity();
 
     void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui, IAugmentInnerData innerData);
 
     default MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         return Component.translatable(this.getId().toString());
-    };
+    }
 
     default void appendItemTooltip(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
     }
@@ -78,5 +83,12 @@ public interface IAugment {
     Codec<AugmentMeta> getMetaDataCodec();
 
     IAugmentInnerData fallbackInnerData();
-//    void apply(ItemStack augmentItem, ItemStack weaponStack);
+
+    default boolean onApply(ItemStack item, Map<IAugment, AugmentInstance> mutableAugMap, AugmentInstance inst) {
+        return true;
+    }
+
+    default boolean onAssemble(ItemStack result, ItemStack augmentItem, IAugment aug, Container cont, Level level) {
+        return true;
+    }
 }

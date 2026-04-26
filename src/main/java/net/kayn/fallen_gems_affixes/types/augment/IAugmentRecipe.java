@@ -14,20 +14,4 @@ import java.util.Objects;
 import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AUGMENTS;
 
 public interface IAugmentRecipe extends SmithingRecipe {
-    /**
-     * Get the augment data in the ingredient.
-     */
-    default ListTag getAugmentData(ItemStack stack) {
-        if (stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            return Objects.requireNonNull(stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA)).getList(AUGMENTS, Tag.TAG_COMPOUND);
-        }
-        else {
-            return new ListTag();
-        }
-    }
-    default ItemStack addAugmentData() {
-        return new ItemStack(Items.DIAMOND);
-    };
-
-    void onCraft(Container inv, Player player, ItemStack output);
 }
