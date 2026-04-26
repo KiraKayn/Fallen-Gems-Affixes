@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(AttributeAffix.class)
+@Mixin(value = AttributeAffix.class, remap = false)
 public interface AttributeAffixAccessor {
     @Accessor
     Map<LootRarity, AttributeAffix.ModifierInst> getModifiers();

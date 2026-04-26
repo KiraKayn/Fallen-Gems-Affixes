@@ -2,8 +2,11 @@ package net.kayn.fallen_gems_affixes.mixin;
 
 import dev.shadowsoffire.attributeslib.impl.AttributeEvents;
 import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.augment.CascadeAugment;
 import net.kayn.fallen_gems_affixes.augment.DualityAugment;
+import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.damagesource.DamageSource;
@@ -72,21 +75,14 @@ public abstract class CritMixin {
             if (attacker == null) return;
             LivingEntity target = e.getEntity();
             ItemStack stack = attacker.getMainHandItem();
-            if (stack.hasTag() && stack.getTag().contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-                CompoundTag augmentData = stack.getTagElement(Fallen.AugmentMisc.AUGMENT_DATA);
-                ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, CompoundTag.TAG_COMPOUND);
-                for (int i = 0; i < augments.size(); i++) {
-                    CompoundTag augment = augments.getCompound(i);
-                    if (augment.getString(Fallen.AugmentMisc.TYPE).equals(Fallen.Augments.DUALITY_STRING)) {
-                        DualityAugment.DualityData data = (DualityAugment.DualityData) Fallen.Augments.DUALITY.deserializeInnerData(augment.getCompound(Fallen.AugmentMisc.INNER_DATA));
-                        float physicalRatio = data.getPhysicalRatio();
-                        float magicRatio = data.getMagicRatio();
-                        float original = e.getAmount();
-                        e.setAmount(original * physicalRatio);
-                        dealDualityMagicDamage$FGA(target, attacker, original, magicRatio);
-                        break;
-                    }
-                }
+            AugmentInstance inst = AugmentHelper.getAugments(stack).get(Fallen.Augments.DUALITY);
+            if (inst != null) {
+                DualityAugment.DualityData data = (DualityAugment.DualityData) inst.getData();
+                float physicalRatio = data.getPhysicalRatio();
+                float magicRatio = data.getMagicRatio();
+                float original = e.getAmount();
+                e.setAmount(original * physicalRatio);
+                dealDualityMagicDamage$FGA(target, attacker, original, magicRatio);
             }
         }
         vanillaCritMark$FGA = false;

@@ -2,6 +2,8 @@ package net.kayn.fallen_gems_affixes.mixin;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingMenu;
+import net.kayn.fallen_gems_affixes.Fallen;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.augment.GenesisAugment;
 import net.kayn.fallen_gems_affixes.recipe.ErasureRecipe;
 import net.minecraft.nbt.ListTag;
@@ -29,7 +31,7 @@ public class AugmentingMenuMixin {
             ),
             index = 5)
     public Predicate<ItemStack> addAugmentingTableGenesisCheck(Predicate<ItemStack> predicate) {
-        return (stack) -> predicate.test(stack) && GenesisAugment.getGenesisGemPower(stack) == null;
+        return (stack) -> predicate.test(stack) && AugmentHelper.hasAugment(stack, Fallen.Augments.GENESIS);
     }
 
     @Inject(

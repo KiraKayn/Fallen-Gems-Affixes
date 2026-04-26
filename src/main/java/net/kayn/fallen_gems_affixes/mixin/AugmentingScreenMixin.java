@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(AugmentingScreen.class)
+@Mixin(value = AugmentingScreen.class, remap = false)
 public abstract class AugmentingScreenMixin {
 
     @Shadow protected SimpleTexButton rerollBtn;
