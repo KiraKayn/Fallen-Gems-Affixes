@@ -25,7 +25,7 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
         this.augmentData = augmentData;
     }
 
-    public AugmentInstance() {
+    AugmentInstance() {
         this.augment = null;
         this.augmentData = null;
     }
@@ -124,7 +124,7 @@ public class AugmentInstance implements INBTSerializable<CompoundTag> {
                 this.augment = template;
 
                 if (tag.contains(AUGMENT_DATA)) {
-                    this.augmentData = this.augment.parse(tag.getCompound(AUGMENT_DATA));
+                    this.augmentData = this.augment.parseEntityAugment(tag.getCompound(AUGMENT_DATA));
                 }
             }
         }
