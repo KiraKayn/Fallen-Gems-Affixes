@@ -1,0 +1,108 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "weight": 1,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "epic",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_melee"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:blood_eruption",
+        "gem_class": {
+          "key": "melee_weapons",
+          "types": [
+            "sword",
+            "heavy_weapon",
+            "trident"
+          ]
+        },
+        "cooldown": {
+          "epic": 15,
+          "mythic": 10,
+          "ancient": 5
+        },
+        "radius": {
+          "epic": 8.0,
+          "mythic": 10.0,
+          "ancient": 12.0
+        },
+        "spell_level": {
+          "epic": 3.0,
+          "mythic": 5.0,
+          "ancient": 7.0
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_ranged"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:blood_nova",
+        "gem_class": {
+          "key": "ranged_weapon",
+          "types": [
+            "bow",
+            "crossbow"
+          ]
+        },
+        "cooldown": {
+          "epic": 12.0,
+          "mythic": 9.0,
+          "ancient": 6.0
+        },
+        "radius": {
+          "epic": 5,
+          "mythic": 7.5,
+          "ancient": 10
+        },
+        "damage_percent": {
+          "epic": 0.20,
+          "mythic": 0.40,
+          "ancient": 0.60
+        },
+        "heal_percent": {
+          "epic": 0.10,
+          "mythic": 0.15,
+          "ancient": 0.20
+        },
+        "bleed_duration": {
+          "epic": 3.0,
+          "mythic": 4.0,
+          "ancient": 5.0
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:spell_echo",
+      "gem_class": {
+        "key": "staffs",
+        "types": [
+          "staffs"
+        ]
+      },
+      "school": "irons_spellbooks:blood",
+      "delay_ticks": {
+        "epic": 12.0,
+        "mythic": 9.0,
+        "ancient": 6.0
+      }
+    }
+  ]
+}

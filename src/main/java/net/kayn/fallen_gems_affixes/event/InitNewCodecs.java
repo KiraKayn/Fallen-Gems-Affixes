@@ -63,6 +63,11 @@ public class InitNewCodecs {
                 GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "void_hunter"), VoidHunterBonus.CODEC);
                 GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "spell_echo"), SpellEchoBonus.CODEC);
                 GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "arrow_tele_slash"), ArrowTeleSlashBonus.CODEC);
+                GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "blood_eruption"), BloodEruptionBonus.CODEC);
+                GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "holy_wrath"), HolyWrathBonus.CODEC);
+                GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "holy_mark"), HolyMarkBonus.CODEC);
+                GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "blood_nova"), BloodNovaBonus.CODEC);
+
             }
 //            ExtraGemBonusRegistry.INSTANCE.registerToBus();
         });

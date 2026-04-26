@@ -1,0 +1,108 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "weight": 1,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "epic",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_melee"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:holy_wrath",
+        "gem_class": {
+          "key": "melee_weapons",
+          "types": [
+            "sword",
+            "heavy_weapon",
+            "trident"
+          ]
+        },
+        "cooldown": {
+          "epic": 20.0,
+          "mythic": 16.0,
+          "ancient": 12.0
+        },
+        "radius": {
+          "epic": 10.0,
+          "mythic": 12.0,
+          "ancient": 15.0
+        },
+        "spell_level": {
+          "epic": 3.0,
+          "mythic": 5.0,
+          "ancient": 7.0
+        },
+        "glow_duration": {
+          "epic": 5.0,
+          "mythic": 7.0,
+          "ancient": 10.0
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_ranged"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:holy_mark",
+        "gem_class": {
+          "key": "ranged_weapon",
+          "types": [
+            "bow",
+            "crossbow"
+          ]
+        },
+        "cooldown": {
+          "epic": 15.0,
+          "mythic": 12.0,
+          "ancient": 9.0
+        },
+        "radius": {
+          "epic": 8.0,
+          "mythic": 10.0,
+          "ancient": 12.0
+        },
+        "spell_level": {
+          "epic": 3.0,
+          "mythic": 5.0,
+          "ancient": 7.0
+        },
+        "mark_duration": {
+          "epic": 8.0,
+          "mythic": 10.0,
+          "ancient": 12.0
+        }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:spell_echo",
+      "gem_class": {
+        "key": "staffs",
+        "types": [
+          "staffs"
+        ]
+      },
+      "school": "irons_spellbooks:holy",
+      "delay_ticks": {
+        "epic": 12.0,
+        "mythic": 9.0,
+        "ancient": 6.0
+      }
+    }
+  ]
+}

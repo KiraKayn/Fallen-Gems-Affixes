@@ -8,9 +8,7 @@ import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.entity.affix.MobAffixEventHandler;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.ArrowTeleSlashEventHandler;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.SpellEchoHandler;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.VoidHunterEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.*;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseNetwork;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
@@ -104,6 +102,10 @@ public class FallenGemsAffixes {
             MinecraftForge.EVENT_BUS.register(VoidHunterEventHandler.class);
             MinecraftForge.EVENT_BUS.register(SpellEchoHandler.class);
             MinecraftForge.EVENT_BUS.register(ArrowTeleSlashEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(BloodEruptionEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(BloodNovaEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(HolyWrathEventHandler.class);
+            MinecraftForge.EVENT_BUS.register(HolyMarkEventHandler.class);
         }
 
         if (ModList.get().isLoaded("celestisynth")) {
