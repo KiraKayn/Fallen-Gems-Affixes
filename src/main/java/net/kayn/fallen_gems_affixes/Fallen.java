@@ -8,22 +8,34 @@ import net.kayn.fallen_gems_affixes.recipe.*;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.rtxyd.fallen.lib.runtime.forgemod.network.Connection;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
+import net.rtxyd.fallen.lib.util.call.ContextKey;
+import net.rtxyd.fallen.lib.util.call.ContextKeyRegistry;
 
 public class Fallen {
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FallenGemsAffixes.MOD_ID);
+
+    public static class ContextKeys {
+        public static final ContextKey<Level> AUG_RECIPE_LEVEL = GameLifecycleHelper.registerContextKey("fga.augment_recipe.level");
+        public static final ContextKey<Container> AUG_RECIPE_CONTAINER = GameLifecycleHelper.registerContextKey("fga.augment_recipe.container");
+        public static void register() {}
+    }
 
     public static void bootstrap(IEventBus bus) {
         RecipeSerializers.bootstrap(bus);
         Augments.bootstrap();
         AugmentMisc.bootstrap();
         Registries.bootstrap();
+        ContextKeys.register();
     }
 
     public static class Registries {
@@ -79,15 +91,55 @@ public class Fallen {
 
     public static class AugmentMisc {
         public static final ResourceLocation AUGMENT_CAP_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "augment_cap");
+        // Not a tag key
+        /**
+         * used for augment cache
+         */
         public static final String AUGMENT_CACHED_OBJECT = "fallen_gems_affixes:augments";
+        /**
+         * used to store to modify affixes for affix power
+         */
+        public static final String TO_MODIFY_AFFIXES_OBJECT = "fallen_gems_affixes:tm_affixes";
+        /**
+         * fabled tag
+         */
+        public static final String FABLED_TAG = "fallen_gems_affixes:fabled";
+        // Top-level tags
+        /**
+         * stores all augment data for ordinary item stacks
+         */
         public static final String AUGMENT_DATA = "fallen_gems_affixes:augment_data";
+        /**
+         * stores affix data for inverting affix power or do something else
+         */
+        public static final String MODIFIER_DATA = "fallen_gems_affixes:modifier_data";
+        /**
+         * stores augment id for {@link net.kayn.fallen_gems_affixes.item.augments.AugmentItem}
+         */
         public static final String AUGMENT_ID_TAG = "AugmentId";
+        // 2nd-level tags
+        /**
+         * stores slot number
+         */
         public static final String AUGMENT_SLOTS = "augment_slots";
+        /**
+         * a list as augment container of compound tag
+         */
         public static final String AUGMENTS = "augments";
+        // 3nd-level tags
+        /**
+         * a compound tag element to store Augment id
+         */
         public static final String TYPE = "type";
-        public static final String UNIQUE_ID = "uuid";
+        /**
+         * a compound tag element to store Augment inner data
+         */
         public static final String INNER_DATA = "inner_data";
-        public static final String CATEGORIES = "categories";
+        /**
+         * a compound tag element to store Augment uuid,
+         * it's intended to function on augment that needs to attach to entity.
+         */
+        public static final String UNIQUE_ID = "uuid";
 
         public static void bootstrap() {
         }
@@ -100,13 +152,6 @@ public class Fallen {
         public static final IAugment CASCADE = Registries.AUGMENT_REGISTRY.register(new CascadeAugment());
         public static final IAugment DUALITY = Registries.AUGMENT_REGISTRY.register(new DualityAugment());
         public static final IAugment MALICE = Registries.AUGMENT_REGISTRY.register(new MaliceAugment());
-
-        public static final String GEM_POWER_STRING = GEM_POWER.getId().toString();
-        public static final String SUPREMACY_STRING = SUPREMACY.getId().toString();
-        public static final String GENESIS_STRING = GENESIS.getId().toString();
-        public static final String CASCADE_STRING = CASCADE.getId().toString();
-        public static final String DUALITY_STRING = DUALITY.getId().toString();
-        public static final String MALICE_STRING = MALICE.getId().toString();
 
         public static void bootstrap() {
 

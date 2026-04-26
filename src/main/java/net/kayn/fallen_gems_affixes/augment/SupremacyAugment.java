@@ -6,12 +6,11 @@ import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -26,6 +25,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.rtxyd.fallen.lib.util.IEither;
+import net.rtxyd.fallen.lib.util.ins_attr.InsAttributeModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +62,7 @@ public class SupremacyAugment implements IAugment {
     }
 
     @Override
-    public boolean shouldAttachToPlayer() {
+    public boolean shouldAttachToEntity() {
         return false;
     }
 
@@ -92,6 +93,12 @@ public class SupremacyAugment implements IAugment {
 
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
+        if (innerData instanceof SupremacyData data) {
+            return Component.translatable(
+                    "fallen_gems_affixes.augment.supremacy.desc",
+                    data.getAffixPower()
+            ).withStyle(ChatFormatting.YELLOW);
+        }
         return Component.translatable("fallen_gems_affixes.augment.supremacy.desc")
                 .withStyle(ChatFormatting.YELLOW);
     }
@@ -108,47 +115,10 @@ public class SupremacyAugment implements IAugment {
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
-    public static void apply(ItemStack stack) {
-        float power = getAugmentPower(stack);
-
-        Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
-        if (affixes == null || affixes.isEmpty()) return;
-
-        Map<DynamicHolder<? extends Affix>, AffixInstance> newAffixes = new HashMap<>();
-        CompoundTag root = stack.getOrCreateTag();
-        root.putBoolean("fallen_gems_affixes:fabled", true);
-
-        SupremacyData data = new SupremacyData();
-        data.power = power;
-        AugmentHelper.applyAugment(stack, new AugmentInstance(Fallen.Augments.SUPREMACY, data));
-
-        for (var entry : affixes.entrySet()) {
-            var holder = entry.getKey();
-            var affixIns = entry.getValue();
-            Affix affix = holder.get();
-
-            if (!(affix instanceof DurableAffix)) {
-                float oldLevel = affixIns.level();
-                float newLevel = Mth.clamp(Math.max(oldLevel, power), 0, MAX_AFFIX_LEVEL);
-
-                newAffixes.put(holder, new AffixInstance(
-                        affixIns.affix(),
-                        affixIns.stack(),
-                        affixIns.rarity(),
-                        newLevel
-                ));
-            } else {
-                newAffixes.put(holder, affixIns);
-            }
-        }
-
-        AffixHelper.setAffixes(stack, newAffixes);
-    }
-
     private static float getAugmentPower(ItemStack stack) {
         AugmentMeta data = AugmentItem.getAugmentData(stack);
         if (data != null) {
-            return ((SupremacyData)data.getDefaultData()).power;
+            return ((SupremacyData)data.newDefaultData()).power;
         }
         return 1.5f;
     }
@@ -164,6 +134,18 @@ public class SupremacyAugment implements IAugment {
                 })
         );
         float power;
+
+        public static final String MODIFIER_NAME = "fallen_gems_affixes:supremacy_affix_power";
+
+        @Override
+        public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
+            return !(either.getA().get() instanceof DurableAffix);
+        }
+
+        @Override
+        public InsAttributeModifier getModifier() {
+            return new InsAttributeModifier(InsAttributeModifier.Type.SET_BASE, MODIFIER_NAME, power);
+        }
 
         @Override
         public void enable() {

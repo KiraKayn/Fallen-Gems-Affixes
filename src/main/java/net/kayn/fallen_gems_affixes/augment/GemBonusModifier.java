@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.rtxyd.fallen.lib.api.annotation.FallenInserter;
+import net.rtxyd.fallen.lib.api.annotation.Params;
 import net.rtxyd.fallen.lib.type.util.patch.IInserterContext;
 import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
 import net.rtxyd.fallen.lib.util.patch.InserterType;
@@ -30,7 +31,7 @@ public class GemBonusModifier {
     public static final ThreadLocal<ItemStack> currentSuspendedItemStack = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
     public static final ThreadLocal<Boolean> clientMarker = ThreadLocal.withInitial(() -> false);
 
-    @FallenInserter(type = InserterType.STANDARD)
+    @FallenInserter(type = InserterType.STANDARD, params = @Params(catchOuterArgs = {}))
     public static Object modifier(IInserterContext<Object, Object> ctx, Object... args) {
         if (args.length > 0 && args[0] instanceof LootRarity) {
             Object ret = ctx.ret();
@@ -118,13 +119,13 @@ public class GemBonusModifier {
     private static int checkReverse(Map<LootRarity, StepFunction> m) {
         Float last = null;
         LootRarity lastR = null;
-        for (LootRarity rarity : m.keySet()) {
+        for (Map.Entry<LootRarity, StepFunction> e : m.entrySet()) {
             if (last == null) {
-                last = m.get(rarity).min();
-                lastR = rarity;
+                last = e.getValue().min();
+                lastR = e.getKey();
             } else {
-                boolean check = rarity.ordinal() > lastR.ordinal();
-                float current = m.get(rarity).min();
+                boolean check = e.getKey().ordinal() > lastR.ordinal();
+                float current = e.getValue().min();
                 if (current == last) return -1;
                 if (current > last) {
                     if (check) {

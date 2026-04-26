@@ -5,7 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.LiveAugments;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -53,7 +55,7 @@ public class DualityAugment implements IAugment {
 
     @Override public ResourceLocation getId()   { return DUALITY_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean shouldAttachToPlayer()     { return false; }
+    @Override public boolean shouldAttachToEntity()     { return false; }
 
     @Override
     public Codec<AugmentMeta> getMetaDataCodec() {
@@ -115,7 +117,7 @@ public class DualityAugment implements IAugment {
         float physRatio;
         float magicRatio;
         if (meta != null) {
-            DualityData data = (DualityData) meta.getDefaultData();
+            DualityData data = (DualityData) meta.newDefaultData();
             critChanceMult  =  data.critChanceMultiplier;
             critDmgReduce   =  data.critDamageReduction;
             physRatio       =  data.physicalRatio;
@@ -146,23 +148,6 @@ public class DualityAugment implements IAugment {
                                 String.format("%.0f%%", physRatio * 100f),
                                 String.format("%.0f%%", magicRatio * 100f))
                         .withStyle(ChatFormatting.YELLOW)));
-    }
-
-    @Nullable
-    public static DualityData getDualityDataFromItem(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
-        ListTag augments = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            if (DUALITY_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) {
-                DualityData data = new DualityData();
-                data.deserializeNBT(entry.getCompound(Fallen.AugmentMisc.INNER_DATA));
-                return data;
-            }
-        }
-        return null;
     }
 
     public static class DualityData implements IAugmentInnerData {

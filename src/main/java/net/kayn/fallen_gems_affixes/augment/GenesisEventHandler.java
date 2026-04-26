@@ -3,12 +3,7 @@ package net.kayn.fallen_gems_affixes.augment;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
-import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -61,10 +56,10 @@ public class GenesisEventHandler {
         GenesisAugment.GenesisData data = (GenesisAugment.GenesisData) inst.getData();
         data.bossKillCount += 1;
         data.killedBossIds.add(bossType.toString());
+        data.affixPower += data.affixPowerBoost;
         AugmentHelper.applyAugment(stack, new AugmentInstance(inst.getAugment(), data));
         // Deduplicate by entity type - the same boss can only be coutned once
         // Re-apply affix levels immediately (no-ops if item has no affixes yet)
-        GenesisAugment.applyAffixPower(stack, data.affixPower + data.affixPowerBoost);
     }
 
     private static List<ItemStack> getAllItems(ServerPlayer player) {

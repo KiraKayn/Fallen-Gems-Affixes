@@ -3,14 +3,12 @@ package net.kayn.fallen_gems_affixes.augment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -18,24 +16,25 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.common.Mod;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.eventkey.EventKeys;
+import net.rtxyd.fallen.lib.util.IEither;
+import net.rtxyd.fallen.lib.util.ins_attr.InsAttributeModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
+@Mod.EventBusSubscriber
 public class MaliceAugment implements IAugment {
 
     public static final ResourceLocation MALICE_ID =
@@ -45,12 +44,11 @@ public class MaliceAugment implements IAugment {
     private static final String AFFIXES_KEY = "affixes";
     public  static final float  MAX_AFFIX_LEVEL = SupremacyAugment.MAX_AFFIX_LEVEL;
 
-    private static final Random RANDOM = new Random();
     private static final Codec<AugmentMeta> META_CODEC = AugmentMeta.codecCreate(MaliceData.CODEC);
 
     @Override public ResourceLocation getId()   { return MALICE_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean shouldAttachToPlayer()     { return false; }
+    @Override public boolean shouldAttachToEntity()     { return false; }
 
 
     @Override
@@ -71,6 +69,29 @@ public class MaliceAugment implements IAugment {
         data.powerNerf = 0.5f;
         data.revealed = false;
         return data;
+    }
+
+    @Override
+    public boolean onAssemble(ItemStack result, ItemStack augmentItem, IAugment aug, Container cont, Level level) {
+        result.getOrCreateTagElement("fga:malice_unrevealed");
+        GameLifecycleHelper.submitCallback(EventKeys.SLOT_ON_TAKE, cont, (slot, player, stack) -> {
+            if (stack.getTagElement("fga:malice_unrevealed") != null) {
+                stack.removeTagKey("fga:malice_unrevealed");
+                AugmentMeta meta = Fallen.Registries.AUGMENT_REGISTRY.getMetaData(Fallen.Augments.MALICE);
+                MaliceData data = (MaliceData) meta.newDefaultData();
+                data.revealed = true;
+                data.affixDominant = player.level().getRandom().nextDouble() < 0.5;
+                AugmentHelper.applyAugment(stack, new AugmentInstance(meta.getAugment(), data));
+                return true;
+            }
+            return false;
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onApply(ItemStack item, Map<IAugment, AugmentInstance> mutableAugMap, AugmentInstance inst) {
+        return true;
     }
 
     @Override
@@ -97,8 +118,16 @@ public class MaliceAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof MaliceData data && data.revealed) {
+            String key;
+            if (data.isAffixDominant()) {
+                return Component.translatable(
+                        "fallen_gems_affixes.augment.malice.socket_desc.affix",
+                        String.format("%.1f", data.getAffixPower()),
+                        String.format("%.1f", data.getGemPower())
+                ).withStyle(ChatFormatting.YELLOW);
+            }
             return Component.translatable(
-                    "fallen_gems_affixes.augment.malice.socket_desc.affix",
+                    "fallen_gems_affixes.augment.malice.socket_desc.gem",
                     String.format("%.1f", data.getAffixPower()),
                     String.format("%.1f", data.getGemPower())
             ).withStyle(ChatFormatting.YELLOW);
@@ -126,203 +155,6 @@ public class MaliceAugment implements IAugment {
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
-    public static void ensurePendingRoll(ItemStack augmentSlotItem) {
-        if (augmentSlotItem.isEmpty()) return;
-        CompoundTag tag = augmentSlotItem.getTag();
-        if (!AugmentHelper.hasAugment(augmentSlotItem, Fallen.Augments.MALICE)) return;
-        if (!tag.contains("malice_pending_dominant")) {
-            tag.putBoolean("malice_pending_dominant", RANDOM.nextBoolean());
-        }
-    }
-
-    public static void applyFromPendingRoll(ItemStack result, ItemStack augmentItem) {
-        float dominantPower = 2.0f;
-        float penaltyPower  = 0.5f;
-        CompoundTag augTag = augmentItem.getTag();
-        if (augTag != null && augTag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) {
-            ListTag list = augTag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                    .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-            for (int i = 0; i < list.size(); i++) {
-                CompoundTag entry = list.getCompound(i);
-                if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-                CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-                if (inner.contains("powerBoost")) dominantPower = inner.getFloat("powerBoost");
-                if (inner.contains("powerNerf"))  penaltyPower  = inner.getFloat("powerNerf");
-                break;
-            }
-        }
-
-        boolean affixDominant = (augTag != null && augTag.contains("malice_pending_dominant"))
-                ? augTag.getBoolean("malice_pending_dominant")
-                : RANDOM.nextBoolean();
-
-        float affixPower = affixDominant ? dominantPower : penaltyPower;
-        float gemPower   = affixDominant ? penaltyPower  : dominantPower;
-
-        CompoundTag originalLevels = snapshotAffixLevels(result);
-
-        CompoundTag tag = result.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
-        CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            inner.putBoolean("affixDominant",  affixDominant);
-            inner.putFloat("affixPower",       affixPower);
-            inner.putFloat("gemPower",         gemPower);
-            inner.putBoolean("revealed",       true);
-            inner.put("originalAffixLevels",   originalLevels);
-            entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
-            break;
-        }
-        augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
-        tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-
-        var affixes = AffixHelper.getAffixes(result);
-        if (affixes != null && !affixes.isEmpty()) {
-            AffixHelper.setAffixes(result, affixes);
-        }
-    }
-
-    private static CompoundTag snapshotAffixLevels(ItemStack stack) {
-        CompoundTag affixData = stack.getTagElement(AFFIX_DATA);
-        if (affixData == null || !affixData.contains(AFFIXES_KEY)) return new CompoundTag();
-        return affixData.getCompound(AFFIXES_KEY).copy();
-    }
-
-    public static void restoreOriginalAffixLevels(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
-        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < list.size(); i++) {
-            CompoundTag entry = list.getCompound(i);
-            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            if (!inner.contains("originalAffixLevels")) return;
-            CompoundTag originals = inner.getCompound("originalAffixLevels");
-
-            CompoundTag itemTag = stack.getTag();
-            if (itemTag == null || !itemTag.contains(AFFIX_DATA)) return;
-            CompoundTag affixData = itemTag.getCompound(AFFIX_DATA);
-            if (!affixData.contains(AFFIXES_KEY)) return;
-
-            CompoundTag affixes    = affixData.getCompound(AFFIXES_KEY);
-            CompoundTag newAffixes = new CompoundTag();
-            Set<String> durableKeys = getDurableAffixKeys(stack);
-
-            for (String key : affixes.getAllKeys()) {
-                if (durableKeys.contains(key)) {
-                    newAffixes.putFloat(key, affixes.getFloat(key));
-                } else if (originals.contains(key)) {
-                    newAffixes.putFloat(key, originals.getFloat(key));
-                } else {
-                    newAffixes.putFloat(key, affixes.getFloat(key));
-                }
-            }
-            affixData.put(AFFIXES_KEY, newAffixes);
-            itemTag.put(AFFIX_DATA, affixData);
-            return;
-        }
-    }
-
-    public static void revealIfPending(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return;
-        CompoundTag augmentData = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA);
-        ListTag augments = augmentData.getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            if (!inner.contains("affixPower") || inner.getBoolean("revealed")) return;
-            inner.putBoolean("revealed", true);
-            entry.put(Fallen.AugmentMisc.INNER_DATA, inner);
-            augmentData.put(Fallen.AugmentMisc.AUGMENTS, augments);
-            tag.put(Fallen.AugmentMisc.AUGMENT_DATA, augmentData);
-            applyAffixPower(stack, inner.getFloat("affixPower"));
-            return;
-        }
-    }
-
-    public static void applyAffixPower(ItemStack stack, float multiplier) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(AFFIX_DATA)) return;
-
-        CompoundTag affixData = tag.getCompound(AFFIX_DATA);
-        if (!affixData.contains(AFFIXES_KEY)) return;
-
-        Set<String>  durableKeys = getDurableAffixKeys(stack);
-        CompoundTag  affixes     = affixData.getCompound(AFFIXES_KEY);
-        CompoundTag  newAffixes  = new CompoundTag();
-
-        for (String key : affixes.getAllKeys()) {
-            float base = affixes.getFloat(key);
-            if (durableKeys.contains(key)) {
-                newAffixes.putFloat(key, base);
-            } else {
-                newAffixes.putFloat(key, Mth.clamp(base * multiplier, 0f, MAX_AFFIX_LEVEL));
-            }
-        }
-
-        affixData.put(AFFIXES_KEY, newAffixes);
-        tag.put(AFFIX_DATA, affixData);
-    }
-
-    public static boolean hasRevealedMalice(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return false;
-        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < list.size(); i++) {
-            CompoundTag entry = list.getCompound(i);
-            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            return entry.getCompound(Fallen.AugmentMisc.INNER_DATA).getBoolean("revealed");
-        }
-        return false;
-    }
-
-    private static Set<String> getDurableAffixKeys(ItemStack stack) {
-        Set<String> keys = new HashSet<>();
-        Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
-        if (affixes == null) return keys;
-        for (var entry : affixes.entrySet()) {
-            if (entry.getValue().affix().get() instanceof DurableAffix)
-                keys.add(entry.getKey().getId().toString());
-        }
-        return keys;
-    }
-
-
-    @Nullable
-    public static Float getMaliceGemPower(ItemStack stack) {
-        return readInnerFloat(stack, "gemPower");
-    }
-
-    @Nullable
-    public static Float getMaliceAffixPower(ItemStack stack) {
-        return readInnerFloat(stack, "affixPower");
-    }
-
-    @Nullable
-    private static Float readInnerFloat(ItemStack stack, String key) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
-
-        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < list.size(); i++) {
-            CompoundTag entry = list.getCompound(i);
-            if (!MALICE_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            if (inner.contains(key)) return inner.getFloat(key);
-        }
-        return null;
-    }
-
     public static class MaliceData implements IAugmentInnerData, IAffixPowerProvider, IGemPowerProvider {
         public static final Codec<MaliceData> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
@@ -332,6 +164,8 @@ public class MaliceAugment implements IAugment {
                     MaliceData data = (MaliceData) Fallen.Augments.MALICE.fallbackInnerData();
                     data.powerBoost = powerBoost;
                     data.powerNerf = powerNerf;
+                    data.affixDominant = true;
+                    data.revealed = false;
                     return data;
                 })
         );
@@ -341,6 +175,8 @@ public class MaliceAugment implements IAugment {
         float   powerNerf     = 0.5f;
         boolean revealed      = false;
 
+
+        public static final String MODIFIER_NAME = "fallen_gems_affixes:malic_affix_power";
         @Override public void enable()              {}
         @Override public void disable()             {}
         @Override public boolean isFunctional()     { return true; }
@@ -357,9 +193,34 @@ public class MaliceAugment implements IAugment {
         public float getAffixPower() {
             return affixDominant ? powerBoost : powerNerf;
         }
+
+        @Override
+        public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
+            return !(either.getA().get() instanceof DurableAffix);
+        }
+
         @Override
         public float getGemPower() {
             return affixDominant ? powerNerf : powerBoost;
+        }
+
+        @Override
+        public InsAttributeModifier getModifier() {
+            if (!revealed) {
+                return InsAttributeModifier.EMPTY;
+            }
+            return new InsAttributeModifier(
+                    InsAttributeModifier.Type.ADD_FINAL,
+                    MODIFIER_NAME,
+                    getAffixPower());
+        }
+
+        @Override
+        public InsAttributeModifier getModifierBy(IEither affix) {
+            if (this.test(affix)) {
+                return getModifier();
+            }
+            return InsAttributeModifier.EMPTY;
         }
 
         @Override

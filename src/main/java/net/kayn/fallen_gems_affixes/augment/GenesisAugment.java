@@ -5,15 +5,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
+import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipe;
+import net.kayn.fallen_gems_affixes.attachment.augment.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -27,10 +24,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.rtxyd.fallen.lib.util.IEither;
+import net.rtxyd.fallen.lib.util.ins_attr.InsAttributeModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +58,7 @@ public class GenesisAugment implements IAugment {
 
     /** NBT key inside affix_data where affix levels live. */
     private static final String AFFIX_DATA   = "affix_data";
-    private static final String AFFIXES_KEY  = "affixes";
+    public static final String AFFIXES_KEY  = "affixes";
 
     public static final float MAX_AFFIX_LEVEL = SupremacyAugment.MAX_AFFIX_LEVEL;
 
@@ -70,7 +68,7 @@ public class GenesisAugment implements IAugment {
 
     @Override public ResourceLocation getId()   { return GENESIS_ID; }
     @Override public boolean isUnique()          { return true; }
-    @Override public boolean shouldAttachToPlayer()     { return false; }
+    @Override public boolean shouldAttachToEntity()     { return false; }
 
     @Override
     public Codec<AugmentMeta> getMetaDataCodec() {
@@ -88,7 +86,7 @@ public class GenesisAugment implements IAugment {
         data.gemPower        = 0.5f;
         data.bossKillCount   = 0;
 //        data.killedBossIds     = new HashSet<>();
-        data.originalAffixLevels     = new CompoundTag();
+//        data.originalAffixLevels     = new CompoundTag();
         return data;
     }
 
@@ -147,7 +145,7 @@ public class GenesisAugment implements IAugment {
         if (meta == null) {
             data = (GenesisData) Fallen.Augments.GENESIS.fallbackInnerData();
         } else {
-            data = (GenesisData) meta.getDefaultData();
+            data = (GenesisData) meta.newDefaultData();
         }
         defaultPower = data.defaultPower;
         affixBoost = data.affixPowerBoost;
@@ -184,142 +182,9 @@ public class GenesisAugment implements IAugment {
      * AffixHelper which is unreliable during recipe assembly), stores them as the permanent
      * baseline, then immediately applies {@code defaultPower} as the starting multiplier.
      */
-    public static void apply(ItemStack result, ItemStack augmentItem) {
-        AugmentMeta meta = AugmentItem.getAugmentData(augmentItem);
-
-        GenesisData data1;
-        if (meta == null) {
-            data1 = (GenesisData) Fallen.Augments.GENESIS.fallbackInnerData();
-        } else {
-            data1 = (GenesisData) meta.getDefaultData();
-        }
-
-        // Snapshot raw affix values now, before we touch anything
-        CompoundTag originalLevels = snapshotAffixLevels(result);
-
-        // Write genesis config + state into inner_data
-        AugmentInstance inst = AugmentHelper.getAugments(result).get(Fallen.Augments.GENESIS);
-        GenesisData data = (GenesisData) inst.getData();
-        data.defaultPower = data1.defaultPower;
-        data.affixPowerBoost = data1.affixPowerBoost;
-        data.gemPowerBoost = data1.gemPowerBoost;
-        data.affixPower = data1.defaultPower;
-        data.gemPower = data1.defaultPower;
-        data.bossKillCount = 0;
-        data.originalAffixLevels = originalLevels;
-
-        AugmentHelper.applyAugment(result, inst);
-
-        // Apply starting multiplier: every affix becomes originalLevel * defaultPower
-        applyAffixPower(result, data1.defaultPower);
-    }
-
-    /**
-     * Reads {@code affix_data.affixes} directly from NBT and returns a copy.
-     * Keys match exactly what {@link #applyAffixPower} will iterate, making the
-     * snapshot reliable regardless of AffixHelper state.
-     */
-    private static CompoundTag snapshotAffixLevels(ItemStack stack) {
-        CompoundTag affixData = stack.getTagElement(AFFIX_DATA);
-        if (affixData == null || !affixData.contains(AFFIXES_KEY)) return new CompoundTag();
-        return affixData.getCompound(AFFIXES_KEY).copy();
-    }
-
-    /**
-     * Applies {@code multiplier} to every non-durable affix on {@code stack}.
-     *
-     * <p>Formula: {@code newLevel = originalLevel * multiplier}, clamped to
-     * {@code [0, MAX_AFFIX_LEVEL]}.
-     *
-     * <p>Reads and writes {@code affix_data.affixes} directly in NBT so the keys always
-     * match the stored {@code originalAffixLevels} snapshot, no matter when this is called.
-     */
-    public static void applyAffixPower(ItemStack stack, float multiplier) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(AFFIX_DATA)) return;
-
-        CompoundTag affixData = tag.getCompound(AFFIX_DATA);
-        if (!affixData.contains(AFFIXES_KEY)) return;
-
-        CompoundTag originalLevels = getStoredOriginalLevels(stack);
-        Set<String>  durableKeys   = getDurableAffixKeys(stack);
-
-        CompoundTag affixes    = affixData.getCompound(AFFIXES_KEY);
-        CompoundTag newAffixes = new CompoundTag();
-
-        for (String key : affixes.getAllKeys()) {
-            if (durableKeys.contains(key)) {
-                // Leave durable affixes untouched
-                newAffixes.putFloat(key, affixes.getFloat(key));
-            } else {
-                // Always multiply from the original level, never from the current level
-                float base = (originalLevels != null && originalLevels.contains(key))
-                        ? originalLevels.getFloat(key)
-                        : affixes.getFloat(key); // fallback: first call before snapshot written
-                newAffixes.putFloat(key, Mth.clamp(base * multiplier, 0f, MAX_AFFIX_LEVEL));
-            }
-        }
-
-        affixData.put(AFFIXES_KEY, newAffixes);
-        tag.put(AFFIX_DATA, affixData);
-    }
-
-    /**
-     * Returns the {@code originalAffixLevels} compound from inside genesis inner_data,
-     * or {@code null} if the item has no genesis augment or the snapshot isn't written yet.
-     */
-    @Nullable
-    private static CompoundTag getStoredOriginalLevels(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
-        ListTag augments = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-        for (int i = 0; i < augments.size(); i++) {
-            CompoundTag entry = augments.getCompound(i);
-            if (!GENESIS_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            CompoundTag inner = entry.getCompound(Fallen.AugmentMisc.INNER_DATA);
-            if (inner.contains("originalAffixLevels")) {
-                return inner.getCompound("originalAffixLevels");
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Uses AffixHelper to find which affix keys correspond to DurableAffix, so those
-     * can be skipped during scaling. Returns an empty set if AffixHelper gives nothing
-     * (durable affixes will then be scaled too, which is a minor acceptable fallback).
-     */
-    private static Set<String> getDurableAffixKeys(ItemStack stack) {
-        Set<String> keys = new HashSet<>();
-        Map<DynamicHolder<? extends Affix>, AffixInstance> affixes = AffixHelper.getAffixes(stack);
-        if (affixes == null) return keys;
-        for (var entry : affixes.entrySet()) {
-            if (entry.getValue().affix().get() instanceof DurableAffix) {
-                keys.add(entry.getKey().getId().toString());
-            }
-        }
-        return keys;
-    }
-
-    /**
-     * Returns the Genesis gem-power multiplier for {@code stack}, or {@code null} if
-     * the item carries no Genesis augment.
-     */
-    @Nullable
-    public static Float getGenesisGemPower(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(Fallen.AugmentMisc.AUGMENT_DATA)) return null;
-
-        ListTag list = tag.getCompound(Fallen.AugmentMisc.AUGMENT_DATA)
-                .getList(Fallen.AugmentMisc.AUGMENTS, Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < list.size(); i++) {
-            CompoundTag entry = list.getCompound(i);
-            if (!GENESIS_ID.toString().equals(entry.getString(Fallen.AugmentMisc.TYPE))) continue;
-            return entry.getCompound(Fallen.AugmentMisc.INNER_DATA).getFloat("gemPower");
-        }
-        return null;
+    @Override
+    public boolean onApply(ItemStack stack, Map<IAugment, AugmentInstance> mutableAugMap, AugmentInstance inst) {
+        return true;
     }
 
     public static class GenesisData implements IAugmentInnerData, IGemPowerProvider, IAffixPowerProvider {
@@ -346,8 +211,31 @@ public class GenesisAugment implements IAugment {
         final Set<String> killedBossIds     = new HashSet<>();
         CompoundTag originalAffixLevels     = new CompoundTag();
 
+        public static final String MODIFIER_NAME = "fallen_gems_affixes:genesis_affix_power";
         @Override
         public float getAffixPower()    { return affixPower; }
+
+        @Override
+        public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
+            return !(either.getA().get() instanceof DurableAffix);
+        }
+
+        @Override
+        public InsAttributeModifier getModifier() {
+            return new InsAttributeModifier(
+                    InsAttributeModifier.Type.ADD_FINAL,
+                    MODIFIER_NAME,
+                    getAffixPower());
+        }
+
+        @Override
+        public InsAttributeModifier getModifierBy(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
+            if (this.test(either)) {
+                return getModifier();
+            }
+            return InsAttributeModifier.EMPTY;
+        }
+
         @Override
         public float getGemPower()      { return gemPower; }
         public int   getBossKillCount() { return bossKillCount; }
@@ -374,7 +262,7 @@ public class GenesisAugment implements IAugment {
             tag.putFloat("affixPower",      affixPower);
             tag.putFloat("gemPower",        gemPower);
             tag.putInt("bossKillCount",     bossKillCount);
-            tag.put("originalAffixLevels",  originalAffixLevels);
+//            tag.put("originalAffixLevels",  originalAffixLevels);
             ListTag bosslist = new ListTag();
             for (String id : killedBossIds) bosslist.add(StringTag.valueOf(id));
             tag.put("killedBosses", bosslist);
@@ -389,9 +277,9 @@ public class GenesisAugment implements IAugment {
             affixPower      = tag.getFloat("affixPower");
             gemPower        = tag.getFloat("gemPower");
             bossKillCount   = tag.getInt("bossKillCount");
-            originalAffixLevels = tag.contains("originalAffixLevels")
-                    ? tag.getCompound("originalAffixLevels")
-                    : new CompoundTag();
+//            originalAffixLevels = tag.contains("originalAffixLevels")
+//                    ? tag.getCompound("originalAffixLevels")
+//                    : new CompoundTag();
             killedBossIds.clear();
             for (Tag t : tag.getList("killedBosses", Tag.TAG_STRING))
                 killedBossIds.add(t.getAsString());

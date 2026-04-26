@@ -17,6 +17,7 @@ import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossLoader;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
 import net.kayn.fallen_gems_affixes.item.AffixScrollItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.commands.CommandBuildContext;
@@ -283,8 +284,8 @@ public class ModCommands {
                 return 0;
             }
         }
-
-        AugmentHelper.applyAugment(stack, new AugmentInstance(meta.getAugment(), meta.getDefaultData()));
+        AugmentSlotHelper.setAugmentSlotsDirect(stack,AugmentSlotHelper.getAugmentSlots(stack) + 1);
+        AugmentHelper.applyAugment(stack, new AugmentInstance(meta.getAugment(), meta.newDefaultData()));
 
         ctx.getSource().sendSuccess(
                 () -> Component.literal("Added Augment " + augID + " to " + player.getName().getString()),

@@ -5,7 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.LiveAugments;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -19,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.rtxyd.fallen.lib.util.ins_attr.InsAttributeModifier;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -54,7 +57,7 @@ public class GemPowerAugment implements IAugment {
     }
 
     @Override
-    public boolean shouldAttachToPlayer() {
+    public boolean shouldAttachToEntity() {
         return false;
     }
 
@@ -105,7 +108,7 @@ public class GemPowerAugment implements IAugment {
             return;
         }
 
-        power = ((GemPowerData) data.getDefaultData()).getGemPower();
+        power = ((GemPowerData) data.newDefaultData()).getGemPower();
 
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
@@ -161,6 +164,11 @@ public class GemPowerAugment implements IAugment {
         @Override
         public Codec<GemPowerData> getCodec() {
             return CODEC;
+        }
+
+        @Override
+        public InsAttributeModifier getModifier() {
+            return InsAttributeModifier.EMPTY;
         }
     }
 }
