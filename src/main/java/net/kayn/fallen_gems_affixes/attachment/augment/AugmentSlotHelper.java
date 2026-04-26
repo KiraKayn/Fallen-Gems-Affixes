@@ -18,10 +18,13 @@ public class AugmentSlotHelper {
         return augmentData != null ? augmentData.getInt(AUGMENT_SLOTS) : 0;
     }
 
-    public static void setAugmentSlots(ItemStack stack, int slots) {
-        int max = ModConfig.MAX_AUGMENT_SLOTS.get();
-        stack.getOrCreateTagElement(AUGMENT_DATA)
-                .putInt(AUGMENT_SLOTS, Math.min(slots, max));
+    public static void setAugmentSlotsDirect(ItemStack stack, int amount) {
+        stack.getOrCreateTagElement(AUGMENT_DATA).putInt(AUGMENT_SLOTS, amount);
+    }
+
+    public static void setAugmentSlots(ItemStack stack, int amount) {
+        int amount1 = Math.min(amount, ModConfig.MAX_AUGMENT_SLOTS.get());
+        setAugmentSlotsDirect(stack, amount1);
     }
 
     public static void addAugmentSlots(ItemStack stack, int amount) {

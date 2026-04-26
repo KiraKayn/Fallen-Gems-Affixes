@@ -40,8 +40,13 @@ public class AugmentMeta implements ICodecProvider<AugmentMeta> {
         return augmentHolder.get();
     }
 
-    public IAugmentInnerData getDefaultData() {
+    // we shouldn't change the default data, it should be frozon after registered
+    IAugmentInnerData getDefaultData() {
         return defaultData;
+    }
+
+    public IAugmentInnerData newDefaultData() {
+        return getAugment().fallbackInnerData();
     }
 
     @Override

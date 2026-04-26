@@ -54,6 +54,11 @@ public class AugmentRegistry extends AbstractPacketBoundRegistry<AugmentMeta, Cl
     @Override
     protected void registerBuiltinCodecs() {}
 
+    @Override
+    public void validateItem(ResourceLocation loc, AugmentMeta item) {
+
+    }
+
     // Register an augment
     public IAugment register(IAugment augment) {
        REGISTRY.put(augment.getId(), augment);
