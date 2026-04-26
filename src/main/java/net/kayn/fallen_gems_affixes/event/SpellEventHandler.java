@@ -79,7 +79,8 @@ public class SpellEventHandler {
             return;
         }
 
-        if (spell.getSpellId().equals("irons_spellbooks:teleport")) {
+        String id = spell.getSpellId();
+        if (id.equals("irons_spellbooks:teleport") || id.equals("irons_spellbooks:blood_step")) {
             return;
         }
         LivingEntity livingTarget = null;

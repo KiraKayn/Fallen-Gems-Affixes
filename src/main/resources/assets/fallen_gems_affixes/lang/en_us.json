@@ -646,5 +646,14 @@
   "item.fallen_gems_affixes.sigil_of_prismatic_conversion.desc": "Unifies all sockets into a single Catalyst Socket",
   "item.fallen_gems_affixes.sigil_of_prismatic_conversion.desc2": "Gem power scales with the number of consumed sockets. Requires all sockets to be empty.",
   "socket.fallen_gems_affixes.catalyst.empty": "Catalyst Socket",
-  "socket.fallen_gems_affixes.catalyst.filled": "%s §7[§b+%s%% power§7]"
+  "socket.fallen_gems_affixes.catalyst.filled": "%s §7[§b+%s%% power§7]",
+
+  "bonus.fallen_gems_affixes.blood_eruption": "Crimson Eruption",
+  "bonus.fallen_gems_affixes.blood_eruption.desc": "On Kill: Blood explodes, randomly casting a Blood spell on a nearby enemy [radius: %s] [%s]",
+  "bonus.fallen_gems_affixes.holy_wrath": "Radiant Verdict",
+  "bonus.fallen_gems_affixes.holy_wrath.desc": "On Kill: Sunbeam strikes all nearby enemies, revealing them with Glowing [radius: %s] [%s]",
+  "bonus.fallen_gems_affixes.blood_nova": "Blood Nova",
+  "bonus.fallen_gems_affixes.blood_nova.desc": "On Arrow Hit: Blood erupts, dealing %s arrow damage in %s blocks, applying Bleed for %ss, and healing you for %s of slain enemies' max HP [%s]",
+  "bonus.fallen_gems_affixes.holy_mark": "Hallowed Mark",
+  "bonus.fallen_gems_affixes.holy_mark.desc": "On Arrow Hit: Mark your target. Your next shot calls Sunbeam down on all enemies in range [radius: %s] [%s]"
 }
