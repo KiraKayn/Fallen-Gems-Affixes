@@ -3,18 +3,23 @@ package net.kayn.fallen_gems_affixes.fallen.patch;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.augment.GemBonusModifier;
-import net.rtxyd.fallen.lib.util.PatchUtil;
-import net.rtxyd.fallen.lib.util.patch.InserterKey;
-import net.rtxyd.fallen.lib.util.patch.InserterType;
 import net.rtxyd.fallen.lib.api.IFallenPatch;
 import net.rtxyd.fallen.lib.api.annotation.FallenPatch;
 import net.rtxyd.fallen.lib.api.annotation.Targets;
+import net.rtxyd.fallen.lib.service.DefaultPatchContext;
 import net.rtxyd.fallen.lib.type.service.IFallenPatchContext;
 import net.rtxyd.fallen.lib.type.service.IFallenPatchCtorContext;
 import net.rtxyd.fallen.lib.type.service.IPatchDescriptor;
+import net.rtxyd.fallen.lib.util.PatchUtil;
+import net.rtxyd.fallen.lib.util.patch.InserterKey;
+import net.rtxyd.fallen.lib.util.patch.InserterMethodData;
+import net.rtxyd.fallen.lib.util.patch.InserterType;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +39,11 @@ public class GemPowerPatch implements IFallenPatch {
     }
 
     @Override
-    public void apply(ClassNode cn, IFallenPatchContext iFallenPatchContext) {
+    public void apply(IFallenPatchContext iFallenPatchContext) {
+        if (!(iFallenPatchContext instanceof DefaultPatchContext ct)) return;
+        ClassNode cn = ct.getClassNode();
         FallenGemsAffixes.LOGGER.debug("Starting patch operation for {}. Current patch number {}", cn.name, patchedTargets.size());
-        MethodInsnNode hookMethod = iFallenPatchContext.getFallenInserter(
+        InserterMethodData hookMethod = iFallenPatchContext.getFallenInserter(
                 InserterKey.of("net.kayn.fallen_gems_affixes.augment.GemBonusModifier",
                         "modifier",
                         InserterType.STANDARD));
@@ -60,10 +67,7 @@ public class GemPowerPatch implements IFallenPatch {
                             && mn.name.startsWith("get")
                             && mn.desc.startsWith("(Ljava/lang/Object;")
                             && Type.getReturnType(mn.desc).getSort() != Type.VOID,
-                    InserterType.STANDARD,
-                    hookMethod,
-                    true,
-                    false);
+                    hookMethod);
         }
         patchedTargets.add(cn.name);
     }
