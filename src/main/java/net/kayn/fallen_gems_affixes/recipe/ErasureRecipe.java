@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class ErasureRecipe extends SmithingTransformRecipe {
 
-    public static final String TAG_SCROLL_AFFIXES  = "fga:scroll_affixes";
+    public static final String TAG_SCROLL_AFFIXES = "fga:scroll_affixes";
     public static final String TAG_SCROLL_SLOTS_USED = "fga:scroll_slots_used";
 
     private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:erasure");
@@ -34,7 +34,7 @@ public class ErasureRecipe extends SmithingTransformRecipe {
 
     @Override
     public boolean matches(Container inv, Level level) {
-        ItemStack base  = inv.getItem(1);
+        ItemStack base = inv.getItem(1);
         ItemStack sigil = inv.getItem(2);
         if (base.isEmpty()) return false;
         if (!sigil.is(ModItems.SIGIL_OF_ERASURE.get())) return false;
@@ -58,29 +58,37 @@ public class ErasureRecipe extends SmithingTransformRecipe {
 
     public static void removeScrollAffixes(ItemStack stack) {
         if (!stack.hasTag()) return;
+
         CompoundTag tag = stack.getTag();
-        if (!tag.contains(TAG_SCROLL_AFFIXES)) return;
+        if (tag == null) return;
 
-        ListTag scrollAffixList = tag.getList(TAG_SCROLL_AFFIXES, 8);
-        var currentAffixes = AffixHelper.getAffixes(stack);
-        if (currentAffixes == null || currentAffixes.isEmpty()) return;
+        if (tag.contains(TAG_SCROLL_AFFIXES)) {
+            ListTag scrollAffixList = tag.getList(TAG_SCROLL_AFFIXES, 8);
+            var currentAffixes = AffixHelper.getAffixes(stack);
 
-        Map<DynamicHolder<? extends dev.shadowsoffire.apotheosis.adventure.affix.Affix>, AffixInstance> kept = new HashMap<>();
-        for (var entry : currentAffixes.entrySet()) {
-            ResourceLocation id = entry.getKey().getId();
-            boolean isScrollAffix = false;
-            for (int i = 0; i < scrollAffixList.size(); i++) {
-                if (scrollAffixList.getString(i).equals(id.toString())) {
-                    isScrollAffix = true;
-                    break;
+            if (currentAffixes != null && !currentAffixes.isEmpty()) {
+                Map<DynamicHolder<? extends dev.shadowsoffire.apotheosis.adventure.affix.Affix>, AffixInstance> kept = new HashMap<>();
+
+                for (var entry : currentAffixes.entrySet()) {
+                    ResourceLocation id = entry.getKey().getId();
+                    boolean isScrollAffix = false;
+
+                    for (int i = 0; i < scrollAffixList.size(); i++) {
+                        if (scrollAffixList.getString(i).equals(id.toString())) {
+                            isScrollAffix = true;
+                            break;
+                        }
+                    }
+
+                    if (!isScrollAffix) {
+                        kept.put(entry.getKey(), entry.getValue());
+                    }
                 }
+                AffixHelper.setAffixes(stack, kept);
             }
-            if (!isScrollAffix) kept.put(entry.getKey(), entry.getValue());
+            tag.remove(TAG_SCROLL_AFFIXES);
         }
-
-        AffixHelper.setAffixes(stack, kept);
-        tag.remove(TAG_SCROLL_AFFIXES);
-        tag.putInt(TAG_SCROLL_SLOTS_USED, 0);
+        tag.remove(TAG_SCROLL_SLOTS_USED);
     }
 
     public static int getScrollSlotsUsed(ItemStack stack) {
@@ -90,9 +98,7 @@ public class ErasureRecipe extends SmithingTransformRecipe {
 
     public static void markScrollAffix(ItemStack stack, ResourceLocation affixId) {
         CompoundTag tag = stack.getOrCreateTag();
-        ListTag list = tag.contains(TAG_SCROLL_AFFIXES)
-                ? tag.getList(TAG_SCROLL_AFFIXES, 8)
-                : new ListTag();
+        ListTag list = tag.contains(TAG_SCROLL_AFFIXES) ? tag.getList(TAG_SCROLL_AFFIXES, 8) : new ListTag();
         net.minecraft.nbt.StringTag entry = net.minecraft.nbt.StringTag.valueOf(affixId.toString());
         list.add(entry);
         tag.put(TAG_SCROLL_AFFIXES, list);

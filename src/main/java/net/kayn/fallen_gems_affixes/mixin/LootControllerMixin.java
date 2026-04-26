@@ -7,6 +7,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootController;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import net.kayn.fallen_gems_affixes.adventure.socket.CatalystSocketHelper;
 import net.kayn.fallen_gems_affixes.adventure.socket.TieredSocketHelper;
+import net.kayn.fallen_gems_affixes.recipe.ErasureRecipe;   // <-- added import
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -31,14 +32,15 @@ public class LootControllerMixin {
             method = "createLootItem(Lnet/minecraft/world/item/ItemStack;Ldev/shadowsoffire/apotheosis/adventure/loot/LootCategory;Ldev/shadowsoffire/apotheosis/adventure/loot/LootRarity;Lnet/minecraft/util/RandomSource;)Lnet/minecraft/world/item/ItemStack;",
             at = @At("RETURN")
     )
-    private static void assignTieredSocketTiers(
+    private static void onLootItemCreated(
             ItemStack stack, LootCategory cat, LootRarity rarity, RandomSource rand,
             CallbackInfoReturnable<ItemStack> cir) {
 
         ItemStack result = cir.getReturnValue();
         if (!result.isEmpty()) {
-            if (CatalystSocketHelper.hasCatalystSocket(result)) return;
+            ErasureRecipe.removeScrollAffixes(result);
 
+            if (CatalystSocketHelper.hasCatalystSocket(result)) return;
             TieredSocketHelper.assignSocketTiersToLootItem(result, rand);
         }
     }
