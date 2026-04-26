@@ -46,21 +46,6 @@
       }
     },
     {
-      "type": "fallen_gems_affixes:spell_echo",
-      "gem_class": {
-        "key": "staffs",
-        "types": [
-          "staffs"
-        ]
-      },
-      "school": "irons_spellbooks:ender",
-      "delay_ticks": {
-        "epic": 10,
-        "mythic": 8,
-        "ancient": 6
-      }
-    },
-    {
       "type": "fallen_gems_affixes:con_cat_bonus",
       "con_cat": [
         {
@@ -87,6 +72,21 @@
           "mythic": 4.0,
           "ancient": 5.0
         }
+      }
+    },
+    {
+      "type": "fallen_gems_affixes:spell_echo",
+      "gem_class": {
+        "key": "staffs",
+        "types": [
+          "staffs"
+        ]
+      },
+      "school": "irons_spellbooks:ender",
+      "delay_ticks": {
+        "epic": 10,
+        "mythic": 8,
+        "ancient": 6
       }
     }
   ]
