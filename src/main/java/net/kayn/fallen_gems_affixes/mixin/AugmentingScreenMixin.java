@@ -19,39 +19,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(AugmentingScreen.class)
-public class AugmentingScreenMixin {
+public abstract class AugmentingScreenMixin {
 
-    @Shadow
-    protected SimpleTexButton rerollBtn;
+    @Shadow protected SimpleTexButton rerollBtn;
+    @Shadow protected List<AffixInstance> currentItemAffixes;
+    @Shadow protected abstract int getSelectedAffix();
 
-    @Shadow
-    protected List<AffixInstance> currentItemAffixes;
-
-    @Inject(
-            method = "updateCachedState",
-            at = @At("TAIL"),
-            remap = false
-    )
+    @Inject(method = "updateCachedState", at = @At("TAIL"), remap = false)
     private void disableRerollForScrollAffixes(CallbackInfo ci) {
         if (rerollBtn == null || !rerollBtn.active) return;
-        if (currentItemAffixes == null || currentItemAffixes.isEmpty()) return;
+        int selected = this.getSelectedAffix();
 
-        AugmentingMenu menu = ((AugmentingScreen)(Object)this).getMenu();
+        if (currentItemAffixes == null || currentItemAffixes.isEmpty()) return;
+        if (selected < 0 || selected >= currentItemAffixes.size()) return;
+
+        AugmentingMenu menu = ((AugmentingScreen) (Object) this).getMenu();
         ItemStack mainItem = menu.getMainItem();
+
         if (!mainItem.hasTag() || !mainItem.getTag().contains(ErasureRecipe.TAG_SCROLL_AFFIXES)) return;
 
         ListTag scrollList = mainItem.getTag().getList(ErasureRecipe.TAG_SCROLL_AFFIXES, Tag.TAG_STRING);
+        String selectedId = currentItemAffixes.get(selected).affix().getId().toString();
 
-        for (AffixInstance inst : currentItemAffixes) {
-            for (int i = 0; i < scrollList.size(); i++) {
-                if (scrollList.getString(i).equals(inst.affix().getId().toString())) {
-                    rerollBtn.active = false;
-                    rerollBtn.setInactiveMessage(
-                            Component.translatable("button.fallen_gems_affixes.scroll_affix_no_reroll")
-                                    .withStyle(ChatFormatting.RED)
-                    );
-                    return;
-                }
+        for (int i = 0; i < scrollList.size(); i++) {
+            if (scrollList.getString(i).equals(selectedId)) {
+                rerollBtn.active = false;
+                rerollBtn.setInactiveMessage(
+                        Component.translatable("button.fallen_gems_affixes.scroll_affix_no_reroll")
+                                .withStyle(ChatFormatting.RED)
+                );
+                return;
             }
         }
     }
