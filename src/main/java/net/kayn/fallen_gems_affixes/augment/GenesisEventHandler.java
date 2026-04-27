@@ -4,6 +4,7 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -16,16 +17,10 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Server-side event handler Genesis Augment
- *
- * <p>When a {@link ServerPlayer} kills an entity matching the
- * {@code fallen_gems_affixes:boss_slayer} tag, every Genesis-augmented item in their
- * full inventory is updated — no guards on whether affixes or gems are present.
- * Both powers always grow; {@link GenesisAugment#applyAffixPower} handles the case
- * where the item has no affixes gracefully (it's a no-op).
- */
 public class GenesisEventHandler {
+
+    private static final String SOURCE_APOTH     = "apoth";
+    private static final String SOURCE_UNIVERSAL = "universal";
 
     private static final TagKey<EntityType<?>> BOSS_TAG = TagKey.create(
             Registries.ENTITY_TYPE,
@@ -37,29 +32,63 @@ public class GenesisEventHandler {
 
     private static void onLivingDeath(LivingDeathEvent event) {
         LivingEntity dying = event.getEntity();
-        if (!dying.getType().is(BOSS_TAG)) return;
         if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
 
-        // Track by entity TYPE, so same boss only counts once
-        ResourceLocation bossType = EntityType.getKey(dying.getType());
-        if (bossType == null) return;
+        String dedupKey = resolveDeduplicationKey(dying);
+        if (dedupKey == null) return;
 
         for (ItemStack stack : getAllItems(player)) {
-            if (!stack.isEmpty()) updateGenesisOnBossKill(stack, bossType);
+            if (!stack.isEmpty()) tryApplyGenesis(stack, dedupKey);
         }
     }
+    private static String resolveDeduplicationKey(LivingEntity entity) {
+        CompoundTag data = entity.getPersistentData();
 
+        boolean isApoth     = data.contains("apoth.boss") || data.contains("apoth.miniboss");
+        boolean isUniversal = data.contains("fga.universal_boss");
 
-    private static void updateGenesisOnBossKill(ItemStack stack, ResourceLocation bossType) {
+        if (isApoth) {
+            String rarity = extractRarity(data, "apoth.rarity");
+            if (rarity == null) return null;
+            return SOURCE_APOTH + ":" + rarity;
+        }
+
+        if (isUniversal) {
+            String rarity = extractRarity(data, "fga.universal_boss.rarity");
+            if (rarity == null) return null;
+            return SOURCE_UNIVERSAL + ":" + rarity;
+        }
+
+        if (entity.getType().is(BOSS_TAG)) {
+            ResourceLocation entityType = EntityType.getKey(entity.getType());
+            if (entityType == null) return null;
+            return "tag:" + entityType;
+        }
+
+        return null;
+    }
+
+    private static String extractRarity(CompoundTag data, String nbtKey) {
+        if (!data.contains(nbtKey)) return null;
+        String raw = data.getString(nbtKey).trim();
+        if (raw.isEmpty()) return null;
+        int colon = raw.indexOf(':');
+        return colon >= 0 ? raw.substring(colon + 1) : raw;
+    }
+
+    private static void tryApplyGenesis(ItemStack stack, String dedupKey) {
         AugmentInstance inst = AugmentHelper.getAugments(stack).get(Fallen.Augments.GENESIS);
         if (inst == null) return;
+
         GenesisAugment.GenesisData data = (GenesisAugment.GenesisData) inst.getData();
-        data.bossKillCount += 1;
-        data.killedBossIds.add(bossType.toString());
-        data.affixPower += data.affixPowerBoost;
+
+        if (!data.killedBossIds.add(dedupKey)) return;
+
+        data.bossKillCount = data.killedBossIds.size();
+        data.affixPower   += data.affixPowerBoost;
+        data.gemPower     += data.gemPowerBoost;
+
         AugmentHelper.applyAugment(stack, new AugmentInstance(inst.getAugment(), data));
-        // Deduplicate by entity type - the same boss can only be coutned once
-        // Re-apply affix levels immediately (no-ops if item has no affixes yet)
     }
 
     private static List<ItemStack> getAllItems(ServerPlayer player) {

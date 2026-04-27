@@ -10,7 +10,9 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.*;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipe;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -18,9 +20,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -62,9 +61,6 @@ public class GenesisAugment implements IAugment {
 
     public static final float MAX_AFFIX_LEVEL = SupremacyAugment.MAX_AFFIX_LEVEL;
 
-    // -------------------------------------------------------------------------
-    // IAugment identity
-    // -------------------------------------------------------------------------
 
     @Override public ResourceLocation getId()   { return GENESIS_ID; }
     @Override public boolean isUnique()          { return true; }
@@ -102,10 +98,6 @@ public class GenesisAugment implements IAugment {
         return data;
     }
 
-    // -------------------------------------------------------------------------
-    // Rendering
-    // -------------------------------------------------------------------------
-
     @Override
     public void renderImage(@NotNull Font font, int x, int y, GuiGraphics gui,
                             IAugmentInnerData innerData) {
@@ -118,10 +110,6 @@ public class GenesisAugment implements IAugment {
         gui.renderFakeItem(displayStack, 0, 0);
         pose.popPose();
     }
-
-    // -------------------------------------------------------------------------
-    // Tooltips
-    // -------------------------------------------------------------------------
 
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
@@ -248,7 +236,7 @@ public class GenesisAugment implements IAugment {
         public MutableComponent combineText() {
             return Component.translatable(
                     "fallen_gems_affixes.augment.genesis.socket_desc",
-                    bossKillCount,
+                    killedBossIds.size(),
                     String.format("%.2f", affixPower),
                     String.format("%.2f", gemPower));
         }
@@ -262,9 +250,11 @@ public class GenesisAugment implements IAugment {
             tag.putFloat("affixPower",      affixPower);
             tag.putFloat("gemPower",        gemPower);
             tag.putInt("bossKillCount",     bossKillCount);
-//            tag.put("originalAffixLevels",  originalAffixLevels);
-            ListTag bosslist = new ListTag();
-            for (String id : killedBossIds) bosslist.add(StringTag.valueOf(id));
+            //killedBossIds now stores dedup keys: "apoth:epic", "universal:mythic", etc
+            net.minecraft.nbt.ListTag bosslist = new net.minecraft.nbt.ListTag();
+            for (String id : killedBossIds) {
+                bosslist.add(net.minecraft.nbt.StringTag.valueOf(id));
+            }
             tag.put("killedBosses", bosslist);
             return tag;
         }
@@ -277,12 +267,10 @@ public class GenesisAugment implements IAugment {
             affixPower      = tag.getFloat("affixPower");
             gemPower        = tag.getFloat("gemPower");
             bossKillCount   = tag.getInt("bossKillCount");
-//            originalAffixLevels = tag.contains("originalAffixLevels")
-//                    ? tag.getCompound("originalAffixLevels")
-//                    : new CompoundTag();
             killedBossIds.clear();
-            for (Tag t : tag.getList("killedBosses", Tag.TAG_STRING))
+            for (net.minecraft.nbt.Tag t : tag.getList("killedBosses", net.minecraft.nbt.Tag.TAG_STRING)) {
                 killedBossIds.add(t.getAsString());
+            }
         }
 
         @Override
