@@ -13,11 +13,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -44,10 +45,15 @@ public class HolyMarkEventHandler {
 
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
-        if (!(event.getProjectile() instanceof net.minecraft.world.entity.projectile.AbstractArrow arrow)) return;
+        if (!(event.getProjectile() instanceof AbstractArrow arrow)) return;
         if (arrow.getPersistentData().getBoolean("apoth.generated")) return;
         if (arrow.getTags().contains(HM_COUNTED)) return;
         arrow.addTag(HM_COUNTED);
+
+        if (!(event.getRayTraceResult() instanceof EntityHitResult entityHit)) return;
+        Entity hitEntity = entityHit.getEntity();
+        if (!(hitEntity instanceof LivingEntity target)) return;
+
         if (!(arrow.getOwner() instanceof ServerPlayer player)) return;
         if (isCurrentlyTriggering(player)) return;
 
@@ -56,7 +62,6 @@ public class HolyMarkEventHandler {
 
         HolyMarkBonus bonus = null;
         LootRarity rarity = null;
-
         LootCategory cat = LootCategory.forItem(main);
         for (GemInstance inst : SocketHelper.getGems(main).gems()) {
             if (!inst.isValid()) continue;
@@ -68,63 +73,62 @@ public class HolyMarkEventHandler {
                 break;
             }
         }
-
         if (bonus == null || rarity == null) return;
-
-        Vec3 impactPos = resolveImpactPosition(event);
-        if (impactPos == null) return;
 
         ServerLevel level = (ServerLevel) player.level();
         long now = level.getGameTime();
-        Long expiry = MARK_EXPIRY.get(player.getUUID());
+        long cooldownTicks = (long) (bonus.getCooldown(rarity) * 20);
+
+        if (MiscUtil.isOnCooldown(bonus.getId(), cooldownTicks, player)) return;
+
+        Long expiry = MARK_EXPIRY.get(target.getUUID());
         boolean markActive = expiry != null && now < expiry;
 
         if (markActive) {
-            MARK_EXPIRY.remove(player.getUUID());
+            MARK_EXPIRY.remove(target.getUUID());
             MiscUtil.startCooldown(bonus.getId(), player);
 
             AbstractSpell sunbeam = SpellRegistry.REGISTRY.get().getValue(SUNBEAM_ID);
             if (sunbeam == null) return;
 
-            float radius = bonus.getRadius(rarity);
             int spellLevel = bonus.getSpellLevel(rarity);
+            float radius = bonus.getRadius(rarity);
+            Vec3 center = target.position();
 
-            List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class,
-                    new AABB(impactPos, impactPos).inflate(radius),
+            List<LivingEntity> enemies = level.getEntitiesOfClass(LivingEntity.class,
+                    new AABB(center, center).inflate(radius),
                     e -> e != player && e.isAlive() && !e.isAlliedTo(player) && !(e instanceof Player));
 
-            if (targets.isEmpty()) return;
+            if (!enemies.isEmpty()) {
+                List<LivingEntity> targets = enemies.subList(0, Math.min(enemies.size(), MAX_TARGETS));
 
-            level.sendParticles(ParticleTypes.END_ROD,
-                    impactPos.x, impactPos.y + 1.0, impactPos.z, 20, 0.5, 0.5, 0.5, 0.12);
-            level.playSound(null, impactPos.x, impactPos.y, impactPos.z,
-                    SoundEvents.LIGHTNING_BOLT_THUNDER, player.getSoundSource(), 0.5f, 1.5f);
+                level.sendParticles(ParticleTypes.END_ROD, center.x, center.y + 1.0, center.z,
+                        20, 0.5, 0.5, 0.5, 0.12);
+                level.playSound(null, center.x, center.y, center.z,
+                        SoundEvents.LIGHTNING_BOLT_THUNDER, player.getSoundSource(), 0.5f, 1.5f);
 
-            List<LivingEntity> capped = targets.subList(0, Math.min(targets.size(), MAX_TARGETS));
-
-            setTriggering(player, true);
-            try {
-                for (LivingEntity target : capped) {
-                    SpellCastUtil.castSpell(player, sunbeam, spellLevel, target);
-                }
-            } finally {
-                var server = player.level().getServer();
-                if (server != null) {
-                    server.execute(() -> setTriggering(player, false));
-                } else {
-                    setTriggering(player, false);
+                setTriggering(player, true);
+                try {
+                    for (LivingEntity foe : targets) {
+                        SpellCastUtil.castSpell(player, sunbeam, spellLevel, foe);
+                    }
+                } finally {
+                    var server = player.level().getServer();
+                    if (server != null) {
+                        server.execute(() -> setTriggering(player, false));
+                    } else {
+                        setTriggering(player, false);
+                    }
                 }
             }
-
         } else {
-            if (MiscUtil.isOnCooldown(bonus.getId(), (long) (bonus.getCooldown(rarity) * 20), player)) return;
-
             long newExpiry = now + bonus.getMarkDurationTicks(rarity);
-            MARK_EXPIRY.put(player.getUUID(), newExpiry);
+            MARK_EXPIRY.put(target.getUUID(), newExpiry);
 
-            level.sendParticles(ParticleTypes.END_ROD,
-                    impactPos.x, impactPos.y + 0.5, impactPos.z, 12, 0.2, 0.4, 0.2, 0.05);
-            level.playSound(null, impactPos.x, impactPos.y, impactPos.z,
+            Vec3 pos = target.position();
+            level.sendParticles(ParticleTypes.END_ROD, pos.x, pos.y + 0.5, pos.z,
+                    12, 0.2, 0.4, 0.2, 0.05);
+            level.playSound(null, pos.x, pos.y, pos.z,
                     SoundEvents.EXPERIENCE_ORB_PICKUP, player.getSoundSource(), 1.0f, 2.0f);
         }
     }
@@ -132,14 +136,5 @@ public class HolyMarkEventHandler {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         MARK_EXPIRY.clear();
-    }
-
-    private static Vec3 resolveImpactPosition(ProjectileImpactEvent event) {
-        if (event.getRayTraceResult() instanceof EntityHitResult entityHit) {
-            return entityHit.getEntity().position();
-        } else if (event.getRayTraceResult() instanceof BlockHitResult blockHit) {
-            return blockHit.getLocation();
-        }
-        return null;
     }
 }

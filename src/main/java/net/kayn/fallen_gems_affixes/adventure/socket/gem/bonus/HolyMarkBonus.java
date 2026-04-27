@@ -7,9 +7,12 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -17,6 +20,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class HolyMarkBonus extends GemBonus {
+
+    private static final ResourceLocation SUNBEAM_ID =
+            ResourceLocation.fromNamespaceAndPath("irons_spellbooks", "sunbeam");
 
     public static final Codec<HolyMarkBonus> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             gemClass(),
@@ -57,6 +63,7 @@ public class HolyMarkBonus extends GemBonus {
         StepFunction fn = spellLevel.get(rarity);
         return fn != null ? (int) fn.get(0) : 1;
     }
+
     public long getMarkDurationTicks(LootRarity rarity) {
         StepFunction fn = markDuration.get(rarity);
         return fn != null ? (long) (fn.get(0) * 20) : 160L;
@@ -64,10 +71,32 @@ public class HolyMarkBonus extends GemBonus {
 
     @Override
     public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
+        Component effectName = getSunbeamName();
+        Component effectWithLevel = effectName == null
+                ? Component.literal("Sunbeam")
+                : ((MutableComponent) effectName)
+                .append(Component.literal(" "))
+                .append(Component.translatable("enchantment.level." + getSpellLevel(rarity)));
+
+        Component radiusText = Component.literal(String.format(Locale.ROOT, "%.1f", getRadius(rarity)))
+                .withStyle(ChatFormatting.YELLOW);
+        Component cooldownText = Component.literal(formatSeconds(getCooldown(rarity)) + "s")
+                .withStyle(ChatFormatting.YELLOW);
+
         return Component.translatable("bonus.fallen_gems_affixes.holy_mark.desc",
-                Component.literal(String.format(Locale.ROOT, "%.1f", getRadius(rarity))).withStyle(ChatFormatting.YELLOW),
-                Component.literal(formatSeconds(getCooldown(rarity)) + "s").withStyle(ChatFormatting.YELLOW)
+                effectWithLevel,
+                radiusText,
+                cooldownText
         ).withStyle(ChatFormatting.YELLOW);
+    }
+
+    private static Component getSunbeamName() {
+        AbstractSpell spell = SpellRegistry.REGISTRY.get().getValue(SUNBEAM_ID);
+        if (spell != null) {
+            return Component.literal("Sunbeam")
+                    .withStyle(spell.getSchoolType().getDisplayName().getStyle());
+        }
+        return null;
     }
 
     private static String formatSeconds(float v) {
