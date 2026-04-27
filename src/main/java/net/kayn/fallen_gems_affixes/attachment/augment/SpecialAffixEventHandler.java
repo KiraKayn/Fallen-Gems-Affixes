@@ -36,6 +36,7 @@ public class SpecialAffixEventHandler {
         if (NOT_REFRESH.get()) return;
         NOT_REFRESH.set(false);
         ToModifyAffixes toModifyAffixes = getToModifyAffixesRefresh(event.getItem(), event.getAffixes());
+        if (toModifyAffixes.getFactor().isEmpty()) return;
         event.setCacheAffixes(toModifyAffixes.output());
     }
 
@@ -80,7 +81,7 @@ public class SpecialAffixEventHandler {
     private static ToModifyAffixes getToModifyAffixesA(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
         if (stack.isEmpty()) return ToModifyAffixes.EMPTY;
         LiveAugments augments = AugmentHelper.getAugments(stack);
-        if (augments.isEmpty()) return ToModifyAffixes.EMPTY;
+        if (affixes.isEmpty() && augments.isEmpty()) return ToModifyAffixes.EMPTY;
         return new ToModifyAffixes(affixes, augments);
     }
 
