@@ -7,14 +7,11 @@ import com.mojang.serialization.DynamicOps;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
-import net.kayn.fallen_gems_affixes.attachment.augment.LiveAugments;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +45,7 @@ public interface IAugment {
 
     ResourceLocation AUGMENT_ICON = ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "textures/gui/augment_socket.png");
 
-    Component TEXT = Component.literal("Empty Crest");
+    Component TEXT = Component.translatable("fallen_gems_affixes.augment_slot");
 
     // Every augment must have a unique ID.
     // Used for serialization

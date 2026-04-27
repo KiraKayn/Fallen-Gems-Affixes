@@ -102,18 +102,23 @@ public final class TieredSocketHelper {
         if (totalSockets <= 0) return;
 
         int[] existing = getSocketTiers(stack);
-        int[] tiers = new int[totalSockets];
+        int[] newTiers = new int[totalSockets];
+
+        SocketedGems gems = SocketHelper.getGems(stack);
 
         for (int i = 0; i < totalSockets; i++) {
-
-            if (i < existing.length && existing[i] == REGULAR_SOCKET) {
-                tiers[i] = REGULAR_SOCKET;
-            } else {
-                tiers[i] = SocketTierManager.INSTANCE.rollSocketTier(rand);
+            if (i < existing.length && i < gems.size() && gems.get(i).isValid()) {
+                newTiers[i] = existing[i];
+            }
+            else if (i < existing.length && existing[i] == REGULAR_SOCKET) {
+                newTiers[i] = REGULAR_SOCKET;
+            }
+            else {
+                newTiers[i] = SocketTierManager.INSTANCE.rollSocketTier(rand);
             }
         }
 
-        setSocketTiers(stack, tiers);
+        setSocketTiers(stack, newTiers);
     }
 
     public static void addRegularSocket(ItemStack stack) {
