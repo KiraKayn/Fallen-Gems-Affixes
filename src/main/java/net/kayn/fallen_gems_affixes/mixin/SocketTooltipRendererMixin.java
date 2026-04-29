@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Mixin(value = SocketTooltipRenderer.class, remap = false)
+@Mixin(value = SocketTooltipRenderer.class)
 public class SocketTooltipRendererMixin {
 
     @Shadow @Final public static ResourceLocation SOCKET;
