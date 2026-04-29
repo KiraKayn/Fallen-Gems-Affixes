@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
+import net.kayn.fallen_gems_affixes.util.ConditionalLootCategory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.rtxyd.fallen.lib.runtime.forgemod.util.ICodecProvider;
 
 import java.util.Collections;
@@ -46,7 +46,7 @@ public class AugmentMeta implements ICodecProvider<AugmentMeta> {
     }
 
     public IAugmentInnerData newDefaultData() {
-        return getAugment().fallbackInnerData();
+        return defaultData.copy();
     }
 
     @Override
@@ -63,20 +63,24 @@ public class AugmentMeta implements ICodecProvider<AugmentMeta> {
     }
 
     public static class AugmentGeneral {
-        private static final Products.P2<RecordCodecBuilder.Mu<AugmentGeneral>, ResourceLocation, Set<LootCategory>> P2 = new RecordCodecBuilder.Instance<AugmentGeneral>().group(
+        private static final Products.P3<RecordCodecBuilder.Mu<AugmentGeneral>, ResourceLocation, Set<LootCategory>, Set<ConditionalLootCategory>> P3 = new RecordCodecBuilder.Instance<AugmentGeneral>().group(
                 ResourceLocation.CODEC.fieldOf("texture").forGetter(t -> t.texture),
-                LootCategory.SET_CODEC.fieldOf("categories").forGetter(t -> t.categories)
+                LootCategory.SET_CODEC.fieldOf("categories").forGetter(t -> t.categories),
+                ConditionalLootCategory.SET_CODEC.optionalFieldOf("con_cat", Set.of()).forGetter(t -> t.conCat)
         );
         private static final Codec<AugmentGeneral> INTERNAL_CODEC = RecordCodecBuilder.create(inst ->
-                P2.apply(inst, (texture, categories) -> {
+                P3.apply(inst, (texture, categories, conCategories) -> {
                     AugmentGeneral general = new AugmentGeneral();
                     general.texture = texture;
+                    ConditionalLootCategory.addAll(conCategories, categories);
+                    general.conCat = conCategories;
                     general.categories = Collections.unmodifiableSet(categories);
                     return general;
                 }));
 
         private ResourceLocation texture;
         private Set<LootCategory> categories;
+        private Set<ConditionalLootCategory> conCat;
 
         public static App<RecordCodecBuilder.Mu<AugmentMeta>, AugmentGeneral> generalCodec() {
             return INTERNAL_CODEC.fieldOf("general").forGetter(t -> t.general);

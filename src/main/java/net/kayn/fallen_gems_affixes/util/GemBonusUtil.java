@@ -15,13 +15,7 @@ public class GemBonusUtil {
                     GemBonus.CODEC.fieldOf("bonus").forGetter(Function.identity()))
             .apply(inst, (conCategories, bonus) -> {
                 Set<LootCategory> categories = bonus.getGemClass().types();
-                if (conCategories != null && !conCategories.isEmpty()) {
-                    conCategories.forEach(cat -> {
-                        if (cat.test()) {
-                            categories.add(LootCategory.byId(cat.cat()));
-                        }
-                    });
-                }
+                ConditionalLootCategory.addAll(conCategories, categories);
                 return bonus;
             }));
 }

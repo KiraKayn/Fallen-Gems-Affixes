@@ -47,7 +47,7 @@ public class GemPowerAugment implements IAugment {
     @Override
     public IAugmentInnerData fallbackInnerData() {
         GemPowerData data = new GemPowerData();
-        data.power = 1.5f;
+        data.power = 0.5f;
         return data;
     }
 
@@ -112,7 +112,7 @@ public class GemPowerAugment implements IAugment {
 
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
-                .append(Component.translatable("fallen_gems_affixes.augment.gem_power.desc", power)
+                .append(Component.translatable("fallen_gems_affixes.augment.gem_power.desc", power + 1)
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
@@ -140,8 +140,15 @@ public class GemPowerAugment implements IAugment {
         }
 
         @Override
+        public IAugmentInnerData copy() {
+            var data = new GemPowerData();
+            data.power = power;
+            return data;
+        }
+
+        @Override
         public MutableComponent combineText() {
-            return Component.translatable(Fallen.Augments.GEM_POWER.getDescString(), power);
+            return Component.translatable(Fallen.Augments.GEM_POWER.getDescString(), power + 1);
         }
 
         @Override

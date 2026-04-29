@@ -182,6 +182,16 @@ public class DualityAugment implements IAugment {
         @Override public boolean isFunctional() { return true; }
 
         @Override
+        public IAugmentInnerData copy() {
+            var data = new DualityData();
+            data.critChanceMultiplier = critChanceMultiplier;
+            data.critDamageReduction = critDamageReduction;
+            data.physicalRatio = physicalRatio;
+            data.magicRatio = magicRatio;
+            return data;
+        }
+
+        @Override
         public MutableComponent combineText() {
             return Component.translatable(
                     "fallen_gems_affixes.augment.duality.socket_desc",

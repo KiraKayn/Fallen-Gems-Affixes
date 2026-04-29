@@ -1,5 +1,8 @@
 package net.kayn.fallen_gems_affixes;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
+import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
+import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipeSerializer;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRegistry;
 import net.kayn.fallen_gems_affixes.augment.*;
@@ -20,6 +23,8 @@ import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
 import net.rtxyd.fallen.lib.util.call.ContextKey;
 import net.rtxyd.fallen.lib.util.call.ContextKeyRegistry;
 
+import java.util.Map;
+
 public class Fallen {
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FallenGemsAffixes.MOD_ID);
@@ -27,6 +32,7 @@ public class Fallen {
     public static class ContextKeys {
         public static final ContextKey<Level> AUG_RECIPE_LEVEL = GameLifecycleHelper.registerContextKey("fga.augment_recipe.level");
         public static final ContextKey<Container> AUG_RECIPE_CONTAINER = GameLifecycleHelper.registerContextKey("fga.augment_recipe.container");
+        public static final ContextKey<Map<DynamicHolder<? extends Affix>, AffixInstance>> AFFIXES_HOLER = GameLifecycleHelper.registerContextKey("fga.special_event.affixes_holder");
         public static void register() {}
     }
 
@@ -96,6 +102,10 @@ public class Fallen {
          * used for augment cache
          */
         public static final String AUGMENT_CACHED_OBJECT = "fallen_gems_affixes:augments";
+        /**
+         * used to refresh affixes manually
+         */
+        public static final String AFFIXES_REFRESH_MARKER = "fga:refresh_marker";
         /**
          * used to store to modify affixes for affix power
          */

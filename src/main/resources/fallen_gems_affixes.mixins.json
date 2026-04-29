@@ -16,7 +16,8 @@
     "permanent_effect.InventoryMixin",
     "permanent_effect.LivingEntityMixin",
     "TieredAddSocketsRecipeMixin",
-    "TieredSocketingRecipeMixin"
+    "TieredSocketingRecipeMixin",
+    "StepFunctionMixin"
   ],
   "client": [
     "AugmentingScreenMixin",

@@ -161,6 +161,13 @@ public class SupremacyAugment implements IAugment {
         }
 
         @Override
+        public IAugmentInnerData copy() {
+            var data = new SupremacyData();
+            data.power = power;
+            return data;
+        }
+
+        @Override
         public MutableComponent combineText() {
             return Component.translatable("fallen_gems_affixes.augment.supremacy.desc", power);
         }

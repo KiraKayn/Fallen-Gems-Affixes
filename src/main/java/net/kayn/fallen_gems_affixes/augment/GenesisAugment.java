@@ -16,6 +16,7 @@ import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipe;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
+import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -75,11 +76,11 @@ public class GenesisAugment implements IAugment {
     public IAugmentInnerData fallbackInnerData() {
         GenesisData data = new GenesisData();
         data.originalAffixLevels = new CompoundTag();
-        data.defaultPower    = 0.5f;
+        data.defaultPower    = -0.5f;
         data.affixPowerBoost = 0.1f;
         data.gemPowerBoost   = 0.1f;
         data.affixPower      = 0.5f;
-        data.gemPower        = 0.5f;
+        data.gemPower        = -0.5f;
         data.bossKillCount   = 0;
 //        data.killedBossIds     = new HashSet<>();
 //        data.originalAffixLevels     = new CompoundTag();
@@ -142,22 +143,25 @@ public class GenesisAugment implements IAugment {
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
-                                "fallen_gems_affixes.augment.genesis.desc.default", defaultPower)
+                                "fallen_gems_affixes.augment.genesis.desc.default",
+                                MiscUtil.formatPercentage(defaultPower))
                         .withStyle(ChatFormatting.YELLOW)));
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
-                                "fallen_gems_affixes.augment.genesis.desc.affix_boost", affixBoost)
+                                "fallen_gems_affixes.augment.genesis.desc.affix_boost",
+                                MiscUtil.formatPercentage(affixBoost))
                         .withStyle(ChatFormatting.YELLOW)));
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
-                                "fallen_gems_affixes.augment.genesis.desc.gem_boost", gemBoost)
+                                "fallen_gems_affixes.augment.genesis.desc.gem_boost",
+                                MiscUtil.formatPercentage(gemBoost))
                         .withStyle(ChatFormatting.YELLOW)));
         tooltip.add(Component.literal("• ")
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
-                                "fallen_gems_affixes.augment.genesis.desc.augmentation_block", gemBoost)
+                                "fallen_gems_affixes.augment.genesis.desc.augmentation_block")
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
@@ -190,11 +194,11 @@ public class GenesisAugment implements IAugment {
                 })
         );
 
-        float defaultPower    = 0.5f;
+        float defaultPower    = -0.5f;
         float affixPowerBoost = 0.1f;
         float gemPowerBoost   = 0.1f;
-        float affixPower      = 0.5f;
-        float gemPower        = 0.5f;
+        float affixPower      = -0.5f;
+        float gemPower        = -0.5f;
         int   bossKillCount   = 0;
         final Set<String> killedBossIds     = new HashSet<>();
         CompoundTag originalAffixLevels     = new CompoundTag();
@@ -211,7 +215,7 @@ public class GenesisAugment implements IAugment {
         @Override
         public InsAttributeModifier getModifier() {
             return new InsAttributeModifier(
-                    InsAttributeModifier.Type.ADD_FINAL,
+                    InsAttributeModifier.Type.ADD_MULTIPLIED_FINAL,
                     MODIFIER_NAME,
                     getAffixPower());
         }
@@ -233,12 +237,25 @@ public class GenesisAugment implements IAugment {
         @Override public boolean isFunctional() { return true; }
 
         @Override
+        public IAugmentInnerData copy() {
+            var data = new GenesisData();
+            data.bossKillCount = bossKillCount;
+//            data.killedBossIds = killedBossIds;
+            data.affixPowerBoost = affixPowerBoost;
+            data.gemPower = gemPower;
+            data.gemPowerBoost = gemPowerBoost;
+            data.affixPowerBoost = affixPowerBoost;
+            data.affixPower = affixPower;
+            return data;
+        }
+
+        @Override
         public MutableComponent combineText() {
             return Component.translatable(
                     "fallen_gems_affixes.augment.genesis.socket_desc",
                     killedBossIds.size(),
-                    String.format("%.2f", affixPower),
-                    String.format("%.2f", gemPower));
+                    MiscUtil.formatPercentage(affixPower),
+                    MiscUtil.formatPercentage(gemPower));
         }
 
         @Override

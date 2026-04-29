@@ -194,6 +194,14 @@ public class CascadeAugment implements IAugment {
         @Override public boolean isFunctional() { return true; }
 
         @Override
+        public IAugmentInnerData copy() {
+            var data = new CascadeData();
+            data.chance = chance;
+            data.damageBonus = damageBonus;
+            return data;
+        }
+
+        @Override
         public MutableComponent combineText() {
             return Component.translatable(
                     "fallen_gems_affixes.augment.cascade.desc",

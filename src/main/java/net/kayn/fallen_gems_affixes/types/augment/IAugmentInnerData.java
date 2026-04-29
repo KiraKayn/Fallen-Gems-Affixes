@@ -30,6 +30,11 @@ public interface IAugmentInnerData extends INBTSerializable<CompoundTag>, ICodec
         }
 
         @Override
+        public IAugmentInnerData copy() {
+            return this;
+        }
+
+        @Override
         public MutableComponent combineText() {
             return Component.empty();
         };
@@ -47,6 +52,7 @@ public interface IAugmentInnerData extends INBTSerializable<CompoundTag>, ICodec
     void enable();
     void disable();
     boolean isFunctional();
+    IAugmentInnerData copy();
 
     MutableComponent combineText();
 }

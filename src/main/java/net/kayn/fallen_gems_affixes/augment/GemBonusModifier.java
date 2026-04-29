@@ -11,10 +11,12 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.rtxyd.fallen.lib.api.annotation.FallenInserter;
+import net.rtxyd.fallen.lib.api.annotation.Options;
 import net.rtxyd.fallen.lib.api.annotation.Params;
 import net.rtxyd.fallen.lib.type.util.patch.IInserterContext;
 import net.rtxyd.fallen.lib.util.ObjectModifierFactory;
 import net.rtxyd.fallen.lib.util.patch.InserterType;
+import net.rtxyd.fallen.lib.util.patch.PatchOption;
 
 import java.util.Map;
 
@@ -31,7 +33,7 @@ public class GemBonusModifier {
     public static final ThreadLocal<ItemStack> currentSuspendedItemStack = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
     public static final ThreadLocal<Boolean> clientMarker = ThreadLocal.withInitial(() -> false);
 
-    @FallenInserter(type = InserterType.STANDARD, params = @Params(catchOuterArgs = {}))
+    @FallenInserter(value = InserterType.STANDARD, options = @Options(PatchOption.REPLACE_RETURN))
     public static Object modifier(IInserterContext<Object, Object> ctx, Object... args) {
         if (args.length > 0 && args[0] instanceof LootRarity) {
             Object ret = ctx.ret();

@@ -5,7 +5,7 @@
     "categories": []
   },
   "inner_data": {
-    "power_boost": 2.0,
-    "power_nerf": 0.5
+    "power_boost": 1.0,
+    "power_nerf": -0.5
   }
 }

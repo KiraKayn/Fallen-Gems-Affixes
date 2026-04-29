@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.augment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
+import dev.shadowsoffire.apotheosis.adventure.affix.AttributeAffix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
@@ -10,8 +11,10 @@ import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.attachment.augment.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
+import net.kayn.fallen_gems_affixes.mixin.AttributeAffixAccessor;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
+import net.kayn.fallen_gems_affixes.util.MiscUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +23,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -34,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-@Mod.EventBusSubscriber
 public class MaliceAugment implements IAugment {
 
     public static final ResourceLocation MALICE_ID =
@@ -65,8 +69,8 @@ public class MaliceAugment implements IAugment {
     public IAugmentInnerData fallbackInnerData() {
         MaliceData data = new MaliceData();
         data.affixDominant = true;
-        data.powerBoost = 2.0f;
-        data.powerNerf = 0.5f;
+        data.powerBoost = 1.0f;
+        data.powerNerf = -0.5f;
         data.revealed = false;
         return data;
     }
@@ -118,19 +122,11 @@ public class MaliceAugment implements IAugment {
     @Override
     public MutableComponent organizeTooltipText(IAugmentInnerData innerData) {
         if (innerData instanceof MaliceData data && data.revealed) {
-            String key;
-            if (data.isAffixDominant()) {
                 return Component.translatable(
-                        "fallen_gems_affixes.augment.malice.socket_desc.affix",
-                        String.format("%.1f", data.getAffixPower()),
-                        String.format("%.1f", data.getGemPower())
+                        "fallen_gems_affixes.augment.malice.socket_desc",
+                        MiscUtil.formatPercentage(data.getAffixPower()),
+                        MiscUtil.formatPercentage(data.getGemPower())
                 ).withStyle(ChatFormatting.YELLOW);
-            }
-            return Component.translatable(
-                    "fallen_gems_affixes.augment.malice.socket_desc.gem",
-                    String.format("%.1f", data.getAffixPower()),
-                    String.format("%.1f", data.getGemPower())
-            ).withStyle(ChatFormatting.YELLOW);
         }
         return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.hidden")
                 .withStyle(ChatFormatting.GOLD);
@@ -139,6 +135,9 @@ public class MaliceAugment implements IAugment {
     @Override
     public void appendItemTooltip(ItemStack stack, @Nullable Level level,
                                   List<Component> tooltip, TooltipFlag flag) {
+        AugmentMeta meta = AugmentItem.getAugmentData(stack);
+        if (meta == null) return;
+        MaliceData data = (MaliceData) meta.newDefaultData();
         tooltip.add(Component.translatable("fallen_gems_affixes.augment.malice.type")
                 .withStyle(ChatFormatting.GOLD));
         tooltip.add(Component.literal("• ")
@@ -147,11 +146,15 @@ public class MaliceAugment implements IAugment {
                         .withStyle(ChatFormatting.YELLOW)));
         tooltip.add(Component.literal("  → ")
                 .withStyle(ChatFormatting.YELLOW)
-                .append(Component.translatable("fallen_gems_affixes.augment.malice.desc.option_a")
+                .append(Component.translatable("fallen_gems_affixes.augment.malice.desc.option_affix",
+                                MiscUtil.formatPercentage(data.getAffixPower()),
+                                MiscUtil.formatPercentage(data.getGemPower()))
                         .withStyle(ChatFormatting.YELLOW)));
         tooltip.add(Component.literal("  → ")
                 .withStyle(ChatFormatting.YELLOW)
-                .append(Component.translatable("fallen_gems_affixes.augment.malice.desc.option_b")
+                .append(Component.translatable("fallen_gems_affixes.augment.malice.desc.option_gem",
+                                MiscUtil.formatPercentage(data.getAffixPower()),
+                                MiscUtil.formatPercentage(data.getGemPower()))
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
@@ -171,8 +174,8 @@ public class MaliceAugment implements IAugment {
         );
 
         boolean affixDominant = true;
-        float   powerBoost    = 2.0f;
-        float   powerNerf     = 0.5f;
+        float   powerBoost    = 1.0f;
+        float   powerNerf     = -0.5f;
         boolean revealed      = false;
 
 
@@ -180,6 +183,16 @@ public class MaliceAugment implements IAugment {
         @Override public void enable()              {}
         @Override public void disable()             {}
         @Override public boolean isFunctional()     { return true; }
+
+        @Override
+        public IAugmentInnerData copy() {
+            var data = new MaliceData();
+            data.affixDominant = affixDominant;
+            data.powerBoost = powerBoost;
+            data.powerNerf = powerNerf;
+            data.revealed = revealed;
+            return data;
+        }
 
         public boolean isRevealed() {
             return revealed;
@@ -210,7 +223,7 @@ public class MaliceAugment implements IAugment {
                 return InsAttributeModifier.EMPTY;
             }
             return new InsAttributeModifier(
-                    InsAttributeModifier.Type.ADD_FINAL,
+                    InsAttributeModifier.Type.ADD_MULTIPLIED_FINAL,
                     MODIFIER_NAME,
                     getAffixPower());
         }
@@ -225,11 +238,9 @@ public class MaliceAugment implements IAugment {
 
         @Override
         public MutableComponent combineText() {
-            if (affixDominant)
-                return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.affix",
-                        String.format("%.1f", getAffixPower()), String.format("%.1f", getGemPower()));
-            return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc.gem",
-                    String.format("%.1f", getGemPower()), String.format("%.1f", getAffixPower()));
+            return Component.translatable("fallen_gems_affixes.augment.malice.socket_desc",
+                    MiscUtil.formatPercentage(getAffixPower()),
+                    MiscUtil.formatPercentage(getGemPower()));
         }
 
         @Override

@@ -1,10 +1,12 @@
 package net.kayn.fallen_gems_affixes.util;
 
 import com.google.gson.JsonObject;
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import net.kayn.fallen_gems_affixes.recipe.ErasureRecipe;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,18 @@ public class MiscUtil {
 
     public static void startCooldown(ResourceLocation id, LivingEntity entity) {
         entity.getPersistentData().putLong("fga._cooldown." + id.toString(), entity.level().getGameTime());
+    }
+
+    public static String formatPercentage(float value) {
+        return String.format("%s%s%%", value < 0 ? "" : "+", fmt(value * 100));
+    }
+
+    public static String fmt(float f) {
+        long l = (long) f;
+        if (f == (float) l) {
+            return Long.toString(l);
+        }
+        return ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(f);
     }
 
     public static <T extends Recipe<?>> Supplier<RecipeSerializer<T>> simpleRecipeSerializer(Supplier<T> supplier) {

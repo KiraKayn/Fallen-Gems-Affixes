@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
@@ -19,5 +20,14 @@ public record ConditionalLootCategory(Optional<String> modid, String cat) {
     public boolean test() {
         if (modid().isEmpty()) return false;
         return ModList.get().isLoaded(modid.get());
+    }
+    public static void addAll(Set<ConditionalLootCategory> conCategories, Set<LootCategory> categories) {
+        if (conCategories != null && !conCategories.isEmpty()) {
+            conCategories.forEach(cat -> {
+                if (cat.test()) {
+                    categories.add(LootCategory.byId(cat.cat()));
+                }
+            });
+        }
     }
 }

@@ -26,9 +26,7 @@ import java.util.List;
 
 @FallenPatch(
         priority = 1000,
-        targets = @Targets(
-                exact = {},
-                subclass = {GemBonus.class}),
+        targets = @Targets(subclass = {GemBonus.class}),
         inserters = {GemBonusModifier.class})
 public class GemPowerPatch implements IFallenPatch {
     private final IPatchDescriptor desc;

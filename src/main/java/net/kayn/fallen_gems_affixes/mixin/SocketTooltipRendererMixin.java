@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Mixin(value = SocketTooltipRenderer.class)
+@Mixin(value = SocketTooltipRenderer.class, remap = false)
 public class SocketTooltipRendererMixin {
 
     @Shadow @Final public static ResourceLocation SOCKET;
@@ -40,7 +40,7 @@ public class SocketTooltipRendererMixin {
     @Shadow @Final private SocketTooltipRenderer.SocketComponent comp;
     @Shadow @Final private int spacing;
 
-    @Inject(method = "renderText", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderText", at = @At("HEAD"), cancellable = true, remap = true)
     private void renderTieredText(Font font, int x, int y, Matrix4f matrix,
                                   BufferSource bufferSource, CallbackInfo ci) {
 
@@ -93,7 +93,7 @@ public class SocketTooltipRendererMixin {
         }
     }
 
-    @Inject(method = "renderImage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderImage", at = @At("HEAD"), cancellable = true, remap = true)
     private void renderTieredImage(Font font, int x, int y, GuiGraphics gfx, CallbackInfo ci) {
 
         ItemStack socketed = this.comp.socketed();
