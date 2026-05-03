@@ -215,7 +215,7 @@ public class GenesisAugment implements IAugment {
         @Override
         public InsAttributeModifier getModifier() {
             return new InsAttributeModifier(
-                    InsAttributeModifier.Type.ADD_MULTIPLIED_FINAL,
+                    InsAttributeModifier.Type.ADD_MULTIPLIED_BASE,
                     MODIFIER_NAME,
                     getAffixPower());
         }

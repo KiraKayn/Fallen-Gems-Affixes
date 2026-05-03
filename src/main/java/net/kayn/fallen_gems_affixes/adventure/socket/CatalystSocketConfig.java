@@ -29,7 +29,7 @@ public final class CatalystSocketConfig extends SimplePreparableReloadListener<O
 
     @Override
     protected Optional<JsonObject> prepare(ResourceManager manager, ProfilerFiller profiler) {
-        return manager.getResource(new net.minecraft.resources.ResourceLocation("fallen_gems_affixes", PATH))
+        return manager.getResource(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", PATH))
                 .map(resource -> {
                     try (InputStreamReader reader = new InputStreamReader(resource.open())) {
                         return GSON.fromJson(reader, JsonObject.class);

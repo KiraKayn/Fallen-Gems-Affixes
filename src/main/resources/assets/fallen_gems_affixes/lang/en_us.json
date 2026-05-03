@@ -655,5 +655,10 @@
   "bonus.fallen_gems_affixes.holy_mark": "Hallowed Mark",
   "bonus.fallen_gems_affixes.holy_mark.desc": "On Arrow Hit: Mark your target. Your next shot calls %1$s down on all enemies in range [Radius: %2$s] [%3$s]",
 
-  "fallen_gems_affixes.augment_slot": "Empty Tablet"
+  "fallen_gems_affixes.augment_slot": "Empty Tablet",
+
+  "item.fallen_gems_affixes.augment.convergence": "Augment of Convergence",
+  "fallen_gems_affixes.augment.convergence.type": "Convergence:",
+  "fallen_gems_affixes.augment.convergence.desc": "Each affix gives %s flat Gem Power, while each gem gives %s flat Affix Power.",
+  "fallen_gems_affixes.augment.convergence.socket_desc": "Affix: %1$s Power | Gem: %2$s Power"
 }

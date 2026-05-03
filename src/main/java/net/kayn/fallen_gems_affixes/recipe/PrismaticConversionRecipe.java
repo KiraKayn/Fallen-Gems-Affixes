@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class PrismaticConversionRecipe extends SmithingTransformRecipe {
 
-    private static final ResourceLocation ID = new ResourceLocation("fallen_gems_affixes:prismatic_conversion");
+    private static final ResourceLocation ID = ResourceLocation.parse("fallen_gems_affixes:prismatic_conversion");
 
     public PrismaticConversionRecipe() {
         super(ID, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(ModItems.SIGIL_OF_PRISMATIC_CONVERSION.get()), ItemStack.EMPTY);

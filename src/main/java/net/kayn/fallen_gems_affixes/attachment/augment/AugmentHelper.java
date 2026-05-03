@@ -5,6 +5,7 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.mod_events.ApplyAugmentEvent;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
+import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -82,7 +83,9 @@ public class AugmentHelper {
                 if (augment != null) {
                     CompoundTag inner = tag.getCompound(INNER_DATA);
                     if (inner.isEmpty()) continue;
-                    map.put(augment, new AugmentInstance(augment, augment.deserializeInnerData(inner)));
+                    IAugmentInnerData data = augment.deserializeInnerData(inner);
+                    data.stackContext(stack);
+                    map.put(augment, new AugmentInstance(augment, data));
                 }
             }
         }
