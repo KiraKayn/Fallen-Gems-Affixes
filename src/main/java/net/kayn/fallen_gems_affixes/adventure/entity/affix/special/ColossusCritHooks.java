@@ -2,6 +2,7 @@ package net.kayn.fallen_gems_affixes.adventure.entity.affix.special;
 
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -22,7 +23,8 @@ public final class ColossusCritHooks {
     private static final UUID NO_CRIT_UUID = UUID.fromString("7e3f1b44-4d1d-4b0e-8e7a-8d7a9f8f2c11");
 
     private static final AttributeModifier NO_CRIT_MOD =
-            new AttributeModifier(NO_CRIT_UUID, "fallen_gems_affixes:colossus_no_crit", -1000.0D, Operation.ADDITION);
+            new AttributeModifier(NO_CRIT_UUID, "fallen_gems_affixes:colossus_no_crit",
+                    -1000.0D, Operation.ADDITION);
 
     private static final Map<UUID, Integer> SUPPRESSED = new HashMap<>();
 
@@ -37,10 +39,8 @@ public final class ColossusCritHooks {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void suppressApothCrit(LivingHurtEvent e) {
-        if (!(e.getEntity() instanceof LivingEntity)) return;
         LivingEntity target = e.getEntity();
         if (!hasColossus(target)) return;
-
         if (!(e.getSource().getEntity() instanceof LivingEntity attacker)) return;
 
         AttributeInstance critChance = attacker.getAttribute(ALObjects.Attributes.CRIT_CHANCE.get());
@@ -66,18 +66,16 @@ public final class ColossusCritHooks {
         depth--;
         if (depth <= 0) {
             SUPPRESSED.remove(id);
-
             AttributeInstance critChance = attacker.getAttribute(ALObjects.Attributes.CRIT_CHANCE.get());
-            if (critChance != null) {
-                critChance.removeModifier(NO_CRIT_UUID);
-            }
+            if (critChance != null) critChance.removeModifier(NO_CRIT_UUID);
         } else {
             SUPPRESSED.put(id, depth);
         }
     }
 
     private static boolean hasColossus(LivingEntity entity) {
-        return false;
+        return MobAffixHelper.getAffixes(entity).stream()
+                .anyMatch(r -> r.affix() instanceof ColossusAffix);
     }
 
     private ColossusCritHooks() {}

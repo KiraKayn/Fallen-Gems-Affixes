@@ -34,6 +34,9 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
     public static final UUID   FORTIFY_UUID = UUID.fromString("f07f1f00-aaaa-bbbb-cccc-000000000001");
     public static final String FORTIFY_NAME = "fga:fortify_armor";
 
+    public static final UUID   ENTITY_FORTIFY_UUID = UUID.fromString("f07f1f00-aaaa-bbbb-cccc-000000000002");
+    public static final String ENTITY_FORTIFY_NAME = "fga:entity_fortify_armor";
+
     public static final Codec<FortifyAffix> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(
                     GemBonus.VALUES_CODEC.fieldOf("values").forGetter(a -> a.values),
@@ -48,6 +51,7 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
         this.values = values;
         this.types  = types;
     }
+
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
@@ -99,6 +103,7 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
         return total;
     }
 
+
     @Override
     public void tickEntityAffix(LivingEntity entity, LootRarity rarity, float level) {
         Vec3 lastPos = entity.position();
@@ -107,15 +112,14 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
             AttributeInstance armorAttr = entity.getAttribute(Attributes.ARMOR);
             if (armorAttr == null) return;
 
-            // Remove first to get clean baseline
-            armorAttr.removeModifier(FORTIFY_UUID);
+            armorAttr.removeModifier(ENTITY_FORTIFY_UUID);
             float bonus = values.get(rarity).get(level);
             if (bonus <= 0f) return;
 
             if (entity.position().distanceToSqr(lastPos) < 0.001) {
                 double base = armorAttr.getValue();
                 armorAttr.addTransientModifier(new AttributeModifier(
-                        FORTIFY_UUID, FORTIFY_NAME,
+                        ENTITY_FORTIFY_UUID, ENTITY_FORTIFY_NAME,
                         base * bonus,
                         AttributeModifier.Operation.ADDITION));
             }
@@ -123,9 +127,8 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
     }
 
     @Override
-    public int tickInterval() {
-        return 5;
-    }
+    public int tickInterval() { return 5; }
+
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
@@ -142,7 +145,5 @@ public class FortifyAffix extends Affix implements EntityAffixBehavior {
     }
 
     @Override
-    public Codec<? extends Affix> getCodec() {
-        return CODEC;
-    }
+    public Codec<? extends Affix> getCodec() { return CODEC; }
 }
