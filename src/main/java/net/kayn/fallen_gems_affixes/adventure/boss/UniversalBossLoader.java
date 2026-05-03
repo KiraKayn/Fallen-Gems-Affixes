@@ -8,8 +8,11 @@ import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarity;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarityRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -17,6 +20,7 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
+import net.rtxyd.fallen.lib.runtime.forgemod.addon.apotheosis.AFallenRarity;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -52,33 +56,33 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     private static UniversalBossConfig tryResolve() {
         if (RAW_TIER_CHANCES.isEmpty()) return null;
 
-        Map<LootRarity, Float> tierChances = new LinkedHashMap<>();
+        Map<FallenRarity, Float> tierChances = new LinkedHashMap<>();
         for (Map.Entry<String, Float> e : RAW_TIER_CHANCES.entrySet()) {
-            LootRarity r = resolveRarity(e.getKey());
+            FallenRarity r = resolveRarity(e.getKey());
             if (r != null) tierChances.put(r, e.getValue());
             else FallenGemsAffixes.LOGGER.warn("[FGA] Cannot resolve rarity '{}'", e.getKey());
         }
 
-        Map<LootRarity, BossStats> statsMap = new LinkedHashMap<>();
+        Map<FallenRarity, BossStats> statsMap = new LinkedHashMap<>();
         for (Map.Entry<String, BossStats> e : RAW_STATS.entrySet()) {
-            LootRarity r = resolveRarity(e.getKey());
+            FallenRarity r = resolveRarity(e.getKey());
             if (r != null) statsMap.put(r, e.getValue());
         }
 
-        Map<ResourceLocation, List<LootRarity>> dimensionRarities = new LinkedHashMap<>();
+        Map<ResourceLocation, List<FallenRarity>> dimensionRarities = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> e : RAW_DIMENSION_RARITIES.entrySet()) {
             ResourceLocation dimId = ResourceLocation.parse(e.getKey());
-            List<LootRarity> rarities = new ArrayList<>();
+            List<FallenRarity> rarities = new ArrayList<>();
             for (String name : e.getValue()) {
-                LootRarity r = resolveRarity(name);
+                FallenRarity r = resolveRarity(name);
                 if (r != null) rarities.add(r);
             }
             if (!rarities.isEmpty()) dimensionRarities.put(dimId, rarities);
         }
 
-        Map<LootRarity, Float> gearBonus = new LinkedHashMap<>();
+        Map<FallenRarity, Float> gearBonus = new LinkedHashMap<>();
         for (Map.Entry<String, Float> e : RAW_GEAR_BONUS.entrySet()) {
-            LootRarity r = resolveRarity(e.getKey());
+            FallenRarity r = resolveRarity(e.getKey());
             if (r != null) gearBonus.put(r, e.getValue());
         }
 
@@ -94,14 +98,11 @@ public class UniversalBossLoader extends SimpleJsonResourceReloadListener {
     }
 
     @Nullable
-    private static LootRarity resolveRarity(String name) {
-        DynamicHolder<LootRarity> holder = RarityRegistry.byLegacyId(name);
-        if (holder.isBound()) return holder.get();
-
-        for (LootRarity rarity : RarityRegistry.INSTANCE.getValues()) {
-            ResourceLocation id = RarityRegistry.INSTANCE.getKey(rarity);
+    private static FallenRarity resolveRarity(String name) {
+        for (var en : Fallen.Registries.RARITY_REGISTRY) {
+            ResourceLocation id = en.getKey();
             if (id != null && id.getPath().equalsIgnoreCase(name)) {
-                return rarity;
+                return en.getValue();
             }
         }
 
