@@ -5,11 +5,14 @@ import dev.shadowsoffire.apotheosis.adventure.boss.BossStats;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEntry;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixHelper;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixInstance;
 import net.kayn.fallen_gems_affixes.adventure.entity.MobAffixHelper;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarity;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarityRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,6 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import dev.shadowsoffire.placebo.json.ChancedEffectInstance;
 import dev.shadowsoffire.placebo.json.RandomAttributeModifier;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.ILocalRarity;
 
 import java.util.*;
 
@@ -51,12 +55,12 @@ public class UniversalBossEventHandler {
         if (config.isBlacklisted(mob.getType(), entityId)) return;
 
         ResourceLocation dimensionId = event.getLevel().getLevel().dimension().location();
-        List<LootRarity> allowed = config.getRaritiesForDimension(dimensionId);
+        List<FallenRarity> allowed = config.getRaritiesForDimension(dimensionId);
         if (allowed != null && allowed.isEmpty()) return;
 
-        Set<LootRarity> allowedSet = allowed != null ? new java.util.HashSet<>(allowed) : null;
+        Set<FallenRarity> allowedSet = allowed != null ? new java.util.HashSet<>(allowed) : null;
 
-        Map<LootRarity, Float> gearBonuses = Collections.emptyMap();
+        Map<FallenRarity, Float> gearBonuses = Collections.emptyMap();
         if (!config.gearBonus().isEmpty()) {
             Player nearestPlayer = event.getLevel().getLevel()
                     .getNearestPlayer(event.getX(), event.getY(), event.getZ(), 64, false);
@@ -67,16 +71,17 @@ public class UniversalBossEventHandler {
                     if (item.isEmpty()) continue;
                     DynamicHolder<LootRarity> rarityHolder = AffixHelper.getRarity(item);
                     if (!rarityHolder.isBound()) continue;
-                    LootRarity itemRarity = rarityHolder.get();
-                    Float bonus = config.gearBonus().get(itemRarity);
+                    ILocalRarity itemRarity = (ILocalRarity) rarityHolder.get();
+                    FallenRarity rarity = (FallenRarity) Fallen.Registries.RARITY_REGISTRY.rarityRegistry.getRarityMapView().get(itemRarity.fallen_lib$getId());
+                    Float bonus = config.gearBonus().get(rarity);
                     if (bonus != null && bonus > 0f) {
-                        gearBonuses.merge(itemRarity, bonus, Float::sum);
+                        gearBonuses.merge(rarity, bonus, Float::sum);
                     }
                 }
             }
         }
 
-        LootRarity rarity = config.rollRarity(mob.getRandom(), allowedSet, gearBonuses);
+        FallenRarity rarity = config.rollRarity(mob.getRandom(), allowedSet, gearBonuses);
         if (rarity == null) return;
 
         BossStats stats = config.stats().get(rarity);
@@ -90,12 +95,14 @@ public class UniversalBossEventHandler {
         data.putBoolean(TAG, true);
         data.putString(TAG + ".rarity", config.getRarityKey(rarity));
         data.putBoolean("apoth.boss", true);
-        ResourceLocation rarityId = RarityRegistry.INSTANCE.getKey(rarity);
-        String rarityIdStr = rarityId != null ? rarityId.toString() : config.getRarityKey(rarity);
-        data.putString("apoth.rarity", rarityIdStr);
+        if (rarity.getRarity() instanceof LootRarity r) {
+            ResourceLocation rarityId = RarityRegistry.INSTANCE.getKey(r);
+            String rarityIdStr = rarityId != null ? rarityId.toString() : config.getRarityKey(rarity);
+            data.putString("apoth.rarity", rarityIdStr);
+        }
     }
 
-    private static void applyBoss(Mob mob, BossStats stats, LootRarity rarity, UniversalBossConfig config) {
+    private static void applyBoss(Mob mob, BossStats stats, FallenRarity rarity, UniversalBossConfig config) {
         int duration = mob instanceof Creeper ? 6000 : Integer.MAX_VALUE;
 
         for (ChancedEffectInstance inst : stats.effects()) {
@@ -142,22 +149,23 @@ public class UniversalBossEventHandler {
                 MobAffixHelper.addAffix(mob, entry.affixId(), entry.level());
             }
         }
+        if (rarity.getRarity() instanceof LootRarity r) {
+            String rarityPath = RarityRegistry.INSTANCE.getKey(r) != null
+                    ? Objects.requireNonNull(RarityRegistry.INSTANCE.getKey(r)).getPath() : "unknown";
+            String rarityTitle = rarityPath.substring(0, 1).toUpperCase() + rarityPath.substring(1);
+            Component mobName = mob.hasCustomName() ? mob.getCustomName() : mob.getName();
+            assert mobName != null;
+            MutableComponent name;
 
-        String rarityPath = RarityRegistry.INSTANCE.getKey(rarity) != null
-                ? Objects.requireNonNull(RarityRegistry.INSTANCE.getKey(rarity)).getPath() : "unknown";
-        String rarityTitle = rarityPath.substring(0, 1).toUpperCase() + rarityPath.substring(1);
-        Component mobName = mob.hasCustomName() ? mob.getCustomName() : mob.getName();
-        assert mobName != null;
-        MutableComponent name;
-
-        if (net.kayn.fallen_gems_affixes.config.ModConfig.SHOW_BOSS_RARITY_NAME.get()) {
-            name = Component.literal(rarityTitle + " ")
-                    .withStyle(Style.EMPTY.withColor(rarity.getColor()))
-                    .append(mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
-        } else {
-            name = mobName.copy().withStyle(Style.EMPTY.withColor(rarity.getColor()));
+            if (net.kayn.fallen_gems_affixes.config.ModConfig.SHOW_BOSS_RARITY_NAME.get()) {
+                name = Component.literal(rarityTitle + " ")
+                        .withStyle(Style.EMPTY.withColor(r.getColor()))
+                        .append(mobName.copy().withStyle(Style.EMPTY.withColor(r.getColor())));
+            } else {
+                name = mobName.copy().withStyle(Style.EMPTY.withColor(r.getColor()));
+            }
+            mob.setCustomName(name);
+            mob.setCustomNameVisible(false);
         }
-        mob.setCustomName(name);
-        mob.setCustomNameVisible(false);
     }
 }

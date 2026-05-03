@@ -17,7 +17,8 @@
     "permanent_effect.LivingEntityMixin",
     "TieredAddSocketsRecipeMixin",
     "TieredSocketingRecipeMixin",
-    "StepFunctionMixin"
+    "StepFunctionMixin",
+    "RarityRegistryMixin"
   ],
   "client": [
     "AugmentingScreenMixin",

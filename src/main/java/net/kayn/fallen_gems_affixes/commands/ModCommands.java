@@ -18,6 +18,8 @@ import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentSlotHelper;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarity;
+import net.kayn.fallen_gems_affixes.attachment.rarity.FallenRarityRegistry;
 import net.kayn.fallen_gems_affixes.item.AffixScrollItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.minecraft.commands.CommandBuildContext;
@@ -63,7 +65,7 @@ public class ModCommands {
 
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_RARITY = (ctx, builder) ->
             SharedSuggestionProvider.suggest(
-                    RarityRegistry.INSTANCE.getKeys().stream().map(ResourceLocation::toString), builder);
+                    Fallen.Registries.RARITY_REGISTRY.rarityRegistry.getRarityMapView().keySet().stream().map(ResourceLocation::toString), builder);
 
     public static final SuggestionProvider<CommandSourceStack> SUGGEST_AFFIX = (ctx, builder) ->
             SharedSuggestionProvider.suggest(
@@ -156,8 +158,8 @@ public class ModCommands {
                                       ResourceLocation entityId,
                                       ResourceLocation rarityId,
                                       Vec3 pos) throws CommandSyntaxException {
-        DynamicHolder<LootRarity> rarityHolder = RarityRegistry.INSTANCE.holder(rarityId);
-        if (!rarityHolder.isBound()) {
+        var rarity = (FallenRarity) Fallen.Registries.RARITY_REGISTRY.rarityRegistry.getRarityMapView().get(rarityId);
+        if (rarity == null) {
             ctx.getSource().sendFailure(Component.literal("Unknown rarity: " + rarityId));
             return -1;
         }
@@ -180,7 +182,6 @@ public class ModCommands {
         mob.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, 0, 0);
         mob.finalizeSpawn(level, level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.COMMAND, null, null);
 
-        LootRarity rarity = rarityHolder.get();
         UniversalBossConfig config = UniversalBossLoader.getConfig();
         if (config != null) {
             var stats = config.stats().get(rarity);
@@ -228,11 +229,11 @@ public class ModCommands {
         mob.getPersistentData().putBoolean("fga.universal_boss", true);
         mob.getPersistentData().putString("fga.universal_boss.rarity", rarityId.getPath());
         mob.getPersistentData().putBoolean("apoth.boss", true);
-        ResourceLocation resId = RarityRegistry.INSTANCE.getKey(rarity);
+        ResourceLocation resId = rarity.getClassifier();
         String rarityIdStr = resId != null ? resId.toString() : rarityId.toString();
         mob.getPersistentData().putString("apoth.rarity", rarityIdStr);
 
-        mob.setCustomName(mob.getName().copy().withStyle(Style.EMPTY.withColor(rarity.getColor())));
+        mob.setCustomName(mob.getName().copy().withStyle(Style.EMPTY.withColor(1234)));
         mob.setCustomNameVisible(false);
 
         level.addFreshEntity(mob);
