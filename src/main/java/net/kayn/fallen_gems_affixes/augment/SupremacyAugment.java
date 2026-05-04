@@ -139,7 +139,7 @@ public class SupremacyAugment implements IAugment {
 
         @Override
         public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
-            return !(either.getA().get() instanceof DurableAffix);
+            return IAffixPowerProvider.super.test(either);
         }
 
         @Override

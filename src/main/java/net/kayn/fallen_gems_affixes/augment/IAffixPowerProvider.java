@@ -4,11 +4,10 @@ import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import net.kayn.fallen_gems_affixes.adventure.affix.SocketBonusAffix;
 import net.rtxyd.fallen.lib.util.IEither;
 import net.rtxyd.fallen.lib.util.ins_attr.IFilterableIAMProvider;
 import net.rtxyd.fallen.lib.util.ins_attr.InsAttributeModifier;
-
-import java.util.function.Predicate;
 
 public interface IAffixPowerProvider extends IFilterableIAMProvider<IEither<DynamicHolder<? extends Affix>, GemBonus>> {
     float getAffixPower();
@@ -21,6 +20,7 @@ public interface IAffixPowerProvider extends IFilterableIAMProvider<IEither<Dyna
     }
     @Override
     default boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> a) {
-        return !(a.getA().get() instanceof DurableAffix);
+        Affix affix = a.getA().get();
+        return !(affix instanceof DurableAffix || affix instanceof SocketBonusAffix);
     }
 }

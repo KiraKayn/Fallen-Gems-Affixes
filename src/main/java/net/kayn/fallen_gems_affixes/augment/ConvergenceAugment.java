@@ -11,10 +11,7 @@ import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
-import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipe;
-import net.kayn.fallen_gems_affixes.attachment.augment.SpecialAffixEventHandler;
+import net.kayn.fallen_gems_affixes.attachment.augment.*;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -175,8 +172,8 @@ public class ConvergenceAugment implements IAugment {
         }
 
         @Override
-        public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> a) {
-            return !(a.getA().get() instanceof DurableAffix);
+        public boolean test(IEither<DynamicHolder<? extends Affix>, GemBonus> either) {
+            return IAffixPowerProvider.super.test(either);
         }
 
         @Override

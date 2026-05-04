@@ -1,6 +1,5 @@
 package net.kayn.fallen_gems_affixes.attachment.augment;
 
-import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.mod_events.ApplyAugmentEvent;
