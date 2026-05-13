@@ -114,6 +114,7 @@ public class Fallen {
         public static final ResourceLocation AUGMENT_CAP_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "augment_cap");
         public static final ResourceLocation FABLED_ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "fabled");
         // Not a tag key
+        public static final String ADDITIONAL_SOCKET_AFFIX_CACHE = "fallen_gems_affixes:additional_socket";
         /**
          * used for augment cache
          */
@@ -178,6 +179,7 @@ public class Fallen {
         public static final IAugment CASCADE = Registries.AUGMENT_REGISTRY.register(new CascadeAugment());
         public static final IAugment DUALITY = Registries.AUGMENT_REGISTRY.register(new DualityAugment());
         public static final IAugment MALICE = Registries.AUGMENT_REGISTRY.register(new MaliceAugment());
+        public static final IAugment CONVERGENCE = Registries.AUGMENT_REGISTRY.register(new ConvergenceAugment());
 
         public static void bootstrap() {
 

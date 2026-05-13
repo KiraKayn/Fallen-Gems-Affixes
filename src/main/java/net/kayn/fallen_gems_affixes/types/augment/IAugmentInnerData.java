@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.rtxyd.fallen.lib.runtime.forgemod.util.ICodecProvider;
 
@@ -52,6 +53,7 @@ public interface IAugmentInnerData extends INBTSerializable<CompoundTag>, ICodec
     void enable();
     void disable();
     boolean isFunctional();
+    default void stackContext(ItemStack stack) {}
     IAugmentInnerData copy();
 
     MutableComponent combineText();

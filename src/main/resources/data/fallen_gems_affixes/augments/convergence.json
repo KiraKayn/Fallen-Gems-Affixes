@@ -1,0 +1,11 @@
+{
+  "augment": "fallen_gems_affixes:convergence",
+  "general": {
+    "texture": "fallen_gems_affixes:textures/item/augments/convergence.png",
+    "categories": []
+  },
+  "inner_data": {
+    "each_affix_power": 0.05,
+    "each_gem_power": 0.05
+  }
+}

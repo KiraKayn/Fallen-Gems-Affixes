@@ -7,14 +7,17 @@ import dev.shadowsoffire.apotheosis.adventure.affix.AffixType;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.placebo.util.StepFunction;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 import java.util.Set;
 
 public class SocketBonusAffix extends Affix {
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "socket_bonus");
     public static final Codec<SocketBonusAffix> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
                     LootRarity.mapCodec(SocketData.CODEC).fieldOf("values").forGetter(a -> a.values),

@@ -27,6 +27,10 @@ public class MiscUtil {
         return String.format("%s%s%%", value < 0 ? "" : "+", fmt(value * 100));
     }
 
+    public static String formatFlat(float value) {
+        return String.format("%s%s", value < 0 ? "" : "+", value);
+    }
+
     public static String fmt(float f) {
         long l = (long) f;
         if (f == (float) l) {

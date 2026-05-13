@@ -82,6 +82,7 @@ public class AugmentTooltipHandler {
 
             if (augment != null) {
                 IAugmentInnerData inner = augment.deserializeInnerData(tag.getCompound(INNER_DATA));
+                inner.stackContext(stack);
                 event.getTooltipElements().add(remove, Either.right(new AugmentTooltipComponent(augment, inner)));
             } else {
                 event.getTooltipElements().add(remove, Either.right(new AugmentTooltipComponent(null, null)));
