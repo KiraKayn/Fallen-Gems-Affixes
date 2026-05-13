@@ -5,13 +5,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
-import dev.shadowsoffire.apotheosis.adventure.affix.effect.DurableAffix;
 import dev.shadowsoffire.apotheosis.adventure.socket.SocketHelper;
 import dev.shadowsoffire.apotheosis.adventure.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
-import net.kayn.fallen_gems_affixes.attachment.augment.*;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentInstance;
+import net.kayn.fallen_gems_affixes.attachment.augment.AugmentMeta;
 import net.kayn.fallen_gems_affixes.item.augments.AugmentItem;
 import net.kayn.fallen_gems_affixes.types.augment.IAugment;
 import net.kayn.fallen_gems_affixes.types.augment.IAugmentInnerData;
@@ -118,7 +118,7 @@ public class ConvergenceAugment implements IAugment {
                 .withStyle(ChatFormatting.YELLOW)
                 .append(Component.translatable(
                                 "fallen_gems_affixes.augment.convergence.desc",
-                                MiscUtil.formatFlat(eachGemPower), MiscUtil.formatFlat(eachAffixPower))
+                                MiscUtil.formatPercentage(eachGemPower), MiscUtil.formatPercentage(eachAffixPower))
                         .withStyle(ChatFormatting.YELLOW)));
     }
 
@@ -211,7 +211,7 @@ public class ConvergenceAugment implements IAugment {
         @Override
         public MutableComponent combineText() {
             return Component.translatable("fallen_gems_affixes.augment.convergence.socket_desc",
-                    MiscUtil.formatFlat(getAffixPower()), MiscUtil.formatFlat(getGemPower()));
+                    MiscUtil.formatPercentage(getAffixPower()), MiscUtil.formatPercentage(getGemPower()));
         }
 
         @Override

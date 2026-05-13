@@ -659,6 +659,6 @@
 
   "item.fallen_gems_affixes.augment.convergence": "Augment of Convergence",
   "fallen_gems_affixes.augment.convergence.type": "Convergence:",
-  "fallen_gems_affixes.augment.convergence.desc": "Each affix gives %s flat Gem Power, while each gem gives %s flat Affix Power.",
-  "fallen_gems_affixes.augment.convergence.socket_desc": "Affix: %1$s Power | Gem: %2$s Power"
+  "fallen_gems_affixes.augment.convergence.desc": "Grants %s Gem Power per Affix and %s Affix Power per Gem",
+  "fallen_gems_affixes.augment.convergence.socket_desc": "Affix Power: %1$s | Gem Power: %2$s"
 }
