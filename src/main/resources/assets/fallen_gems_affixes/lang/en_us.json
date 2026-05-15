@@ -655,12 +655,16 @@
   "bonus.fallen_gems_affixes.holy_mark": "Hallowed Mark",
   "bonus.fallen_gems_affixes.holy_mark.desc": "On Arrow Hit: Mark your target. Your next shot calls %1$s down on all enemies in range [Radius: %2$s] [%3$s]",
 
-  "fallen_gems_affixes.augment_slot": "Empty Tablet",
+  "fallen_gems_affixes.augment_slot": "Empty Inlay",
 
   "item.fallen_gems_affixes.augment.convergence": "Augment of Convergence",
   "fallen_gems_affixes.augment.convergence.type": "Convergence:",
   "fallen_gems_affixes.augment.convergence.desc": "Grants %s Gem Power per Affix and %s Affix Power per Gem",
   "fallen_gems_affixes.augment.convergence.socket_desc": "Affix Power: %1$s | Gem Power: %2$s",
 
-  "bonus.fallen_gems_affixes.echoing_strike.desc": "Striking an enemy triggers a second hit dealing %s damage after %s"
+  "bonus.fallen_gems_affixes.echoing_strike.desc": "Striking an enemy triggers a second hit dealing %s damage after %s",
+
+  "item.fallen_gems_affixes.sigil_of_confluence": "Sigil of Confluence",
+  "item.fallen_gems_affixes.sigil_of_confluence.desc": "Merges the affixes, sockets and gems of two identical items",
+  "item.fallen_gems_affixes.sigil_of_confluence.desc2": "The item will no longer be able to receive Augments"
 }

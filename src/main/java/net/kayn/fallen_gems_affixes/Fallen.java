@@ -2,7 +2,6 @@ package net.kayn.fallen_gems_affixes;
 
 import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRecipeSerializer;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentRegistry;
@@ -24,7 +23,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.rtxyd.fallen.lib.runtime.forgemod.network.Connection;
 import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
-import net.rtxyd.fallen.lib.runtime.forgemod.util.ManualLazyRegistry;
 import net.rtxyd.fallen.lib.util.call.ContextKey;
 
 import java.util.Map;
@@ -104,6 +102,9 @@ public class Fallen {
         public static final RegistryObject<RecipeSerializer<PrismaticConversionRecipe>> PRISMATIC_CONVERSION =
                 SERIALIZERS.register("prismatic_conversion",
                         MiscUtil.simpleRecipeSerializer(PrismaticConversionRecipe::new));
+        public static final RegistryObject<RecipeSerializer<ConfluenceRecipe>> CONFLUENCE =
+                SERIALIZERS.register("confluence",
+                        MiscUtil.simpleRecipeSerializer(ConfluenceRecipe::new));
 
         private static void bootstrap(IEventBus bus) {
             SERIALIZERS.register(bus);
@@ -167,6 +168,12 @@ public class Fallen {
          * it's intended to function on augment that needs to attach to entity.
          */
         public static final String UNIQUE_ID = "uuid";
+
+        /**
+         * Marks an item as the product of a Sigil of Confluence merge.
+         * Items carrying this tag cannot receive augments.
+         */
+        public static final String AFFIX_COMBINED = "fallen_gems_affixes:affix_combined";
 
         public static void bootstrap() {
         }

@@ -35,6 +35,11 @@ public class AugmentRecipe extends SmithingTransformRecipe implements IAugmentRe
     @Override
     public boolean matches(Container cont, Level level) {
         ItemStack base = cont.getItem(1);
+
+        if (base.getTag() != null && base.getTag().contains(Fallen.AugmentMisc.AFFIX_COMBINED)) {
+            return false;
+        }
+
         ItemStack addition = cont.getItem(2);
         LootCategory cat = LootCategory.forItem(base);
         boolean isAugmentItem = this.isAdditionIngredient(addition);

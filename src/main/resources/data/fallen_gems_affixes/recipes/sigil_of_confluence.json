@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FRF",
+    "RTR",
+    "FRF"
+  ],
+  "key": {
+    "T": {
+      "item": "fallen_gems_affixes:sigil_of_transmutation"
+    },
+    "F": {
+      "item": "fallen_gems_affixes:fabled_material"
+    },
+    "R": {
+      "item": "fallen_gems_affixes:reinforced_gem_slate"
+    }
+  },
+  "result": {
+    "item": "fallen_gems_affixes:sigil_of_confluence",
+    "count": 1
+  }
+}

@@ -31,6 +31,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.SIGIL_OF_ELEVATION.get());
                         output.accept(ModItems.FABLED_MATERIAL.get());
                         output.accept(ModItems.SIGIL_OF_PRISMATIC_CONVERSION.get());
+                        output.accept(ModItems.SIGIL_OF_CONFLUENCE.get());
                     })
                     .build());
 

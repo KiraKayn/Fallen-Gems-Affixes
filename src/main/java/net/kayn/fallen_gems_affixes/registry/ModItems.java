@@ -48,4 +48,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> SIGIL_OF_PRISMATIC_CONVERSION = ITEMS.register("sigil_of_prismatic_conversion",
             () -> new SigilOfPrismaticConversionItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
+
+    public static final RegistryObject<Item> SIGIL_OF_CONFLUENCE = ITEMS.register("sigil_of_confluence",
+                    () -> new SigilOfConfluenceItem(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 }
