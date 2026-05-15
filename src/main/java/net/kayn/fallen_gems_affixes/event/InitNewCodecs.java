@@ -25,6 +25,7 @@ public class InitNewCodecs {
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "hydra"), HydraBonus.CODEC);
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "wet_damage"), WetDamageBonus.CODEC);
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "wet_resistance"), WetResistanceBonus.CODEC);
+            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "echoing_strike"), EchoingStrikeBonus.CODEC);
             GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "con_cat_bonus"), GemBonusUtil.CONDITIONAL_CAT_CODEC);
 
             AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "socket_bonus"), SocketBonusAffix.CODEC);

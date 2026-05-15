@@ -660,5 +660,7 @@
   "item.fallen_gems_affixes.augment.convergence": "Augment of Convergence",
   "fallen_gems_affixes.augment.convergence.type": "Convergence:",
   "fallen_gems_affixes.augment.convergence.desc": "Grants %s Gem Power per Affix and %s Affix Power per Gem",
-  "fallen_gems_affixes.augment.convergence.socket_desc": "Affix Power: %1$s | Gem Power: %2$s"
+  "fallen_gems_affixes.augment.convergence.socket_desc": "Affix Power: %1$s | Gem Power: %2$s",
+
+  "bonus.fallen_gems_affixes.echoing_strike.desc": "Striking an enemy triggers a second hit dealing %s damage after %s"
 }

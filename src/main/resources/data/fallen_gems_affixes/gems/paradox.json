@@ -1,0 +1,37 @@
+{
+  "weight": 1,
+  "quality": 0,
+  "unique": true,
+  "min_rarity": "epic",
+  "bonuses": [
+    {
+      "type": "fallen_gems_affixes:con_cat_bonus",
+      "con_cat": [
+        {
+          "modid": "celestisynth",
+          "category": "celestial_melee"
+        }
+      ],
+      "bonus": {
+        "type": "fallen_gems_affixes:echoing_strike",
+        "gem_class": {
+          "key": "melee_weapons",
+          "types": [
+            "sword",
+            "heavy_weapon"
+          ]
+        },
+        "damage": {
+          "epic": 0.5,
+          "mythic": 0.75,
+          "ancient": 1.0
+        },
+        "delay_ticks": {
+          "epic": 20,
+          "mythic": 10,
+          "ancient": 5.0
+        }
+      }
+    }
+  ]
+}

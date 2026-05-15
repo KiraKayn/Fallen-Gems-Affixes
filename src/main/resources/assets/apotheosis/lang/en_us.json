@@ -74,5 +74,7 @@
     "item.apotheosis.gem.fallen_gems_affixes:void_hunter": "Void Hunter Gem",
     "item.apotheosis.gem.fallen_gems_affixes:hemophage_core": "Hemophage Core",
     "item.apotheosis.gem.fallen_gems_affixes:hallowed_relic": "Hallowed Relic",
-    "gem_class.melee_weapons": "Melee Weapons"
+    "gem_class.melee_weapons": "Melee Weapons",
+
+    "item.apotheosis.gem.fallen_gems_affixes:paradox": "Paradox Gem"
 }
