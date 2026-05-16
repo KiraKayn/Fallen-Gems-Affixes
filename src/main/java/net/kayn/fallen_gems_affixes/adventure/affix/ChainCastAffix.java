@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
-public class AutocastAffix extends Affix {
+public class ChainCastAffix extends Affix {
 
     private static final int MIN_DELAY_TICKS = 2; // minimum safe value
 
@@ -42,7 +42,7 @@ public class AutocastAffix extends Affix {
                 .put(entity.getUUID(), entity.level().getGameTime() + durationTicks);
     }
 
-    public static final Codec<AutocastAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    public static final Codec<ChainCastAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             SpellRegistry.REGISTRY.get().getCodec()
                     .optionalFieldOf("trigger_spell")
                     .forGetter(a -> a.triggerSpell),
@@ -63,7 +63,7 @@ public class AutocastAffix extends Affix {
             SpellCastAffix.TargetType.CODEC
                     .optionalFieldOf("target")
                     .forGetter(a -> a.target)
-    ).apply(inst, AutocastAffix::new));
+    ).apply(inst, ChainCastAffix::new));
 
     public final Optional<AbstractSpell> triggerSpell;
     protected final AbstractSpell spell;
@@ -73,7 +73,7 @@ public class AutocastAffix extends Affix {
     protected final Set<LootCategory> types;
     public final Optional<SpellCastAffix.TargetType> target;
 
-    public AutocastAffix(
+    public ChainCastAffix(
             Optional<AbstractSpell> triggerSpell,
             AbstractSpell spell,
             int cooldownBetweenCasts,
@@ -114,7 +114,7 @@ public class AutocastAffix extends Affix {
 
         if (this.cooldownBetweenCasts < MIN_DELAY_TICKS) {
             FallenGemsAffixes.LOGGER.error(
-                    "AutocastAffix [{}]: cooldown_between_casts is {} tick(s), minimum is {} (0.1s). " +
+                    "ChainCastAffix [{}]: cooldown_between_casts is {} tick(s), minimum is {} (0.1s). " +
                             "The spell will not cast correctly. Please set it to at least {}.",
                     this.getId(), this.cooldownBetweenCasts, MIN_DELAY_TICKS, MIN_DELAY_TICKS);
             return;
@@ -148,7 +148,7 @@ public class AutocastAffix extends Affix {
         SpellCastAffix.setTriggering(caster, true);
         try {
             // Reset i-frames on the entity the triggering spell actually hit
-            // actualTarget may be the caster for non-damage triggered autocasts,
+            // actualTarget may be the caster for non-damage triggered chaincasts,
             // so look up the real last-hit entity the same way the echo handler does
             if (caster.level() instanceof ServerLevel sl) {
                 UUID lastTargetId = SpellEventHandler.LAST_SPELL_DAMAGE_TARGET.get(caster.getUUID());
@@ -165,7 +165,7 @@ public class AutocastAffix extends Affix {
             SpellCastUtil.castSpell(caster, this.spell, spellLevel, actualTarget);
         } catch (Exception e) {
             FallenGemsAffixes.LOGGER.warn(
-                    "AutocastAffix: spell {} cast failed: {}",
+                    "ChainCastAffix: spell {} cast failed: {}",
                     this.spell.getSpellId(), e.getMessage());
         } finally {
             server.execute(() -> SpellCastAffix.setTriggering(caster, false));
@@ -219,17 +219,17 @@ public class AutocastAffix extends Affix {
                 .withStyle(this.spell.getSchoolType().getDisplayName().getStyle());
 
         MutableComponent comp = Component.translatable(
-                "affix.fallen_gems_affixes.autocast",
+                "affix.fallen_gems_affixes.chain_cast",
                 coloredSpellName
         ).withStyle(ChatFormatting.YELLOW);
 
         Component triggerName = this.triggerSpell
                 .map(ts -> (Component) ts.getDisplayName(null).copy()
                         .withStyle(ts.getSchoolType().getDisplayName().getStyle()))
-                .orElseGet(() -> Component.translatable("affix.fallen_gems_affixes.autocast.any_spell")
+                .orElseGet(() -> Component.translatable("affix.fallen_gems_affixes.chain_cast.any_spell")
                         .withStyle(ChatFormatting.YELLOW));
         comp.append(
-                Component.translatable("affix.fallen_gems_affixes.autocast.trigger", triggerName)
+                Component.translatable("affix.fallen_gems_affixes.chain_cast.trigger", triggerName)
                         .withStyle(ChatFormatting.YELLOW)
         );
 

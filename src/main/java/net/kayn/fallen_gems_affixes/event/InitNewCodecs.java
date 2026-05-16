@@ -50,7 +50,7 @@ public class InitNewCodecs {
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "spell_effect"), SpellEffectAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "spell_cast"), SpellCastAffix.CODEC);
-                AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "autocast"), AutocastAffix.CODEC);
+                AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "chain_cast"), ChainCastAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "mana_cost"), ManaCostAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "mana_return"), ManaReturnAffix.CODEC);
                 AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "mana_damage"), ManaDamageAffix.CODEC);

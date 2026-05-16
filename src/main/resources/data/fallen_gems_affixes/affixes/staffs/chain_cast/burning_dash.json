@@ -5,9 +5,9 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:autocast",
-  "trigger_spell": "irons_spellbooks:blood_slash",
-  "spell": "irons_spellbooks:acupuncture",
+  "type": "fallen_gems_affixes:chain_cast",
+  "trigger_spell": "irons_spellbooks:flaming_strike",
+  "spell": "irons_spellbooks:burning_dash",
   "cooldown_between_casts": 2,
   "target": "TARGET",
   "cooldown": 600,

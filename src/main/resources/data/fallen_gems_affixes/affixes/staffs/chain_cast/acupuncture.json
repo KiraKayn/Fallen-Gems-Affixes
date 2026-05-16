@@ -5,9 +5,9 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:autocast",
-  "trigger_spell": "irons_spellbooks:lob_creeper",
-  "spell": "irons_spellbooks:arrow_volley",
+  "type": "fallen_gems_affixes:chain_cast",
+  "trigger_spell": "irons_spellbooks:blood_slash",
+  "spell": "irons_spellbooks:acupuncture",
   "cooldown_between_casts": 2,
   "target": "TARGET",
   "cooldown": 600,

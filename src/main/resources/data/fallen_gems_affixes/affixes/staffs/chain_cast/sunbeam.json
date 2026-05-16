@@ -5,9 +5,9 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:autocast",
-  "trigger_spell": "irons_spellbooks:eldritch_blast",
-  "spell": "irons_spellbooks:sonic_boom",
+  "type": "fallen_gems_affixes:chain_cast",
+  "trigger_spell": "irons_spellbooks:wisp",
+  "spell": "irons_spellbooks:sunbeam",
   "cooldown_between_casts": 2,
   "target": "TARGET",
   "cooldown": 600,

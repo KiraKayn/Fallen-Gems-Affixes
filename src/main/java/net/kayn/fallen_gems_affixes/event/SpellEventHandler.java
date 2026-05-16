@@ -125,7 +125,7 @@ public class SpellEventHandler {
             AffixHelper.streamAffixes(stack).forEach(inst -> {
                 if (inst.affix().get() instanceof CooldownResetAffix affix) {
                     affix.onSpellCast(caster, event.getSpellId(), inst.rarity().get(), inst.level());
-                } else if (inst.affix().get() instanceof AutocastAffix affix) {
+                } else if (inst.affix().get() instanceof ChainCastAffix affix) {
                     boolean isTargetMode = affix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (!isTargetMode) {
                         affix.onSpellCast(caster, event.getSpellId(), caster, inst.rarity().get());
@@ -179,10 +179,10 @@ public class SpellEventHandler {
                 } else if (affix instanceof SpellCastAffix castAffix && castAffix.trigger == SpellCastAffix.TriggerType.SPELL_DAMAGE) {
                     LivingEntity actualTarget = getSpellTarget(castAffix.target, caster, target);
                     castAffix.triggerSpell(caster, actualTarget, rarity, (int) affixLevel);
-                } else if (affix instanceof AutocastAffix autocastAffix) {
-                    boolean isTargetMode = autocastAffix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
+                } else if (affix instanceof ChainCastAffix chainCastAffix) {
+                    boolean isTargetMode = chainCastAffix.target.filter(t -> t == SpellCastAffix.TargetType.TARGET).isPresent();
                     if (isTargetMode) {
-                        autocastAffix.onSpellCast(caster, castSpellId, target, rarity);
+                        chainCastAffix.onSpellCast(caster, castSpellId, target, rarity);
                     }
                 } else if (affix instanceof SpellFocusAffix focusAffix) {
                     float mult = focusAffix.onSpellDamage(caster, target, castSpellId, rarity, affixLevel);

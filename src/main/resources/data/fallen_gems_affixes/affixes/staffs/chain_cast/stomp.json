@@ -5,11 +5,11 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "type": "fallen_gems_affixes:autocast",
-  "trigger_spell": "irons_spellbooks:magic_arrow",
-  "spell": "irons_spellbooks:shadow_slash",
+  "type": "fallen_gems_affixes:chain_cast",
+  "trigger_spell": "irons_spellbooks:root",
+  "spell": "irons_spellbooks:stomp",
   "cooldown_between_casts": 2,
-  "target": "TARGET",
+  "target": "SELF",
   "cooldown": 600,
   "values": {
     "rare": {
