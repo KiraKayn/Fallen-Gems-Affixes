@@ -19,7 +19,6 @@ public class ModConfig {
     public static final ForgeConfigSpec.ConfigValue<List<String>> IRONS_ITEMS_MAP;
     public static final ForgeConfigSpec.IntValue MAX_AUGMENT_SLOTS;
     public static final ForgeConfigSpec.BooleanValue ENABLE_BOSS_SPAWNER_CONVERSION;
-    public static final ForgeConfigSpec.DoubleValue BOSS_SPAWNER_CHANCE;
     public static final ForgeConfigSpec.DoubleValue AFFIX_SCROLL_DROP_CHANCE;
     public static final ForgeConfigSpec.IntValue AFFIX_SCROLL_XP_COST;
     public static final ForgeConfigSpec.IntValue MAX_SCROLL_SLOTS;
@@ -69,10 +68,6 @@ public class ModConfig {
         ENABLE_BOSS_SPAWNER_CONVERSION = BUILDER
                 .comment("If true, natural spawners have a chance to convert into Apotheosis boss spawners on first discovery.")
                 .define("enableBossSpawnerConversion", true);
-
-        BOSS_SPAWNER_CHANCE = BUILDER
-                .comment("Chance for a natural spawner to become a boss spawner (0.0 = never, 1.0 = always)")
-                .defineInRange("bossSpawnerChance", 0.15, 0.0, 1.0);
 
         AFFIX_SCROLL_DROP_CHANCE = BUILDER
                 .comment("Chance for a universal boss to drop an Affix Scroll on death (0.0 = never, 1.0 = always)")
