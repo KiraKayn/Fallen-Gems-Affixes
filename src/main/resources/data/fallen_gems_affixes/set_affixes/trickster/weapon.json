@@ -1,0 +1,9 @@
+{
+  "type": "fallen_gems_affixes:trickster_weapon",
+  "set": "fallen_gems_affixes:trickster",
+  "damage_multiplier": 0.4,
+  "cooldown_ticks": 40,
+  "three_piece_speed_per_clone": 0.10,
+  "three_piece_dodge_per_clone": 0.05,
+  "five_piece_kill_refresh_chance": 0.20
+}

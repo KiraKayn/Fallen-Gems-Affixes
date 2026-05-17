@@ -1,7 +1,7 @@
 package net.kayn.fallen_gems_affixes.adventure.reforging;
 
-import com.mojang.logging.LogUtils; // Standard log utilities
-import org.slf4j.Logger;         // SLF4J wrapper interface
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 import dev.shadowsoffire.apotheosis.adventure.Adventure.Items;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
@@ -34,7 +34,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class FabledReforgingMenu extends BlockEntityMenu<FabledReforgingTableTile> {
-    // Standard logger instance for your mod's sub-systems
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final String REFORGE_SEED = "fga_fabled_reforge_seed";

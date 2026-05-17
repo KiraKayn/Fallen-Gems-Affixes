@@ -36,12 +36,10 @@ public record SetAffixInstance(DynamicHolder<? extends SetAffix> affix, ItemStac
         return this.affix.isBound() && this.rarity.isBound();
     }
 
-    // FIX: Changed from private to public so SetAffixHelper can access them
     public SetAffix afx() {
         return this.affix.get();
     }
 
-    // FIX: Changed from private to public
     public LootRarity rty() {
         return this.rarity.get();
     }

@@ -1,0 +1,9 @@
+{
+  "type": "fallen_gems_affixes:trickster_chestplate",
+  "set": "fallen_gems_affixes:trickster",
+  "damage_reduction": 0.15,
+  "max_clones": 3,
+  "cooldown_ticks": 600,
+  "two_piece_clone_health_fraction": 0.25,
+  "five_piece_bonus_clones": 2
+}
