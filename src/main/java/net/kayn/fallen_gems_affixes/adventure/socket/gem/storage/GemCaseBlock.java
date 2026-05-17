@@ -28,9 +28,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -41,7 +39,7 @@ import java.util.List;
 
 public class GemCaseBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
-    public static final VoxelShape SHAPE = Shapes.join(box(0, 0, 0, 16, 16, 16), box(1, 13, 1, 15, 15, 15), BooleanOp.ONLY_FIRST);
+    public static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D);
 
     private static final DecimalFormat FMT = new DecimalFormat("##.#");
 
