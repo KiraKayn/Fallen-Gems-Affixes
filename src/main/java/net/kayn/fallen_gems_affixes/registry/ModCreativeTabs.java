@@ -1,6 +1,7 @@
 package net.kayn.fallen_gems_affixes.registry;
 
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.reforging.FabledReforging;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -32,6 +33,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.FABLED_MATERIAL.get());
                         output.accept(ModItems.SIGIL_OF_PRISMATIC_CONVERSION.get());
                         output.accept(ModItems.SIGIL_OF_CONFLUENCE.get());
+                        output.accept(FabledReforging.FABLED_REFORGING_TABLE.get());
                     })
                     .build());
 
