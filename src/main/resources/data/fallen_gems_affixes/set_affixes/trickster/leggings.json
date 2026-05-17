@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:trickster_leggings",
+  "set": "fallen_gems_affixes:trickster",
+  "explosion_multiplier": 0.5,
+  "radius": 3.0,
+  "four_piece_cooldown_reduction_ticks": 30
+}
