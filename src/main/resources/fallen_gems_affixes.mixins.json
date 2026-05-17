@@ -18,7 +18,10 @@
     "TieredAddSocketsRecipeMixin",
     "TieredSocketingRecipeMixin",
     "StepFunctionMixin",
-    "RarityRegistryMixin"
+    "RarityRegistryMixin",
+    "LootRuleExecuteMixin",
+    "PlayerAttackMixin",
+    "AffixHelperMixin"
   ],
   "client": [
     "AugmentingScreenMixin",

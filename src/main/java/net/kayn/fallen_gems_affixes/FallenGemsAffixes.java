@@ -8,6 +8,11 @@ import net.kayn.fallen_gems_affixes.adventure.affix.FortifyAffix;
 import net.kayn.fallen_gems_affixes.adventure.boss.UniversalBossEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.entity.EntityAffixEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.entity.affix.MobAffixEventHandler;
+import net.kayn.fallen_gems_affixes.adventure.reforging.FabledReforging;
+import net.kayn.fallen_gems_affixes.adventure.set.SetAffixRegistry;
+import net.kayn.fallen_gems_affixes.adventure.set.SetBonusHandler;
+import net.kayn.fallen_gems_affixes.adventure.set.trickster.TricksterEntities;
+import net.kayn.fallen_gems_affixes.adventure.set.trickster.TricksterSetAffixEventHandler;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.*;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseNetwork;
 import net.kayn.fallen_gems_affixes.adventure.socket.gem.storage.GemCaseRegistry;
@@ -27,6 +32,7 @@ import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
 import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.kayn.fallen_gems_affixes.registry.ModCreativeTabs;
 import net.kayn.fallen_gems_affixes.registry.ModItems;
+import net.kayn.fallen_gems_affixes.util.AffixTypeExtender;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -48,6 +54,7 @@ public class FallenGemsAffixes {
     public static boolean curiosLoaded = false;
 
     public FallenGemsAffixes(FMLJavaModLoadingContext context) {
+        AffixTypeExtender.init();
         IEventBus modEventBus = context.getModEventBus();
         LOGGER.info("Loading Fallen Gems & Affixes");
 
@@ -69,6 +76,10 @@ public class FallenGemsAffixes {
         // Bootstraps
         Fallen.bootstrap(modEventBus);
         GemBonusModifier.bootstrap(MinecraftForge.EVENT_BUS);
+        TricksterEntities.bootstrap(modEventBus);
+        FabledReforging.bootstrap(modEventBus);
+        SetAffixRegistry.INSTANCE.registerToBus();
+        MinecraftForge.EVENT_BUS.register(SetBonusHandler.class);
         GenesisEventHandler.bootstrap(MinecraftForge.EVENT_BUS);
         SpecialAffixEventHandler.register();
         AALootCategories.init();
@@ -93,6 +104,8 @@ public class FallenGemsAffixes {
         MinecraftForge.EVENT_BUS.register(MobAffixEventHandler.class);
         MinecraftForge.EVENT_BUS.register(CatalystSocketEventHandler.class);
         MinecraftForge.EVENT_BUS.register(EchoingStrikeEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(TricksterSetAffixEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(net.kayn.fallen_gems_affixes.adventure.set.trickster.bonus.TricksterSetBonusHandler.class);
 
         // Mod integrations
         curiosLoaded = ModList.get().isLoaded("curios");

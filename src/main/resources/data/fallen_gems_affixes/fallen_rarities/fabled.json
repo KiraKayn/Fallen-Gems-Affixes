@@ -9,7 +9,7 @@
     "quality": 0,
     "rules": [
       {
-        "type": "ancient",
+        "type": "set_affix",
         "chance": 1.0
       }
     ]
