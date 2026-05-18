@@ -29,7 +29,6 @@ public class PredatorAffix extends EntityAffix {
         if (!(target instanceof LivingEntity living)) return;
         Vec3 targetLook = living.getLookAngle();
         Vec3 toAttacker = entity.position().subtract(living.position()).normalize();
-        // dot < 0 → attacker is behind the target
         if (targetLook.dot(toAttacker) >= 0) return;
         DamageSource src = entity.damageSources().mobAttack(entity);
         living.hurt(src, bonusDamage.get(level));

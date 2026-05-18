@@ -19,7 +19,6 @@ public final class EntityAffixRegistry {
 
     static {
         registerType(PackLeaderAffix.TYPE, PackLeaderAffix.CODEC);
-        registerType(CursedAffix.TYPE, CursedAffix.CODEC);
         registerType(SoulDrainAffix.TYPE, SoulDrainAffix.CODEC);
         registerType(ShadowStepAffix.TYPE, ShadowStepAffix.CODEC);
         registerType(ArcaneShieldAffix.TYPE, ArcaneShieldAffix.CODEC);
