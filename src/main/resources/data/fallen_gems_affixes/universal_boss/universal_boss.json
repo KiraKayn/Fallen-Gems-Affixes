@@ -242,7 +242,7 @@
       ]
     },
     "fabled": {
-      "stat_chance": 0.20,
+      "stat_chance": 0.5,
       "enchant_chance": 0.0,
       "enchantment_levels": [0, 0, 0, 0],
       "effects": [
