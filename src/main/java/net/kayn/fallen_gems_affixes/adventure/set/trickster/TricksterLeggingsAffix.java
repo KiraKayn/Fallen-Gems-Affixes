@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffix;
 import net.kayn.fallen_gems_affixes.adventure.set.trickster.bonus.TricksterSetBonusHandler;
 import net.minecraft.ChatFormatting;
@@ -37,38 +38,36 @@ public class TricksterLeggingsAffix extends SetAffix {
     public int getFourPieceCooldownReductionTicks() { return fourPieceCooldownReductionTicks; }
 
     @Override
-    public Component getName(boolean prefix) {
-        return Component.translatable(prefix ? "set_affix.fallen_gems_affixes.trickster_leggings" : "set_affix.fallen_gems_affixes.trickster_leggings.suffix");
+    public ResourceLocation getTypeId() { return FallenGemsAffixes.id("trickster_leggings"); }
+
+    @Override
+    public MutableComponent getDescription(ItemStack stack, LootRarity rarity, float level) {
+        Component dmgVal    = Component.literal(SetAffix.fmt(explosionMultiplier * 100f) + "%").withStyle(ChatFormatting.DARK_RED);
+        Component radiusVal = Component.literal(SetAffix.fmt(radius)).withStyle(ChatFormatting.DARK_RED);
+        return Component.translatable("set_affix.fallen_gems_affixes.trickster_leggings.desc",
+                dmgVal, radiusVal).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
-    public ResourceLocation getTypeId() {
+    public Component getBonusDescription(int threshold) {
+        if (threshold == 4) {
+            Component val = Component.literal(SetAffix.fmt(fourPieceCooldownReductionTicks / 20f) + "s")
+                    .withStyle(ChatFormatting.DARK_RED);
+            return Component.translatable("set_bonus.fallen_gems_affixes.trickster.4", val);
+        }
         return null;
     }
 
     @Override
-    public MutableComponent getDescription(ItemStack stack, LootRarity rarity, float level) {
-        Component value = Component.literal(SetAffix.fmt(explosionMultiplier * 100f) + "%")
-                .withStyle(ChatFormatting.DARK_RED);
-
-        return Component.translatable("set_affix.fallen_gems_affixes.trickster_leggings.desc", value)
-                .withStyle(ChatFormatting.YELLOW);
-    }
-
-    @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
-        return !cat.isNone() && cat == dev.shadowsoffire.apotheosis.adventure.loot.LootCategory.LEGGINGS;
+        return !cat.isNone() && cat == LootCategory.LEGGINGS;
     }
 
     @Override
-    public void applySetBonus(Player player, int pieceCount) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount);
-    }
+    public void applySetBonus(Player player, int pieceCount) { TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount); }
 
     @Override
-    public void removeSetBonus(Player player) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, 0);
-    }
+    public void removeSetBonus(Player player) { TricksterSetBonusHandler.onPieceCountChanged(player, 0); }
 
     @Override
     public int[] getBonusThresholds() { return TricksterSetConstants.BONUS_THRESHOLDS; }

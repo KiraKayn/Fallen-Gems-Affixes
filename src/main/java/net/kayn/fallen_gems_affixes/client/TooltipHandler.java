@@ -1,7 +1,9 @@
 package net.kayn.fallen_gems_affixes.client;
 
+import net.kayn.fallen_gems_affixes.adventure.set.SetAffix;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffixHelper;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffixInstance;
+import net.kayn.fallen_gems_affixes.adventure.set.SetAffixRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,12 +33,10 @@ public class TooltipHandler {
 
         List<Component> tooltip = event.getToolTip();
 
-        MutableComponent bullet = Component.literal(" \u2022 ").withStyle(ChatFormatting.DARK_GRAY);
-        MutableComponent rawDesc = Component.empty().append(inst.getDescription()).withStyle(ChatFormatting.DARK_RED);
-        MutableComponent setAffixLine = bullet.copy().append(rawDesc);
+        MutableComponent setAffixLine = Component.translatable("text.apotheosis.dot_prefix", inst.getDescription())
+                .withStyle(ChatFormatting.YELLOW);
 
         tooltip.removeIf(line -> line.getString().equals(setAffixLine.getString()));
-
         int insertPos = Math.min(1, tooltip.size());
         tooltip.add(insertPos, setAffixLine);
 
@@ -65,14 +65,36 @@ public class TooltipHandler {
 
         for (int threshold : thresholds) {
             boolean unlocked = finalPieceCount >= threshold;
-            MutableComponent icon = Component.literal(unlocked ? " \u2714 " : " \u2718 ")
+            Component bonusDesc = resolveBonusDescription(setId, threshold, setKey);
+
+            Component formattedDesc = unlocked
+                    ? Component.empty().append(bonusDesc).withStyle(ChatFormatting.GRAY)
+                    : forceStyle(bonusDesc, ChatFormatting.DARK_GRAY);
+
+            MutableComponent icon = Component.literal(unlocked ? " ✔ " : " ✘ ")
                     .withStyle(unlocked ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY);
-            MutableComponent tierDesc = Component.translatable("set_bonus." + setKey + "." + threshold)
-                    .withStyle(unlocked ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY);
-            MutableComponent tierLine = icon.append(
-                    Component.literal("(" + threshold + ") ").withStyle(ChatFormatting.DARK_GRAY)
-            ).append(tierDesc);
+            MutableComponent tierNum = Component.literal("(" + threshold + ") ")
+                    .withStyle(ChatFormatting.DARK_GRAY);
+            MutableComponent tierLine = icon.append(tierNum).append(formattedDesc);
             tooltip.add(tierLine);
         }
+    }
+
+    private static Component resolveBonusDescription(ResourceLocation setId, int threshold, String setKey) {
+        for (SetAffix affix : SetAffixRegistry.INSTANCE.getValues()) {
+            if (!setId.equals(affix.getSetId())) continue;
+            Component desc = affix.getBonusDescription(threshold);
+            if (desc != null) return desc;
+        }
+        return Component.translatable("set_bonus." + setKey + "." + threshold);
+    }
+
+    private static Component forceStyle(Component comp, ChatFormatting format) {
+        MutableComponent copy = comp.copy().withStyle(format);
+        List<Component> siblings = copy.getSiblings();
+        for (int i = 0; i < siblings.size(); i++) {
+            siblings.set(i, forceStyle(siblings.get(i), format));
+        }
+        return copy;
     }
 }

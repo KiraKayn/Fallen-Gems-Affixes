@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffix;
+import net.kayn.fallen_gems_affixes.adventure.set.SetAffixRegistry;
 import net.kayn.fallen_gems_affixes.adventure.set.trickster.bonus.TricksterSetBonusHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -41,80 +43,66 @@ public class TricksterWeaponAffix extends SetAffix {
         this.fivePieceKillRefreshChance = fivePieceKillRefreshChance;
     }
 
-    public float getDamageMultiplier() {
-        return damageMultiplier;
-    }
-
-    public int getCooldownTicks() {
-        return cooldownTicks;
-    }
-
-    public float getThreePieceSpeedPerClone() {
-        return threePieceSpeedPerClone;
-    }
-
-    public float getThreePieceDodgePerClone() {
-        return threePieceDodgePerClone;
-    }
-
-    public float getFivePieceKillRefreshChance() {
-        return fivePieceKillRefreshChance;
-    }
+    public float getDamageMultiplier() { return damageMultiplier; }
+    public int getCooldownTicks() { return cooldownTicks; }
+    public float getThreePieceSpeedPerClone() { return threePieceSpeedPerClone; }
+    public float getThreePieceDodgePerClone() { return threePieceDodgePerClone; }
+    public float getFivePieceKillRefreshChance() { return fivePieceKillRefreshChance; }
 
     @Override
-    public Component getName(boolean prefix) {
-        return Component.translatable(prefix ? "set_affix.fallen_gems_affixes.trickster_weapon" : "set_affix.fallen_gems_affixes.trickster_weapon.suffix");
-    }
-
-    @Override
-    public ResourceLocation getTypeId() {
-        return null;
-    }
+    public ResourceLocation getTypeId() { return FallenGemsAffixes.id("trickster_weapon"); }
 
     @Override
     public MutableComponent getDescription(ItemStack stack, LootRarity rarity, float level) {
-        Component value = Component.literal(SetAffix.fmt(damageMultiplier * 100f) + "%")
-                .withStyle(ChatFormatting.DARK_RED);
+        Component dmgVal      = Component.literal(SetAffix.fmt(damageMultiplier * 100f) + "%").withStyle(ChatFormatting.DARK_RED);
+        Component cooldownVal = Component.literal(SetAffix.fmt(cooldownTicks / 20f) + "s").withStyle(ChatFormatting.DARK_RED);
+        return Component.translatable("set_affix.fallen_gems_affixes.trickster_weapon.desc",
+                dmgVal, cooldownVal).withStyle(ChatFormatting.YELLOW);
+    }
 
-        return Component.translatable("set_affix.fallen_gems_affixes.trickster_weapon.desc", value)
-                .withStyle(ChatFormatting.YELLOW);
+    @Override
+    public Component getBonusDescription(int threshold) {
+        if (threshold == 3) {
+            Component speedVal = Component.literal(SetAffix.fmt(threePieceSpeedPerClone * 100f) + "%")
+                    .withStyle(ChatFormatting.DARK_RED);
+            Component dodgeVal = Component.literal(SetAffix.fmt(threePieceDodgePerClone * 100f) + "%")
+                    .withStyle(ChatFormatting.DARK_RED);
+            return Component.translatable("set_bonus.fallen_gems_affixes.trickster.3", speedVal, dodgeVal);
+        }
+        if (threshold == 5) {
+            Component chanceVal = Component.literal(SetAffix.fmt(fivePieceKillRefreshChance * 100f) + "%")
+                    .withStyle(ChatFormatting.DARK_RED);
+            int bonusClones = SetAffixRegistry.INSTANCE.getValues().stream()
+                    .filter(a -> a instanceof TricksterChestplateAffix && this.setId.equals(a.getSetId()))
+                    .map(a -> ((TricksterChestplateAffix) a).getFivePieceBonusClones())
+                    .findFirst().orElse(2);
+            Component clonesVal = Component.literal(String.valueOf(bonusClones))
+                    .withStyle(ChatFormatting.DARK_RED);
+            return Component.translatable("set_bonus.fallen_gems_affixes.trickster.5", chanceVal, clonesVal);
+        }
+        return null;
     }
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
         if (cat.isNone()) return false;
-
-        if (cat == dev.shadowsoffire.apotheosis.adventure.loot.LootCategory.SWORD
-                || cat == dev.shadowsoffire.apotheosis.adventure.loot.LootCategory.HEAVY_WEAPON) {
-            return true;
-        }
-
+        if (cat == LootCategory.SWORD || cat == LootCategory.HEAVY_WEAPON) return true;
         if (ModList.get().isLoaded("celestisynth")) {
-            dev.shadowsoffire.apotheosis.adventure.loot.LootCategory celestialMelee =
-                    dev.shadowsoffire.apotheosis.adventure.loot.LootCategory.byId("celestial_melee");
+            LootCategory celestialMelee = LootCategory.byId("celestial_melee");
             return celestialMelee != null && cat == celestialMelee;
         }
-
         return false;
     }
 
     @Override
-    public void applySetBonus(Player player, int pieceCount) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount);
-    }
+    public void applySetBonus(Player player, int pieceCount) { TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount); }
 
     @Override
-    public void removeSetBonus(Player player) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, 0);
-    }
+    public void removeSetBonus(Player player) { TricksterSetBonusHandler.onPieceCountChanged(player, 0); }
 
     @Override
-    public int[] getBonusThresholds() {
-        return TricksterSetConstants.BONUS_THRESHOLDS;
-    }
+    public int[] getBonusThresholds() { return TricksterSetConstants.BONUS_THRESHOLDS; }
 
     @Override
-    public Codec<? extends SetAffix> getCodec() {
-        return CODEC;
-    }
+    public Codec<? extends SetAffix> getCodec() { return CODEC; }
 }

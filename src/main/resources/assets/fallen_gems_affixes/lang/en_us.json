@@ -580,7 +580,6 @@
   "fallen_gems_affixes.augment.malice.desc.option_gem": "Gem Dominant: %s Gem Power, %s Affix Power",
   "fallen_gems_affixes.augment.malice.socket_desc":  "Affix: %1$s Power | Gem: %2$s Power",
 
-
   "block.fallen_gems_affixes.gem_case": "Gem Case",
   "tooltip.fallen_gems_affixes.gem_case.capacity": "Capacity: %s Gems",
   "tooltip.fallen_gems_affixes.gem_case.unique_gems": "Contains %s different gems",
@@ -677,28 +676,18 @@
 
   "set.fallen_gems_affixes.trickster": "Trickster",
 
-  "set_affix.fallen_gems_affixes.trickster_helmet": "Echoing Strike",
-  "set_affix.fallen_gems_affixes.trickster_helmet.suffix": "of Echoing Strikes",
-  "set_affix.fallen_gems_affixes.trickster_helmet.desc": "Critical Hits cause all active Shadow Clones to strike the target. With no clones active, Critical Hits have a %s chance to spawn one.",
+  "set_affix.fallen_gems_affixes.trickster_helmet.desc": "Critical Hits cause all active Shadow Clones to strike the target. With no clones active, Critical Hits have a %s chance to spawn one",
 
-  "set_affix.fallen_gems_affixes.trickster_chestplate": "Phantom Guard",
-  "set_affix.fallen_gems_affixes.trickster_chestplate.suffix": "of Phantom Guard",
-  "set_affix.fallen_gems_affixes.trickster_chestplate.desc": "On taking damage, spawn up to %s Shadow Clones around you (30s). While any clone is alive, take %s less damage.",
+  "set_affix.fallen_gems_affixes.trickster_chestplate.desc": "On taking damage, spawn up to %s Shadow Clones around you [%s]. While any clone is alive, take %s less damage",
 
-  "set_affix.fallen_gems_affixes.trickster_leggings": "Parting Blow",
-  "set_affix.fallen_gems_affixes.trickster_leggings.suffix": "of Parting Blows",
-  "set_affix.fallen_gems_affixes.trickster_leggings.desc": "When a Shadow Clone disappears, it deals %s of your melee damage to all enemies within 3 blocks.",
+  "set_affix.fallen_gems_affixes.trickster_leggings.desc": "When a Shadow Clone disappears, it deals %s of your melee damage to all enemies within %s blocks",
 
-  "set_affix.fallen_gems_affixes.trickster_boots": "Phantom Step",
-  "set_affix.fallen_gems_affixes.trickster_boots.suffix": "of Phantom Steps",
-  "set_affix.fallen_gems_affixes.trickster_boots.desc": "Sneak while looking at a Shadow Clone to swap places with it. The clone dies instantly. (%s cooldown).",
+  "set_affix.fallen_gems_affixes.trickster_boots.desc": "Sneak while looking at a Shadow Clone to swap places with it. The clone dies instantly [%s]",
 
-  "set_affix.fallen_gems_affixes.trickster_weapon": "Clone Strike",
-  "set_affix.fallen_gems_affixes.trickster_weapon.suffix": "of Clone Strikes",
-  "set_affix.fallen_gems_affixes.trickster_weapon.desc": "Hitting an enemy causes all active Shadow Clones to deal an additional %s of your melee damage to the same target (2s).",
+  "set_affix.fallen_gems_affixes.trickster_weapon.desc": "Hitting an enemy causes all active Shadow Clones to deal an additional %s of your melee damage to the same target [%s]",
 
-  "set_bonus.fallen_gems_affixes.trickster.2": "§8 §7Shadow Clones inherit §e25%§7 of your maximum health.",
-  "set_bonus.fallen_gems_affixes.trickster.3": "§8 §7Gain §e+10%§7 Movement Speed and §e+5%§7 Dodge Chance per active Shadow Clone.",
-  "set_bonus.fallen_gems_affixes.trickster.4": "§8 §7When a Shadow Clone disappears, reduce affix cooldowns by §e1.5s§7.",
-  "set_bonus.fallen_gems_affixes.trickster.5": "§8 §7Killing an enemy has a §e20%§7 chance to refresh your clone generation cooldown. Gain §e+2§7 additional Shadow Clones."
+  "set_bonus.fallen_gems_affixes.trickster.2": "Shadow Clones inherit %s of your maximum health.",
+  "set_bonus.fallen_gems_affixes.trickster.3": "Gain +%s Movement Speed and +%s Dodge Chance per active Shadow Clone.",
+  "set_bonus.fallen_gems_affixes.trickster.4": "When a Shadow Clone disappears, reduce affix cooldowns by %s.",
+  "set_bonus.fallen_gems_affixes.trickster.5": "Killing an enemy has a %s chance to refresh clone cooldown. Gain +%s additional Shadow Clones."
 }

@@ -29,11 +29,6 @@ public class TricksterBootsAffix extends SetAffix {
     public int getCooldownTicks() { return cooldownTicks; }
 
     @Override
-    public Component getName(boolean prefix) {
-        return Component.translatable(prefix ? "set_affix.fallen_gems_affixes.trickster_boots" : "set_affix.fallen_gems_affixes.trickster_boots.suffix");
-    }
-
-    @Override
     public ResourceLocation getTypeId() {
         return null;
     }
@@ -64,6 +59,11 @@ public class TricksterBootsAffix extends SetAffix {
 
     @Override
     public int[] getBonusThresholds() { return TricksterSetConstants.BONUS_THRESHOLDS; }
+
+    @Override
+    public Component getBonusDescription(int threshold) {
+        return null;
+    }
 
     @Override
     public Codec<? extends SetAffix> getCodec() { return CODEC; }

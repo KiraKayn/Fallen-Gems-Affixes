@@ -101,6 +101,8 @@ public abstract class SetAffix implements CodecProvider<SetAffix> {
 
     public int[] getBonusThresholds() { return new int[]{2, 3, 4, 5}; }
 
+    public abstract Component getBonusDescription(int threshold);
+
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) { return !cat.isNone(); }
 
     public static boolean isOnCooldown(ResourceLocation id, int cooldown, LivingEntity entity) {

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
+import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffix;
 import net.kayn.fallen_gems_affixes.adventure.set.trickster.bonus.TricksterSetBonusHandler;
 import net.minecraft.ChatFormatting;
@@ -29,41 +30,34 @@ public class TricksterHelmetAffix extends SetAffix {
     public float getSpawnChance() { return spawnChance; }
 
     @Override
-    public Component getName(boolean prefix) {
-        return Component.translatable(prefix ? "set_affix.fallen_gems_affixes.trickster_helmet" : "set_affix.fallen_gems_affixes.trickster_helmet.suffix");
-    }
-
-    @Override
-    public ResourceLocation getTypeId() {
-        return null;
-    }
+    public ResourceLocation getTypeId() { return FallenGemsAffixes.id("trickster_helmet"); }
 
     @Override
     public MutableComponent getDescription(ItemStack stack, LootRarity rarity, float level) {
-        Component value = Component.literal(SetAffix.fmt(spawnChance * 100f) + "%")
+        Component spawnValue = Component.literal(SetAffix.fmt(spawnChance * 100f) + "%")
                 .withStyle(ChatFormatting.DARK_RED);
-
-        return Component.translatable("set_affix.fallen_gems_affixes.trickster_helmet.desc", value)
+        return Component.translatable("set_affix.fallen_gems_affixes.trickster_helmet.desc", spawnValue)
                 .withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
     public boolean canApplyTo(ItemStack stack, LootCategory cat, LootRarity rarity) {
-        return !cat.isNone() && cat == dev.shadowsoffire.apotheosis.adventure.loot.LootCategory.HELMET;
+        return !cat.isNone() && cat == LootCategory.HELMET;
     }
 
     @Override
-    public void applySetBonus(Player player, int pieceCount) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount);
-    }
+    public void applySetBonus(Player player, int pieceCount) { TricksterSetBonusHandler.onPieceCountChanged(player, pieceCount); }
 
     @Override
-    public void removeSetBonus(Player player) {
-        TricksterSetBonusHandler.onPieceCountChanged(player, 0);
-    }
+    public void removeSetBonus(Player player) { TricksterSetBonusHandler.onPieceCountChanged(player, 0); }
 
     @Override
     public int[] getBonusThresholds() { return TricksterSetConstants.BONUS_THRESHOLDS; }
+
+    @Override
+    public Component getBonusDescription(int threshold) {
+        return null;
+    }
 
     @Override
     public Codec<? extends SetAffix> getCodec() { return CODEC; }
