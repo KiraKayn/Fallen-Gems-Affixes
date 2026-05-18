@@ -1,5 +1,6 @@
 {
   "type": "fallen_gems_affixes:trickster_helmet",
   "set": "fallen_gems_affixes:trickster",
-  "spawn_chance": 0.25
+  "spawn_chance": 0.25,
+  "clone_strike_damage_fraction": 0.10
 }

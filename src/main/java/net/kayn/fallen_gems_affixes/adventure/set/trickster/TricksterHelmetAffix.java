@@ -17,17 +17,21 @@ import net.minecraft.world.item.ItemStack;
 public class TricksterHelmetAffix extends SetAffix {
     public static final Codec<TricksterHelmetAffix> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("set").forGetter(a -> a.setId),
-            Codec.FLOAT.fieldOf("spawn_chance").forGetter(a -> a.spawnChance)
+            Codec.FLOAT.fieldOf("spawn_chance").forGetter(a -> a.spawnChance),
+            Codec.FLOAT.fieldOf("clone_strike_damage_fraction").forGetter(a -> a.cloneStrikeDamageFraction)
     ).apply(inst, TricksterHelmetAffix::new));
 
     private final float spawnChance;
+    private final float cloneStrikeDamageFraction;
 
-    public TricksterHelmetAffix(ResourceLocation setId, float spawnChance) {
+    public TricksterHelmetAffix(ResourceLocation setId, float spawnChance, float cloneStrikeDamageFraction) {
         super(setId);
         this.spawnChance = spawnChance;
+        this.cloneStrikeDamageFraction = cloneStrikeDamageFraction;
     }
 
     public float getSpawnChance() { return spawnChance; }
+    public float getCloneStrikeDamageFraction() { return cloneStrikeDamageFraction; }
 
     @Override
     public ResourceLocation getTypeId() { return FallenGemsAffixes.id("trickster_helmet"); }
@@ -55,9 +59,7 @@ public class TricksterHelmetAffix extends SetAffix {
     public int[] getBonusThresholds() { return TricksterSetConstants.BONUS_THRESHOLDS; }
 
     @Override
-    public Component getBonusDescription(int threshold) {
-        return null;
-    }
+    public Component getBonusDescription(int threshold) { return null; }
 
     @Override
     public Codec<? extends SetAffix> getCodec() { return CODEC; }

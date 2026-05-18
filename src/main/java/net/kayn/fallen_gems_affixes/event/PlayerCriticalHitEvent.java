@@ -7,12 +7,15 @@ import net.minecraftforge.eventbus.api.Event;
 public class PlayerCriticalHitEvent extends Event {
     private final Player player;
     private final LivingEntity target;
+    private final float damage;
 
-    public PlayerCriticalHitEvent(Player player, LivingEntity target) {
+    public PlayerCriticalHitEvent(Player player, LivingEntity target, float damage) {
         this.player = player;
         this.target = target;
+        this.damage = damage;
     }
 
     public Player getPlayer() { return player; }
     public LivingEntity getTarget() { return target; }
+    public float getDamage() { return damage; }
 }
