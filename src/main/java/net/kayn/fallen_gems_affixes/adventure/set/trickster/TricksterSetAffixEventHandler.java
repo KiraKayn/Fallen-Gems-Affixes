@@ -32,8 +32,9 @@ public class TricksterSetAffixEventHandler {
         List<ShadowCloneEntity> clones = ShadowCloneManager.getClones(player);
 
         if (!clones.isEmpty()) {
+            float strikeDamage = event.getDamage() * helmetAffix.getCloneStrikeDamageFraction();
             for (ShadowCloneEntity clone : clones) {
-                clone.strikeTarget(target, 1.0f);
+                clone.strikeTarget(target, strikeDamage);
             }
         } else {
             if (player.getRandom().nextFloat() < helmetAffix.getSpawnChance()) {

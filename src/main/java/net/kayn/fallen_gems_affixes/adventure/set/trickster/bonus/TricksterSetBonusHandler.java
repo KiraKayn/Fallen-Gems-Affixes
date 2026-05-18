@@ -5,21 +5,22 @@ import net.kayn.fallen_gems_affixes.adventure.set.SetAffixHelper;
 import net.kayn.fallen_gems_affixes.adventure.set.SetBonusHandler;
 import net.kayn.fallen_gems_affixes.adventure.set.trickster.*;
 import net.kayn.fallen_gems_affixes.event.ShadowCloneDeathEvent;
+import dev.shadowsoffire.attributeslib.api.ALObjects;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
 public class TricksterSetBonusHandler {
     private static final String PIECE_COUNT_KEY = "fga.trickster_bonus_pieces";
-    private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("a2c4b6d8-1234-5678-9abc-def012345678");
+    private static final UUID SPEED_MODIFIER_UUID  = UUID.fromString("a2c4b6d8-1234-5678-9abc-def012345678");
+    private static final UUID DODGE_MODIFIER_UUID  = UUID.fromString("a2c4b6d8-1234-5678-9abc-def012345679");
 
     public static void onPieceCountChanged(Player player, int newCount) {
         int lastCount = player.getPersistentData().getInt(PIECE_COUNT_KEY);
@@ -36,50 +37,45 @@ public class TricksterSetBonusHandler {
 
         int pieces = SetBonusHandler.getSetPieceCount(player, TricksterSetConstants.SET_ID);
         if (pieces < 3) {
-            removeSpeedModifier(player);
+            removeModifiers(player);
             return;
         }
 
         SetAffix weaponAffix = SetAffixHelper.getSetAffix(player.getMainHandItem());
         if (!(weaponAffix instanceof TricksterWeaponAffix wa)) {
-            removeSpeedModifier(player);
+            removeModifiers(player);
             return;
         }
 
         int clones = ShadowCloneManager.getCloneCount(player);
-        AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr == null) return;
+        if (clones <= 0) {
+            removeModifiers(player);
+            return;
+        }
 
-        speedAttr.removeModifier(SPEED_MODIFIER_UUID);
-        if (clones > 0) {
-            double bonus = clones * wa.getThreePieceSpeedPerClone();
+        AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speedAttr != null) {
+            speedAttr.removeModifier(SPEED_MODIFIER_UUID);
+            double speedBonus = clones * wa.getThreePieceSpeedPerClone();
             speedAttr.addTransientModifier(new AttributeModifier(SPEED_MODIFIER_UUID,
-                    "trickster_set_speed", bonus, AttributeModifier.Operation.MULTIPLY_BASE));
+                    "trickster_set_speed", speedBonus, AttributeModifier.Operation.MULTIPLY_BASE));
+        }
+
+        AttributeInstance dodgeAttr = player.getAttribute(ALObjects.Attributes.DODGE_CHANCE.get());
+        if (dodgeAttr != null) {
+            dodgeAttr.removeModifier(DODGE_MODIFIER_UUID);
+            double dodgeBonus = clones * wa.getThreePieceDodgePerClone();
+            dodgeAttr.addTransientModifier(new AttributeModifier(DODGE_MODIFIER_UUID,
+                    "trickster_set_dodge", dodgeBonus, AttributeModifier.Operation.ADDITION));
         }
     }
 
-    private static void removeSpeedModifier(Player player) {
+    private static void removeModifiers(Player player) {
         AttributeInstance speedAttr = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) speedAttr.removeModifier(SPEED_MODIFIER_UUID);
-    }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onPlayerDodge(LivingHurtEvent event) {
-        if (event.isCanceled()) return;
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (player.level().isClientSide) return;
-
-        int pieces = SetBonusHandler.getSetPieceCount(player, TricksterSetConstants.SET_ID);
-        if (pieces < 3) return;
-
-        SetAffix wa = SetAffixHelper.getSetAffix(player.getMainHandItem());
-        if (!(wa instanceof TricksterWeaponAffix weaponAffix)) return;
-
-        int clones = ShadowCloneManager.getCloneCount(player);
-        float dodgeChance = clones * weaponAffix.getThreePieceDodgePerClone();
-        if (player.getRandom().nextFloat() < dodgeChance) {
-            event.setCanceled(true);
-        }
+        AttributeInstance dodgeAttr = player.getAttribute(ALObjects.Attributes.DODGE_CHANCE.get());
+        if (dodgeAttr != null) dodgeAttr.removeModifier(DODGE_MODIFIER_UUID);
     }
 
     @SubscribeEvent
@@ -94,10 +90,31 @@ public class TricksterSetBonusHandler {
         if (!(leggingsAffix instanceof TricksterLeggingsAffix la)) return;
 
         int reduction = la.getFourPieceCooldownReductionTicks();
-        TricksterCooldownHelper.reduceCooldown(owner, TricksterCooldownHelper.CHESTPLATE_CD, reduction);
-        TricksterCooldownHelper.reduceCooldown(owner, TricksterCooldownHelper.BOOTS_CD, reduction);
-        TricksterCooldownHelper.reduceCooldown(owner, TricksterCooldownHelper.WEAPON_CD, reduction);
+
+        CompoundTag data = owner.getPersistentData();
+        String prefix = "apoth.affix_cooldown.";
+        for (String key : data.getAllKeys()) {
+            if (key.startsWith(prefix)) {
+                long startTime = data.getLong(key);
+                if (startTime > 0) {
+                    data.putLong(key, Math.max(0, startTime - reduction));
+                }
+            }
+        }
+
+        String[] tricksterCooldownKeys = {
+                TricksterCooldownHelper.CHESTPLATE_CD,
+                TricksterCooldownHelper.BOOTS_CD,
+                TricksterCooldownHelper.WEAPON_CD
+        };
+
+        for (String key : tricksterCooldownKeys) {
+            if (TricksterCooldownHelper.isOnCooldown(owner, key)) {
+                TricksterCooldownHelper.reduceCooldown(owner, key, reduction);
+            }
+        }
     }
+
 
     @SubscribeEvent
     public static void onKill(LivingDeathEvent event) {
