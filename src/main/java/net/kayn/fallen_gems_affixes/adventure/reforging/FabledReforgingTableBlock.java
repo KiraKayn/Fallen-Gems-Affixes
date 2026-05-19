@@ -61,8 +61,8 @@ public class FabledReforgingTableBlock extends Block implements TickingEntityBlo
 
     @Override
     public void appendHoverText(ItemStack pStack, BlockGetter pLevel, List<Component> list, TooltipFlag pFlag) {
-        list.add(Component.translatable("block." + FallenGemsAffixes.MOD_ID + ".fabled_reforging_table.desc").withStyle(ChatFormatting.LIGHT_PURPLE));
-        list.add(Component.translatable("block." + FallenGemsAffixes.MOD_ID + ".fabled_reforging_table.desc2").withStyle(ChatFormatting.GRAY));
+        list.add(Component.translatable("block." + FallenGemsAffixes.MOD_ID + ".fabled_reforging_table.desc").withStyle(ChatFormatting.GRAY));
+        list.add(Component.translatable("block." + FallenGemsAffixes.MOD_ID + ".fabled_reforging_table.desc2", getFabledRarity().toComponent()).withStyle(ChatFormatting.GRAY));
     }
 
     @Override
