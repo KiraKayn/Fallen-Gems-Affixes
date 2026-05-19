@@ -131,6 +131,9 @@ public class ShadowCloneEntity extends PathfinderMob {
         if (this.isRemoved()) return false;
         if (source.getEntity() instanceof ShadowCloneEntity) return false;
 
+        if (ownerUUID != null && source.getEntity() instanceof Player attacker
+                && ownerUUID.equals(attacker.getUUID())) return false;
+
         if (dieOnHit) {
             fireDeathEvent();
             this.discard();
