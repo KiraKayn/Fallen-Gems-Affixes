@@ -685,25 +685,25 @@
 
   "set_affix.fallen_gems_affixes.trickster_weapon.desc": "Hitting an enemy causes all active Shadow Clones to deal an additional %s of your melee damage to the same target [%s]",
 
-  "set_bonus.fallen_gems_affixes.trickster.2": "Shadow Clones inherit %s of your maximum health.",
-  "set_bonus.fallen_gems_affixes.trickster.3": "Gain +%s Movement Speed and +%s Dodge Chance per active Shadow Clone.",
-  "set_bonus.fallen_gems_affixes.trickster.4": "When a Shadow Clone disappears, reduce affix cooldowns by %s.",
-  "set_bonus.fallen_gems_affixes.trickster.5": "Killing an enemy has a %s chance to refresh clone cooldown. Gain +%s additional Shadow Clones.",
+  "set_bonus.fallen_gems_affixes.trickster.2": "Shadow Clones inherit %s of your maximum health",
+  "set_bonus.fallen_gems_affixes.trickster.3": "Gain +%s Movement Speed and +%s Dodge Chance per active Shadow Clone",
+  "set_bonus.fallen_gems_affixes.trickster.4": "When a Shadow Clone disappears, reduce affix cooldowns by %s",
+  "set_bonus.fallen_gems_affixes.trickster.5": "Killing an enemy has a %s chance to refresh clone cooldown. Gain +%s additional Shadow Clones",
 
   "set.fallen_gems_affixes.colossus": "Colossus",
 
   "set_affix.fallen_gems_affixes.colossus_helmet.desc": "Critical Hits consume 1 Bastion Orb, releasing a shockwave dealing %s + %s per Orb in a %s block radius",
 
-  "set_affix.fallen_gems_affixes.colossus_chestplate.desc": "Taking damage grants %s Bastion Orb(s). Hits dealing ≥%s max HP grant %s extra. While Orbs are active, gain %s of missing HP per Orb as bonus Max Health",
+  "set_affix.fallen_gems_affixes.colossus_chestplate.desc": "On taking damage, gain %s Bastion Orb. Hits dealing ≥%s max HP grant %s extra. Gain %s of your missing HP as Max Health per Orb",
 
-  "set_affix.fallen_gems_affixes.colossus_leggings.desc": "When a Bastion Orb is consumed, release a shockwave dealing %s + %s×accumulated damage. Consuming all 4 at once multiplies damage by %s and radius by %s",
+  "set_affix.fallen_gems_affixes.colossus_leggings.desc": "Orb consumption triggers a shockwave dealing %s + %s stored damage. Consuming all orbs at once grants %sx damage and %sx radius",
 
   "set_affix.fallen_gems_affixes.colossus_boots.desc": "Gain %s Movement Speed per Bastion Orb. At 4 Orbs, immune to slows and melee hits root enemies for %s. Standing still for %s charges +1 Orb on your next gain",
 
   "set_affix.fallen_gems_affixes.colossus_shield.desc": "Blocking always grants 1 Bastion Orb. At 4 Orbs, blocking reflects %s damage and releases a stun pulse [%s blocks, %s]",
 
-  "set_bonus.fallen_gems_affixes.colossus.2": "Gain bonus Max Health equal to %s of your missing health per active Bastion Orb.",
-  "set_bonus.fallen_gems_affixes.colossus.3": "Surviving death at 4 Orbs: consume all Orbs, massive shockwave, and %s invulnerability. [%s cooldown]",
-  "set_bonus.fallen_gems_affixes.colossus.4": "Gaining or consuming a Bastion Orb heals you [%s max HP], boosts Attack Speed [+%s, %s], and reduces effect cooldowns.",
-  "set_bonus.fallen_gems_affixes.colossus.5": "At 4 Orbs: immune to negative effects, knockback, melee attacks emit shockwaves. %s chance to gain a bonus Orb on Orb gain."
+  "set_bonus.fallen_gems_affixes.colossus.2": "Gain bonus Max Health equal to %s of your missing health per active Bastion Orb",
+  "set_bonus.fallen_gems_affixes.colossus.3": "Surviving death at 4 Orbs: consume all Orbs, massive shockwave, and %s invulnerability [%s]",
+  "set_bonus.fallen_gems_affixes.colossus.4": "Gaining or consuming a Bastion Orb heals you [%s max HP], boosts Attack Speed [+%s, %s], and reduce affix cooldowns by %s",
+  "set_bonus.fallen_gems_affixes.colossus.5": "At 4 Orbs: immune to negative effects, knockback, melee attacks emit shockwaves. %s chance to gain a bonus Orb on Orb gain"
 }

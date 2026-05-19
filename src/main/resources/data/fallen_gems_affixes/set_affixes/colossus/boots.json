@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:colossus_boots",
+  "set": "fallen_gems_affixes:colossus",
+  "speed_per_orb": 0.05,
+  "root_duration_ticks": 60,
+  "standing_still_threshold_ticks": 40
+}

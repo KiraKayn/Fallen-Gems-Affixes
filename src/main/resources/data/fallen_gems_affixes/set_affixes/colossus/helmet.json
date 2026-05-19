@@ -1,0 +1,7 @@
+{
+  "type": "fallen_gems_affixes:colossus_helmet",
+  "set": "fallen_gems_affixes:colossus",
+  "shockwave_base_damage": 6.0,
+  "shockwave_damage_per_orb": 2.5,
+  "shockwave_radius": 4.0
+}

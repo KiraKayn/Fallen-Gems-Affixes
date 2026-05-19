@@ -1,0 +1,8 @@
+{
+  "type": "fallen_gems_affixes:colossus_shield",
+  "set": "fallen_gems_affixes:colossus",
+  "reflect_fraction": 0.25,
+  "stun_duration_ticks": 60,
+  "stun_radius": 4.0,
+  "five_piece_orb_gen_bonus": 0.3
+}

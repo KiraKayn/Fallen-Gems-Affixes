@@ -3,6 +3,7 @@ package net.kayn.fallen_gems_affixes.adventure.set;
 import com.mojang.logging.LogUtils;
 import dev.shadowsoffire.placebo.reload.DynamicRegistry;
 import net.kayn.fallen_gems_affixes.FallenGemsAffixes;
+import net.kayn.fallen_gems_affixes.adventure.set.colossus.*;
 import net.kayn.fallen_gems_affixes.adventure.set.trickster.*;
 import org.slf4j.Logger;
 
@@ -21,5 +22,11 @@ public class SetAffixRegistry extends DynamicRegistry<SetAffix> {
         this.registerCodec(FallenGemsAffixes.id("trickster_leggings"),   TricksterLeggingsAffix.CODEC);
         this.registerCodec(FallenGemsAffixes.id("trickster_boots"),      TricksterBootsAffix.CODEC);
         this.registerCodec(FallenGemsAffixes.id("trickster_weapon"),     TricksterWeaponAffix.CODEC);
+
+        this.registerCodec(FallenGemsAffixes.id("colossus_helmet"),      ColossusHelmetAffix.CODEC);
+        this.registerCodec(FallenGemsAffixes.id("colossus_chestplate"),  ColossusChestplateAffix.CODEC);
+        this.registerCodec(FallenGemsAffixes.id("colossus_leggings"),    ColossusLeggingsAffix.CODEC);
+        this.registerCodec(FallenGemsAffixes.id("colossus_boots"),       ColossusBootsAffix.CODEC);
+        this.registerCodec(FallenGemsAffixes.id("colossus_shield"),      ColossusShieldAffix.CODEC);
     }
 }

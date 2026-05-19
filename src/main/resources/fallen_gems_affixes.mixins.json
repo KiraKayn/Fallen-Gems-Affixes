@@ -20,8 +20,8 @@
     "StepFunctionMixin",
     "RarityRegistryMixin",
     "LootRuleExecuteMixin",
-    "PlayerAttackMixin",
-    "AffixHelperMixin"
+    "AffixHelperMixin",
+    "ApotheosisCritMixin"
   ],
   "client": [
     "AugmentingScreenMixin",

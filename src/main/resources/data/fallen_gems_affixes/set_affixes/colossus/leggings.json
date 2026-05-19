@@ -1,0 +1,13 @@
+{
+  "type": "fallen_gems_affixes:colossus_leggings",
+  "set": "fallen_gems_affixes:colossus",
+  "base_shockwave_damage": 4.0,
+  "damage_scale_fraction": 0.25,
+  "shockwave_radius": 4.0,
+  "max_orb_radius_multiplier": 2.0,
+  "max_orb_damage_multiplier": 2.5,
+  "resonance_heal_fraction": 0.02,
+  "resonance_attack_speed_boost": 0.25,
+  "resonance_attack_speed_duration_ticks": 60,
+  "resonance_cooldown_reduction_ticks": 10
+}

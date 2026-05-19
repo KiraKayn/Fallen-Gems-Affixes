@@ -1,0 +1,13 @@
+{
+  "type": "fallen_gems_affixes:colossus_chestplate",
+  "set": "fallen_gems_affixes:colossus",
+  "orbs_per_hit": 1,
+  "heavy_hit_threshold": 0.15,
+  "heavy_hit_bonus_orbs": 1,
+  "max_health_per_orb_fraction": 0.03,
+  "adaptive_vitality_fraction": 0.05,
+  "last_stand_cooldown_ticks": 14400,
+  "last_stand_invuln_ticks": 60,
+  "last_stand_shockwave_damage": 20.0,
+  "last_stand_shockwave_radius": 8.0
+}
