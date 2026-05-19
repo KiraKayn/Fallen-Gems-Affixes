@@ -15,7 +15,7 @@
     "epic":     0.008,
     "mythic":   0.012,
     "ancient":  0.018,
-    "fabled":   0.0
+    "fabled":   0.02
   },
   "blacklist": [
     "minecraft:villager",
