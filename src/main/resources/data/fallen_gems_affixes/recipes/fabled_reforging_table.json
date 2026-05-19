@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "minecraft:deepslate_bricks"
+    },
+    "B": {
+      "item": "minecraft:netherite_block"
+    },
+    "R": {
+      "item": "apotheosis:reforging_table"
+    },
+    "F": {
+      "item": "fallen_gems_affixes:fabled_material"
+    }
+  },
+  "pattern": [
+    " N ",
+    "FRF",
+    "DBD"
+  ],
+  "result": {
+    "item": "fallen_gems_affixes:fabled_reforging_table",
+    "count": 1
+  }
+}

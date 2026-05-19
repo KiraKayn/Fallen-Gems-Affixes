@@ -1,0 +1,24 @@
+{
+  "type": "apotheosis:enchanting",
+  "conditions": [{
+    "type": "apotheosis:module",
+    "module": "enchantment"
+  }],
+  "input": {
+    "item": "fallen_gems_affixes:gem_case"
+  },
+  "requirements": {
+    "eterna": 100,
+    "quanta": 100,
+    "arcana": 45
+  },
+  "max_requirements": {
+    "eterna": 100,
+    "quanta": 100,
+    "arcana": 50
+  },
+  "result": {
+    "item": "fallen_gems_affixes:ender_gem_case",
+    "count": 1
+  }
+}
