@@ -705,5 +705,7 @@
   "set_bonus.fallen_gems_affixes.colossus.2": "Gain bonus Max Health equal to %s of your missing health per active Bastion Orb",
   "set_bonus.fallen_gems_affixes.colossus.3": "Surviving death at 4 Orbs: consume all Orbs, massive shockwave, and %s invulnerability [%s]",
   "set_bonus.fallen_gems_affixes.colossus.4": "Gaining or consuming a Bastion Orb heals you [%s max HP], boosts Attack Speed [+%s, %s], and reduce affix cooldowns by %s",
-  "set_bonus.fallen_gems_affixes.colossus.5": "At 4 Orbs: immune to negative effects, knockback, melee attacks emit shockwaves. %s chance to gain a bonus Orb on Orb gain"
+  "set_bonus.fallen_gems_affixes.colossus.5": "At 4 Orbs: immune to negative effects, knockback, melee attacks emit shockwaves. %s chance to gain a bonus Orb on Orb gain",
+  "button.fallen_gems_affixes.no_upgrade_for_locked_level": "Level is locked due to Augment",
+  "button.fallen_gems_affixes.no_upgrade_for_modified_level_cap": "Reach current level cap"
 }

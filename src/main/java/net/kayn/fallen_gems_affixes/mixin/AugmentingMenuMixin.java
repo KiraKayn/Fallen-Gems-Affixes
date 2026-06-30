@@ -1,7 +1,11 @@
 package net.kayn.fallen_gems_affixes.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingMenu;
+import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.attachment.augment.AugmentHelper;
 import net.kayn.fallen_gems_affixes.recipe.ErasureRecipe;
@@ -9,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @Mixin(AugmentingMenu.class)
@@ -59,5 +65,26 @@ public class AugmentingMenuMixin {
                 return;
             }
         }
+    }
+
+    @WrapOperation(
+            method = "clickMenuButton",
+            at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"),
+            remap = false
+    )
+    private Object affixRerollRecord(Map<DynamicHolder<? extends Affix>, AffixInstance> instance, Object k, Object v, Operation<Object> original) {
+        GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.REROLLED_AFFIX, () -> (AffixInstance) v);
+        return original.call(instance, k, v);
+    }
+
+    @WrapOperation(
+            method = "clickMenuButton",
+            at = @At(value = "INVOKE", target = "Ljava/util/Map;remove(Ljava/lang/Object;)Ljava/lang/Object;"),
+            remap = false
+    )
+    private Object affixRerollRecord2(Map<DynamicHolder<? extends Affix>, AffixInstance> instance, Object object, Operation<Object> original) {
+        var result = original.call(instance, object);
+        GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.REROLLED_REMOVE, () -> (AffixInstance) result);
+        return result;
     }
 }

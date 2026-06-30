@@ -39,6 +39,9 @@ public class Fallen {
 
         public static final ContextKey<Set<FallenRarity>> FALLEN_RARITIES = GameLifecycleHelper.registerContextKey("fga.reload.fallen_rarities");
         public static final ContextKey<Void> DELAYED_RARITY_REGISTER = GameLifecycleHelper.registerContextKey("fga.reload.delayed_rarity");
+        public static final ContextKey<AffixInstance> APPLIED_AFFIX = GameLifecycleHelper.registerContextKey("fga.affix.applied_affix");
+        public static final ContextKey<AffixInstance> REROLLED_AFFIX = GameLifecycleHelper.registerContextKey("fga.affix.rerolled_affix");
+        public static final ContextKey<AffixInstance> REROLLED_REMOVE = GameLifecycleHelper.registerContextKey("fga.affix.rerolled_remove");
 
         public static void register() {}
     }
@@ -128,6 +131,10 @@ public class Fallen {
          * used to store to modify affixes for affix power
          */
         public static final String TO_MODIFY_AFFIXES_OBJECT = "fallen_gems_affixes:tm_affixes";
+        /**
+         * used to store to modify affixes version for cache refresh
+         */
+        public static final String TO_MODIFY_AFFIXES_VERSION = "fga:tma_version";
         /**
          * fabled tag
          */

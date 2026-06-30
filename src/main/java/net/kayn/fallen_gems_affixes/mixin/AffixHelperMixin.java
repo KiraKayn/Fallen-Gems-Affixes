@@ -8,14 +8,18 @@ import dev.shadowsoffire.apotheosis.adventure.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import net.kayn.fallen_gems_affixes.Fallen;
 import net.kayn.fallen_gems_affixes.adventure.set.SetAffixHelper;
+import net.kayn.fallen_gems_affixes.attachment.augment.SpecialAffixEventHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.GameLifecycleHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collections;
@@ -87,5 +91,68 @@ public class AffixHelperMixin {
             } catch (Exception ignored) {}
         }
         return RarityRegistry.getMinRarity();
+    }
+
+    @Inject(method = "setAffixes", at = @At("HEAD"))
+    private static void setAffixesA(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes, CallbackInfo ci) {
+        AffixInstance ins = GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.APPLIED_AFFIX, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+        AffixInstance ins2 = GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.REROLLED_AFFIX, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+        if (ins != null) {
+            if (affixes.containsValue(ins)) {
+                if (ins.stack() != stack) {
+                    GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.APPLIED_AFFIX, () -> ins);
+                } else {
+                    var tma = SpecialAffixEventHandler.getToModifyAffixes(stack);
+                    var input = tma.getInput();
+                    if (input.size() != affixes.size()) return;
+                    affixes.clear();
+                    affixes.putAll(input);
+                    var attr = tma.getAttributes().get(ins.affix());
+                    if (attr == null) return;
+                    AffixInstance neoInst = attr.output(tma::createInsWith);
+                    float diff = ins.level() - neoInst.level();
+                    AffixInstance raw = input.get(ins.affix());
+                    if (raw == null) return;
+                    affixes.put(ins.affix(), ins.withNewLevel(raw.level() + diff));
+                    return;
+                }
+            }
+        }
+        if (ins2 != null) {
+            AffixInstance ins3 = GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.REROLLED_REMOVE, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+            if (ins3 == null) return;
+            if (affixes.containsValue(ins2)) {
+                if (ins2.stack() != stack) {
+                    GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.REROLLED_AFFIX, () -> ins2);
+                } else {
+                    var tma = SpecialAffixEventHandler.getToModifyAffixes(stack);
+                    var input = tma.getInput();
+                    if (input.size() != affixes.size()) return;
+                    affixes.clear();
+                    affixes.putAll(tma.getInput());
+                    affixes.remove(ins3.affix());
+                    affixes.put(ins2.affix(), ins2);
+                }
+                return;
+            }
+        }
+        var affixes1 = SpecialAffixEventHandler.getToModifyAffixes(stack);
+        var affixes2 = affixes1.output();
+        for (AffixInstance value : affixes1.getInput().values()) {
+            AffixInstance inst = affixes.get(value.affix());
+            if (inst == null) continue;
+            AffixInstance inst2 = affixes2.get(value.affix());
+            if (inst2 == null) continue;
+            if (inst.level() == inst2.level()) {
+                affixes.put(value.affix(), value);
+            }
+        }
+    }
+
+    @Inject(method = "setAffixes", at = @At("RETURN"))
+    private static void setAffixesB(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes, CallbackInfo ci) {
+        GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.APPLIED_AFFIX, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+        GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.REROLLED_AFFIX, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+        GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.REROLLED_REMOVE, GameLifecycleHelper.EMPTY_EX_CONSUMER);
     }
 }

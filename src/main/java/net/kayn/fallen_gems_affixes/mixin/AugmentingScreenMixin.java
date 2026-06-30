@@ -1,15 +1,20 @@
 package net.kayn.fallen_gems_affixes.mixin;
 
+import dev.shadowsoffire.apotheosis.adventure.affix.Affix;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingMenu;
 import dev.shadowsoffire.apotheosis.adventure.affix.augmenting.AugmentingScreen;
 import dev.shadowsoffire.apotheosis.adventure.client.SimpleTexButton;
+import dev.shadowsoffire.placebo.reload.DynamicHolder;
+import net.kayn.fallen_gems_affixes.attachment.augment.SpecialAffixEventHandler;
+import net.kayn.fallen_gems_affixes.attachment.augment.ToModifyAffixes;
 import net.kayn.fallen_gems_affixes.recipe.ErasureRecipe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.rtxyd.fallen.lib.runtime.forgemod.util.ItemStackCakyHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Map;
 
 @Mixin(value = AugmentingScreen.class, remap = false)
 public abstract class AugmentingScreenMixin {
@@ -24,6 +30,8 @@ public abstract class AugmentingScreenMixin {
     @Shadow protected SimpleTexButton rerollBtn;
     @Shadow protected List<AffixInstance> currentItemAffixes;
     @Shadow protected abstract int getSelectedAffix();
+
+    @Shadow protected SimpleTexButton upgradeBtn;
 
     @Inject(method = "updateCachedState", at = @At("TAIL"), remap = false)
     private void disableRerollForScrollAffixes(CallbackInfo ci) {
@@ -49,6 +57,43 @@ public abstract class AugmentingScreenMixin {
                                 .withStyle(ChatFormatting.RED)
                 );
                 return;
+            }
+        }
+    }
+
+    @Inject(method = "updateCachedState", at = @At("TAIL"), remap = false)
+    private void disableUpgradeForModifiedAffixes(CallbackInfo ci) {
+        if (upgradeBtn == null || !upgradeBtn.active) return;
+        int selected = this.getSelectedAffix();
+
+        if (currentItemAffixes == null || currentItemAffixes.isEmpty()) return;
+        if (selected < 0 || selected >= currentItemAffixes.size()) return;
+
+        AugmentingMenu menu = ((AugmentingScreen) (Object) this).getMenu();
+        ItemStack mainItem = menu.getMainItem();
+
+        AffixInstance inst = currentItemAffixes.get(selected);
+        var tma = SpecialAffixEventHandler.getToModifyAffixes(mainItem);
+        var input = tma.getInput();
+        var attrs = tma.getAttributes();
+        var attr = attrs.get(inst.affix());
+        if (attr != null) {
+            if (attr.hasSetBase() || attr.hasSetFinal()) {
+                upgradeBtn.active = false;
+                upgradeBtn.setInactiveMessage(
+                        Component.translatable("button.fallen_gems_affixes.no_upgrade_for_locked_level")
+                                .withStyle(ChatFormatting.RED)
+                );
+            }
+            AffixInstance instInput = input.get(inst.affix());
+            if (instInput != null) {
+                if (instInput.level() >= 1.0f) {
+                    upgradeBtn.active = false;
+                    upgradeBtn.setInactiveMessage(
+                            Component.translatable("button.fallen_gems_affixes.no_upgrade_for_modified_level_cap")
+                                    .withStyle(ChatFormatting.RED)
+                    );
+                }
             }
         }
     }

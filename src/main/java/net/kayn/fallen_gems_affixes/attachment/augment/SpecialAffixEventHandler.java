@@ -19,12 +19,9 @@ import net.rtxyd.fallen.lib.util.IObjectCaky;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.AFFIXES_REFRESH_MARKER;
-import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.TO_MODIFY_AFFIXES_OBJECT;
+import static net.kayn.fallen_gems_affixes.Fallen.AugmentMisc.*;
 
 public class SpecialAffixEventHandler {
-    private static final ThreadLocal<Boolean> NOT_REFRESH = ThreadLocal.withInitial(() -> false);
-    private static final ThreadLocal<AtomicInteger> REFRESHER_TMA = ThreadLocal.withInitial(AtomicInteger::new);
 
     public static void register() {
         MinecraftForge.EVENT_BUS.addListener(SpecialAffixEventHandler::onAffixApply);
@@ -33,38 +30,21 @@ public class SpecialAffixEventHandler {
     }
 
     private static void onAffixApply(AffixApplyEvent event) {
-        NOT_REFRESH.set(true);
+        GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.APPLIED_AFFIX, event::getAffix);
     }
 
+    // it triggers *in* affix cache logic chain, to block or manually refresh the cache
+    // better don't change original cache.
     private static void inAffixCacheRefresh(AffixCacheRefreshEvent event) {
-        if (NOT_REFRESH.get()) {
-            var affixes = GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.AFFIXES_HOLER, GameLifecycleHelper.EMPTY_EX_CONSUMER);
-            if (affixes != null) {
-                event.setCacheAffixes(affixes);
-            }
-            NOT_REFRESH.set(false);
-            return;
-        }
-        ToModifyAffixes toModifyAffixes = getToModifyAffixesRefresh(event.getItem(), event.getAffixes());
-        if (toModifyAffixes.getFactor().isEmpty()) return;
-        event.setCacheAffixes(toModifyAffixes.output());
+        getToModifyAffixesRefresh(event.getItem(), event.getAffixes());
     }
 
+    // it triggers at getAffixes return, can modify the affix instances or check them.
     private static void onAffixGetFinish(AffixGetFinishEvent event) {
         ItemStack stack = event.getItem();
-        var inses = event.getAffixesView();
-        ToModifyAffixes affixes = getToModifyAffixes(stack, inses);
-        var augs = AugmentHelper.getAugments(stack);
-        if (affixes.getFactor() != augs) {
-            try {
-                NOT_REFRESH.set(true);
-                GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.AFFIXES_HOLER, () -> inses);
-                getAffixesManualRefresh(stack, inses,1);
-            } finally {
-                NOT_REFRESH.set(false);
-            }
-            event.setTransientAffixes(getAffixesManualRefresh(stack, inses, 0));
-        }
+        ToModifyAffixes toModifyAffixes = getToModifyAffixes(stack);
+        if (toModifyAffixes == ToModifyAffixes.EMPTY) return;
+        event.setTransientAffixes(toModifyAffixes.output());
     }
 
     private static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixesManualRefresh(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> inses, int refresh) {
@@ -87,12 +67,26 @@ public class SpecialAffixEventHandler {
         }
     }
 
-    public static ToModifyAffixes getToModifyAffixes(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
-        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> getToModifyAffixesA(s, affixes), i -> REFRESHER_TMA.get().get());
+    public static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixesFromNbt(ItemStack stack) {
+        return CachedObject.CachedObjectSource.getOrCreate(stack, AffixHelper.AFFIX_CACHED_OBJECT, AffixHelper::getAffixesImpl, CachedObject.hashSubkey(AffixHelper.AFFIX_DATA));
+    }
+
+    public static ToModifyAffixes getToModifyAffixes(ItemStack stack) {
+        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL,
+                s -> getToModifyAffixesA(stack, getAffixesFromNbt(stack)),
+                i -> getTmaFingerprintRefresher(i).get());
+    }
+
+    private static AtomicInteger getTmaFingerprintRefresher(ItemStack stack) {
+        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_VERSION, IObjectCaky.Type.MANUAL, s -> new AtomicInteger(), i -> 0);
+    }
+
+    private static ToModifyAffixes getToModifyAffixes(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
+        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> getToModifyAffixesA(s, affixes), i -> getTmaFingerprintRefresher(i).get());
     }
 
     private static ToModifyAffixes getToModifyAffixesRefresh(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
-        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> getToModifyAffixesA(s, affixes), i -> REFRESHER_TMA.get().incrementAndGet());
+        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> getToModifyAffixesA(s, affixes), i -> getTmaFingerprintRefresher(i).incrementAndGet());
     }
 
     private static ToModifyAffixes getToModifyAffixesA(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes) {
@@ -103,6 +97,6 @@ public class SpecialAffixEventHandler {
     }
 
     private static ToModifyAffixes getToModifyAffixesManualRefresh(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> affixes, LiveAugments augments) {
-        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> new ToModifyAffixes(affixes, augments), i -> REFRESHER_TMA.get().incrementAndGet());
+        return ItemStackCakyHandler.resolveWith(stack, TO_MODIFY_AFFIXES_OBJECT, IObjectCaky.Type.MANUAL, s -> new ToModifyAffixes(affixes, augments), i -> getTmaFingerprintRefresher(i).incrementAndGet());
     }
 }

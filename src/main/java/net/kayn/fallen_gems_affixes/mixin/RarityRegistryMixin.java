@@ -31,6 +31,7 @@ public abstract class RarityRegistryMixin extends WeightedDynamicRegistry<LootRa
         GameLifecycleHelper.submitContextCall(Fallen.ContextKeys.DELAYED_RARITY_REGISTER, () -> {
             BiMap<ResourceLocation, LootRarity> map = HashBiMap.create(this.registry);
             var fallenRarities = GameLifecycleHelper.callAndRemoveIfPresent(Fallen.ContextKeys.FALLEN_RARITIES, GameLifecycleHelper.EMPTY_EX_CONSUMER);
+            if (fallenRarities == null) return null;
             for (FallenRarity fallenRarity : fallenRarities) {
                 ResourceLocation location = fallenRarity.getClassifier();
                 LootRarity rarity = (LootRarity) fallenRarity.getRarity();
