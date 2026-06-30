@@ -84,7 +84,13 @@ public class AffixScrollItem extends Item {
     public Component getName(ItemStack stack) {
         LootRarity rarity = getAffixRarity(stack);
         if (rarity != null) {
-            return Component.translatable("item.fallen_gems_affixes.affix_scroll").withStyle(Style.EMPTY.withColor(rarity.getColor()));
+            Component rarityName = Component.translatable("rarity." + RarityRegistry.INSTANCE.getKey(rarity));
+            Component baseName = Component.translatable("item.fallen_gems_affixes.affix_scroll");
+            return Component.empty()
+                    .append(rarityName)
+                    .append(Component.literal(" "))
+                    .append(baseName)
+                    .withStyle(Style.EMPTY.withColor(rarity.getColor()));
         }
         return super.getName(stack);
     }
