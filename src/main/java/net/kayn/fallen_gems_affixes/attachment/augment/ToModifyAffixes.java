@@ -19,6 +19,7 @@ import java.util.Map;
 public class ToModifyAffixes extends AFactorInsAttributeSystem<DynamicHolder<? extends Affix>, AffixInstance, ToModifyAffixes.AffixPowerAttribute, LiveAugments> {
 
     public static final ToModifyAffixes EMPTY = new ToModifyAffixes(Collections.emptyMap(), LiveAugments.EMPTY);
+    private Map<DynamicHolder<? extends Affix>, AffixInstance> output;
 
     public ToModifyAffixes(Map<DynamicHolder<? extends Affix>, AffixInstance> affixes, LiveAugments augments) {
         super(affixes, augments);
@@ -41,6 +42,13 @@ public class ToModifyAffixes extends AFactorInsAttributeSystem<DynamicHolder<? e
     @Override
     public AffixInstance createInsWith(AffixInstance old, float value) {
         return new AffixInstance(old.affix(), old.stack(), old.rarity(), Mth.clamp(value, 0, SupremacyAugment.MAX_AFFIX_LEVEL));
+    }
+
+    public Map<DynamicHolder<? extends Affix>, AffixInstance> getOutput() {
+        if (this.output == null) {
+            this.output = this.output();
+        }
+        return output;
     }
 
     public static class AffixPowerAttribute extends AInsAttribute<AffixInstance> {

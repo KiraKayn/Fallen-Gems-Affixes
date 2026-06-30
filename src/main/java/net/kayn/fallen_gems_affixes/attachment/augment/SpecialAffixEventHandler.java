@@ -44,7 +44,11 @@ public class SpecialAffixEventHandler {
         ItemStack stack = event.getItem();
         ToModifyAffixes toModifyAffixes = getToModifyAffixes(stack);
         if (toModifyAffixes == ToModifyAffixes.EMPTY) return;
-        event.setTransientAffixes(toModifyAffixes.output());
+        var augs = AugmentHelper.getAugments(stack);
+        if (toModifyAffixes.getFactor() != augs) {
+            toModifyAffixes = getToModifyAffixesManualRefresh(stack, toModifyAffixes.getInput(), augs);
+        }
+        event.setTransientAffixes(toModifyAffixes.getOutput());
     }
 
     private static Map<DynamicHolder<? extends Affix>, AffixInstance> getAffixesManualRefresh(ItemStack stack, Map<DynamicHolder<? extends Affix>, AffixInstance> inses, int refresh) {
