@@ -1,0 +1,12 @@
+{
+  "type": "fallen_gems_affixes:shield_guard",
+  "reduction": {
+    "rare":    0.50,
+    "epic":    0.75,
+    "mythic":  1.0,
+    "ancient": 1.0
+  },
+  "types": [
+    "shield"
+  ]
+}

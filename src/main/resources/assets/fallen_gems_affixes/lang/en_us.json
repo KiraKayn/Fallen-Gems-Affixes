@@ -706,6 +706,12 @@
   "set_bonus.fallen_gems_affixes.colossus.3": "Surviving death at 4 Orbs: consume all Orbs, massive shockwave, and %s invulnerability [%s]",
   "set_bonus.fallen_gems_affixes.colossus.4": "Gaining or consuming a Bastion Orb heals you [%s max HP], boosts Attack Speed [+%s, %s], and reduce affix cooldowns by %s",
   "set_bonus.fallen_gems_affixes.colossus.5": "At 4 Orbs: immune to negative effects, knockback, melee attacks emit shockwaves. %s chance to gain a bonus Orb on Orb gain",
+
   "button.fallen_gems_affixes.no_upgrade_for_locked_level": "Level is locked due to Augment",
-  "button.fallen_gems_affixes.no_upgrade_for_modified_level_cap": "Reach current level cap"
+  "button.fallen_gems_affixes.no_upgrade_for_modified_level_cap": "Reach current level cap",
+
+  "affix.fallen_gems_affixes.shield_guard.desc": "Reduces shield disable duration by %s%%",
+  "affix.fallen_gems_affixes.shield_guard.immune": "Your shield cannot be disabled",
+  "affix.fallen_gems_affixes:shield/shield_guard": "Steadfast",
+  "affix.fallen_gems_affixes:shield/shield_guard.suffix": "of the Bulwark"
 }

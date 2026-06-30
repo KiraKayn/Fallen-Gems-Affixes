@@ -21,7 +21,8 @@
     "RarityRegistryMixin",
     "LootRuleExecuteMixin",
     "AffixHelperMixin",
-    "ApotheosisCritMixin"
+    "ApotheosisCritMixin",
+    "PlayerShieldGuardMixin"
   ],
   "client": [
     "AugmentingScreenMixin",

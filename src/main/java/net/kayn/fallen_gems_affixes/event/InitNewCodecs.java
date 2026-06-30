@@ -44,6 +44,7 @@ public class InitNewCodecs {
             AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "fortify"), FortifyAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "prospector"), ProspectorAffix.CODEC);
             AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "enchant_boost"), EnchantBoostAffix.CODEC);
+            AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "shield_guard"), ShieldGuardAffix.CODEC);
 
             if (ModList.get().isLoaded("irons_spellbooks")) {
                 GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath(FallenGemsAffixes.MOD_ID, "spell_effect"), SpellEffectBonus.CODEC);
