@@ -6,10 +6,14 @@
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
     "LootControllerMixin",
+    "LootRarityMixin",
     "PlayerShieldGuardMixin",
     "TrueShotMixin",
+    "UniversalBossGlowMixin",
+    "accessor.DynamicHolderAccessor",
     "accessor.DynamicRegistryAccessor",
-    "accessor.GemClassAccessor"
+    "accessor.GemClassAccessor",
+    "accessor.RarityRegistryAccessor"
   ],
   "client": [
   ],
