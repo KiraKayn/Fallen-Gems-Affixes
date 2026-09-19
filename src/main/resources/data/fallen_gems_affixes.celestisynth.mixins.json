@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "net.kayn.fallen_gems_affixes.mixin.celestisynth",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "RainfallArrowMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "fallen_gems_affixes.refmap.json"
+}
