@@ -220,7 +220,7 @@ dependencies {
 //    compileOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}:api"
 //    runtimeOnly "io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}"
 
-//    implementation "curse.maven:celestisynth-872712:5776930"
+    implementation "curse.maven:celestisynth-1-21-1-1672331:8867800"
     runtimeOnly "curse.maven:additional-attributes-986624:6388896"
     runtimeOnly "curse.maven:runiclib-880879:6604840"
     runtimeOnly "curse.maven:lendercataclysm-551586:6769151"
@@ -233,7 +233,7 @@ dependencies {
     runtimeOnly "curse.maven:alshanexs-familiars-1171602:6539981"
     runtimeOnly "curse.maven:apotheosis-x-irons-spellbooks-compat-1244863:6884505"
 //    runtimeOnly "curse.maven:ice-and-fire-spellbooks-977855:5844739"
-//    runtimeOnly "curse.maven:iceandfire-ce-1040076:6758480"
+    implementation "curse.maven:iceandfire-ce-1040076:8757837"
 //    runtimeOnly "curse.maven:ice-and-fire-dragons-264231:5633453"
 
     // Optional Integrations
