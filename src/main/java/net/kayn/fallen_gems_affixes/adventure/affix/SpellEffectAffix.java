@@ -5,9 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.affix.AffixDefinition;
 import dev.shadowsoffire.apotheosis.affix.AffixInstance;
-import dev.shadowsoffire.apotheosis.affix.AffixType;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
+import dev.shadowsoffire.apothic_attributes.api.AbilityCooldowns;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.core.Holder;
@@ -39,7 +39,6 @@ public class SpellEffectAffix extends Affix {
                     Codec.intRange(1, 255).optionalFieldOf("stacking_limit", 255).forGetter(a -> a.stackingLimit))
             .apply(inst, SpellEffectAffix::new));
 
-
     protected final int cooldown;
     protected final Holder<MobEffect> effect;
     public final Target target;
@@ -48,8 +47,8 @@ public class SpellEffectAffix extends Affix {
     protected final int stackingLimit;
     protected final boolean stackOnReapply;
 
-    public SpellEffectAffix(AffixDefinition def, Holder<MobEffect> effect, Target target, Map<LootRarity, EffectData> values, int cooldown, Set<LootCategory> types, boolean stackOnReapply, int stackingLimit)
-    {
+    public SpellEffectAffix(AffixDefinition def, Holder<MobEffect> effect, Target target, Map<LootRarity, EffectData> values,
+                            int cooldown, Set<LootCategory> types, boolean stackOnReapply, int stackingLimit) {
         super(def);
         this.effect = effect;
         this.target = target;
@@ -62,11 +61,13 @@ public class SpellEffectAffix extends Affix {
 
     @Override
     public MutableComponent getDescription(AffixInstance inst, AttributeTooltipContext ctx) {
-        MobEffectInstance effectInst = this.values.get(inst.getRarity()).build(this.effect, inst.level());
-        MutableComponent comp = this.target.toComponent(toComponent(effectInst, ctx.tickRate()));
-        int cooldown = this.getCooldown(inst.getRarity());
+        LootRarity rarity = inst.getRarity();
+        float level = inst.level();
+        MobEffectInstance effectInst = this.values.get(rarity).build(this.effect, level);
+        MutableComponent comp = this.target.toComponent(toComponent(effectInst), toComponent(effectInst));
+        int cooldown = this.getCooldown(rarity);
         if (cooldown != 0) {
-            Component cd = Component.translatable("affix.apotheosis.cooldown", StringUtil.formatTickDuration(cooldown, ctx.tickRate()));
+            Component cd = Component.translatable("affix.apotheosis.cooldown", StringUtil.formatTickDuration(cooldown, 20f));
             comp = comp.append(" ").append(cd);
         }
         if (this.stackOnReapply) {
@@ -78,28 +79,28 @@ public class SpellEffectAffix extends Affix {
     @Override
     public Component getAugmentingText(AffixInstance inst, AttributeTooltipContext ctx) {
         LootRarity rarity = inst.getRarity();
-        MobEffectInstance effectInst = this.values.get(rarity).build(this.effect, inst.level());
-        MutableComponent comp = this.target.toComponent(toComponent(effectInst, ctx.tickRate()));
+        float level = inst.level();
+        MobEffectInstance effectInst = this.values.get(rarity).build(this.effect, level);
+        MutableComponent comp = this.target.toComponent(toComponent(effectInst));
 
         MobEffectInstance min = this.values.get(rarity).build(this.effect, 0);
         MobEffectInstance max = this.values.get(rarity).build(this.effect, 1);
 
         if (min.getAmplifier() != max.getAmplifier()) {
-            // Vanilla ships potion.potency.0 as an empty string, so we have to fix that here
             Component minComp = min.getAmplifier() == 0 ? Component.literal("I") : Component.translatable("potion.potency." + min.getAmplifier());
             Component maxComp = Component.translatable("potion.potency." + max.getAmplifier());
             comp.append(valueBounds(minComp, maxComp));
         }
 
         if (!this.effect.value().isInstantenous() && min.getDuration() != max.getDuration()) {
-            Component minComp = MobEffectUtil.formatDuration(min, 1, ctx.tickRate());
-            Component maxComp = MobEffectUtil.formatDuration(max, 1, ctx.tickRate());
+            Component minComp = MobEffectUtil.formatDuration(min, 1, 20f);
+            Component maxComp = MobEffectUtil.formatDuration(max, 1, 20f);
             comp.append(valueBounds(minComp, maxComp));
         }
 
         int cooldown = this.getCooldown(rarity);
         if (cooldown != 0) {
-            Component cd = Component.translatable("affix.apotheosis.cooldown", StringUtil.formatTickDuration(cooldown, ctx.tickRate()));
+            Component cd = Component.translatable("affix.apotheosis.cooldown", StringUtil.formatTickDuration(cooldown, 20f));
             comp = comp.append(" ").append(cd);
         }
         if (this.stackOnReapply) {
@@ -141,21 +142,23 @@ public class SpellEffectAffix extends Affix {
     public void applyEffect(LivingEntity target, LootRarity rarity, float level) {
         if (target.level().isClientSide()) return;
 
+        EffectData data = this.values.get(rarity);
         int cooldown = this.getCooldown(rarity);
-        if (cooldown != 0 && isOnCooldown(this.id(), cooldown, target)) return;
-        SpellEffectAffix.EffectData data = this.values.get(rarity);
-        var inst = target.getEffect(this.effect);
-        if (this.stackOnReapply && inst != null) {
-            if (inst != null) {
-                int amplifier = Math.min(this.stackingLimit, (int) (inst.getAmplifier() + 1 + data.amplifier.get(level)));
-                var newInst = new MobEffectInstance(this.effect, (int) Math.max(inst.getDuration(), data.duration.get(level)), amplifier);
-                target.addEffect(newInst);
-            }
-        }
-        else {
+        if (cooldown != 0 && AbilityCooldowns.isOnCooldown(target, this.id(), cooldown)) return;
+
+        var existing = target.getEffect(this.effect);
+        if (this.stackOnReapply && existing != null) {
+            int amplifier = Math.min(this.stackingLimit, (int) (existing.getAmplifier() + 1 + data.amplifier.get(level)));
+            var newInst = new MobEffectInstance(this.effect,
+                    (int) Math.max(existing.getDuration(), data.duration.get(level)), amplifier);
+            target.addEffect(newInst);
+        } else {
             target.addEffect(data.build(this.effect, level));
         }
-        startCooldown(this.id(), target);
+
+        if (cooldown != 0) {
+            AbilityCooldowns.startCooldown(target, this.id());
+        }
     }
 
     protected int getCooldown(LootRarity rarity) {
@@ -164,21 +167,20 @@ public class SpellEffectAffix extends Affix {
         return this.cooldown;
     }
 
-    public static Component toComponent(MobEffectInstance inst, float tickRate) {
+    public static Component toComponent(MobEffectInstance inst) {
         MutableComponent mutablecomponent = Component.translatable(inst.getDescriptionId());
-        Holder<MobEffect> mobeffect = inst.getEffect();
+        MobEffect mobeffect = inst.getEffect().value();
 
         if (inst.getAmplifier() > 0) {
             mutablecomponent = Component.translatable("potion.withAmplifier", mutablecomponent, Component.translatable("potion.potency." + inst.getAmplifier()));
         }
 
         if (inst.getDuration() > 20) {
-            mutablecomponent = Component.translatable("potion.withDuration", mutablecomponent, MobEffectUtil.formatDuration(inst, 1, tickRate));
+            mutablecomponent = Component.translatable("potion.withDuration", mutablecomponent, MobEffectUtil.formatDuration(inst, 1, 20f));
         }
 
-        return mutablecomponent.withStyle(mobeffect.value().getCategory().getTooltipFormatting());
+        return mutablecomponent.withStyle(mobeffect.getCategory().getTooltipFormatting());
     }
-
 
     public static record EffectData(StepFunction duration, StepFunction amplifier, int cooldown) {
 

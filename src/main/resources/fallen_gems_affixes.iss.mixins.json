@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.kayn.fallen_gems_affixes.mixin.iss",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "fallen_gems_affixes.refmap.json",
+  "mixins": [
+    "AbstractSpellMixin"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

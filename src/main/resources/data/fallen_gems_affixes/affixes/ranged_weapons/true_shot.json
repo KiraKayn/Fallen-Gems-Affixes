@@ -1,0 +1,30 @@
+{
+  "type": "fallen_gems_affixes:con_affix_type",
+  "con_type": [],
+  "affix": {
+    "type": "fallen_gems_affixes:true_shot",
+    "definition": {
+      "affix_type": "ability",
+      "exclusive_set": [],
+      "weights": {
+        "weight": 25,
+        "quality": 0.1
+      }
+    },
+    "values": {
+      "apotheosis:epic": true,
+      "apotheosis:mythic": true,
+      "apotheosis:ancient": true
+    },
+    "types": [
+      "apotheosis:bow",
+      "apotheosis:crossbow"
+    ],
+    "con_cat": [
+      {
+        "modid": "celestisynth",
+        "category": "fallen_gems_affixes:celestial_ranged"
+      }
+    ]
+  }
+}

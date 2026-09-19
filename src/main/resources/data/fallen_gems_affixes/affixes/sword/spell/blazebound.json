@@ -1,0 +1,63 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:con_affix_type",
+  "con_type": [],
+  "affix": {
+    "type": "fallen_gems_affixes:spell_cast",
+    "definition": {
+      "affix_type": "ability",
+      "exclusive_set": [],
+      "weights": {
+        "weight": 25,
+        "quality": 0.1
+      }
+    },
+    "spell": "irons_spellbooks:burning_dash",
+    "trigger": "melee_hit",
+    "target": "TARGET",
+    "values": {
+      "apotheosis:rare": {
+        "level": {
+          "min": 1,
+          "max": 4
+        },
+        "cooldown": 600
+      },
+      "apotheosis:epic": {
+        "level": {
+          "min": 2,
+          "max": 6
+        },
+        "cooldown": 450
+      },
+      "apotheosis:mythic": {
+        "level": {
+          "min": 4,
+          "max": 8
+        },
+        "cooldown": 300
+      },
+      "apotheosis:ancient": {
+        "level": {
+          "min": 6,
+          "max": 10
+        },
+        "cooldown": 150
+      }
+    },
+    "types": [
+      "apotheosis:melee_weapon"
+    ],
+    "con_cat": [
+      {
+        "modid": "celestisynth",
+        "category": "fallen_gems_affixes:celestial_melee"
+      }
+    ]
+  }
+}

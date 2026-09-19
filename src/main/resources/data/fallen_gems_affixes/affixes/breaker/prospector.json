@@ -1,0 +1,19 @@
+{
+  "type": "fallen_gems_affixes:prospector",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "range": {
+    "apotheosis:epic": 8,
+    "apotheosis:mythic": 16,
+    "apotheosis:ancient": 24
+  },
+  "types": [
+    "apotheosis:pickaxe"
+  ]
+}

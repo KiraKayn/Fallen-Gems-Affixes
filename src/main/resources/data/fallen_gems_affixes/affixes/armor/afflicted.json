@@ -1,0 +1,49 @@
+{
+  "type": "fallen_gems_affixes:afflicted",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "damage_per_effect": {
+    "apotheosis:epic": {
+      "min": 0.05,
+      "steps": 5,
+      "step": 0.005
+    },
+    "apotheosis:mythic": {
+      "min": 0.06,
+      "steps": 4,
+      "step": 0.005
+    },
+    "apotheosis:ancient": {
+      "min": 0.07,
+      "steps": 5,
+      "step": 0.005
+    }
+  },
+  "speed_per_effect": {
+    "apotheosis:epic": {
+      "min": 0.025,
+      "steps": 5,
+      "step": 0.002
+    },
+    "apotheosis:mythic": {
+      "min": 0.03,
+      "steps": 4,
+      "step": 0.002
+    },
+    "apotheosis:ancient": {
+      "min": 0.035,
+      "steps": 5,
+      "step": 0.002
+    }
+  },
+  "types": [
+    "apotheosis:helmet",
+    "apotheosis:boots"
+  ]
+}

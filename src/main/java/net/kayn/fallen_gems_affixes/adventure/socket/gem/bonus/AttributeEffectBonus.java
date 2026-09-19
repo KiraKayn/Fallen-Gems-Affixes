@@ -1,21 +1,17 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
-import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.affix.effect.MobEffectAffix.Target;
-import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.mixin.LivingEntityInvoker;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.socket.gem.GemView;
 import dev.shadowsoffire.apotheosis.socket.gem.Purity;
 import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
-import dev.shadowsoffire.apotheosis.socket.gem.bonus.MobEffectBonus;
+import dev.shadowsoffire.apothic_attributes.api.AbilityCooldowns;
 import dev.shadowsoffire.apothic_attributes.modifiers.StackAttributeModifiersEvent;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
-import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -36,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
@@ -45,8 +40,6 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.neoforged.neoforge.common.util.AttributeTooltipContext;
 
 import java.util.Map;
-import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class AttributeEffectBonus extends GemBonus {
@@ -204,25 +197,24 @@ public class AttributeEffectBonus extends GemBonus {
 
     private void applyEffect(GemInstance inst, LivingEntity target) {
         int cooldown = this.getCooldown(inst.purity());
-        if (cooldown != 0 && Affix.isOnCooldown(makeUniqueId(inst), cooldown, target)) {
+        if (cooldown != 0 && AbilityCooldowns.isOnCooldown(target, makeUniqueId(inst), cooldown)) {
             return;
         }
         EffectData data = this.effectValues.get(inst.purity());
         MobEffectInstance effectInst = target.getEffect(this.effect);
         if (this.stackOnReapply && effectInst != null) {
-            if (inst != null) {
-                int duration = Math.max(effectInst.getDuration(), data.duration);
-                int amp = Math.min(this.stackingLimit, effectInst.getAmplifier() + 1 + data.amplifier);
-                var newInst = new MobEffectInstance(this.effect, duration, amp, effectInst.isAmbient(), effectInst.isVisible());
-                effectInst.update(newInst);
-                ((LivingEntityInvoker) target).callOnEffectUpdated(effectInst, true, null);
-                effectInst.onEffectStarted(target);
-            }
-        }
-        else {
+            int duration = Math.max(effectInst.getDuration(), data.duration);
+            int amp = Math.min(this.stackingLimit, effectInst.getAmplifier() + 1 + data.amplifier);
+            var newInst = new MobEffectInstance(this.effect, duration, amp, effectInst.isAmbient(), effectInst.isVisible());
+            effectInst.update(newInst);
+            ((LivingEntityInvoker) target).callOnEffectUpdated(effectInst, true, null);
+            effectInst.onEffectStarted(target);
+        } else {
             target.addEffect(data.build(this.effect));
         }
-        Affix.startCooldown(makeUniqueId(inst), target);
+        if (cooldown != 0) {
+            AbilityCooldowns.startCooldown(target, makeUniqueId(inst));
+        }
     }
 
     public AttributeModifier createModifier(GemView gem) {

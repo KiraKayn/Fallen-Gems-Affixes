@@ -1,23 +1,20 @@
 package net.kayn.fallen_gems_affixes;
 
-import dev.shadowsoffire.apotheosis.affix.AffixRegistry;
-import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import dev.shadowsoffire.apothic_attributes.compat.CurioEquipmentSlot;
 import net.kayn.fallen_gems_affixes.adventure.affix.AdaptiveSpellPowerAffix;
-import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
-import net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus.*;
 import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.PermanentEffectCapability;
 import net.kayn.fallen_gems_affixes.attachment.permanent_effect_v2.PermanentEffectCommands;
 import net.kayn.fallen_gems_affixes.attributes.AAAttributes;
 import net.kayn.fallen_gems_affixes.attributes.MaxHealthDamageHandler;
+import net.kayn.fallen_gems_affixes.compat.celestisynth.CelestisynthAttributeHandler;
 import net.kayn.fallen_gems_affixes.config.ModConfig;
 import net.kayn.fallen_gems_affixes.event.SpellEventHandler;
 import net.kayn.fallen_gems_affixes.init.loot.ModLootModifier;
-import net.kayn.fallen_gems_affixes.loot.LootCategories;
+import net.kayn.fallen_gems_affixes.loot.CelestialLootCategory;
+import net.kayn.fallen_gems_affixes.loot.StaffLootCategory;
 import net.kayn.fallen_gems_affixes.network.ClientlikeClearPermanentEffectPacket;
 import net.kayn.fallen_gems_affixes.network.ClientlikeUpdatePermanentEffectPacket;
-import net.kayn.fallen_gems_affixes.util.CodecUtil;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrapper;
 import net.kayn.fallen_gems_affixes.util.EquipmentSlotWrappers;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,6 +42,7 @@ import java.util.stream.Collectors;
 public class FallenGemsAffixes {
     public static final String MOD_ID = "fallen_gems_affixes";
     public static final Logger LOGGER = LogManager.getLogger();
+    public static boolean curiosLoaded = false;
 
     public FallenGemsAffixes(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Loading Fallen Gems & Affixes");
@@ -61,12 +59,13 @@ public class FallenGemsAffixes {
         ModLootModifier.LOOT_MODIFIERS.register(modEventBus);
         AAAttributes.ATTRIBUTES.register(modEventBus);
 
-        LootCategories.bootstrap(modEventBus);
+        StaffLootCategory.bootstrap(modEventBus);
         Fallen.bootstrap(modEventBus);
 
 //        AALootCategories.init();
         new MaxHealthDamageHandler();
 
+        curiosLoaded = ModList.get().isLoaded("curios");
         if (ModList.get().isLoaded("irons_spellbooks")) {
             if (!ModList.get().isLoaded("irons_apothic")) {
                 modEventBus.addListener(AdaptiveSpellPowerAffix::loadingIronsItemsFromConfig);
@@ -74,33 +73,23 @@ public class FallenGemsAffixes {
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellHeal);
             NeoForge.EVENT_BUS.addListener(SpellEventHandler::onSpellDamage);
         }
-//        if (ModList.get().isLoaded("celestisynth")) {
-//            CelestialLootCategory.CELESTIAL_WEAPONS.toString();
-//            NeoForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(KeresSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(AquafloraSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(PoltergeistSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
-//            NeoForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
-//        }
+        if (ModList.get().isLoaded("celestisynth")) {
+            CelestialLootCategory.CELESTIAL_MELEE.toString();
+            CelestialLootCategory.CELESTIAL_RANGED.toString();
+            NeoForge.EVENT_BUS.register(SolarisSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(CrescentiaSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(BreezebreakerSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(KeresSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(AquafloraSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(PoltergeistSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(RainfallSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(FrostboundSpellPowerPatch.class);
+            NeoForge.EVENT_BUS.register(CelestisynthAttributeHandler.class);
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "multi_effect"), MultiEffectBonus.CODEC);
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "attribute_effect"), AttributeEffectBonus.CODEC);
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "permanent_effect"), PermanentEffectBonus.CODEC);
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "boss_slayer"), BossSlayerBonus.CODEC);
-            GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "con_cat_bonus"), CodecUtil.CONDITIONAL_CAT_CODEC);
-            AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "con_affix_type"), CodecUtil.CONDITIONAL_AFFIX_TYPE_CODEC);
-            if (ModList.get().isLoaded("irons_spellbooks")) {
-                GemBonus.CODEC.register(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "spell_effect"), SpellEffectBonus.CODEC);
-                AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "adaptive_spell_power"), AdaptiveSpellPowerAffix.CODEC);
-                AffixRegistry.INSTANCE.registerCodec(ResourceLocation.fromNamespaceAndPath("fallen_gems_affixes", "spell_effect"), SpellEffectAffix.CODEC);
-            }
         });
     }
 

@@ -1,0 +1,51 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "mob_effect": "apothic_attributes:sundering",
+  "target": "ATTACK_TARGET",
+  "values": {
+    "apotheosis:epic": {
+      "duration": {
+        "min": 100,
+        "steps": 5,
+        "step": 20
+      },
+      "amplifier": 0,
+      "cooldown": 300
+    },
+    "apotheosis:mythic": {
+      "duration": {
+        "min": 100,
+        "steps": 5,
+        "step": 20
+      },
+      "amplifier": 1,
+      "cooldown": 300
+    },
+    "apotheosis:ancient": {
+      "duration": {
+        "min": 120,
+        "steps": 8,
+        "step": 20
+      },
+      "amplifier": 3,
+      "cooldown": 500
+    }
+  },
+  "types": [
+    "fallen_gems_affixes:celestial_melee"
+  ]
+}

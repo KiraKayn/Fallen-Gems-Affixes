@@ -1,0 +1,16 @@
+{
+  "type": "fallen_gems_affixes:soulbound",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 12,
+      "quality": 0.1
+    }
+  },
+  "values": {
+    "apotheosis:mythic": {},
+    "apotheosis:ancient": {}
+  },
+  "types": []
+}

@@ -1,0 +1,37 @@
+{
+  "type": "fallen_gems_affixes:piercing_arrow",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "values": {
+    "apotheosis:rare": {
+      "min": 1,
+      "steps": 1,
+      "step": 0
+    },
+    "apotheosis:epic": {
+      "min": 2,
+      "steps": 1,
+      "step": 0
+    },
+    "apotheosis:mythic": {
+      "min": 3,
+      "steps": 1,
+      "step": 0
+    },
+    "apotheosis:ancient": {
+      "min": 4,
+      "steps": 1,
+      "step": 0
+    }
+  },
+  "types": [
+    "apotheosis:bow",
+    "apotheosis:crossbow"
+  ]
+}

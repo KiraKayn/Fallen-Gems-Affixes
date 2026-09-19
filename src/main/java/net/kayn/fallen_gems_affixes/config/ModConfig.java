@@ -10,6 +10,8 @@ public class ModConfig {
 
     public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_GEM_MODIFIER;
     public static final ModConfigSpec.DoubleValue SOCKET_GEM_CHANCE;
+    public static final ModConfigSpec.BooleanValue ENABLE_CELESTISYNTH_ATTRIBUTES;
+    public static final ModConfigSpec.BooleanValue ENABLE_SPELL_POWER_PATCH;
 //    public static final ModConfigSpec.BooleanValue ENABLE_SOCKET_MIXIN;
 //    public static final ModConfigSpec.BooleanValue PERMANENT_EFFECT_USE_TICK_EVENT;
     public static final ModConfigSpec.BooleanValue STRICT_SCHOOL_MATCH;
@@ -36,6 +38,14 @@ public class ModConfig {
 //                .comment("If false, uses default impl. More performant, less compatible.")
 //                .define("permanentEffectUseTickEvent", false);
 
+        ENABLE_CELESTISYNTH_ATTRIBUTES = BUILDER
+                .comment("If true, applies Spell Power attributes to Celestisynth weapons via ItemAttributeModifierEvent.")
+                .define("enableCelestisynthAttributes", true);
+
+        ENABLE_SPELL_POWER_PATCH = BUILDER
+                .comment("If true, enables Celestisynth weapons patch to increase weapon damage when held, scaled by the respective Spell Power on the item")
+                .define("enableCelestisynthSpellPowerPatch", true);
+
         STRICT_SCHOOL_MATCH = BUILDER
                 .comment("If false, Adaptive Spell Power Affixes can apply to any compatible item regardless of spell school.")
                 .comment("If true, affixes will only apply to items that already grant spell power of the matching school.")
@@ -46,6 +56,14 @@ public class ModConfig {
                 .comment("Example: modid:itemid|modid:schoolid")
                 .comment("You can also set multiple schools: modid:itemid|modid:schoolid|modid:schoolid")
                 .define("irons_items", new ArrayList<>(List.of(
+                        "celestisynth:crescentia|irons_spellbooks:ender",
+                        "celestisynth:solaris|irons_spellbooks:fire",
+                        "celestisynth:aquaflora|irons_spellbooks:nature",
+                        "celestisynth:breezebreaker|irons_spellbooks:evocation",
+                        "celestisynth:poltergeist|irons_spellbooks:eldritch",
+                        "celestisynth:rainfall_serenity|irons_spellbooks:lightning",
+                        "celestisynth:keres|irons_spellbooks:blood",
+                        "celestisynth:frostbound|irons_spellbooks:ice"
                 )));
 
         BUILDER.pop();

@@ -1,0 +1,33 @@
+{
+  "type": "apotheosis:attribute",
+  "definition": {
+    "affix_type": "stat",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "attribute": "fallen_gems_affixes:max_health_damage",
+  "operation": "ADD_VALUE",
+  "values": {
+    "apotheosis:epic": {
+      "min": 0.04,
+      "steps": 5,
+      "step": 0.01
+    },
+    "apotheosis:mythic": {
+      "min": 0.05,
+      "steps": 6,
+      "step": 0.01
+    },
+    "apotheosis:ancient": {
+      "min": 0.1,
+      "steps": 10,
+      "step": 0.01
+    }
+  },
+  "types": [
+    "apotheosis:melee_weapon"
+  ]
+}

@@ -1,28 +1,24 @@
 package net.kayn.fallen_gems_affixes.adventure.socket.gem.bonus;
 
-import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
 import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.socket.gem.GemView;
 import dev.shadowsoffire.apotheosis.socket.gem.Purity;
 import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
-import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
+import dev.shadowsoffire.apothic_attributes.api.AbilityCooldowns;
 import net.kayn.fallen_gems_affixes.adventure.affix.SpellEffectAffix;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.AttributeTooltipContext;
 
 import java.util.Map;
@@ -83,20 +79,20 @@ public class SpellEffectBonus extends GemBonus {
 
     public void applyEffect(GemInstance gem, LivingEntity target) {
         int cooldown = this.getCooldown(gem.purity());
-        if (cooldown == 0 || !Affix.isOnCooldown(makeUniqueId(gem), cooldown, target)) {
-            SpellEffectBonus.EffectData data = (SpellEffectBonus.EffectData) this.values.get(gem.purity());
-            MobEffectInstance inst = target.getEffect(this.effect);
-            if (this.stackOnReapply && inst != null) {
-                if (inst != null) {
-                    int amplifier = Math.min(this.stackingLimit, (int) (inst.getAmplifier() + 1 + data.amplifier));
-                    MobEffectInstance newInst = new MobEffectInstance(this.effect, Math.max(inst.getDuration(), data.duration), amplifier);
-                    target.addEffect(newInst);
-                }
-            } else {
-                target.addEffect(data.build(this.effect));
-            }
+        if (cooldown != 0 && AbilityCooldowns.isOnCooldown(target, makeUniqueId(gem), cooldown)) return;
 
-            Affix.startCooldown(makeUniqueId(gem), target);
+        SpellEffectBonus.EffectData data = (SpellEffectBonus.EffectData) this.values.get(gem.purity());
+        MobEffectInstance inst = target.getEffect(this.effect);
+        if (this.stackOnReapply && inst != null) {
+            int amplifier = Math.min(this.stackingLimit, (int) (inst.getAmplifier() + 1 + data.amplifier));
+            MobEffectInstance newInst = new MobEffectInstance(this.effect, Math.max(inst.getDuration(), data.duration), amplifier);
+            target.addEffect(newInst);
+        } else {
+            target.addEffect(data.build(this.effect));
+        }
+
+        if (cooldown != 0) {
+            AbilityCooldowns.startCooldown(target, makeUniqueId(gem));
         }
     }
 

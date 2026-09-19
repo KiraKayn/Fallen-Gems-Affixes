@@ -11,7 +11,7 @@ import net.neoforged.fml.ModList;
 
 import static net.kayn.fallen_gems_affixes.Fallen.R;
 
-public class LootCategories {
+public class StaffLootCategory {
     public static class ISSLootCategories {
         public static final LootCategory STAFFS = LootCategoryUtil.registerLootCategoryOrFalse("staffs",
                 ALObjects.EquipmentSlotGroups.MAINHAND,

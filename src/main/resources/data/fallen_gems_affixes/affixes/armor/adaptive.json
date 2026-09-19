@@ -1,0 +1,30 @@
+{
+  "type": "fallen_gems_affixes:adaptive",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "reduction_per_hit": {
+    "apotheosis:epic": 0.01,
+    "apotheosis:mythic": 0.02,
+    "apotheosis:ancient": 0.03
+  },
+  "max_reduction": {
+    "apotheosis:epic": 0.5,
+    "apotheosis:mythic": 0.10,
+    "apotheosis:ancient": 0.15
+  },
+  "duration_ticks": {
+    "apotheosis:epic": 100,
+    "apotheosis:mythic": 150,
+    "apotheosis:ancient": 200
+  },
+  "types": [
+    "apotheosis:chestplate",
+    "apotheosis:leggings"
+  ]
+}

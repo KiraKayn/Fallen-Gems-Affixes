@@ -1,0 +1,47 @@
+{
+  "type": "fallen_gems_affixes:fortify",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "quality": 0.1,
+      "weight": 25
+    }
+  },
+  "values": {
+    "apotheosis:common": {
+      "min": 0.10,
+      "steps": 2,
+      "step": 0.05
+    },
+    "apotheosis:uncommon": {
+      "min": 0.15,
+      "steps": 3,
+      "step": 0.05
+    },
+    "apotheosis:rare": {
+      "min": 0.20,
+      "steps": 4,
+      "step": 0.05
+    },
+    "apotheosis:epic": {
+      "min": 0.25,
+      "steps": 5,
+      "step": 0.05
+    },
+    "apotheosis:mythic": {
+      "min": 0.30,
+      "steps": 4,
+      "step": 0.05
+    },
+    "apotheosis:ancient": {
+      "min": 0.35,
+      "steps": 5,
+      "step": 0.05
+    }
+  },
+  "types": [
+    "apotheosis:chestplate",
+    "apotheosis:boots"
+  ]
+}

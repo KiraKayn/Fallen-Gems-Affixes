@@ -1,0 +1,72 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:con_affix_type",
+  "con_type": [
+    {
+      "modid": "irons_apothic",
+      "type": "fallen_gems_affixes:spell_cast",
+      "not_mode": true
+    }
+  ],
+  "affix": {
+    "type": "fallen_gems_affixes:spell_cast",
+    "definition": {
+      "affix_type": "ability",
+      "exclusive_set": [],
+      "weights": {
+        "weight": 25,
+        "quality": 0.1
+      }
+    },
+    "spell": "irons_spellbooks:wisp",
+    "trigger": "spell_damage",
+    "target": "TARGET",
+    "values": {
+      "apotheosis:rare": {
+        "level": {
+          "min": 1,
+          "max": 4
+        },
+        "cooldown": 600
+      },
+      "apotheosis:epic": {
+        "level": {
+          "min": 2,
+          "max": 6
+        },
+        "cooldown": 450
+      },
+      "apotheosis:mythic": {
+        "level": {
+          "min": 4,
+          "max": 8
+        },
+        "cooldown": 300
+      },
+      "apotheosis:ancient": {
+        "level": {
+          "min": 6,
+          "max": 10
+        },
+        "cooldown": 150
+      }
+    },
+    "types": [],
+    "con_cat": [
+      {
+        "modid": "irons_apothic",
+        "category": "fallen_gems_affixes:staffs",
+        "not_mode": true
+      },
+      {
+        "modid": "irons_apothic",
+        "category": "irons_apothic:staff"
+      }
+    ]
+  }
+}

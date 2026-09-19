@@ -1,0 +1,20 @@
+{
+  "type": "fallen_gems_affixes:shield_guard",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "reduction": {
+    "apotheosis:rare":    0.50,
+    "apotheosis:epic":    0.75,
+    "apotheosis:mythic":  1.0,
+    "apotheosis:ancient": 1.0
+  },
+  "types": [
+    "apotheosis:shield"
+  ]
+}

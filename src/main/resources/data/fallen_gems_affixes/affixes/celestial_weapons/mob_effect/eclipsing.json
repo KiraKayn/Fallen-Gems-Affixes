@@ -1,0 +1,60 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "mob_effect": "minecraft:weakness",
+  "target": "ATTACK_TARGET",
+  "values": {
+    "apotheosis:rare": {
+      "duration": {
+        "min": 80,
+        "steps": 3,
+        "step": 20
+      },
+      "amplifier": 0,
+      "cooldown": 300
+    },
+    "apotheosis:epic": {
+      "duration": {
+        "min": 80,
+        "steps": 3,
+        "step": 20
+      },
+      "amplifier": 0,
+      "cooldown": 300
+    },
+    "apotheosis:mythic": {
+      "duration": {
+        "min": 80,
+        "steps": 4,
+        "step": 20
+      },
+      "amplifier": 1,
+      "cooldown": 300
+    },
+    "apotheosis:ancient": {
+      "duration": {
+        "min": 80,
+        "steps": 4,
+        "step": 40
+      },
+      "amplifier": 3,
+      "cooldown": 400
+    }
+  },
+  "types": [
+    "fallen_gems_affixes:celestial_melee"
+  ]
+}

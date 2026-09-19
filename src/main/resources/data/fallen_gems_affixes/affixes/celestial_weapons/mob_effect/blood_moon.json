@@ -1,0 +1,58 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "celestisynth"
+    }
+  ],
+  "type": "apotheosis:mob_effect",
+  "definition": {
+    "affix_type": "basic_effect",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "mob_effect": "apothic_attributes:bleeding",
+  "target": "ATTACK_TARGET",
+  "stack_on_reapply": true,
+  "stacking_limit": 5,
+  "values": {
+    "apotheosis:rare": {
+      "duration": 100,
+      "amplifier": 0,
+      "cooldown": 80
+    },
+    "apotheosis:epic": {
+      "duration": {
+        "min": 100,
+        "steps": 1,
+        "step": 20
+      },
+      "amplifier": 0,
+      "cooldown": 80
+    },
+    "apotheosis:mythic": {
+      "duration": {
+        "min": 100,
+        "steps": 1,
+        "step": 20
+      },
+      "amplifier": 1,
+      "cooldown": 80
+    },
+    "apotheosis:ancient": {
+      "duration": {
+        "min": 100,
+        "steps": 2,
+        "step": 20
+      },
+      "amplifier": 3,
+      "cooldown": 80
+    }
+  },
+  "types": [
+    "fallen_gems_affixes:celestial_melee"
+  ]
+}

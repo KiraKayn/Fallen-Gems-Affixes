@@ -5,6 +5,9 @@
   "refmap": "fallen_gems_affixes.refmap.json",
   "plugin": "net.kayn.fallen_gems_affixes.MixinConfigPlugin",
   "mixins": [
+    "LootControllerMixin",
+    "PlayerShieldGuardMixin",
+    "TrueShotMixin",
     "accessor.DynamicRegistryAccessor",
     "accessor.GemClassAccessor"
   ],

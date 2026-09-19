@@ -1,0 +1,29 @@
+{
+  "type": "fallen_gems_affixes:enchant_boost",
+  "definition": {
+    "affix_type": "ability",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 15,
+      "quality": 0.1
+    }
+  },
+  "values": {
+    "apotheosis:epic": {
+      "min": 2.0,
+      "steps": 3,
+      "step": 1.0
+    },
+    "apotheosis:mythic": {
+      "min": 3.0,
+      "steps": 3,
+      "step": 1.0
+    },
+    "apotheosis:ancient": {
+      "min": 4.0,
+      "steps": 3,
+      "step": 1.0
+    }
+  },
+  "types": []
+}

@@ -1,0 +1,59 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "celestisynth"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:adaptive_spell_power",
+  "definition": {
+    "affix_type": "stat",
+    "exclusive_set": [],
+    "weights": {
+      "weight": 25,
+      "quality": 0.1
+    }
+  },
+  "attribute": "irons_spellbooks:blood_spell_power",
+  "operation": "ADD_MULTIPLIED_BASE",
+  "values": {
+    "apotheosis:common": {
+      "min": 0.05,
+      "steps": 1,
+      "step": 0.0
+    },
+    "apotheosis:uncommon": {
+      "min": 0.10,
+      "steps": 1,
+      "step": 0.0
+    },
+    "apotheosis:rare": {
+      "min": 0.15,
+      "steps": 1,
+      "step": 0.0
+    },
+    "apotheosis:epic": {
+      "min": 0.20,
+      "steps": 1,
+      "step": 0.0
+    },
+    "apotheosis:mythic": {
+      "min": 0.25,
+      "steps": 1,
+      "step": 0.0
+    },
+    "apotheosis:ancient": {
+      "min": 0.30,
+      "steps": 1,
+      "step": 0.0
+    }
+  },
+  "types": [
+    "fallen_gems_affixes:celestial_melee"
+  ],
+  "school": "irons_spellbooks:blood"
+}

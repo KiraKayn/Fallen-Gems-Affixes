@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "type": "fallen_gems_affixes:con_affix_type",
+  "con_type": [
+    {
+      "modid": "irons_apothic",
+      "type": "fallen_gems_affixes:concentration",
+      "not_mode": true
+    }
+  ],
+  "affix": {
+    "type": "fallen_gems_affixes:concentration",
+    "definition": {
+      "affix_type": "ability",
+      "exclusive_set": [],
+      "weights": {
+        "weight": 25,
+        "quality": 0.1
+      }
+    },
+    "values": {
+      "apotheosis:epic": true,
+      "apotheosis:mythic": true,
+      "apotheosis:ancient": true
+    },
+    "types": [],
+    "con_cat": [
+      {
+        "modid": "irons_apothic",
+        "category": "fallen_gems_affixes:staffs",
+        "not_mode": true
+      },
+      {
+        "modid": "irons_apothic",
+        "category": "irons_apothic:staff"
+      }
+    ]
+  }
+}
